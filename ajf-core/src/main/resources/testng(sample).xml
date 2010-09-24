@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="my tests suite">
+	<test name="first tests">
+		<parameter name="param1" value="myFirstParamValue" />
+		<groups>
+			<run>
+				<include name="aSimpleTestGroup" />
+				<!-- 
+				<exclude name="" />
+				-->
+			</run>
+		</groups>
+		<classes>
+			<class name="adc.tests.SampleTests">
+				<methods>
+					<include name="is.*" />
+				</methods>
+			</class>
+		</classes>
+	</test>
+</suite>

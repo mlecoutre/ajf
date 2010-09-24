@@ -1,0 +1,161 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>am.ajf</groupId>
+  <artifactId>ajfcore</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>AJFCore</name>
+  <inceptionYear>2010</inceptionYear>
+
+	<parent>
+		<groupId>am.parent</groupId>
+		<artifactId>standard</artifactId>
+		<version>1.4-SNAPSHOT</version>
+	</parent>
+	
+	<dependencyManagement>
+
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.4.3</version>
+			</dependency>
+		</dependencies>
+
+	</dependencyManagement>
+	
+	<dependencies>
+				
+		<!-- for testing with testng -->
+		<dependency>
+  			<groupId>org.testng</groupId>
+  			<artifactId>testng</artifactId>
+  			<version>5.9</version>
+  			<scope>test</scope>
+		</dependency>		
+				
+		<!-- include mocking framework -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+  			<artifactId>mockito-all</artifactId>
+  			<version>1.8.1</version>
+  			<scope>test</scope>
+  		</dependency>
+
+		<!-- validation with JSR 303 -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+		</dependency>
+		<!-- hibernate validator impl -->
+		<dependency>
+			<artifactId>hibernate-validator</artifactId>
+			<groupId>org.hibernate</groupId>
+			<version>4.0.2.GA</version>
+		</dependency>
+
+		<!-- apache utils -->
+		<dependency>
+			<artifactId>commons-beanutils</artifactId>
+			<groupId>commons-beanutils</groupId>
+			<version>1.8.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.5</version>
+		</dependency>
+				
+		<!-- JPA 2 -->
+		<!-- Hibernate Impl -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>3.5.1-Final</version>
+		</dependency>
+		<!-- EclipseLink impl -->
+		<!-- 
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId>
+			<version>2.1.1</version>
+		</dependency>
+		-->		
+
+		<!-- the logger abstraction -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+
+		<!-- loggers adapters -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		<!-- in order to exclude commons-logging -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- effective logger impl -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>0.9.24</version>
+		</dependency>
+
+		<!-- Guice, a dependencies injector -->
+		<dependency>
+			<groupId>com.google.code.guice</groupId>
+			<artifactId>guice</artifactId>
+			<version>2.0</version>
+		</dependency>
+		<dependency>
+  			<groupId>aopalliance</groupId>
+  			<artifactId>aopalliance</artifactId>
+  			<version>1.0</version>
+		</dependency>
+		
+		<!-- Weld, a container dependencies injector -->
+		<!-- old jboss repo http://repository.jboss.com/maven2/ -->
+		<!-- new jboss repo http://repository.jboss.org/nexus/content/groups/public/ -->
+		<!-- 
+		<dependency>
+		  <groupId>javax.enterprise</groupId>
+		  <artifactId>cdi-api</artifactId>
+		  <version>1.0-SP1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.weld</groupId>
+  			<artifactId>weld-core</artifactId>
+  			<version>1.0-SP1</version>
+		</dependency>
+		<dependency>
+  			<groupId>org.jboss.weld</groupId>
+  			<artifactId>weld-api</artifactId>
+  			<version>1.0-SP1</version>
+		</dependency>
+		<dependency>
+  			<groupId>org.jboss.weld</groupId>
+  			<artifactId>weld-spi</artifactId>
+  			<version>1.0-SP1</version>
+		</dependency>
+		-->
+		
+	</dependencies>
+	
+  
+  
+</project>
