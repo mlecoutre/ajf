@@ -2,9 +2,6 @@ package ajf.injection;
 
 
 import static ajf.utils.BeanUtils.instanciate;
-
-import org.mockito.MockitoAnnotations;
-
 import ajf.annotations.InjectModule;
 
 import com.google.inject.Guice;
@@ -28,7 +25,7 @@ public abstract class DependenciesInjector {
 		injector.injectMembers(instance);
 
 		// build and inject mocks if required 
-		MockitoAnnotations.initMocks(instance);
+		// MockitoAnnotations.initMocks(instance);
 		
 	}
 
