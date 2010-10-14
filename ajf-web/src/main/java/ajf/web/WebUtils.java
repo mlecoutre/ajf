@@ -155,20 +155,20 @@ public class WebUtils {
 	 *            detail message for the Face Context
 	 */
 	public static void handleError(Exception e, Logger log, String message) {
-		log.error(message, e);
-		FacesMessage facesMessage = new FacesMessage(
-				FacesMessage.SEVERITY_ERROR,
-				getFieldLabel("application.error.occured"), message);
-		context.addMessage(null, facesMessage);
+		handleError(e, log, null, message);
 	}
 
 	/**
 	 * TODO doc
 	 * 
-	 * @param e exception 
-	 * @param log target logger
-	 * @param clientId target client ID for growl or messages
-	 * @param message messages to display
+	 * @param e
+	 *            exception
+	 * @param log
+	 *            target logger
+	 * @param clientId
+	 *            target client ID for growl or messages
+	 * @param message
+	 *            messages to display
 	 */
 	public static void handleError(Exception e, Logger log, String clientId,
 			String message) {
