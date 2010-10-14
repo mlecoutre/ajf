@@ -1,11 +1,11 @@
 <project name="Maven">
-	<!--
+
 	<skin>
 		<groupId>org.apache.maven.skins</groupId>
 		<artifactId>maven-stylus-skin</artifactId>
 		<version>1.2</version>
 	</skin>
-	-->
+
 	<bannerLeft>
 		<name>ArcelorMittal</name>
 		<src>images/arcelormittal.png</src>
