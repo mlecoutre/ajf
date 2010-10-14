@@ -8,6 +8,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * AJF web util class Can be used as static import.
@@ -19,6 +20,8 @@ public class WebUtils {
 
 	private static FacesContext context;
 	private static String bundleName;
+
+	private static Logger log = LoggerFactory.getLogger(WebUtils.class);
 
 	public static void setContext(FacesContext context) {
 		WebUtils.context = context;
@@ -52,6 +55,7 @@ public class WebUtils {
 	 * @param fieldName
 	 *            fieldName
 	 * @param bundleName
+	 *            resource bundle name
 	 * @return Message from the Message Source.
 	 */
 	public static String getFieldLabel(final String fieldName,
@@ -66,7 +70,7 @@ public class WebUtils {
 			label = bundle.getString(fieldName);
 			return label;
 		} catch (MissingResourceException e) {
-			// do nothing on purpose.
+			log.warn("Bundle missing: " + bundleName + ", " + e.getMessage());
 		}
 
 		try {
