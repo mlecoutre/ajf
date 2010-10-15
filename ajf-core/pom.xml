@@ -26,14 +26,6 @@
 	
 	<dependencies>
 				
-		<!-- for testing with testng -->
-		<dependency>
-  			<groupId>org.testng</groupId>
-  			<artifactId>testng</artifactId>
-  			<version>5.9</version>
-  			<scope>test</scope>
-		</dependency>		
-				
 		<!-- include mocking framework -->
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -128,34 +120,8 @@
   			<version>1.0</version>
 		</dependency>
 		
-		<!-- Weld, a container dependencies injector -->
-		<!-- old jboss repo http://repository.jboss.com/maven2/ -->
-		<!-- new jboss repo http://repository.jboss.org/nexus/content/groups/public/ -->
-		<!-- 
-		<dependency>
-		  <groupId>javax.enterprise</groupId>
-		  <artifactId>cdi-api</artifactId>
-		  <version>1.0-SP1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.weld</groupId>
-  			<artifactId>weld-core</artifactId>
-  			<version>1.0-SP1</version>
-		</dependency>
-		<dependency>
-  			<groupId>org.jboss.weld</groupId>
-  			<artifactId>weld-api</artifactId>
-  			<version>1.0-SP1</version>
-		</dependency>
-		<dependency>
-  			<groupId>org.jboss.weld</groupId>
-  			<artifactId>weld-spi</artifactId>
-  			<version>1.0-SP1</version>
-		</dependency>
-		-->
 		
 	</dependencies>
 	
-  
   
 </project>
