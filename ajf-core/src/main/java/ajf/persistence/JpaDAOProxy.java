@@ -1,7 +1,6 @@
 package ajf.persistence;
 
-import static ajf.utils.BeanUtils.instanciate;
-import static ajf.utils.BeanUtils.listMethodsAsMap;
+import static ajf.utils.BeanUtils.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +21,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import ajf.persistence.annotations.AutoCommit;
-import ajf.utils.XMLHelper;
+import ajf.utils.helpers.XMLHelper;
 
 public class JpaDAOProxy implements InvocationHandler {
 
@@ -174,34 +173,50 @@ public class JpaDAOProxy implements InvocationHandler {
 	 * @return
 	 * @throws ClassNotFoundException
 	 */
-	private Object[] processParameters(Class<?> requestedDAO,
+	private Object[] processParameters(Class<?> requestedDAO, Class<?> entityClass, 
 			String requestedMethod, Object[] args)
 			throws ClassNotFoundException {
 
 		Object[] params = args;
 		if (requestedMethod.endsWith("ByPrimaryKey")) {
-
-			params = new Object[2];
-			params[1] = args[0];
-
-			// add the package
-			String entityClassName = requestedDAO.getPackage().getName();
-			// remove dao from the package name
-			entityClassName = entityClassName.substring(0,
-					entityClassName.length() - 3);
-			// add the DAO class name
-			entityClassName = entityClassName.concat(requestedDAO
-					.getCanonicalName());
-			// remove DAO
-			entityClassName = entityClassName.substring(0,
-					entityClassName.length() - 3);
-
-			// retrieve the entity class name
-			Class<?> entityClass = Thread.currentThread()
-					.getContextClassLoader().loadClass(entityClassName);
-			params[0] = entityClass;
+			params = new Object[] {entityClass, args[0]};
+		}
+		else {
+			
+			if ("findAll".equals(requestedMethod)) {
+				params = new Object[] {entityClass};
+			}
+			else {
+				// then, try for named query
+				params = new Object[] {entityClass, requestedMethod, args};
+			}
+			
 		}
 		return params;
+	}
+
+	private Class<?> resolveEntityClass(Class<?> requestedDAO)
+			throws ClassNotFoundException {
+		String entityClassName = processEntityClassName(requestedDAO);
+		// retrieve the entity class name
+		Class<?> entityClass = Thread.currentThread()
+				.getContextClassLoader().loadClass(entityClassName);
+		return entityClass;
+	}
+
+	private String processEntityClassName(Class<?> requestedDAO) {
+		// add the package
+		String entityClassName = requestedDAO.getPackage().getName();
+		// replace dao by model in the package name
+		entityClassName = entityClassName.substring(0,
+				entityClassName.length() - 3).concat("model.");
+		// add the DAO class name
+		entityClassName = entityClassName.concat(requestedDAO
+				.getSimpleName());
+		// remove DAO
+		entityClassName = entityClassName.substring(0,
+				entityClassName.length() - 3);
+		return entityClassName;
 	}
 
 	/**
@@ -294,6 +309,7 @@ public class JpaDAOProxy implements InvocationHandler {
 				Map<String, Method> baseDAOMethodsMap = listMethodsAsMap(BaseJpaDAOImpl.class);
 				// register the DAO methods
 				generatedMethods = baseDAOMethodsMap.keySet();
+				
 				daosMap = new HashMap<String, Map<String, Method>>();
 				daosMap.put(BASE_PERSISTENCE_DAO, baseDAOMethodsMap);
 
@@ -317,43 +333,101 @@ public class JpaDAOProxy implements InvocationHandler {
 		Object daoImpl = null;
 		Object[] params = args;
 		Method methodToInvoke = null;
+				
+		// the invocation result
+		Object result = null;
 		
-		// is auto-commit
-		boolean autoCommit = true;
-		if (method.isAnnotationPresent(AutoCommit.class)) {
-			autoCommit = method.getAnnotation(AutoCommit.class).value();
+		// for the settings setFirstResult(...) setMaxResults(...)
+		if (requestedMethod.startsWith("set")) {
+			
+			if (null != persistenceDAODelegate) { 
+				daoImpl = persistenceDAODelegateImpl;
+				methodToInvoke = daosMap.get(persistenceDAODelegate).get(
+						requestedMethod);
+				if (null != methodToInvoke) {
+					result = methodToInvoke.invoke(daoImpl, args);
+				}
+			}
+			
+			// the DAO impl to invoke
+			daoImpl = basePersistenceDAOImpl;
+			methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
+						requestedMethod);
+			if (null != methodToInvoke) {
+				result = methodToInvoke.invoke(daoImpl, args);
+			}
+			
+			return null;
+			
 		}
-
+		
+		
 		// is the method in the delegate
 		if (null != persistenceDAODelegate) {
 			// get the requested method
 			methodToInvoke = daosMap.get(persistenceDAODelegate).get(
 					requestedMethod);
-			daoImpl = persistenceDAODelegateImpl;
+			if (null != methodToInvoke)
+				daoImpl = persistenceDAODelegateImpl;
 		}
 		
 		// process the generated methods
-		if ((null == methodToInvoke) && (generatedMethods.contains(requestedMethod))) {
-			// get the requested method
-			methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
-					requestedMethod);
-			// process the parameters
-			params = processParameters(requestedDAO, requestedMethod, args);
+		if (null == methodToInvoke) {
+
 			// the DAO impl to invoke
 			daoImpl = basePersistenceDAOImpl;
+			// resolve the corresponding entity class
+			Class<?> entityClass = resolveEntityClass(requestedDAO);
+			
+			if (generatedMethods.contains(requestedMethod)) {
+				// get the requested method
+				methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
+						requestedMethod);
+				// process the parameters
+				params = processParameters(requestedDAO, entityClass, requestedMethod, args);
+			}
+			else {
+				// process the query name
+				String queryName = entityClass.getSimpleName().concat(".").concat(requestedMethod);
+				// process the parameters
+				params = processParameters(requestedDAO, entityClass, queryName, args);
+				
+				// resolve the method to invoke
+				if (requestedMethod.startsWith("findSingleResult")) {
+					// get the requested method
+					methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
+						"findSingleResultQuery");
+				}
+				else {
+					if (requestedMethod.startsWith("find")) {
+						// get the requested method
+						methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
+							"findQuery");
+					}
+					else {
+						// get the requested method
+						methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
+							"executeQuery");
+					}
+				}
+				
+			}
 		}
 		
 		if (null == methodToInvoke) {
 			throw new NullPointerException("The requested method '" + requestedMethod + "' is not implemented.");
 		}
-		
+				
+		// is auto-commit
+		boolean autoCommit = true;
+		if (method.isAnnotationPresent(AutoCommit.class)) {
+			autoCommit = method.getAnnotation(AutoCommit.class).value();
+		}
 		// is auto-commit overrided 
 		if (methodToInvoke.isAnnotationPresent(AutoCommit.class)) {
 			autoCommit = methodToInvoke.getAnnotation(AutoCommit.class).value();
 		}
 
-		// the invocation result
-		Object result = null;
 		try {
 			if ((!inJTA) && (autoCommit)) 
 				entityManager.getTransaction().begin();

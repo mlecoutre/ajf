@@ -1,7 +1,7 @@
 package ajf.persistence;
 
 
-public abstract class AbstractDAO implements JpaDAO {
+public abstract class AbstractDAO implements DAO {
 
 	protected int firstResult = -1;
 	protected int maxResults = -1;

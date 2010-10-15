@@ -18,7 +18,7 @@ public class DefaultAuditData implements EditableAuditData {
 
 	private static final long serialVersionUID = 1L;
 
-	private final static Logger logger = Logger
+	private static Logger logger = Logger
 			.getLogger(DefaultAuditData.class.getName());
 
 	private Map<String, Object> map = null;

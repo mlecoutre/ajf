@@ -14,6 +14,6 @@ public @interface AutoCommit {
 	/**
 	 * @return true if auto-commit
 	 */
-	boolean value() default true;
+	boolean value() default false;
 
 }

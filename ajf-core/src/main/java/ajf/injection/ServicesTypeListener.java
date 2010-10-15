@@ -5,10 +5,8 @@ import java.lang.reflect.Field;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import ajf.annotations.InjectLogger;
 import ajf.injection.injectors.DAOMembersInjector;
 import ajf.injection.injectors.EntityManagerMembersInjector;
-import ajf.injection.injectors.LoggerMembersInjector;
 import ajf.persistence.annotations.InjectDAO;
 
 import com.google.inject.TypeLiteral;
@@ -43,10 +41,6 @@ public class ServicesTypeListener implements TypeListener {
 			
 			if (field.isAnnotationPresent(InjectDAO.class)) {
 				typeEncounter.register(new DAOMembersInjector<T>(field));
-			}
-			
-			if (field.isAnnotationPresent(InjectLogger.class)) {
-				typeEncounter.register(new LoggerMembersInjector<T>(field));
 			}
 			
 		}
