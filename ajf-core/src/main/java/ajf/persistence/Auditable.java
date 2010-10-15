@@ -6,11 +6,11 @@ public interface Auditable {
 	/**
 	 * @return the auditData
 	 */
-	public AuditData getAuditData();
+	public AuditDataComponent getAuditData();
 
 	/**
 	 * @param auditData the auditData to set
 	 */
-	public void setAuditData(AuditData auditData);
+	public void setAuditData(AuditDataComponent auditData);
 		
 }

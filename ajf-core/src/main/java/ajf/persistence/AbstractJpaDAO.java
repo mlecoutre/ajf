@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 
 public abstract class AbstractJpaDAO extends AbstractDAO implements JpaDAO {
 
+	// the EntityManager 
 	protected EntityManager entityManager = null;
 		
 	/*

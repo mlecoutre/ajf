@@ -6,7 +6,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 import ajf.datas.AuditDataContext;
-import ajf.persistence.AuditData;
+import ajf.persistence.AuditDataComponent;
 import ajf.persistence.Auditable;
 
 
@@ -46,11 +46,11 @@ public class AuditDataListener {
 				 user = "Anonymous";
 			
 			Auditable auditableBean = (Auditable) bean;
-			AuditData auditData = auditableBean.getAuditData();
+			AuditDataComponent auditData = auditableBean.getAuditData();
 			
 			if (null == auditData) {
 				// instanciate and attach the AuditData
-				auditData = new AuditData();
+				auditData = new AuditDataComponent();
 				auditableBean.setAuditData(auditData);
 				// initialize the AuditData
 				auditData.setCreateDate(new Date());

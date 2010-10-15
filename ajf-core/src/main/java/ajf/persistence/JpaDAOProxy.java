@@ -371,7 +371,7 @@ public class JpaDAOProxy implements InvocationHandler {
 				daoImpl = persistenceDAODelegateImpl;
 		}
 		
-		// process the generated methods
+		// process the generated methods in the baseJpaDAOImpl 
 		if (null == methodToInvoke) {
 
 			// the DAO impl to invoke
@@ -379,6 +379,7 @@ public class JpaDAOProxy implements InvocationHandler {
 			// resolve the corresponding entity class
 			Class<?> entityClass = resolveEntityClass(requestedDAO);
 			
+			// is it a standard method
 			if (generatedMethods.contains(requestedMethod)) {
 				// get the requested method
 				methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
@@ -442,7 +443,7 @@ public class JpaDAOProxy implements InvocationHandler {
 			if ((!inJTA) && (autoCommit)) 
 				entityManager.getTransaction().commit();
 		}
-		catch (Exception e) {
+		catch (Throwable e) {
 			if ((!inJTA) && (autoCommit)) 
 				entityManager.getTransaction().rollback();
 			throw e;
