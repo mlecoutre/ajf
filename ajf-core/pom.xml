@@ -1,17 +1,19 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>am.ajf</groupId>
-  <artifactId>ajfcore</artifactId>
-  <version>2.0-SNAPSHOT</version>
-  <name>AJFCore</name>
-  <inceptionYear>2010</inceptionYear>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>am.ajf</groupId>
+	<artifactId>ajf-core</artifactId>
+	<version>2.0-SNAPSHOT</version>
+	<name>AJFCore</name>
+	<inceptionYear>2010</inceptionYear>
 
 	<parent>
 		<groupId>am.parent</groupId>
 		<artifactId>standard</artifactId>
 		<version>1.4-SNAPSHOT</version>
 	</parent>
-	
+
 	<dependencyManagement>
 
 		<dependencies>
@@ -23,16 +25,16 @@
 		</dependencies>
 
 	</dependencyManagement>
-	
+
 	<dependencies>
-				
+
 		<!-- include mocking framework -->
 		<dependency>
 			<groupId>org.mockito</groupId>
-  			<artifactId>mockito-all</artifactId>
-  			<version>1.8.1</version>
-  			<scope>test</scope>
-  		</dependency>
+			<artifactId>mockito-all</artifactId>
+			<version>1.8.1</version>
+			<scope>test</scope>
+		</dependency>
 
 		<!-- validation with JSR 303 -->
 		<dependency>
@@ -58,7 +60,7 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.5</version>
 		</dependency>
-				
+
 		<!-- JPA 2 -->
 		<!-- Hibernate Impl -->
 		<dependency>
@@ -67,13 +69,8 @@
 			<version>3.5.1-Final</version>
 		</dependency>
 		<!-- EclipseLink impl -->
-		<!-- 
-		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>eclipselink</artifactId>
-			<version>2.1.1</version>
-		</dependency>
-		-->		
+		<!-- <dependency> <groupId>org.eclipse.persistence</groupId> <artifactId>eclipselink</artifactId> 
+			<version>2.1.1</version> </dependency> -->
 
 		<!-- the logger abstraction -->
 		<dependency>
@@ -115,13 +112,13 @@
 			<version>2.0</version>
 		</dependency>
 		<dependency>
-  			<groupId>aopalliance</groupId>
-  			<artifactId>aopalliance</artifactId>
-  			<version>1.0</version>
+			<groupId>aopalliance</groupId>
+			<artifactId>aopalliance</artifactId>
+			<version>1.0</version>
 		</dependency>
-		
-		
+
+
 	</dependencies>
-	
-  
+
+
 </project>
