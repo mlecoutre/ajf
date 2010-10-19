@@ -28,7 +28,7 @@
 			-->
 		</menu>
 
-		${reports}
+		<menu ref="reports"/>
 
 	</body>
 </project>
