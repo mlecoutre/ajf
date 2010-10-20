@@ -23,6 +23,7 @@
 
 		<menu name="Application">
 			<item name="Introduction" href="index.html" />
+			<item name="parent" href="../epp-parent/index.html" />
 			<!--
 			<item name="StatCVS Report" href="statcvs/index.html"/>
 			-->
