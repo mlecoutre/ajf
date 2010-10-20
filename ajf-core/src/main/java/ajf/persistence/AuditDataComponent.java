@@ -93,5 +93,14 @@ public class AuditDataComponent implements Serializable {
 		this.updateUser = updateUser;
 	}
 
+	@Override
+	public String toString() {
+		return "AuditDataComponent [createUser=" + createUser + ", createDate="
+				+ createDate + ", updateUser=" + updateUser + ", updateDate="
+				+ updateDate + "]";
+	}
+	
+	
+
 	
 }
