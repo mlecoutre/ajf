@@ -24,6 +24,9 @@
 		<menu name="Application">
 			<item name="Introduction" href="index.html" />
 			<item name="parent" href="../epp-parent/index.html" />
+			<item name="epp-ui" href="../epp-ui/index.html" />
+			<item name="epp-common" href="../epp-common/index.html" />
+			<item name="epp-core" href="../epp-core/index.html" />
 			<!--
 			<item name="StatCVS Report" href="statcvs/index.html"/>
 			-->
