@@ -40,7 +40,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- validation with JSR 303 -->
+		<!-- Bean Validation : JSR 303 -->
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
@@ -65,20 +65,19 @@
 			<version>2.5</version>
 		</dependency>
 
-		<!-- JPA 2 API -->
+		<!-- JPA 2 : JSR 317 -->
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.0-api</artifactId>
 			<version>1.0.0.Final</version>
 		</dependency>
-		<!-- JPA 2 Provider -->
-		<!-- Hibernate Impl -->
+		<!-- Hibernate Provider -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>3.5.1-Final</version>
 		</dependency>
-		<!-- EclipseLink impl -->
+		<!-- EclipseLink Provider -->
 		<!-- 
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
@@ -126,7 +125,9 @@
 
 		<!-- Begin : Dependency injection dependencies -->
 
-		<!-- Guice, a dependencies injector -->
+		<!-- Dependency Injection : JSR 330 -->
+		<!-- Context Dependency Injection : JSR 299 -->
+		<!-- Google Guice Impl -->
 		<dependency>
 			<groupId>com.google.code.guice</groupId>
 			<artifactId>guice</artifactId>
@@ -138,7 +139,7 @@
 			<version>1.0</version>
 		</dependency>
 
-		<!-- End : Dependency injection dependencies -->
+		<!-- End :  Dependency injection dependencies -->
 
 	</dependencies>
 	
