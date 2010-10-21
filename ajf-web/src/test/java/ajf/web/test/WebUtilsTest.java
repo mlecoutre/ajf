@@ -31,6 +31,7 @@ import ajf.web.WebUtils;
 public class WebUtilsTest {
 
 	private static final String I18N_MY_KEY = "my.key";
+	private static final String I18N_MY_KEY2 = "my.key2";
 
 	private static final String AJF_WEB_MESSAGES = "ajf.web.messages";
 
@@ -89,9 +90,18 @@ public class WebUtilsTest {
 	@Test
 	public void testGetFieldLabel() {
 		System.out.println("> testGetFieldLabel");
+
+		// test 1
 		String translation = WebUtils.getFieldLabel(I18N_MY_KEY);
-		System.out.println("> " + translation);
+		System.out.println("  1) " + translation);
 		assertNotNull("translation ", translation);
+
+		// test 2
+		translation = WebUtils.getFieldLabel(I18N_MY_KEY2);
+		assertTrue("second call to getLabel() method ",
+				"Mini2 EN".equals(translation));
+		System.out.println("  2) " + translation);
+
 		// MockContext.registerMock(ConfigurationItemTypeDAO.class,
 		// mockedCitDAO);
 	}

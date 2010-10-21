@@ -44,7 +44,7 @@ public class WebUtils {
 	 *            i18n key
 	 * @return i18n associated value regarding the user Locale
 	 */
-	public static String getFieldLabel(final String fieldName) {
+	public static String getFieldLabel(String fieldName) {
 		String bundleName = context.getApplication().getMessageBundle();
 		return getFieldLabel(fieldName, bundleName, context);
 	}
@@ -58,8 +58,8 @@ public class WebUtils {
 	 *            resource bundle name
 	 * @return Message from the Message Source.
 	 */
-	public static String getFieldLabel(final String fieldName,
-			String bundleName, FacesContext context) {
+	public static String getFieldLabel(String fieldName, String bundleName,
+			FacesContext context) {
 
 		Locale locale = context.getViewRoot().getLocale();
 		ResourceBundle bundle = ResourceBundle.getBundle(bundleName, locale,
@@ -110,7 +110,7 @@ public class WebUtils {
 	 * 
 	 * @return generated label name.
 	 */
-	public static String generateLabelValue(final String fieldName) {
+	public static String generateLabelValue(String fieldName) {
 
 		StringBuffer buffer = new StringBuffer(fieldName.length() * 2);
 		char[] chars = fieldName.toCharArray();
