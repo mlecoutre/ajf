@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<groupId>am.ajf</groupId>
 	<artifactId>ajf-core</artifactId>
 	<version>2.0-SNAPSHOT</version>
@@ -13,7 +13,7 @@
 		<artifactId>standard</artifactId>
 		<version>2.0-SNAPSHOT</version>
 	</parent>
-	
+
 	<scm>
 		<url>http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-core</url>
 	</scm>
@@ -65,7 +65,13 @@
 			<version>2.5</version>
 		</dependency>
 
-		<!-- JPA 2 -->
+		<!-- JPA 2 API -->
+		<dependency>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.0-api</artifactId>
+			<version>1.0.0.Final</version>
+		</dependency>
+		<!-- JPA 2 Provider -->
 		<!-- Hibernate Impl -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -73,8 +79,15 @@
 			<version>3.5.1-Final</version>
 		</dependency>
 		<!-- EclipseLink impl -->
-		<!-- <dependency> <groupId>org.eclipse.persistence</groupId> <artifactId>eclipselink</artifactId> 
-			<version>2.1.1</version> </dependency> -->
+		<!-- 
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId> 
+			<version>2.1.1</version>
+		</dependency>
+		-->
+
+		<!-- Begin : Logging dependencies -->
 
 		<!-- the logger abstraction -->
 		<dependency>
@@ -109,6 +122,10 @@
 			<version>0.9.24</version>
 		</dependency>
 
+		<!-- End : Logging dependencies -->
+
+		<!-- Begin : Dependency injection dependencies -->
+
 		<!-- Guice, a dependencies injector -->
 		<dependency>
 			<groupId>com.google.code.guice</groupId>
@@ -121,7 +138,9 @@
 			<version>1.0</version>
 		</dependency>
 
-	</dependencies>
+		<!-- End : Dependency injection dependencies -->
 
+	</dependencies>
+	
 
 </project>
