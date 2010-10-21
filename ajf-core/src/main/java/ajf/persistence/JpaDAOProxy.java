@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.Logger;
@@ -130,11 +132,40 @@ public class JpaDAOProxy implements InvocationHandler {
 	private void resolvePersitenceUnitInfos(Class<?> requestedDAO) {
 		// retrieve the persistence unit
 		PersistenceUnitDesc puDesc = puMap.get(requestedDAO.getName());
-		if (null == puDesc) {
-			throw new NullPointerException("Unable to find persistence unit informations for DAO " + requestedDAO.getName() + ".");
+		if (null != puDesc) {
+			this.persistenceUnitName = puDesc.getName();
+			this.inJTA = "JTA".equalsIgnoreCase(puDesc.getTransactionType());
+			return;
 		}
-		this.persistenceUnitName = puDesc.getName();
-		this.inJTA = "JTA".equalsIgnoreCase(puDesc.getTransactionType());		
+		
+		if (requestedDAO.isAnnotationPresent(PersistenceContext.class)) {
+			PersistenceContext pCtx = requestedDAO.getAnnotation(PersistenceContext.class);
+			String puName= pCtx.name();
+			if (null == puName) {
+				puName = pCtx.unitName();
+			}
+			if (null != puName) {
+				this.persistenceUnitName = puName;
+				this.inJTA = false;
+				return;
+			}
+		}
+		
+		if (requestedDAO.isAnnotationPresent(PersistenceUnit.class)) {
+			PersistenceUnit pUnit = requestedDAO.getAnnotation(PersistenceUnit.class);
+			String puName= pUnit.name();
+			if (null == puName) {
+				puName = pUnit.unitName();
+			}
+			if (null != puName) {
+				this.persistenceUnitName = puName;
+				this.inJTA = false;
+				return;
+			}		
+		}
+		
+		throw new NullPointerException("Unable to find persistence unit informations for DAO " + requestedDAO.getName() + ".");
+				
 	}
 	
 	/**
