@@ -31,4 +31,26 @@ public class PersistenceUtils {
 		throw new PersistenceLayerException(errorMsg);
 	}
 
+	/**
+	 * manage persistence layer exception
+	 * 
+	 * @param log
+	 *            class logger
+	 * @param message
+	 * 
+	 * @param errorType
+	 *            type of error (free for developer)
+	 * @param cause
+	 *            inner exception
+	 * @throws PersistenceLayerException
+	 */
+	public static void handlerError(Logger log, String message,
+			String errorType, Throwable cause) throws PersistenceLayerException {
+		String errorMsg = new StringBuffer("Managed persistence error: ")
+				.append(cause.getMessage()).append(" ")
+				.append(cause.getCause().getMessage()).toString();
+		log.error(errorMsg, cause);
+		throw new PersistenceLayerException(errorMsg);
+	}
+
 }

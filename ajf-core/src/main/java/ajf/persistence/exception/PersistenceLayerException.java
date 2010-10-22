@@ -10,6 +10,8 @@ package ajf.persistence.exception;
 @SuppressWarnings("serial")
 public class PersistenceLayerException extends Exception {
 
+	private String errorType;
+
 	/**
 	 * default constructor
 	 */
@@ -21,8 +23,8 @@ public class PersistenceLayerException extends Exception {
 	 * @param message
 	 *            error message
 	 */
-	public PersistenceLayerException(String arg0) {
-		super(arg0);
+	public PersistenceLayerException(String message) {
+		super(message);
 
 	}
 
@@ -43,6 +45,29 @@ public class PersistenceLayerException extends Exception {
 	public PersistenceLayerException(String message, Throwable cause) {
 		super(message, cause);
 
+	}
+
+	/**
+	 * @param message
+	 * @param errorType
+	 *            type of error
+	 * 
+	 * @param cause
+	 *            inner exception
+	 */
+	public PersistenceLayerException(String message, String errorType,
+			Throwable cause) {
+		super(message, cause);
+		this.errorType = errorType;
+
+	}
+
+	public String getErrorType() {
+		return errorType;
+	}
+
+	public void setErrorType(String errorType) {
+		this.errorType = errorType;
 	}
 
 }
