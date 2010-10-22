@@ -9,7 +9,7 @@ import ajf.persistence.exception.PersistenceLayerException;
  * @author E010925
  * 
  */
-public class PersistanceUtils {
+public class PersistenceUtils {
 
 	/**
 	 * manage persistence layer exception
