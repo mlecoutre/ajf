@@ -18,18 +18,11 @@ import org.slf4j.LoggerFactory;
  */
 public class WebUtils {
 
-	private static FacesContext context;
+	//private  FacesContext context;
 	private static String bundleName;
 
 	private static Logger log = LoggerFactory.getLogger(WebUtils.class);
 
-	public static void setContext(FacesContext context) {
-		WebUtils.context = context;
-	}
-
-	static {
-		context = FacesContext.getCurrentInstance();
-	}
 
 	/**
 	 * Stops creation of a new WebUtils object.
@@ -45,8 +38,8 @@ public class WebUtils {
 	 * @return i18n associated value regarding the user Locale
 	 */
 	public static String getFieldLabel(String fieldName) {
-		String bundleName = context.getApplication().getMessageBundle();
-		return getFieldLabel(fieldName, bundleName, context);
+		String bundleName = FacesContext.getCurrentInstance().getApplication().getMessageBundle();
+		return getFieldLabel(fieldName, bundleName, FacesContext.getCurrentInstance());
 	}
 
 	/**
@@ -180,7 +173,7 @@ public class WebUtils {
 		FacesMessage facesMessage = new FacesMessage(
 				FacesMessage.SEVERITY_ERROR,
 				getFieldLabel("application.error.occured"), message);
-		context.addMessage(clientId, facesMessage);
+		FacesContext.getCurrentInstance().addMessage(clientId, facesMessage);
 	}
 
 	public static String getBundleName() {
@@ -191,8 +184,6 @@ public class WebUtils {
 		WebUtils.bundleName = bundleName;
 	}
 
-	public static FacesContext getContext() {
-		return context;
-	}
+
 
 }
