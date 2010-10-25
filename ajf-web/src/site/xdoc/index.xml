@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <document>
 	<properties>
-		<title>Welcome to epp-core reports</title>
+		<title>Welcome to ajf-web reports</title>
 	</properties>
 	<body>
 		<section name="Welcome">
 			<p>
-				epp-core
+				ajf-web
 				<br />
 				You will find here generated Reports
 				<ul>
