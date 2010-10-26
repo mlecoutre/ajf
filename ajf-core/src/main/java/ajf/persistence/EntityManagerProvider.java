@@ -51,7 +51,7 @@ public abstract class EntityManagerProvider {
 		Map<String, EntityManager> entityManagersMap = getEntityManagersMap();
 		
 		EntityManager em = entityManagersMap.get(persistenceUnitName);
-		if (null == em) {
+		if ((null == em) || (!em.isOpen())) {
 			EntityManagerFactory emFactory = Persistence
 				.createEntityManagerFactory(persistenceUnitName);
 			em = emFactory.createEntityManager();
@@ -93,6 +93,21 @@ public abstract class EntityManagerProvider {
 					em.close();
 				em = null;
 				// register the new entity manager
+				setEntityManager(persistenceUnitName, null);
+			}
+		}
+		
+	}
+
+	/**
+	 * remove all closed entityManagers
+	 */
+	public static void clean() {
+		
+		Map<String, EntityManager> entityManagersMap = getEntityManagersMap();
+		for (String persistenceUnitName : entityManagersMap.keySet()) {
+			EntityManager em = entityManagersMap.get(persistenceUnitName);
+			if ((null != em) && (!em.isOpen())) {
 				setEntityManager(persistenceUnitName, null);
 			}
 		}
