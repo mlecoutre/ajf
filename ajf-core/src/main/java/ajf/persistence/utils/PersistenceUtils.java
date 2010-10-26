@@ -61,15 +61,12 @@ public class PersistenceUtils {
 	 */
 	public static void handlerError(Logger log, String message, Throwable cause)
 			throws PersistenceLayerException {
-		String errorMsg = new StringBuffer("Managed persistence error: ")
-				.append(cause.getMessage()).append(" ")
-				.append(cause.getCause().getMessage()).toString();
-		log.error(errorMsg, cause);
-		throw new PersistenceLayerException(errorMsg);
+		handlerError(log, message, "", cause);
 	}
 
 	/**
-	 * manage persistence layer exception
+	 * manage persistence layer exception. It's raised within Persistence layer
+	 * to the Business Layer. Not sent to the presentation Layer
 	 * 
 	 * @param log
 	 *            class logger
@@ -87,7 +84,7 @@ public class PersistenceUtils {
 				.append(cause.getMessage()).append(" ")
 				.append(cause.getCause().getMessage()).toString();
 		log.error(errorMsg, cause);
-		throw new PersistenceLayerException(errorMsg);
+		throw new PersistenceLayerException(errorMsg, errorType, null);
 	}
 
 }
