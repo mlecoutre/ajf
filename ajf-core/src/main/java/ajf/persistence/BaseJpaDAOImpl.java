@@ -126,7 +126,7 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 		Query query = this.entityManager.createQuery("from ".concat(entityClass
 				.getName()));
 		return (List<?>) processFindQuery(entityClass, 
-				entityClass.getSimpleName().concat(".findAll"), query, false, true);
+				entityClass.getSimpleName().concat(".findAll"), query, false);
 
 	}
 
@@ -138,11 +138,11 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @return
 	 * @throws PersistenceException
 	 */
-	public List<?> findQuery(Class<?> entityClass, boolean haveToDetach, String queryName,
+	public List<?> findQuery(Class<?> entityClass, String queryName,
 			Object[] args) throws PersistenceException {
 
 		Query query = retrieveInitializedQuery(queryName, args);
-		return (List<?>) processFindQuery(entityClass, queryName, query, false, haveToDetach);
+		return (List<?>) processFindQuery(entityClass, queryName, query, false);
 
 	}
 
@@ -154,11 +154,11 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @return
 	 * @throws PersistenceException
 	 */
-	public Object findSingleResultQuery(Class<?> entityClass, boolean haveToDetach, String queryName,
+	public Object findSingleResultQuery(Class<?> entityClass, String queryName,
 			Object[] args) throws PersistenceException {
 
 		Query query = retrieveInitializedQuery(queryName, args);
-		Object result = processFindQuery(entityClass, queryName, query, true, haveToDetach);
+		Object result = processFindQuery(entityClass, queryName, query, true);
 		return result;
 
 	}
@@ -187,7 +187,7 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @return
 	 */
 	private Object processFindQuery(Class<?> entityClass, String queryName, Query query,
-			boolean single, boolean detach) throws PersistenceException {
+			boolean single) throws PersistenceException {
 		try {
 			Object result = null;
 			if (!single) {
