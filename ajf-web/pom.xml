@@ -65,13 +65,33 @@
 		</dependency>
 
 	</dependencies>
+	
 	<repositories>
 		<repository>
 			<id>powermock-repo</id>
 			<url>http://powermock.googlecode.com/svn/repo/</url>
 		</repository>
 	</repositories>
+	
 	<build>
+	
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.java</include>
+				</includes>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
+		
 		<plugins>
 
 			<plugin>
@@ -84,5 +104,6 @@
 				</configuration>
 			</plugin>
 		</plugins>
+			
 	</build>
 </project>
