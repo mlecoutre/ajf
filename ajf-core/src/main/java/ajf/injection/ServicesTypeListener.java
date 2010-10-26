@@ -4,10 +4,11 @@ import java.lang.reflect.Field;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 
-import ajf.injection.injectors.DAOMembersInjector;
-import ajf.injection.injectors.EntityManagerMembersInjector;
 import ajf.persistence.annotations.InjectDAO;
+import ajf.persistence.injectors.DAOMembersInjector;
+import ajf.persistence.injectors.EntityManagerMembersInjector;
 
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
@@ -35,7 +36,8 @@ public class ServicesTypeListener implements TypeListener {
 		for (Field field : typeLiteral.getRawType().getDeclaredFields()) {
 
 			if (field.getType() == EntityManager.class
-					&& field.isAnnotationPresent(PersistenceContext.class)) {
+					&& (field.isAnnotationPresent(PersistenceContext.class)
+					|| field.isAnnotationPresent(PersistenceUnit.class))) {
 				typeEncounter.register(new EntityManagerMembersInjector<T>(field));
 			}
 			
