@@ -1,15 +1,52 @@
 package ajf.persistence.utils;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.FlushModeType;
+import javax.persistence.Persistence;
+
 import org.slf4j.Logger;
 
 import ajf.persistence.exception.PersistenceLayerException;
 
 /**
+ * Utility class for persistence layer
  * 
  * @author E010925
  * 
  */
 public class PersistenceUtils {
+
+	/**
+	 * Opens the entity manager.
+	 * 
+	 * @param persistenceUnit
+	 * @return EntityManager
+	 */
+	public EntityManager openEntityManager(String persistenceUnit) {
+		EntityManagerFactory factory = Persistence
+				.createEntityManagerFactory(persistenceUnit);
+		EntityManager em = null;
+		if (em == null) {
+			em = factory.createEntityManager();
+			em.setFlushMode(FlushModeType.AUTO);
+		}
+		if (!em.isOpen()) {
+			em = factory.createEntityManager();
+			em.setFlushMode(FlushModeType.AUTO);
+		}
+		return em;
+	}
+
+	/**
+	 * Closes the entity manager
+	 * 
+	 * @param em
+	 *            EntityManager
+	 */
+	public void closeEntityManager(EntityManager em) {
+		em.close();
+	}
 
 	/**
 	 * manage persistence layer exception
