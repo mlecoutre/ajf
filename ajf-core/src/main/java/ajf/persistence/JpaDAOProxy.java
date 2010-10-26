@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -23,6 +25,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import ajf.persistence.annotations.AutoCommit;
+import ajf.persistence.utils.PersistenceUtils;
 import ajf.utils.helpers.XMLHelper;
 
 public class JpaDAOProxy implements InvocationHandler {
@@ -40,6 +43,8 @@ public class JpaDAOProxy implements InvocationHandler {
 	private static Map<String, PersistenceUnitDesc> puMap = null;
 	// the generated methods
 	private static Set<String> generatedMethods = null;
+	// the simple generated methods list
+	private static List<String> simpleGeneratedMethodsList = null;
 	// the DAO methods Map
 	private static Map<String, Map<String, Method>> daosMap = null;
 	// The DAO delegates Map
@@ -75,7 +80,7 @@ public class JpaDAOProxy implements InvocationHandler {
 		// resolve the DAO Delegate Class
 		resolveDaoDelegate(daoClass);
 
-		// load the persistence unit infos
+		// resolve the persistence unit infos
 		resolvePersitenceUnitInfos(daoClass);
 		
 		// get the corresponding EntityManager
@@ -94,6 +99,10 @@ public class JpaDAOProxy implements InvocationHandler {
 		
 	}
 
+	/**
+	 * find the corresponding DAODelegate
+	 * @param daoClass
+	 */
 	private void resolveDaoDelegate(Class<?> daoClass) {
 		// set the requested DAO
 		this.requestedDAO = daoClass;
@@ -129,7 +138,9 @@ public class JpaDAOProxy implements InvocationHandler {
 	 * @param requestedDAO
 	 * @return
 	 */
-	private void resolvePersitenceUnitInfos(Class<?> requestedDAO) {
+	private void resolvePersitenceUnitInfos(Class<?> requestedDAO) 
+		throws NullPointerException {
+		
 		// retrieve the persistence unit
 		PersistenceUnitDesc puDesc = puMap.get(requestedDAO.getName());
 		if (null != puDesc) {
@@ -164,7 +175,8 @@ public class JpaDAOProxy implements InvocationHandler {
 			}		
 		}
 		
-		throw new NullPointerException("Unable to find persistence unit informations for DAO " + requestedDAO.getName() + ".");
+		throw 
+			new NullPointerException("Unable to find persistence unit informations for DAO " + requestedDAO.getName() + ".");
 				
 	}
 	
@@ -205,27 +217,37 @@ public class JpaDAOProxy implements InvocationHandler {
 	 * @throws ClassNotFoundException
 	 */
 	private Object[] processParameters(Class<?> requestedDAO, Class<?> entityClass, 
-			String requestedMethod, Object[] args)
+			String requestedMethod, Method invokedMethod, Object[] args)
 			throws ClassNotFoundException {
 
 		Object[] params = args;
-		if (requestedMethod.endsWith("ByPrimaryKey")) {
-			params = new Object[] {entityClass, args[0]};
+		
+		if (simpleGeneratedMethodsList.contains(requestedMethod)) {
+			params = new Object[] {args[0]};
 		}
 		else {
-			
-			if ("findAll".equals(requestedMethod)) {
-				params = new Object[] {entityClass};
+			if (requestedMethod.endsWith("ByPrimaryKey")) {
+				params = new Object[] {entityClass, args[0]};
 			}
 			else {
-				// then, try for named query
-				params = new Object[] {entityClass, requestedMethod, args};
+				if ("findAll".equals(requestedMethod)) {
+					params = new Object[] {entityClass};
+				}
+				else {
+					params = new Object[] {entityClass, requestedMethod, args};
+				}
+				
 			}
-			
 		}
 		return params;
 	}
 
+	/**
+	 * find the entityClass
+	 * @param requestedDAO
+	 * @return
+	 * @throws ClassNotFoundException
+	 */
 	private Class<?> resolveEntityClass(Class<?> requestedDAO)
 			throws ClassNotFoundException {
 		String entityClassName = processEntityClassName(requestedDAO);
@@ -341,6 +363,13 @@ public class JpaDAOProxy implements InvocationHandler {
 				// register the DAO methods
 				generatedMethods = baseDAOMethodsMap.keySet();
 				
+				simpleGeneratedMethodsList = new ArrayList<String>();
+				simpleGeneratedMethodsList.add("add");
+				simpleGeneratedMethodsList.add("create");
+				simpleGeneratedMethodsList.add("remove");
+				simpleGeneratedMethodsList.add("delete");
+				simpleGeneratedMethodsList.add("update");
+				
 				daosMap = new HashMap<String, Map<String, Method>>();
 				daosMap.put(BASE_PERSISTENCE_DAO, baseDAOMethodsMap);
 
@@ -416,13 +445,13 @@ public class JpaDAOProxy implements InvocationHandler {
 				methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
 						requestedMethod);
 				// process the parameters
-				params = processParameters(requestedDAO, entityClass, requestedMethod, args);
+				params = processParameters(requestedDAO, entityClass, requestedMethod, method, args);
 			}
 			else {
 				// process the query name
 				String queryName = entityClass.getSimpleName().concat(".").concat(requestedMethod);
 				// process the parameters
-				params = processParameters(requestedDAO, entityClass, queryName, args);
+				params = processParameters(requestedDAO, entityClass, queryName, method, args);
 				
 				// resolve the method to invoke
 				if (requestedMethod.startsWith("findSingleResult")) {
@@ -477,7 +506,7 @@ public class JpaDAOProxy implements InvocationHandler {
 		catch (Throwable e) {
 			if ((!inJTA) && (autoCommit)) 
 				entityManager.getTransaction().rollback();
-			throw e;
+			PersistenceUtils.handlerError(logger, e.getMessage(), e);
 		}
 		return result;
 

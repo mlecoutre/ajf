@@ -20,7 +20,11 @@ public abstract class EntityManagerProvider {
 	public static void setEntityManager(String persistenceUnitName, EntityManager entityManager) {
 		
 		Map<String, EntityManager> entityManagersMap = getEntityManagersMap();
-
+		if (null == entityManager) {
+			if (entityManagersMap.containsKey(persistenceUnitName))
+				entityManagersMap.remove(persistenceUnitName);
+			return;
+		}
 		entityManagersMap.put(persistenceUnitName, entityManager);
 	}
 
@@ -54,10 +58,45 @@ public abstract class EntityManagerProvider {
 			// remove auto-update
 			em.setFlushMode(FlushModeType.COMMIT);
 			// register the new entity manager
-			entityManagersMap.put(persistenceUnitName, em);
+			setEntityManager(persistenceUnitName, em);
 		}
 		return em;
 	}
 	
+	/**
+	 * close the entityManager
+	 * @param persistenceUnitName
+	 */
+	public static void close(String persistenceUnitName) {
+		
+		Map<String, EntityManager> entityManagersMap = getEntityManagersMap();
+		EntityManager em = entityManagersMap.get(persistenceUnitName);
+		if (null != em) {
+			if (em.isOpen())
+				em.close();
+			em = null;
+			// register the new entity manager
+			setEntityManager(persistenceUnitName, null);
+		}
+	}
+	
+	/**
+	 * close all the the entityManagers
+	 */
+	public static void closeAll() {
+		
+		Map<String, EntityManager> entityManagersMap = getEntityManagersMap();
+		for (String persistenceUnitName : entityManagersMap.keySet()) {
+			EntityManager em = entityManagersMap.get(persistenceUnitName);
+			if (null != em) {
+				if (em.isOpen())
+					em.close();
+				em = null;
+				// register the new entity manager
+				setEntityManager(persistenceUnitName, null);
+			}
+		}
+		
+	}
 	
 }

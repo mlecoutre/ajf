@@ -1,5 +1,6 @@
 package ajf.persistence;
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.NonUniqueResultException;
@@ -29,6 +30,9 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	public boolean add(Object bean) throws PersistenceException {
 		this.entityManager.persist(bean);
 		this.entityManager.flush();
+		// detach the bean
+		if (this.detachEntities)
+			this.entityManager.detach(bean);
 		return true;
 	}
 
@@ -49,6 +53,9 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	public boolean update(Object bean) throws PersistenceException {
 		this.entityManager.persist(bean);
 		this.entityManager.flush();
+		// detach the bean
+		if (this.detachEntities)
+			this.entityManager.detach(bean);
 		return true;
 	}
 
@@ -60,6 +67,9 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	public boolean remove(Object bean) throws PersistenceException {
 		this.entityManager.remove(bean);
 		this.entityManager.flush();
+		// detach the bean
+		if (this.detachEntities)
+			this.entityManager.detach(bean);
 		return true;
 	}
 
@@ -99,6 +109,9 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	public Object findByPrimaryKey(Class<?> entityClass, Object pk)
 			throws PersistenceException {
 		Object res = this.entityManager.find(entityClass, pk);
+		// detach the bean
+		if (this.detachEntities)
+			this.entityManager.detach(res);
 		return res;
 	}
 
@@ -112,8 +125,8 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 
 		Query query = this.entityManager.createQuery("from ".concat(entityClass
 				.getName()));
-		return (List<?>) processFindQuery(
-				entityClass.getSimpleName().concat(".findAll"), query, false);
+		return (List<?>) processFindQuery(entityClass, 
+				entityClass.getSimpleName().concat(".findAll"), query, false, true);
 
 	}
 
@@ -125,11 +138,11 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @return
 	 * @throws PersistenceException
 	 */
-	public List<?> findQuery(Class<?> entityClass, String queryName,
+	public List<?> findQuery(Class<?> entityClass, boolean haveToDetach, String queryName,
 			Object[] args) throws PersistenceException {
 
 		Query query = retrieveInitializedQuery(queryName, args);
-		return (List<?>) processFindQuery(queryName, query, false);
+		return (List<?>) processFindQuery(entityClass, queryName, query, false, haveToDetach);
 
 	}
 
@@ -141,11 +154,11 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @return
 	 * @throws PersistenceException
 	 */
-	public Object findSingleResultQuery(Class<?> entityClass, String queryName,
+	public Object findSingleResultQuery(Class<?> entityClass, boolean haveToDetach, String queryName,
 			Object[] args) throws PersistenceException {
 
 		Query query = retrieveInitializedQuery(queryName, args);
-		Object result = processFindQuery(queryName, query, true);
+		Object result = processFindQuery(entityClass, queryName, query, true, haveToDetach);
 		return result;
 
 	}
@@ -173,8 +186,8 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @param query
 	 * @return
 	 */
-	private Object processFindQuery(String queryName, Query query,
-			boolean single) throws PersistenceException {
+	private Object processFindQuery(Class<?> entityClass, String queryName, Query query,
+			boolean single, boolean detach) throws PersistenceException {
 		try {
 			Object result = null;
 			if (!single) {
@@ -200,6 +213,36 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 					}
 				}
 			}
+			
+			if ((null != result) && this.detachEntities) {
+				if (result instanceof List<?>) {
+					if (!((List<?>) result).isEmpty()) {
+						Object refBean = ((List<?>) result).get(0);
+						try {
+							refBean.getClass().asSubclass(entityClass);
+							for (Iterator<?> iterator = ((List<?>) result).iterator(); iterator
+									.hasNext();) {
+								Object bean = iterator.next();
+								// detach the bean
+								this.entityManager.detach(bean);
+							}
+						} catch (Throwable e) {
+							// Nothing to do
+						}
+					}
+				}
+				else {
+					try {
+						result.getClass().asSubclass(entityClass);
+					} catch (Throwable e) {
+						// Nothing to do
+					}
+					// detach the bean
+					this.entityManager.detach(result);
+				}
+			}
+			
+			
 			return result;
 		} catch (Exception e) {
 			String message = "Unexpected exception while trying to process the namedQuery '"
@@ -235,5 +278,7 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 		}
 		return query;
 	}
+	
+	
 
 }
