@@ -28,7 +28,8 @@ public class PersistenceUtils {
 	/**
 	 * Closes the entity manager
 	 * 
-	 * @param em EntityManager
+	 * @param em
+	 *            EntityManager
 	 */
 	public void closeEntityManager(EntityManager em) {
 		em.close();
@@ -67,9 +68,12 @@ public class PersistenceUtils {
 	 */
 	public static void handlerError(Logger log, String message,
 			String errorType, Throwable cause) throws PersistenceLayerException {
-		String errorMsg = new StringBuffer("Managed persistence error: ")
-				.append(cause.getMessage()).append(" ")
-				.append(cause.getCause().getMessage()).toString();
+		StringBuffer buffer = new StringBuffer("Managed persistence error: ")
+				.append(cause.getMessage()).append(" ");
+		if (cause.getCause() != null) {
+			buffer.append(cause.getCause().getMessage());
+		}
+		String errorMsg = buffer.toString();
 		log.error(errorMsg, cause);
 		throw new PersistenceLayerException(errorMsg, errorType, null);
 	}

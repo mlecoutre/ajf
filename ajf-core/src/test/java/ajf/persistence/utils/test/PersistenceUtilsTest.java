@@ -55,4 +55,24 @@ public class PersistenceUtilsTest {
 		assertTrue("Check if persistenceLayerException is thrown",
 				pleExceptionIsRaised);
 	}
+	
+	@Test
+	public void testHandlerErrorNoInnerException() {
+		boolean pleExceptionIsRaised = false;
+		MockitoAnnotations.initMocks(this);
+		when(exception.getMessage()).thenReturn("exceptionMsg");
+		when(cause.getMessage()).thenReturn("causeMsg");
+		//exception without cause. exception.getCause() return null;
+		try {
+			PersistenceUtils.handlerError(log, "my.error.msg", exception);
+
+		} catch (PersistenceLayerException ple) {
+			// check if only persistenceLayerException is thrown
+			// verify(ple, times(1)).getMessage();
+			pleExceptionIsRaised = true;
+		}
+		
+		assertTrue("Check if persistenceLayerException is thrown",
+				pleExceptionIsRaised);
+	}
 }
