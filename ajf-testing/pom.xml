@@ -14,7 +14,7 @@
 	<name>AJFTesting</name>
 	
 	<scm>
-		<url>http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-testing</url>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-testing</connection>
 	</scm>
 	
 	<dependencies>
