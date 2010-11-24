@@ -128,4 +128,27 @@ public class WebUtilsTest {
 		System.out.println(" * " + result);
 		assertTrue("First name".equals(result));
 	}
+
+	@Test
+	public void testGivePropertyValue() {
+
+		String notExistingKey = "not.existing.key";
+
+		// test normal behavior
+		System.out.println("> testGivePropertyValue");
+		String value = WebUtils.givePropertyValue("mykey",
+				"configuration.properties");
+		assertTrue("hello, world".equals(value));
+
+		// test not existing configuration file
+		value = WebUtils.givePropertyValue(notExistingKey,
+				"notexistingfile.properties");
+		assertTrue(notExistingKey.equals(value));
+		
+		// test not existing key
+		value = WebUtils.givePropertyValue(notExistingKey,
+				"configuration.properties");
+		assertTrue(notExistingKey.equals(value));
+
+	}
 }

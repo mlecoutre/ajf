@@ -1,7 +1,11 @@
 package ajf.web;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 import javax.faces.application.FacesMessage;
@@ -185,5 +189,38 @@ public class WebUtils {
 	}
 
 
+	/**
+	 * 
+	 * @param key
+	 *            key in the configuration file
+	 * @param configFilename
+	 *            configuration file name
+	 * @return value associated with the key
+	 */
+	public static String givePropertyValue(String key, String configFilename) {
+		try {
+			File configFile = new File(WebUtils.class.getClassLoader()
+					.getResource(configFilename).getFile());
+			Properties prop = new Properties();
 
+			InputStream is = new FileInputStream(configFile);
+
+			prop.load(is);
+			String value = prop.getProperty(key);
+			if (value == null) {
+				log.warn(" Null value in the configuration file "
+						+ configFilename
+						+ " or key does not exist. Default configuration return the key value "
+						+ key);
+				return key;
+			} else {
+				return value;
+			}
+		} catch (Exception e) {
+			log.warn(" Problem to access to the key " + key
+					+ " in the config file " + configFilename, e);
+			log.warn(" Default configuration return the key value " + key);
+			return key;
+		}
+	}
 }
