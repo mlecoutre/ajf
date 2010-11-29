@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * 
- * @author vincent
+ * @author vincent claeysen
  *
  */
 public abstract class BeanUtils {
