@@ -1,6 +1,5 @@
 package ajf.persistence;
 
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.NonUniqueResultException;
@@ -31,8 +30,10 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 		this.entityManager.persist(bean);
 		this.entityManager.flush();
 		// detach the bean
+		/*
 		if (this.detachEntities)
 			this.entityManager.detach(bean);
+		*/
 		return true;
 	}
 
@@ -54,8 +55,10 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 		this.entityManager.persist(bean);
 		this.entityManager.flush();
 		// detach the bean
+		/*
 		if (this.detachEntities)
 			this.entityManager.detach(bean);
+		*/
 		return true;
 	}
 
@@ -68,8 +71,10 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 		this.entityManager.remove(bean);
 		this.entityManager.flush();
 		// detach the bean
+		/*
 		if (this.detachEntities)
 			this.entityManager.detach(bean);
+		*/
 		return true;
 	}
 
@@ -110,8 +115,10 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 			throws PersistenceException {
 		Object res = this.entityManager.find(entityClass, pk);
 		// detach the bean
+		/*
 		if (this.detachEntities)
 			this.entityManager.detach(res);
+		*/
 		return res;
 	}
 
@@ -214,6 +221,7 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 				}
 			}
 			
+			/*
 			if ((null != result) && this.detachEntities) {
 				if (result instanceof List<?>) {
 					if (!((List<?>) result).isEmpty()) {
@@ -241,7 +249,7 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 					this.entityManager.detach(result);
 				}
 			}
-			
+			*/
 			
 			return result;
 		} catch (Exception e) {

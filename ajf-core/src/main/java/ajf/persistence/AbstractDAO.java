@@ -7,7 +7,6 @@ public abstract class AbstractDAO implements DAO {
 	protected int maxResults = -1;
 	
 	/*
-	 * (non-Javadoc)
 	 * @see adc.persistence.DAO#getFirstResult()
 	 */
 	public int getFirstResult() {
@@ -15,7 +14,6 @@ public abstract class AbstractDAO implements DAO {
 	}
 
 	/*
-	 * (non-Javadoc)
 	 * @see adc.persistence.DAO#setFirstResult(int)
 	 */
 	public void setFirstResult(int firstResult) {
@@ -23,7 +21,6 @@ public abstract class AbstractDAO implements DAO {
 	}
 
 	/*
-	 * (non-Javadoc)
 	 * @see adc.persistence.DAO#getMaxResults()
 	 */
 	public int getMaxResults() {
@@ -31,7 +28,6 @@ public abstract class AbstractDAO implements DAO {
 	}
 
 	/*
-	 * (non-Javadoc)
 	 * @see adc.persistence.DAO#setMaxResults(int)
 	 */
 	public void setMaxResults(int maxResults) {

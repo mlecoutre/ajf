@@ -26,6 +26,7 @@ import org.xml.sax.SAXException;
 
 import ajf.persistence.annotations.AutoCommit;
 import ajf.persistence.utils.PersistenceUtils;
+import ajf.utils.ClassUtils;
 import ajf.utils.helpers.XMLHelper;
 
 public class JpaDAOProxy implements InvocationHandler {
@@ -243,36 +244,6 @@ public class JpaDAOProxy implements InvocationHandler {
 	}
 
 	/**
-	 * find the entityClass
-	 * @param requestedDAO
-	 * @return
-	 * @throws ClassNotFoundException
-	 */
-	private Class<?> resolveEntityClass(Class<?> requestedDAO)
-			throws ClassNotFoundException {
-		String entityClassName = processEntityClassName(requestedDAO);
-		// retrieve the entity class name
-		Class<?> entityClass = Thread.currentThread()
-				.getContextClassLoader().loadClass(entityClassName);
-		return entityClass;
-	}
-
-	private String processEntityClassName(Class<?> requestedDAO) {
-		// add the package
-		String entityClassName = requestedDAO.getPackage().getName();
-		// replace dao by model in the package name
-		entityClassName = entityClassName.substring(0,
-				entityClassName.length() - 3).concat("model.");
-		// add the DAO class name
-		entityClassName = entityClassName.concat(requestedDAO
-				.getSimpleName());
-		// remove DAO
-		entityClassName = entityClassName.substring(0,
-				entityClassName.length() - 3);
-		return entityClassName;
-	}
-
-	/**
 	 * 
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
@@ -437,7 +408,7 @@ public class JpaDAOProxy implements InvocationHandler {
 			// the DAO impl to invoke
 			daoImpl = basePersistenceDAOImpl;
 			// resolve the corresponding entity class
-			Class<?> entityClass = resolveEntityClass(requestedDAO);
+			Class<?> entityClass = ClassUtils.resolveEntityClass(requestedDAO);
 			
 			// is it a standard method
 			if (generatedMethods.contains(requestedMethod)) {

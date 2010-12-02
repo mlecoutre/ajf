@@ -9,11 +9,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
 @Inherited
-public @interface AutoCommit {
+public @interface Query {
 
 	/**
 	 * @return true if auto-commit
 	 */
-	boolean value() default false;
+	boolean query() default false;
 
 }

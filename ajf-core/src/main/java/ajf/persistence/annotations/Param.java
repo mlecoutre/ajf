@@ -7,13 +7,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ElementType.PARAMETER})
 @Inherited
-public @interface AutoCommit {
+public @interface Param {
 
 	/**
 	 * @return true if auto-commit
 	 */
-	boolean value() default false;
+	boolean name() default false;
 
 }
