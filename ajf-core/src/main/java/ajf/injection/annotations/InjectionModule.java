@@ -1,4 +1,4 @@
-package ajf.annotations;
+package ajf.injection.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -11,7 +11,7 @@ import com.google.inject.Module;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Inherited
-public @interface InjectModule {
+public @interface InjectionModule {
 
 	/**
 	 * @return a Runner class (must have a constructor that takes a single Class to run)

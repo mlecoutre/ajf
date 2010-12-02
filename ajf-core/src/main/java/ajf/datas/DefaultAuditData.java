@@ -7,8 +7,6 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * AuditData implementation Predefined key are available in AuditData.KEY_XXXX
  * 
@@ -80,15 +78,11 @@ public class DefaultAuditData implements EditableAuditData {
 		return map.keySet();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
+	@Override
 	public String toString() {
-		Object[] array = new Object[] { map };
-		StringBuffer buffer = new StringBuffer("AuditData ");
-		buffer.append(StringUtils.join(array, ", "));
-		return buffer.toString();
+		return "DefaultAuditData [map=" + map + "]";
 	}
+
+	
 
 }

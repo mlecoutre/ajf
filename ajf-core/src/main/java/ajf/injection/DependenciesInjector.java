@@ -2,7 +2,7 @@ package ajf.injection;
 
 
 import static ajf.utils.BeanUtils.instanciate;
-import ajf.annotations.InjectModule;
+import ajf.injection.annotations.InjectionModule;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -56,10 +56,10 @@ public abstract class DependenciesInjector {
 		Module module = null;
 
 		// is the object class using annotation InjectionModule
-		if (objectClass.isAnnotationPresent(InjectModule.class)) {
+		if (objectClass.isAnnotationPresent(InjectionModule.class)) {
 			
-			InjectModule injectionModuleAnnotation = objectClass
-				.getAnnotation(InjectModule.class);
+			InjectionModule injectionModuleAnnotation = objectClass
+				.getAnnotation(InjectionModule.class);
 
 			// get the injection module class
 			Class<? extends Module> moduleClass = injectionModuleAnnotation
@@ -94,7 +94,6 @@ public abstract class DependenciesInjector {
 			IllegalAccessException {
 
 		Object bean = instanciate(type);
-		inject(bean);
 		return (T) bean;
 	
 	}
