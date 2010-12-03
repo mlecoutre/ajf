@@ -1,11 +1,11 @@
 package ajf.injection.test.model;
 
-import ajf.annotations.InjectModule;
 import ajf.injection.DefaultInjectionModule;
+import ajf.injection.annotations.InjectionModule;
 import ajf.injection.test.dao.MyMockDAO;
 import ajf.persistence.annotations.InjectDAO;
 
-@InjectModule(value = DefaultInjectionModule.class)
+@InjectionModule(value = DefaultInjectionModule.class)
 public class MyMock {
 
 	@InjectDAO
