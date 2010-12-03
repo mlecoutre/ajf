@@ -2,17 +2,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>am.ajf</groupId>
-	<artifactId>ajf-core</artifactId>
-	<version>2.0-SNAPSHOT</version>
-	<name>AJFCore</name>
-	<inceptionYear>2010</inceptionYear>
-
 	<parent>
 		<groupId>am.parent</groupId>
 		<artifactId>standard</artifactId>
 		<version>2.0-SNAPSHOT</version>
 	</parent>
+
+	<groupId>am.ajf</groupId>
+	<artifactId>ajf-core</artifactId>
+	<version>2.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<inceptionYear>2010</inceptionYear>
 
 	<scm>
 		<url>http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-core</url>
@@ -39,6 +39,15 @@
 			<version>2.0-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- 
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-injection</artifactId>
+			<version>2.0-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		-->
 
 		<!-- Bean Validation : JSR 303 -->
 		<dependency>
@@ -142,10 +151,9 @@
 		<!-- End :  Dependency injection dependencies -->
 
 		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<version>10.6.1.0</version>
-			<scope>test</scope>
+			<groupId>hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>3.4.0.GA</version>
 		</dependency>
 	</dependencies>
 	
