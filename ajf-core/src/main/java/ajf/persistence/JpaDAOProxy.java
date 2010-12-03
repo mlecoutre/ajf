@@ -287,10 +287,7 @@ public class JpaDAOProxy implements InvocationHandler {
 							Class<?> entityClass = classLoader.loadClass(className);
 							
 							// process candidate DAO className
-							String daoCandidate = entityClass.getPackage().getName();
-							daoCandidate = daoCandidate.substring(0, daoCandidate.length()-5);
-							daoCandidate = daoCandidate.concat("dao.");
-							daoCandidate = daoCandidate.concat(entityClass.getSimpleName()).concat("DAO");
+							String daoCandidate = ClassUtils.processDAOClassName(entityClass);
 							
 							// check the DAO class
 							classLoader.loadClass(daoCandidate);

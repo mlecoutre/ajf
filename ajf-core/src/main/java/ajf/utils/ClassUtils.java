@@ -66,17 +66,33 @@ public abstract class ClassUtils {
 	}
 
 	
+	
 	/*
 	 * DAO in [project].core.dao.[Entity]DAO
 	 * Entity in [project].lib.model.[Entity]
 	 */
-	private static String processEntityClassName(Class<?> daoClass) {
+	public static String processEntityClassName(Class<?> daoClass) {
 		
 		// replace ".core.dao" by ".lib.model" 
 		String entityClassName = daoClass.getName().replace(".core.dao.", ".lib.model.");
 		// remove ~DAO
 		entityClassName = entityClassName.substring(0, entityClassName.length()-3);
 		return entityClassName;
+	}
+	
+	/*
+	 * Entity in [project].lib.model.[Entity]
+	 * DAO in [project].core.dao.[Entity]DAO
+	 */
+	public static String processDAOClassName(Class<?> entityClass) {
+		
+		// replace ".core.dao" by ".lib.model" 
+		String daoClassName = entityClass.getName().replace(".lib.model.", ".core.dao.");
+		// add ~DAO
+		daoClassName = daoClassName.concat("DAO");
+		
+		return daoClassName;
+		
 	}
 	
 }

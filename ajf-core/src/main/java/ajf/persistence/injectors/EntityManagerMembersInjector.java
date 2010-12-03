@@ -49,7 +49,7 @@ public class EntityManagerMembersInjector<T> implements MembersInjector<T> {
 			puName = DEFAULT_PERSISTENCE_UNIT_NAME;
 		this.persistenceUnitName = puName;
 		
-		field.setAccessible(true);
+		this.field.setAccessible(true);
 		
 	}
 

@@ -18,7 +18,7 @@ public class DAOMembersInjector<T> implements MembersInjector<T> {
 
 	public DAOMembersInjector(Field field) {
 		this.field = field;
-		field.setAccessible(true);
+		this.field.setAccessible(true);
 	}
 
 	public void injectMembers(T t) {

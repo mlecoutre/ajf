@@ -8,7 +8,7 @@ public class DefaultInjectionModule extends AbstractModule {
 	
 	private static Module instance = new DefaultInjectionModule(); 
 	
-	private DefaultInjectionModule() {
+	public DefaultInjectionModule() {
 		super();
 	}
 	
