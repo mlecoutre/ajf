@@ -4,8 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import ajf.injection.test.model.MyMock;
 import ajf.utils.BeanUtils;
+import foo.lib.model.MyMock;
 
 public class BeanUtilsTest {
 
