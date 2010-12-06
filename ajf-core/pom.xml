@@ -40,6 +40,13 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId> 
+			<version>10.6.1.0</version>
+			<scope>test</scope>
+		</dependency>
+		
 		<!-- 
 		<dependency>
 			<groupId>am.ajf</groupId>
@@ -75,19 +82,19 @@
 		</dependency>
 
 		<!-- JPA 2 : JSR 317 -->
+		<!-- 
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.0-api</artifactId>
 			<version>1.0.0.Final</version>
 		</dependency>
+		-->
 		<!-- Hibernate Provider -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>3.4.0.GA</version>			
-			<!-- 
 			<version>3.5.1-Final</version>
-			-->
+			<!-- <version>3.4.0.GA</version> -->			
 		</dependency>
 		<!-- EclipseLink Provider -->
 		<!-- 
@@ -152,12 +159,6 @@
 		</dependency>
 
 		<!-- End :  Dependency injection dependencies -->
-
-		<dependency>
-			<groupId>hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>3.4.0.GA</version>
-		</dependency>
 	</dependencies>
 	
 	<build>
