@@ -30,7 +30,7 @@ public class EntityManagerMembersInjector<T> implements MembersInjector<T> {
 		if (field.isAnnotationPresent(PersistenceContext.class)) {
 			PersistenceContext pCtx = field.getAnnotation(PersistenceContext.class);
 			puName= pCtx.name();
-			if (null == puName) {
+			if ((null == puName) || (0 == puName.length())) {
 				puName = pCtx.unitName();
 			}
 		}
@@ -39,7 +39,7 @@ public class EntityManagerMembersInjector<T> implements MembersInjector<T> {
 			if (field.isAnnotationPresent(PersistenceUnit.class)) {
 				PersistenceUnit pUnit = field.getAnnotation(PersistenceUnit.class);
 				puName= pUnit.name();
-				if (null == puName) {
+				if ((null == puName) || (0 == puName.length())) {
 					puName = pUnit.unitName();
 				}
 			}
