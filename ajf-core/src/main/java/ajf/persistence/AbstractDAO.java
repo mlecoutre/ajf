@@ -6,6 +6,8 @@ public abstract class AbstractDAO implements DAO {
 	protected int firstResult = -1;
 	protected int maxResults = -1;
 	
+	protected boolean autoCommit = false;
+	
 	/*
 	 * @see adc.persistence.DAO#getFirstResult()
 	 */
@@ -33,6 +35,13 @@ public abstract class AbstractDAO implements DAO {
 	public void setMaxResults(int maxResults) {
 		this.maxResults = maxResults;
 	}
-	
+
+	public boolean isAutoCommit() {
+		return autoCommit;
+	}
+
+	public void setAutoCommit(boolean autoCommit) {
+		this.autoCommit = autoCommit;
+	}
 	
 }

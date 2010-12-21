@@ -7,6 +7,8 @@ public abstract class AbstractJpaDAO extends AbstractDAO implements JpaDAO {
 	// the EntityManager 
 	protected EntityManager entityManager = null;
 	
+	protected boolean detachEntities = false;
+	
 	/*
 	 * @see ajf.persistence.JpaDAO#getEntityManager()
 	 */
@@ -20,5 +22,13 @@ public abstract class AbstractJpaDAO extends AbstractDAO implements JpaDAO {
 	public void setEntityManager(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
-	
+
+	public boolean isDetachEntities() {
+		return detachEntities;
+	}
+
+	public void setDetachEntities(boolean detachEntities) {
+		this.detachEntities = detachEntities;
+	}
+		
 }

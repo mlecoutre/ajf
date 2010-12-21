@@ -26,15 +26,10 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @param bean
 	 * @throws PersistenceException
 	 */
-	public boolean add(Object bean) throws PersistenceException {
+	public Object add(Object bean) throws PersistenceException {
 		this.entityManager.persist(bean);
 		this.entityManager.flush();
-		// detach the bean
-		/*
-		if (this.detachEntities)
-			this.entityManager.detach(bean);
-		*/
-		return true;
+		return bean;
 	}
 
 	/**
@@ -42,7 +37,7 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @param bean
 	 * @throws PersistenceException
 	 */
-	public boolean create(Object bean) throws PersistenceException {
+	public Object create(Object bean) throws PersistenceException {
 		return add(bean);
 	}
 
@@ -51,15 +46,10 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @param bean
 	 * @throws PersistenceException
 	 */
-	public boolean update(Object bean) throws PersistenceException {
+	public Object update(Object bean) throws PersistenceException {
 		this.entityManager.persist(bean);
 		this.entityManager.flush();
-		// detach the bean
-		/*
-		if (this.detachEntities)
-			this.entityManager.detach(bean);
-		*/
-		return true;
+		return bean;
 	}
 
 	/**
@@ -67,15 +57,10 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @param bean
 	 * @throws PersistenceException
 	 */
-	public boolean remove(Object bean) throws PersistenceException {
+	public Object remove(Object bean) throws PersistenceException {
 		this.entityManager.remove(bean);
 		this.entityManager.flush();
-		// detach the bean
-		/*
-		if (this.detachEntities)
-			this.entityManager.detach(bean);
-		*/
-		return true;
+		return bean;
 	}
 
 	/**
@@ -83,7 +68,7 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @param bean
 	 * @throws PersistenceException
 	 */
-	public boolean delete(Object bean) throws PersistenceException {
+	public Object delete(Object bean) throws PersistenceException {
 		return remove(bean);
 	}
 
@@ -93,14 +78,13 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @param pk
 	 * @throws PersistenceException
 	 */
-	public boolean removeByPrimaryKey(Class<?> entityClass, Object pk)
+	public Object removeByPrimaryKey(Class<?> entityClass, Object pk)
 			throws PersistenceException {
 		Object bean = findByPrimaryKey(entityClass, pk);
 		if (null != bean) {
-			remove(bean);
-			return true;
+			return remove(bean);
 		}
-		return false;
+		return null;
 
 	}
 
@@ -115,10 +99,6 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 			throws PersistenceException {
 		Object res = this.entityManager.find(entityClass, pk);
 		// detach the bean
-		/*
-		if (this.detachEntities)
-			this.entityManager.detach(res);
-		*/
 		return res;
 	}
 
@@ -220,37 +200,7 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 					}
 				}
 			}
-			
-			/*
-			if ((null != result) && this.detachEntities) {
-				if (result instanceof List<?>) {
-					if (!((List<?>) result).isEmpty()) {
-						Object refBean = ((List<?>) result).get(0);
-						try {
-							refBean.getClass().asSubclass(entityClass);
-							for (Iterator<?> iterator = ((List<?>) result).iterator(); iterator
-									.hasNext();) {
-								Object bean = iterator.next();
-								// detach the bean
-								this.entityManager.detach(bean);
-							}
-						} catch (Throwable e) {
-							// Nothing to do
-						}
-					}
-				}
-				else {
-					try {
-						result.getClass().asSubclass(entityClass);
-					} catch (Throwable e) {
-						// Nothing to do
-					}
-					// detach the bean
-					this.entityManager.detach(result);
-				}
-			}
-			*/
-			
+						
 			return result;
 		} catch (Exception e) {
 			String message = "Unexpected exception while trying to process the namedQuery '"

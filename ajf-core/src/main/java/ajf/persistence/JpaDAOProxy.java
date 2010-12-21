@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,7 +25,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import ajf.persistence.annotations.AutoCommit;
 import ajf.persistence.utils.PersistenceUtils;
 import ajf.utils.ClassUtils;
 import ajf.utils.helpers.XMLHelper;
@@ -55,11 +55,17 @@ public class JpaDAOProxy implements InvocationHandler {
 	private String persistenceUnitName;
 	private boolean inJTA = true;
 		
+	private Class<?> entityClass = null;
+	
 	private Class<?> requestedDAO = null;
 	private JpaDAO basePersistenceDAOImpl = null;
-	private String persistenceDAODelegate = null;
-	private Class<?> daoDelegateClass = null;
+	
+	private String persistenceDAODelegateClassName = null;
+	private Class<?> daoDelegateClass = null;	
 	private JpaDAO persistenceDAODelegateImpl = null;
+	
+	private boolean detachEntities = false;
+	private boolean autoCommit = false;
 	
 	private EntityManager entityManager = null;
 
@@ -84,20 +90,31 @@ public class JpaDAOProxy implements InvocationHandler {
 		// resolve the persistence unit infos
 		resolvePersitenceUnitInfos(daoClass);
 		
-		// get the corresponding EntityManager
-		entityManager = EntityManagerProvider.getEntityManager(persistenceUnitName);
-
 		// get a new persistence base dao impl instance
 		basePersistenceDAOImpl = (JpaDAO) instanciate(BASE_PERSISTENCE_DAO_CLASS);
-		basePersistenceDAOImpl.setEntityManager(entityManager);
 
 		// get a new persistence dao delegate impl instance
 		persistenceDAODelegateImpl = null;
 		if (null != daoDelegateClass) {
 			persistenceDAODelegateImpl = (JpaDAO) instanciate(daoDelegateClass);
-			persistenceDAODelegateImpl.setEntityManager(entityManager);
 		}
 		
+	}
+	
+	public boolean isDetachEntities() {
+		return detachEntities;
+	}
+
+	public void setDetachEntities(boolean detachEntities) {
+		this.detachEntities = detachEntities;
+	}
+
+	public boolean isAutoCommit() {
+		return autoCommit;
+	}
+
+	public void setAutoCommit(boolean autoCommit) {
+		this.autoCommit = autoCommit;
 	}
 
 	/**
@@ -107,7 +124,15 @@ public class JpaDAOProxy implements InvocationHandler {
 	private void resolveDaoDelegate(Class<?> daoClass) {
 		// set the requested DAO
 		this.requestedDAO = daoClass;
-
+		
+		// resolve the corresponding entity class
+		try {
+			this.entityClass = ClassUtils.resolveEntityClass(requestedDAO);
+		} catch (ClassNotFoundException e1) {
+			this.entityClass = null;
+		}
+		
+		
 		// resolve the DAO Delegate
 		if (daoDelegatesMap.containsKey(daoClass)) {
 			this.daoDelegateClass = daoDelegatesMap.get(daoClass);
@@ -120,7 +145,7 @@ public class JpaDAOProxy implements InvocationHandler {
 				this.daoDelegateClass = Thread.currentThread()
 						.getContextClassLoader()
 						.loadClass(daoDelegateClassName);
-				this.persistenceDAODelegate = daoDelegateClassName;
+				this.persistenceDAODelegateClassName = daoDelegateClassName;
 			}
 			catch (Exception e) {
 				this.daoDelegateClass = null;
@@ -354,8 +379,16 @@ public class JpaDAOProxy implements InvocationHandler {
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
 
+		// get the corresponding EntityManager
+		this.entityManager = EntityManagerProvider.getEntityManager(persistenceUnitName);
+		
+		// set the current EntityManager
+		basePersistenceDAOImpl.setEntityManager(entityManager);
+		if (null != persistenceDAODelegateClassName) 
+			persistenceDAODelegateImpl.setEntityManager(entityManager);
+		
 		// the requested method name
-		String requestedMethod = method.getName();
+		String requestedMethodName = method.getName();
 
 		// the invocation parameters
 		Object daoImpl = null;
@@ -366,12 +399,19 @@ public class JpaDAOProxy implements InvocationHandler {
 		Object result = null;
 		
 		// for the settings setFirstResult(...) setMaxResults(...)
-		if (requestedMethod.startsWith("set")) {
+		if (requestedMethodName.startsWith("set")) {
 			
-			if (null != persistenceDAODelegate) { 
+			if ("setDetachEntities".equals(requestedMethodName)) {
+				setDetachEntities((Boolean)args[0]);
+			}
+			if ("setAutoCommit".equals(requestedMethodName)) {
+				setAutoCommit((Boolean)args[0]);
+			}
+						
+			if (null != persistenceDAODelegateClassName) { 
 				daoImpl = persistenceDAODelegateImpl;
-				methodToInvoke = daosMap.get(persistenceDAODelegate).get(
-						requestedMethod);
+				methodToInvoke = daosMap.get(persistenceDAODelegateClassName).get(
+						requestedMethodName);
 				if (null != methodToInvoke) {
 					result = methodToInvoke.invoke(daoImpl, args);
 				}
@@ -380,7 +420,7 @@ public class JpaDAOProxy implements InvocationHandler {
 			// the DAO impl to invoke
 			daoImpl = basePersistenceDAOImpl;
 			methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
-						requestedMethod);
+						requestedMethodName);
 			if (null != methodToInvoke) {
 				result = methodToInvoke.invoke(daoImpl, args);
 			}
@@ -391,10 +431,10 @@ public class JpaDAOProxy implements InvocationHandler {
 		
 		
 		// is the method in the delegate
-		if (null != persistenceDAODelegate) {
+		if (null != persistenceDAODelegateClassName) {
 			// get the requested method
-			methodToInvoke = daosMap.get(persistenceDAODelegate).get(
-					requestedMethod);
+			methodToInvoke = daosMap.get(persistenceDAODelegateClassName).get(
+					requestedMethodName);
 			if (null != methodToInvoke)
 				daoImpl = persistenceDAODelegateImpl;
 		}
@@ -405,30 +445,30 @@ public class JpaDAOProxy implements InvocationHandler {
 			// the DAO impl to invoke
 			daoImpl = basePersistenceDAOImpl;
 			// resolve the corresponding entity class
-			Class<?> entityClass = ClassUtils.resolveEntityClass(requestedDAO);
+			// Class<?> entityClass = ClassUtils.resolveEntityClass(requestedDAO);
 			
 			// is it a standard method
-			if (generatedMethods.contains(requestedMethod)) {
+			if (generatedMethods.contains(requestedMethodName)) {
 				// get the requested method
 				methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
-						requestedMethod);
+						requestedMethodName);
 				// process the parameters
-				params = processParameters(requestedDAO, entityClass, requestedMethod, method, args);
+				params = processParameters(requestedDAO, entityClass, requestedMethodName, method, args);
 			}
 			else {
 				// process the query name
-				String queryName = entityClass.getSimpleName().concat(".").concat(requestedMethod);
+				String queryName = entityClass.getSimpleName().concat(".").concat(requestedMethodName);
 				// process the parameters
 				params = processParameters(requestedDAO, entityClass, queryName, method, args);
 				
 				// resolve the method to invoke
-				if (requestedMethod.startsWith("findSingleResult")) {
+				if (requestedMethodName.startsWith("findSingleResult")) {
 					// get the requested method
 					methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
 						"findSingleResultQuery");
 				}
 				else {
-					if (requestedMethod.startsWith("find")) {
+					if (requestedMethodName.startsWith("find")) {
 						// get the requested method
 						methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
 							"findQuery");
@@ -444,19 +484,9 @@ public class JpaDAOProxy implements InvocationHandler {
 		}
 		
 		if (null == methodToInvoke) {
-			throw new NullPointerException("The requested method '" + requestedMethod + "' is not implemented.");
+			throw new NullPointerException("The requested method '" + requestedMethodName + "' is not implemented.");
 		}
 				
-		// is auto-commit
-		boolean autoCommit = true;
-		if (method.isAnnotationPresent(AutoCommit.class)) {
-			autoCommit = method.getAnnotation(AutoCommit.class).value();
-		}
-		// is auto-commit overrided 
-		if (methodToInvoke.isAnnotationPresent(AutoCommit.class)) {
-			autoCommit = methodToInvoke.getAnnotation(AutoCommit.class).value();
-		}
-
 		try {
 			if ((!inJTA) && (autoCommit)) 
 				entityManager.getTransaction().begin();
@@ -470,6 +500,36 @@ public class JpaDAOProxy implements InvocationHandler {
 			
 			if ((!inJTA) && (autoCommit)) 
 				entityManager.getTransaction().commit();
+			
+			// manage entities detachment
+			if ((null != result) && detachEntities) {
+				if (result instanceof List<?>) {
+					if (!((List<?>) result).isEmpty()) {
+						Object refBean = ((List<?>) result).get(0);
+						try {
+							refBean.getClass().asSubclass(entityClass);
+							for (Iterator<?> iterator = ((List<?>) result).iterator(); iterator
+									.hasNext();) {
+								Object bean = iterator.next();
+								// detach the bean
+								this.entityManager.detach(bean);
+							}
+						} catch (Throwable e) {
+							// Nothing to do
+						}
+					}
+				}
+				else {
+					try {
+						result.getClass().asSubclass(entityClass);
+					} catch (Throwable e) {
+						// Nothing to do
+					}
+					// detach the bean
+					this.entityManager.detach(result);
+				}
+			}
+			
 		}
 		catch (Throwable e) {
 			if ((!inJTA) && (autoCommit)) 

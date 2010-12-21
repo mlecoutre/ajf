@@ -16,5 +16,14 @@ public interface JpaDAO extends DAO {
 	 */
 	EntityManager getEntityManager();
 	
+	/**
+	 * @param detach the entities
+	 */
+	void setDetachEntities(boolean detach);
 	
+	/**
+	 * @return the detach entities flag
+	 */
+	boolean isDetachEntities();
+		
 }

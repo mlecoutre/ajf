@@ -23,4 +23,15 @@ public interface DAO {
 	 */
 	void setMaxResults(int maxResults);
 	
+	/**
+	 * @param autocommit true | false
+	 */
+	void setAutoCommit(boolean autoCommit);
+	
+	/**
+	 * @return the autocommit status
+	 */
+	boolean isAutoCommit();
+	
+	
 }
