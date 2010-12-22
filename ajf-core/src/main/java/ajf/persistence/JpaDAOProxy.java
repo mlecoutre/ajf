@@ -4,6 +4,7 @@ import static ajf.utils.BeanUtils.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import ajf.persistence.annotations.Param;
 import ajf.persistence.utils.PersistenceUtils;
 import ajf.utils.ClassUtils;
 import ajf.utils.helpers.XMLHelper;
@@ -50,6 +52,9 @@ public class JpaDAOProxy implements InvocationHandler {
 	private static List<String> simpleGeneratedMethodsList = null;
 	// the DAO methods Map
 	private static Map<String, Map<String, Method>> daosMap = null;
+	// the DAO methods nammed parameters Map
+	private static Map<Method, String[]> daosMethodsNammedParamsMap = new HashMap<Method, String[]>();
+
 	// The DAO delegates Map
 	private static Map<Class<?>, Class<?>> daoDelegatesMap = null;
 
@@ -225,6 +230,7 @@ public class JpaDAOProxy implements InvocationHandler {
 	 * @param requestedDAO
 	 */
 	private void registerDAO(Class<?> requestedDAO) {
+
 		synchronized (token) {
 			Map<String, Method> daoMethodsMap = daosMap.get(requestedDAO
 					.getName());
@@ -261,7 +267,13 @@ public class JpaDAOProxy implements InvocationHandler {
 				if ("findAll".equals(requestedMethod)) {
 					params = new Object[] { entityClass };
 				} else {
-					params = new Object[] { entityClass, requestedMethod, args };
+					String[] argParamsNames = null;
+					if (daosMethodsNammedParamsMap.containsKey(invokedMethod)) {
+						argParamsNames = daosMethodsNammedParamsMap
+								.get(invokedMethod);
+					}
+					params = new Object[] { entityClass, requestedMethod, args,
+							argParamsNames };
 				}
 
 			}
@@ -320,7 +332,56 @@ public class JpaDAOProxy implements InvocationHandler {
 									.processDAOClassName(entityClass);
 
 							// check the DAO class
-							classLoader.loadClass(daoCandidate);
+							Class<?> daoClass = classLoader
+									.loadClass(daoCandidate);
+
+							// visit and register the DAO methods parameters
+							for (Method daoMethod : daoClass.getMethods()) {
+
+								if (null != daoMethod.getParameterTypes()) {
+									int numParams = daoMethod
+											.getParameterTypes().length;
+									if (numParams > 0) {
+
+										List<String> argNames = new ArrayList<String>();
+
+										Annotation[][] paramsAnnotations = daoMethod
+												.getParameterAnnotations();
+										if (paramsAnnotations.length >= numParams) {
+											for (int idx = 0; idx < numParams; idx++) {
+												Annotation[] paramAnnotations = paramsAnnotations[idx];
+												boolean foundParamAnnoation = false;
+												for (int j = 0; j < paramAnnotations.length; j++) {
+													Annotation annota = paramAnnotations[j];
+													if (annota
+															.annotationType()
+															.equals(Param.class)) {
+														argNames.add(((Param) annota)
+																.value());
+														foundParamAnnoation = true;
+														break;
+													}
+												}
+												if (!foundParamAnnoation) {
+													argNames = null;
+													break;
+												}
+											}
+
+										}
+										String[] paramNames = null;
+										if ((null != argNames)
+												&& (!argNames.isEmpty())) {
+											paramNames = argNames
+													.toArray(new String[0]);
+											daosMethodsNammedParamsMap.put(
+													daoMethod, paramNames);
+										}
+
+									}
+								}
+
+							}
 
 							puDesc.addClass(className);
 
@@ -434,12 +495,15 @@ public class JpaDAOProxy implements InvocationHandler {
 		}
 
 		// is the method in the delegate
+		boolean inDAODelegate = false;
 		if (null != persistenceDAODelegateClassName) {
 			// get the requested method
 			methodToInvoke = daosMap.get(persistenceDAODelegateClassName).get(
 					requestedMethodName);
-			if (null != methodToInvoke)
+			if (null != methodToInvoke) {
 				daoImpl = persistenceDAODelegateImpl;
+				inDAODelegate = true;
+			}
 		}
 
 		// process the generated methods in the baseJpaDAOImpl
@@ -540,12 +604,11 @@ public class JpaDAOProxy implements InvocationHandler {
 				entityManager.getTransaction().rollback();
 			PersistenceUtils.handlerError(logger, e.getMessage(), e);
 		}
-		
-		if (simpleGeneratedMethodsList.contains(requestedMethodName)) {
+
+		if (!inDAODelegate) {
 			if (method.getReturnType().equals(Void.TYPE)) {
 				result = null;
-			}
-			else {
+			} else {
 				if (method.getReturnType().getName().equals("boolean")) {
 					result = (result != null);
 				}

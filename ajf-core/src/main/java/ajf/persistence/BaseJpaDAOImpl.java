@@ -126,9 +126,9 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @throws PersistenceException
 	 */
 	public List<?> findQuery(Class<?> entityClass, String queryName,
-			Object[] args) throws PersistenceException {
+			Object[] args, String[] argNames) throws PersistenceException {
 
-		Query query = retrieveInitializedQuery(queryName, args);
+		Query query = retrieveInitializedQuery(queryName, args, argNames);
 		return (List<?>) processFindQuery(entityClass, queryName, query, false);
 
 	}
@@ -142,9 +142,9 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @throws PersistenceException
 	 */
 	public Object findSingleResultQuery(Class<?> entityClass, String queryName,
-			Object[] args) throws PersistenceException {
+			Object[] args, String[] argNames) throws PersistenceException {
 
-		Query query = retrieveInitializedQuery(queryName, args);
+		Query query = retrieveInitializedQuery(queryName, args, argNames);
 		Object result = processFindQuery(entityClass, queryName, query, true);
 		return result;
 
@@ -159,9 +159,9 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @throws PersistenceException
 	 */
 	public boolean executeQuery(Class<?> entityClass, String queryName,
-			Object[] args) throws PersistenceException {
+			Object[] args, String[] argNames) throws PersistenceException {
 
-		Query query = retrieveInitializedQuery(queryName, args);
+		Query query = retrieveInitializedQuery(queryName, args, argNames);
 		int num = query.executeUpdate();
 		this.entityManager.flush();
 		return (num > 0);
@@ -216,7 +216,7 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 	 * @param args
 	 * @return
 	 */
-	private Query retrieveInitializedQuery(String queryName, Object[] args)
+	private Query retrieveInitializedQuery(String queryName, Object[] args, String[] argNames)
 			throws PersistenceException {
 		Query query;
 		try {
@@ -231,6 +231,8 @@ public class BaseJpaDAOImpl extends AbstractJpaDAO {
 			for (int i = 0; i < args.length; i++) {
 				Object value = args[i];
 				String parameterName = "p".concat(String.valueOf(i + 1));
+				if ((null != argNames) && (argNames.length > 0))
+					parameterName = argNames[i];				
 				query.setParameter(parameterName, value);
 			}
 		}

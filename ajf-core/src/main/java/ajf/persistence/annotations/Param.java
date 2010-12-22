@@ -12,8 +12,8 @@ import java.lang.annotation.Target;
 public @interface Param {
 
 	/**
-	 * @return true if auto-commit
+	 * @return the param name
 	 */
-	boolean name() default false;
+	String value() ;
 
 }
