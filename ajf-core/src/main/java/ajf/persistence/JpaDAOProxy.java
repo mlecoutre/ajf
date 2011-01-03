@@ -4,7 +4,6 @@ import static ajf.utils.BeanUtils.*;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -15,8 +14,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.Logger;
@@ -26,37 +23,32 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import ajf.persistence.annotations.Param;
 import ajf.persistence.utils.PersistenceUtils;
-import ajf.utils.ClassUtils;
 import ajf.utils.helpers.XMLHelper;
 
 public class JpaDAOProxy implements InvocationHandler {
 
 	public final static String DEFAULT_PERSISTENCE_UNIT_NAME = "default";
+	public final static String JTA = "JTA";
 
 	private final static Class<?> BASE_PERSISTENCE_DAO_CLASS = BaseJpaDAOImpl.class;
-	private final static String BASE_PERSISTENCE_DAO = BASE_PERSISTENCE_DAO_CLASS
-			.getName();
-
+	
 	private final static Logger logger = LoggerFactory
 			.getLogger(JpaDAOProxy.class);
 
 	private static Object token = new Object();
 
-	// the persistence unit Map
-	private static Map<String, PersistenceUnitDesc> puMap = null;
 	// the generated methods
 	private static Set<String> generatedMethods = null;
 	// the simple generated methods list
 	private static List<String> simpleGeneratedMethodsList = null;
-	// the DAO methods Map
-	private static Map<String, Map<String, Method>> daosMap = null;
-	// the DAO methods nammed parameters Map
-	private static Map<Method, String[]> daosMethodsNammedParamsMap = new HashMap<Method, String[]>();
 
-	// The DAO delegates Map
-	private static Map<Class<?>, Class<?>> daoDelegatesMap = null;
+	// the DAO methods Map
+	// private static Map<String, Map<String, Method>> daosMap = null;
+	private static Map<String, Method> basePersistenceDAOMethodsMap = null;
+	private static Map<String, DAOMetadata> daosMetadatasMap = null;
+
+	private DAOMetadata daoMetadata = null;
 
 	// the proxy instance datas
 	private String persistenceUnitName;
@@ -66,15 +58,10 @@ public class JpaDAOProxy implements InvocationHandler {
 
 	private Class<?> requestedDAO = null;
 	private JpaDAO basePersistenceDAOImpl = null;
-
-	private String persistenceDAODelegateClassName = null;
-	private Class<?> daoDelegateClass = null;
 	private JpaDAO persistenceDAODelegateImpl = null;
 
 	private boolean detachEntities = false;
 	private boolean autoCommit = false;
-
-	private EntityManager entityManager = null;
 
 	/**
 	 * 
@@ -90,21 +77,28 @@ public class JpaDAOProxy implements InvocationHandler {
 			IOException {
 
 		// check init
-		init();
+		checkInit();
 
-		// resolve the DAO Delegate Class
-		resolveDaoDelegate(daoClass);
+		this.daoMetadata = daosMetadatasMap.get(daoClass.getName());
+		
+		if (null == this.daoMetadata) 
+			throw new NullPointerException("Unable to find DAO Metadatas.");
+		
+		this.requestedDAO = this.daoMetadata.getDaoClass();
+		this.entityClass = this.daoMetadata.getEntityClass();
 
-		// resolve the persistence unit infos
-		resolvePersitenceUnitInfos(daoClass);
+		PersistenceUnitDesc puDesc = this.daoMetadata.getPersistenceUnitDesc();
+		this.persistenceUnitName = puDesc.getName();
+		this.inJTA = JTA.equalsIgnoreCase(puDesc.getTransactionType());
 
 		// get a new persistence base dao impl instance
-		basePersistenceDAOImpl = (JpaDAO) instanciate(BASE_PERSISTENCE_DAO_CLASS);
+		this.basePersistenceDAOImpl = (JpaDAO) instanciate(BASE_PERSISTENCE_DAO_CLASS);
 
 		// get a new persistence dao delegate impl instance
-		persistenceDAODelegateImpl = null;
-		if (null != daoDelegateClass) {
-			persistenceDAODelegateImpl = (JpaDAO) instanciate(daoDelegateClass);
+		this.persistenceDAODelegateImpl = null;
+		if (null != this.daoMetadata.getDaoDelegateClass()) {
+			persistenceDAODelegateImpl = (JpaDAO) instanciate(this.daoMetadata
+					.getDaoDelegateClass());
 		}
 
 	}
@@ -125,125 +119,7 @@ public class JpaDAOProxy implements InvocationHandler {
 		this.autoCommit = autoCommit;
 	}
 
-	/**
-	 * find the corresponding DAODelegate
-	 * 
-	 * @param daoClass
-	 */
-	private void resolveDaoDelegate(Class<?> daoClass) {
-		// set the requested DAO
-		this.requestedDAO = daoClass;
-
-		// resolve the corresponding entity class
-		try {
-			this.entityClass = ClassUtils.resolveEntityClass(requestedDAO);
-		} catch (ClassNotFoundException e1) {
-			this.entityClass = null;
-		}
-
-		// resolve the DAO Delegate
-		if (daoDelegatesMap.containsKey(daoClass)) {
-			this.daoDelegateClass = daoDelegatesMap.get(daoClass);
-		} else {
-			// check if a DAO delegate exist
-			String daoDelegateClassName = buildDaoDelegateClassName(daoClass);
-			try {
-				// find the DAO delegate class
-				this.daoDelegateClass = Thread.currentThread()
-						.getContextClassLoader()
-						.loadClass(daoDelegateClassName);
-				this.persistenceDAODelegateClassName = daoDelegateClassName;
-			} catch (Exception e) {
-				this.daoDelegateClass = null;
-			}
-			daoDelegatesMap.put(daoClass, this.daoDelegateClass);
-		}
-
-		// check if the requested DAO is already registered
-		registerDAO(daoClass);
-		if (null != daoDelegateClass)
-			registerDAO(daoDelegateClass);
-	}
-
-	/**
-	 * 
-	 * @param requestedDAO
-	 * @return
-	 */
-	private void resolvePersitenceUnitInfos(Class<?> requestedDAO)
-			throws NullPointerException {
-
-		// retrieve the persistence unit
-		PersistenceUnitDesc puDesc = puMap.get(requestedDAO.getName());
-		if (null != puDesc) {
-			this.persistenceUnitName = puDesc.getName();
-			this.inJTA = "JTA".equalsIgnoreCase(puDesc.getTransactionType());
-			return;
-		}
-
-		if (requestedDAO.isAnnotationPresent(PersistenceContext.class)) {
-			PersistenceContext pCtx = requestedDAO
-					.getAnnotation(PersistenceContext.class);
-			String puName = pCtx.name();
-			if (null == puName) {
-				puName = pCtx.unitName();
-			}
-			if (null != puName) {
-				this.persistenceUnitName = puName;
-				this.inJTA = false;
-				return;
-			}
-		}
-
-		if (requestedDAO.isAnnotationPresent(PersistenceUnit.class)) {
-			PersistenceUnit pUnit = requestedDAO
-					.getAnnotation(PersistenceUnit.class);
-			String puName = pUnit.name();
-			if (null == puName) {
-				puName = pUnit.unitName();
-			}
-			if (null != puName) {
-				this.persistenceUnitName = puName;
-				this.inJTA = false;
-				return;
-			}
-		}
-
-		throw new NullPointerException(
-				"Unable to find persistence unit informations for DAO "
-						+ requestedDAO.getName() + ".");
-
-	}
-
-	/**
-	 * 
-	 * @param daoClass
-	 * @return the DAO Delegate Class name
-	 */
-	private String buildDaoDelegateClassName(Class<?> daoClass) {
-		String daoDelegateClassName = daoClass.getName().concat("Delegate");
-		return daoDelegateClassName;
-	}
-
-	/**
-	 * 
-	 * @param requestedDAO
-	 */
-	private void registerDAO(Class<?> requestedDAO) {
-
-		synchronized (token) {
-			Map<String, Method> daoMethodsMap = daosMap.get(requestedDAO
-					.getName());
-			// in this case, register the DAO
-			if (null == daoMethodsMap) {
-				// list the DAO methods
-				daoMethodsMap = listMethodsAsMap(requestedDAO);
-				// register the DAO methods
-				daosMap.put(requestedDAO.getName(), daoMethodsMap);
-			}
-		}
-	}
-
+	
 	/**
 	 * 
 	 * @param requestedDAO
@@ -268,9 +144,11 @@ public class JpaDAOProxy implements InvocationHandler {
 					params = new Object[] { entityClass };
 				} else {
 					String[] argParamsNames = null;
-					if (daosMethodsNammedParamsMap.containsKey(invokedMethod)) {
-						argParamsNames = daosMethodsNammedParamsMap
-								.get(invokedMethod);
+					if (this.daoMetadata.getDaoMethodsNammedParametersMap()
+							.containsKey(invokedMethod.getName())) {
+						argParamsNames = this.daoMetadata
+								.getDaoMethodsNammedParametersMap().get(
+										invokedMethod.getName());
 					}
 					params = new Object[] { entityClass, requestedMethod, args,
 							argParamsNames };
@@ -302,8 +180,8 @@ public class JpaDAOProxy implements InvocationHandler {
 		ClassLoader classLoader = Thread.currentThread()
 				.getContextClassLoader();
 
-		// instanciate the puMap
-		puMap = new HashMap<String, PersistenceUnitDesc>();
+		// instanciate the DAOs Metadatas Map
+		daosMetadatasMap = new HashMap<String, DAOMetadata>();
 
 		NodeList nodes = root.getElementsByTagName("persistence-unit");
 		if ((null != nodes) && (nodes.getLength() > 0)) {
@@ -327,66 +205,12 @@ public class JpaDAOProxy implements InvocationHandler {
 							Class<?> entityClass = classLoader
 									.loadClass(className);
 
-							// process candidate DAO className
-							String daoCandidate = ClassUtils
-									.processDAOClassName(entityClass);
-
-							// check the DAO class
-							Class<?> daoClass = classLoader
-									.loadClass(daoCandidate);
-
-							// visit and register the DAO methods parameters
-							for (Method daoMethod : daoClass.getMethods()) {
-
-								if (null != daoMethod.getParameterTypes()) {
-									int numParams = daoMethod
-											.getParameterTypes().length;
-									if (numParams > 0) {
-
-										List<String> argNames = new ArrayList<String>();
-
-										Annotation[][] paramsAnnotations = daoMethod
-												.getParameterAnnotations();
-										if (paramsAnnotations.length >= numParams) {
-											for (int idx = 0; idx < numParams; idx++) {
-												Annotation[] paramAnnotations = paramsAnnotations[idx];
-												boolean foundParamAnnoation = false;
-												for (int j = 0; j < paramAnnotations.length; j++) {
-													Annotation annota = paramAnnotations[j];
-													if (annota
-															.annotationType()
-															.equals(Param.class)) {
-														argNames.add(((Param) annota)
-																.value());
-														foundParamAnnoation = true;
-														break;
-													}
-												}
-												if (!foundParamAnnoation) {
-													argNames = null;
-													break;
-												}
-											}
-
-										}
-										String[] paramNames = null;
-										if ((null != argNames)
-												&& (!argNames.isEmpty())) {
-											paramNames = argNames
-													.toArray(new String[0]);
-											daosMethodsNammedParamsMap.put(
-													daoMethod, paramNames);
-										}
-
-									}
-								}
-
-							}
-
-							puDesc.addClass(className);
-
-							// register the puDesc for the DAO candidate
-							puMap.put(daoCandidate, puDesc);
+							// initialize the metadatas for the DAO
+							DAOMetadata daoMetadata = new DAOMetadata(puDesc,
+									entityClass);
+							// register the DAO Metadatas
+							daosMetadatasMap.put(daoMetadata.getDaoClass()
+									.getName(), daoMetadata);
 
 						} catch (ClassNotFoundException e) {
 							// Entity not Found
@@ -405,20 +229,20 @@ public class JpaDAOProxy implements InvocationHandler {
 	 * @throws ParserConfigurationException
 	 * 
 	 */
-	private void init() throws ParserConfigurationException, SAXException,
+	private void checkInit() throws ParserConfigurationException, SAXException,
 			IOException {
 
 		synchronized (token) {
 
-			if (null == daosMap) {
+			if (null == daosMetadatasMap) {
 
 				// load the JPA persistence.xml
 				loadPersistence();
 
-				// register the BasePersistenceDAOImpl
-				Map<String, Method> baseDAOMethodsMap = listMethodsAsMap(BaseJpaDAOImpl.class);
+				// register the BasePersistenceDAOImpl methods
+				basePersistenceDAOMethodsMap = listMethodsAsMap(BaseJpaDAOImpl.class);
 				// register the DAO methods
-				generatedMethods = baseDAOMethodsMap.keySet();
+				generatedMethods = basePersistenceDAOMethodsMap.keySet();
 
 				simpleGeneratedMethodsList = new ArrayList<String>();
 				simpleGeneratedMethodsList.add("add");
@@ -426,12 +250,6 @@ public class JpaDAOProxy implements InvocationHandler {
 				simpleGeneratedMethodsList.add("remove");
 				simpleGeneratedMethodsList.add("delete");
 				simpleGeneratedMethodsList.add("update");
-
-				daosMap = new HashMap<String, Map<String, Method>>();
-				daosMap.put(BASE_PERSISTENCE_DAO, baseDAOMethodsMap);
-
-				// initialized the daoDelegatesMap
-				daoDelegatesMap = new HashMap<Class<?>, Class<?>>();
 
 			}
 
@@ -444,12 +262,12 @@ public class JpaDAOProxy implements InvocationHandler {
 			throws Throwable {
 
 		// get the corresponding EntityManager
-		this.entityManager = EntityManagerProvider
-				.getEntityManager(persistenceUnitName);
+		EntityManager entityManager = EntityManagerProvider
+				.getEntityManager(this.persistenceUnitName);
 
 		// set the current EntityManager
 		basePersistenceDAOImpl.setEntityManager(entityManager);
-		if (null != persistenceDAODelegateClassName)
+		if (null != persistenceDAODelegateImpl)
 			persistenceDAODelegateImpl.setEntityManager(entityManager);
 
 		// the requested method name
@@ -473,10 +291,12 @@ public class JpaDAOProxy implements InvocationHandler {
 				setAutoCommit((Boolean) args[0]);
 			}
 
-			if (null != persistenceDAODelegateClassName) {
+			if (null != persistenceDAODelegateImpl) {
 				daoImpl = persistenceDAODelegateImpl;
-				methodToInvoke = daosMap.get(persistenceDAODelegateClassName)
+				methodToInvoke = this.daoMetadata.getDaoDelegateMethodsMap()
 						.get(requestedMethodName);
+				// methodToInvoke = daosMap.get(persistenceDAODelegateClassName)
+				// .get(requestedMethodName);
 				if (null != methodToInvoke) {
 					result = methodToInvoke.invoke(daoImpl, args);
 				}
@@ -484,8 +304,8 @@ public class JpaDAOProxy implements InvocationHandler {
 
 			// the DAO impl to invoke
 			daoImpl = basePersistenceDAOImpl;
-			methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
-					requestedMethodName);
+			methodToInvoke = basePersistenceDAOMethodsMap
+					.get(requestedMethodName);
 			if (null != methodToInvoke) {
 				result = methodToInvoke.invoke(daoImpl, args);
 			}
@@ -496,9 +316,9 @@ public class JpaDAOProxy implements InvocationHandler {
 
 		// is the method in the delegate
 		boolean inDAODelegate = false;
-		if (null != persistenceDAODelegateClassName) {
+		if (null != persistenceDAODelegateImpl) {
 			// get the requested method
-			methodToInvoke = daosMap.get(persistenceDAODelegateClassName).get(
+			methodToInvoke = this.daoMetadata.getDaoDelegateMethodsMap().get(
 					requestedMethodName);
 			if (null != methodToInvoke) {
 				daoImpl = persistenceDAODelegateImpl;
@@ -511,40 +331,37 @@ public class JpaDAOProxy implements InvocationHandler {
 
 			// the DAO impl to invoke
 			daoImpl = basePersistenceDAOImpl;
-			// resolve the corresponding entity class
-			// Class<?> entityClass =
-			// ClassUtils.resolveEntityClass(requestedDAO);
 
 			// is it a standard method
 			if (generatedMethods.contains(requestedMethodName)) {
 				// get the requested method
-				methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
-						requestedMethodName);
+				methodToInvoke = basePersistenceDAOMethodsMap
+						.get(requestedMethodName);
 				// process the parameters
 				params = processParameters(requestedDAO, entityClass,
-						requestedMethodName, method, args);
+							requestedMethodName, method, args);
 			} else {
 				// process the query name
 				String queryName = entityClass.getSimpleName().concat(".")
 						.concat(requestedMethodName);
 				// process the parameters
 				params = processParameters(requestedDAO, entityClass,
-						queryName, method, args);
+							queryName, method, args);
 
 				// resolve the method to invoke
 				if (requestedMethodName.startsWith("findSingleResult")) {
 					// get the requested method
-					methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
-							"findSingleResultQuery");
+					methodToInvoke = basePersistenceDAOMethodsMap
+							.get("findSingleResultQuery");
 				} else {
 					if (requestedMethodName.startsWith("find")) {
 						// get the requested method
-						methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
-								"findQuery");
+						methodToInvoke = basePersistenceDAOMethodsMap
+								.get("findQuery");
 					} else {
 						// get the requested method
-						methodToInvoke = daosMap.get(BASE_PERSISTENCE_DAO).get(
-								"executeQuery");
+						methodToInvoke = basePersistenceDAOMethodsMap
+								.get("executeQuery");
 					}
 				}
 
@@ -582,7 +399,7 @@ public class JpaDAOProxy implements InvocationHandler {
 									.iterator(); iterator.hasNext();) {
 								Object bean = iterator.next();
 								// detach the bean
-								this.entityManager.detach(bean);
+								entityManager.detach(bean);
 							}
 						} catch (Throwable e) {
 							// Nothing to do
@@ -595,7 +412,7 @@ public class JpaDAOProxy implements InvocationHandler {
 						// Nothing to do
 					}
 					// detach the bean
-					this.entityManager.detach(result);
+					entityManager.detach(result);
 				}
 			}
 
