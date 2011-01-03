@@ -1,6 +1,6 @@
 package ajf.utils;
 
-import static ajf.injection.DependenciesInjector.inject;
+import static ajf.injection.DependenciesInjector.*;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -24,7 +24,8 @@ public abstract class BeanUtils {
 		Method[] methods = clazz.getMethods();
 		if (null != methods) {
 			for (Method method : methods) {
-				daoMethodsMap.put(method.getName(), method);
+				if (!Object.class.equals(method.getDeclaringClass())) 
+					daoMethodsMap.put(method.getName(), method);
 			}
 		}
 		return daoMethodsMap;
