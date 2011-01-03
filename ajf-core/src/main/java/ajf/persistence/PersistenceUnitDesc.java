@@ -1,14 +1,10 @@
 package ajf.persistence;
 
-import java.util.Collection;
-import java.util.HashSet;
 
 public class PersistenceUnitDesc {
 
 	private String name;
 	private String transactionType;
-	
-	private Collection<String> classes = new HashSet<String>();
 
 	/**
 	 * @param name
@@ -47,31 +43,5 @@ public class PersistenceUnitDesc {
 	public void setTransactionType(String transactionType) {
 		this.transactionType = transactionType;
 	}
-
-	/**
-	 * @return the classes
-	 */
-	public Collection<String> getClasses() {
-		return classes;
-	}
-
-	/**
-	 * @param classes the classes to set
-	 */
-	public void setClasses(Collection<String> classes) {
-		this.classes = classes;
-	}
-	
-	/**
-	 * 
-	 * @param className
-	 * @return
-	 */
-	public PersistenceUnitDesc addClass(String className) {
-		this.classes.add(className);
-		return this;
-	}
-	
-	
 	
 }
