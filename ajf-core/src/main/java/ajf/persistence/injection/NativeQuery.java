@@ -1,4 +1,4 @@
-package ajf.persistence.annotations;
+package ajf.persistence.injection;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -6,14 +6,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER})
+@Target({ElementType.METHOD})
 @Inherited
-public @interface Param {
+public @interface NativeQuery {
 
 	/**
-	 * @return the param name
+	 * @return true if auto-commit
 	 */
-	String value() ;
+	boolean query() default false;
 
 }

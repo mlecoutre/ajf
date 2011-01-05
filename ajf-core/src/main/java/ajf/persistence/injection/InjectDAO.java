@@ -1,4 +1,4 @@
-package ajf.persistence.annotations;
+package ajf.persistence.injection;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -7,9 +7,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD})
 @Inherited
-public @interface Optional {
+public @interface InjectDAO {
 
 	
 

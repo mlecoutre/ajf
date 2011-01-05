@@ -1,4 +1,4 @@
-package ajf.persistence.injectors;
+package ajf.persistence.injection;
 
 import java.lang.reflect.Field;
 

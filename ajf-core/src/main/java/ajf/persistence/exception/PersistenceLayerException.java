@@ -7,9 +7,13 @@ package ajf.persistence.exception;
  * @author E010925
  * 
  */
-@SuppressWarnings("serial")
 public class PersistenceLayerException extends Exception {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private String errorType;
 
 	/**
