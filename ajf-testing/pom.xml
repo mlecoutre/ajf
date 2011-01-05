@@ -11,19 +11,27 @@
 	<groupId>am.ajf</groupId>
 	<artifactId>ajf-testing</artifactId>
 	<version>2.0-SNAPSHOT</version>
-	<name>AJFTesting</name>
-	
+	<packaging>jar</packaging>
+		
 	<scm>
 		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-testing</connection>
 	</scm>
 	
 	<dependencies>
+	
+		<!-- AJF 2 -->
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-core</artifactId>
+			<version>2.0-SNAPSHOT</version>
+			<optional>true</optional>
+		</dependency>
 
 		<!-- junit -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.7</version>
+			<version>4.8.2</version>
 		</dependency>
 		
 		<!-- ! to replace by javax.el groupId -->
@@ -37,31 +45,31 @@
 		<dependency>
 			<groupId>org.dbunit</groupId>
 			<artifactId>dbunit</artifactId>
-			<version>2.4.5</version>
+			<version>2.4.8</version>
 		</dependency>
 
 		<!-- include mocking framework - mockito -->
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
-			<version>1.8.4</version>
+			<version>1.8.5</version>
 		</dependency>
 
 
 		<dependency>
-			<groupId>org.powermock.modules</groupId>
+			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
-			<version>1.4.5</version>
+			<version>1.4.7</version>
 		</dependency>
 		<dependency>
-			<groupId>org.powermock.api</groupId>
+			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-support</artifactId>
-			<version>1.4.5</version>
+			<version>1.4.7</version>
 		</dependency>
 		<dependency>
-			<groupId>org.powermock.api</groupId>
+			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-mockito</artifactId>
-			<version>1.4.5</version>
+			<version>1.4.7</version>
 		</dependency>
 
 	</dependencies>
