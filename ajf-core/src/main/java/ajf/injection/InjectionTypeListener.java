@@ -6,19 +6,21 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 
-import ajf.persistence.annotations.InjectDAO;
-import ajf.persistence.injectors.DAOMembersInjector;
-import ajf.persistence.injectors.EntityManagerMembersInjector;
+import ajf.persistence.injection.DAOMembersInjector;
+import ajf.persistence.injection.EntityManagerMembersInjector;
+import ajf.persistence.injection.InjectDAO;
+import ajf.services.injection.InjectService;
+import ajf.services.injection.ServiceMembersInjector;
 
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
-public class ServicesTypeListener implements TypeListener {
+public class InjectionTypeListener implements TypeListener {
 	
-	private static TypeListener instance = new ServicesTypeListener();
+	private static TypeListener instance = new InjectionTypeListener();
 	
-	private ServicesTypeListener() {
+	private InjectionTypeListener() {
 		super();
 	}
 
@@ -44,6 +46,11 @@ public class ServicesTypeListener implements TypeListener {
 			if (field.isAnnotationPresent(InjectDAO.class)) {
 				typeEncounter.register(new DAOMembersInjector<T>(field));
 			}
+
+			if (field.isAnnotationPresent(InjectService.class)) {
+				typeEncounter.register(new ServiceMembersInjector<T>(field));
+			}
+			
 			
 		}
 

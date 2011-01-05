@@ -18,7 +18,7 @@ public class DefaultInjectionModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		bindListener(Matchers.any(), ServicesTypeListener.getInstance());
+		bindListener(Matchers.any(), InjectionTypeListener.getInstance());
 	}
 	
 }

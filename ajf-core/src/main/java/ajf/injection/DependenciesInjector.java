@@ -1,8 +1,7 @@
 package ajf.injection;
 
 
-import static ajf.utils.BeanUtils.instanciate;
-import ajf.injection.annotations.InjectionModule;
+import static ajf.utils.BeanUtils.*;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -52,7 +51,7 @@ public abstract class DependenciesInjector {
 	 * @param objectClass
 	 * @return the required injection module
 	 */
-	private static Module retrieveInjectionModule(Class<?> objectClass) {
+	public static Module retrieveInjectionModule(Class<?> objectClass) {
 		Module module = null;
 
 		// is the object class using annotation InjectionModule
@@ -79,23 +78,6 @@ public abstract class DependenciesInjector {
 		}
 						
 		return module;
-	}
-
-	/**
-	 * inject members of a specified class
-	 * @param <T>
-	 * @param type
-	 * @return
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T inject(Class<?> type) throws InstantiationException,
-			IllegalAccessException {
-
-		Object bean = instanciate(type);
-		return (T) bean;
-	
 	}
 
 }
