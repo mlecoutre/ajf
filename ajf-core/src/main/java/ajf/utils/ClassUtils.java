@@ -50,30 +50,12 @@ public abstract class ClassUtils {
 		return classes;
 	}
 	
-	/**
-	 * find the entityClass
-	 * @param requestedDAO
-	 * @return the corresponding entity class 
-	 * @throws ClassNotFoundException
-	 */
-	public static Class<?> resolveEntityClass(Class<?> daoClass)
-			throws ClassNotFoundException {
-		String entityClassName = processEntityClassName(daoClass);
-		// retrieve the entity class name
-		Class<?> entityClass = Thread.currentThread()
-				.getContextClassLoader().loadClass(entityClassName);
-		return entityClass;
-	}
-
-	
-	
 	/*
 	 * DAO in [project].core.dao.[Entity]DAO
 	 * Entity in [project].lib.model.[Entity]
 	 */
 	public static String processEntityClassName(Class<?> daoClass) {
 		
-		// replace ".core.dao" by ".lib.model" 
 		String entityClassName = daoClass.getName().replace(".core.dao.", ".lib.model.");
 		// remove ~DAO
 		entityClassName = entityClassName.substring(0, entityClassName.length()-3);
@@ -86,7 +68,6 @@ public abstract class ClassUtils {
 	 */
 	public static String processDAOClassName(Class<?> entityClass) {
 		
-		// replace ".core.dao" by ".lib.model" 
 		String daoClassName = entityClass.getName().replace(".lib.model.", ".core.dao.");
 		// add ~DAO
 		daoClassName = daoClassName.concat("DAO");
@@ -94,5 +75,32 @@ public abstract class ClassUtils {
 		return daoClassName;
 		
 	}
+	
+	/*
+	 * Service Interface in [project].lib.services.[ServiceName]ServiceBD
+	 * Service Impl in [project].core.services.[ServiceName]Service
+	 */
+	public static String processServiceClassName(Class<?> serviceClass) {
+		
+		String serviceClassName = serviceClass.getName().replace(".lib.services.", ".core.services.");
+		// remove ~BD
+		serviceClassName = serviceClassName.substring(0, serviceClassName.length()-2);
+		
+		return serviceClassName;
+		
+	}
+	
+	/**
+	 * 
+	 * @param className
+	 * @return
+	 * @throws ClassNotFoundException 
+	 */
+	public static Class<?> loadClass(String className) throws ClassNotFoundException {
+		ClassLoader cld = Thread.currentThread().getContextClassLoader();
+		return cld.loadClass(className);
+	}
+	
+	
 	
 }
