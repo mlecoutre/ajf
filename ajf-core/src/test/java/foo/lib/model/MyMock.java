@@ -1,6 +1,6 @@
 package foo.lib.model;
 
-import ajf.persistence.annotations.InjectDAO;
+import ajf.persistence.injection.InjectDAO;
 import foo.core.dao.MyMockDAO;
 
 public class MyMock {
