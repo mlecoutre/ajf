@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ajf.persistence.injection.Param;
+import ajf.persistence.annotations.Param;
 import ajf.utils.ClassUtils;
 
 public class DAOMetadata {
