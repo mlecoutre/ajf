@@ -76,7 +76,7 @@ public abstract class BeanUtils {
 	 * @throws IllegalAccessException
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T instanciate(Class<?> clazz)
+	public static <T> T newInstance(Class<?> clazz)
 			throws InstantiationException, IllegalAccessException {
 
 		// call the default constructor
