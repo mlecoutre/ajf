@@ -13,7 +13,7 @@ import ajf.persistence.exception.PersistenceLayerException;
  * @author E010925
  * 
  */
-public class PersistenceUtils {
+public abstract class PersistenceUtils {
 
 	/**
 	 * Opens the entity manager.
@@ -68,7 +68,7 @@ public class PersistenceUtils {
 	 */
 	public static void handlerError(Logger log, String message,
 			String errorType, Throwable cause) throws PersistenceLayerException {
-		StringBuffer buffer = new StringBuffer("Managed persistence error: ")
+		StringBuffer buffer = new StringBuffer("Managed persistence error : ")
 				.append(cause.getMessage()).append(" ");
 		if (cause.getCause() != null) {
 			buffer.append(cause.getCause().getMessage());

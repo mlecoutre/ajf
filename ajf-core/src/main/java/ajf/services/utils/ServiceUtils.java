@@ -2,6 +2,7 @@ package ajf.services.utils;
 
 import org.slf4j.Logger;
 
+import ajf.persistence.exception.PersistenceLayerException;
 import ajf.services.exceptions.ServiceLayerException;
 
 /**
@@ -10,7 +11,7 @@ import ajf.services.exceptions.ServiceLayerException;
  * @author E010925
  * 
  */
-public class ServiceUtils {
+public abstract class ServiceUtils {
 
 	/**
 	 * manage service layer exception
@@ -44,6 +45,7 @@ public class ServiceUtils {
 	 */
 	public static void handlerError(Logger log, String message,
 			String errorType, Throwable cause) throws ServiceLayerException {
+		
 		StringBuffer buffer = new StringBuffer("Managed service error : ")
 				.append(cause.getMessage()).append(" ");
 		if (cause.getCause() != null) {
@@ -51,7 +53,16 @@ public class ServiceUtils {
 		}
 		String errorMsg = buffer.toString();
 		log.error(errorMsg, cause);
-		throw new ServiceLayerException(errorMsg, errorType, null);
+		
+		Throwable propagatedCause = cause;
+		if (cause != null) {
+			if (cause instanceof PersistenceLayerException) {
+				PersistenceLayerException pLayerException = (PersistenceLayerException) cause;
+				propagatedCause = new PersistenceLayerException(pLayerException.getMessage(),
+						pLayerException.getErrorType(), null);
+			}
+		}		
+		throw new ServiceLayerException(errorMsg, errorType, propagatedCause);
 	}
 
 }
