@@ -65,7 +65,7 @@ public abstract class DependenciesInjector {
 					.value();
 			try {
 				// instanciate the injection module
-				module = (Module) instanciate(moduleClass);
+				module = (Module) newInstance(moduleClass);
 			} catch (InstantiationException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
