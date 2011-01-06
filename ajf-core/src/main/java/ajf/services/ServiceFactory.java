@@ -17,7 +17,7 @@ public abstract class ServiceFactory {
 		
 		String serviceImplClassName = ClassUtils.processServiceClassName(serviceClass);
 		Class<?> serviceImplClass = ClassUtils.loadClass(serviceImplClassName);
-		Object serviceImpl = BeanUtils.instanciate(serviceImplClass);
+		Object serviceImpl = BeanUtils.newInstance(serviceImplClass);
 		
 		return (T) serviceImpl;
 		
