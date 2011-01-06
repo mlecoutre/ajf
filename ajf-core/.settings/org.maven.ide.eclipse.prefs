@@ -1,9 +1,9 @@
-#Mon Nov 29 11:34:01 CET 2010
+#Thu Jan 06 10:17:34 CET 2011
 activeProfiles=JEE5_PROFILE
 eclipse.preferences.version=1
 fullBuildGoals=process-test-resources
 includeModules=false
-resolveWorkspaceProjects=false
+resolveWorkspaceProjects=true
 resourceFilterGoals=process-resources resources\:testResources
 skipCompilerPlugin=true
 version=1

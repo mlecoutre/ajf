@@ -2,25 +2,25 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	
+	<parent>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-parent</artifactId>
+		<version>2.0-SNAPSHOT</version>
+		<relativePath>../ajf-parent/pom.xml</relativePath>
+	</parent>
+	
 	<groupId>am.ajf</groupId>
 	<artifactId>ajf-web</artifactId>
 	<version>2.0-SNAPSHOT</version>
-	<name>AJFWeb</name>
-	<inceptionYear>2010</inceptionYear>
 	<description>specific utility classes for ajf web application</description>
-	
-	<parent>
-		<groupId>am.parent</groupId>
-		<artifactId>standard</artifactId>
-		<version>2.0-SNAPSHOT</version>
-	</parent>
 		
 	<scm>
-		<url>http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-web</url>
-	</scm>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/${project.artifactId}</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/${project.artifactId}</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/${project.artifactId}/]]></url>
+	</scm>	
 
 	<dependencies>
-
 
 		<dependency>
 			<groupId>commons-lang</groupId>
@@ -47,7 +47,6 @@
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-testing</artifactId>
-			<version>2.0-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -65,12 +64,14 @@
 		</dependency>
 
 	</dependencies>
+	
 	<repositories>
 		<repository>
 			<id>powermock-repo</id>
 			<url>http://powermock.googlecode.com/svn/repo/</url>
 		</repository>
 	</repositories>
+	
 	<build>
 	
 		<resources>
