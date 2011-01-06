@@ -23,6 +23,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import ajf.persistence.exception.PersistenceLayerException;
 import ajf.persistence.utils.PersistenceUtils;
 import ajf.utils.helpers.XMLHelper;
 
@@ -416,10 +417,16 @@ public class JpaDAOProxy implements InvocationHandler {
 				}
 			}
 
-		} catch (Throwable e) {
+		}
+		catch (Throwable e) {
 			if ((!inJTA) && (autoCommit))
 				entityManager.getTransaction().rollback();
-			PersistenceUtils.handlerError(logger, e.getMessage(), e);
+			if (!(e instanceof PersistenceLayerException)) {
+				PersistenceUtils.handlerError(logger, e.getMessage(), e);
+			}
+			else {
+				throw e;
+			}
 		}
 
 		if (!inDAODelegate) {
