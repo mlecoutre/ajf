@@ -3,27 +3,28 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<artifactId>standard</artifactId>
-		<groupId>am.parent</groupId>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-parent</artifactId>
 		<version>2.0-SNAPSHOT</version>
+		<relativePath>../ajf-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>am.ajf</groupId>
 	<artifactId>ajf-testing</artifactId>
-	<version>2.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 		
 	<scm>
-		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-testing</connection>
-	</scm>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/${project.artifactId}</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/${project.artifactId}</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/${project.artifactId}/]]></url>
+	</scm>	
 	
 	<dependencies>
 	
 		<!-- AJF 2 -->
 		<dependency>
 			<groupId>am.ajf</groupId>
-			<artifactId>ajf-core</artifactId>
-			<version>2.0-SNAPSHOT</version>
+			<artifactId>ajf-commons</artifactId>
 		</dependency>
 
 		<!-- junit -->
