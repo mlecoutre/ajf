@@ -3,49 +3,36 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>am.parent</groupId>
-		<artifactId>standard</artifactId>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-parent</artifactId>
 		<version>2.0-SNAPSHOT</version>
+		<relativePath>../ajf-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>am.ajf</groupId>
 	<artifactId>ajf-injection</artifactId>
-	<version>2.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<scm>
-		<url>http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-core</url>
-	</scm>
-
-	<dependencyManagement>
-
-		<dependencies>
-			<dependency>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.4.3</version>
-			</dependency>
-		</dependencies>
-
-	</dependencyManagement>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/${project.artifactId}</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/${project.artifactId}</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/${project.artifactId}/]]></url>
+	</scm>	
 
 	<dependencies>
 
-		<!-- testing dependency -->
+		<!-- AJF testing dependency -->
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-testing</artifactId>
-			<version>2.0-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
-			
-		<!-- ajf dependency -->
+		
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-core</artifactId>
-			<version>2.0-SNAPSHOT</version>
 		</dependency>
-
+		
 		<!-- Begin : Dependency injection dependencies -->
 
 		<!-- Dependency Injection : JSR 330 -->
