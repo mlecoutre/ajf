@@ -8,7 +8,7 @@ public class DefaultInjectionModule extends AbstractModule {
 	
 	private static Module instance = new DefaultInjectionModule(); 
 	
-	public DefaultInjectionModule() {
+	private DefaultInjectionModule() {
 		super();
 	}
 	
@@ -20,5 +20,7 @@ public class DefaultInjectionModule extends AbstractModule {
 	protected void configure() {
 		bindListener(Matchers.any(), InjectionTypeListener.getInstance());
 	}
+	
+	
 	
 }

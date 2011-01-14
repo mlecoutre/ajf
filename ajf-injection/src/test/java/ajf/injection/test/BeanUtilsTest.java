@@ -5,6 +5,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+
 import foo.lib.model.MyMock;
 
 public class BeanUtilsTest {
@@ -14,6 +18,18 @@ public class BeanUtilsTest {
 		MyMock beanMock = (MyMock) newInstance(MyMock.class);
 		assertTrue("check if injection is working",
 				beanMock.getMockDAO() != null);
+	}
+	
+	@Test
+	public void testSimpleInjection() {
+		Injector injector = Guice.createInjector(new AbstractModule() {
+			@Override
+			protected void configure() {
+				bind(MyMock.class);
+			}
+		});
+		MyMock myMock = injector.getInstance(MyMock.class);
+		System.out.println(myMock);
 	}
 	
 }

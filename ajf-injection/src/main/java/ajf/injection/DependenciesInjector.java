@@ -1,9 +1,6 @@
 package ajf.injection;
 
 
-import static ajf.utils.BeanUtils.*;
-
-import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
@@ -20,11 +17,8 @@ public abstract class DependenciesInjector {
 	 */
 	public static void inject(Object instance) {
 
-		Injector injector = getInjector(instance);
+		Injector injector = giveInjector(instance);
 		injector.injectMembers(instance);
-
-		// build and inject mocks if required 
-		// MockitoAnnotations.initMocks(instance);
 		
 	}
 
@@ -33,16 +27,24 @@ public abstract class DependenciesInjector {
 	 * @param instance
 	 * @return
 	 */
-	public static Injector getInjector(Object instance) {
-		Class<?> objectClass = instance.getClass(); 
-		Module module = retrieveInjectionModule(objectClass);
+	public static Injector giveInjector(Object instance) {
+		Injector injector = null;
 		
-		if (null == module) {
+		Class<?> objectClass = instance.getClass(); 
+		
+		Module module = retrieveInjectionModule(objectClass);
+		if (null != module) {
+			injector = InjectionContext.getInjector(module);
+		}
+		else {
+			injector = InjectionContext.getInjector();
+		}
+
+		/*
+		if ((null == modulesList) || (modulesList.isEmpty())) {
 			throw new NullPointerException("Unable to find module");
 		}
-		
-		// create and use the guice injector
-		Injector injector = Guice.createInjector(module);
+		*/	
 		return injector;
 	}
 	
@@ -64,17 +66,13 @@ public abstract class DependenciesInjector {
 			Class<? extends Module> moduleClass = injectionModuleAnnotation
 					.value();
 			try {
-				// instanciate the injection module
-				module = (Module) newInstance(moduleClass);
+				// instantiate the injection module
+				module = (Module) moduleClass.newInstance();
 			} catch (InstantiationException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
-		}
-		
-		if (null == module) {
-			module = InjectionContext.getInjectionModule();
 		}
 						
 		return module;

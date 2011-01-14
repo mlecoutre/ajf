@@ -17,7 +17,7 @@
 		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/${project.artifactId}</connection>
 		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/${project.artifactId}</developerConnection>
 		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/${project.artifactId}/]]></url>
-	</scm>	
+	</scm>
 
 	<dependencies>
 
@@ -28,11 +28,28 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<!-- database driver -->
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId> 
+			<version>10.6.2.1</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- JPA provider -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>3.6.0.Final</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- AJF -->
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-core</artifactId>
-		</dependency>
-		
+		</dependency>	
+
 		<!-- Begin : Dependency injection dependencies -->
 
 		<!-- Dependency Injection : JSR 330 -->
@@ -49,12 +66,12 @@
 			<version>1.0</version>
 		</dependency>
 
-		<!-- End :  Dependency injection dependencies -->
+		<!-- End : Dependency injection dependencies -->
 
 	</dependencies>
-	
+
 	<build>
-	
+
 		<resources>
 			<resource>
 				<filtering>false</filtering>
@@ -71,7 +88,7 @@
 				</includes>
 			</resource>
 		</resources>
-			
-	</build>	
+
+	</build>
 
 </project>
