@@ -1,6 +1,6 @@
 package ajf.persistence;
 
-import static ajf.utils.BeanUtils.*;
+import static ajf.utils.ClassUtils.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -11,6 +11,7 @@ import java.util.Map;
 
 import ajf.persistence.annotations.Param;
 import ajf.utils.ClassUtils;
+
 
 public class DAOMetadata {
 

@@ -1,6 +1,7 @@
 package ajf.persistence;
 
 import static ajf.utils.BeanUtils.*;
+import static ajf.utils.ClassUtils.*;
 
 import java.io.IOException;
 import java.io.InputStream;
