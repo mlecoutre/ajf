@@ -1,9 +1,12 @@
 package ajf.utils;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class ClassUtils {
 
@@ -101,6 +104,49 @@ public abstract class ClassUtils {
 		return cld.loadClass(className);
 	}
 	
+	/**
+	 * 
+	 * @return the caller class name
+	 */
+	public static String getClassName() {
+		/* populate the stack trace */
+		StackTraceElement[] stack = new Throwable().fillInStackTrace()
+				.getStackTrace();
+		/* get the caller class name */
+		String callerClassName = stack[1].getClassName();
+		return callerClassName;
+	}
+
+	/**
+	 * 
+	 * @return the caller method name
+	 */
+	public static String getMethodName() {
+		/* populate the stack trace */
+		StackTraceElement[] stack = new Throwable().fillInStackTrace()
+				.getStackTrace();
+		/* get the caller class name */
+		String callerMethodName = stack[1].getMethodName();
+		return callerMethodName;
+	}
+	
+	/**
+	 * 
+	 * @param clazz
+	 * @return a Map of all public methods
+	 */
+	public static Map<String, Method> listMethodsAsMap(Class<?> clazz) {
+
+		Map<String, Method> daoMethodsMap = new HashMap<String, Method>();
+		Method[] methods = clazz.getMethods();
+		if (null != methods) {
+			for (Method method : methods) {
+				if (!Object.class.equals(method.getDeclaringClass()))
+					daoMethodsMap.put(method.getName(), method);
+			}
+		}
+		return daoMethodsMap;
+	}
 	
 	
 }
