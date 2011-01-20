@@ -36,6 +36,13 @@
 			<scope>test</scope>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.0.2.GA</version>
+			<scope>test</scope>
+		</dependency>
+		
 		<!-- JPA provider -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -53,6 +60,12 @@
 		<!-- Begin : Dependency injection dependencies -->
 
 		<!-- Dependency Injection : JSR 330 -->
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>inject-api</artifactId>
+			<version>1.0.0-PRD</version>
+		</dependency>		
+		
 		<!-- Context Dependency Injection : JSR 299 -->
 		<!-- Google Guice Impl -->
 		<dependency>
@@ -67,7 +80,7 @@
 		</dependency>
 
 		<!-- End : Dependency injection dependencies -->
-
+		
 	</dependencies>
 
 	<build>
