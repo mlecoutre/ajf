@@ -1,7 +1,7 @@
 package ajf.injection.test;
 
-import static ajf.utils.BeanUtils.*;
-import static org.junit.Assert.*;
+import static ajf.utils.BeanUtils.newInstance;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 

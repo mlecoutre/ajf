@@ -1,11 +1,12 @@
 package foo.lib.model;
 
-import ajf.persistence.injection.InjectDAO;
+import javax.inject.Inject;
+
 import foo.core.dao.MyMockDAO;
 
 public class MyMock {
 
-	@InjectDAO
+	@Inject
 	private MyMockDAO mockDAO;
 
 	public MyMock() {

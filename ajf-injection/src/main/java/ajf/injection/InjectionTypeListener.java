@@ -2,6 +2,7 @@ package ajf.injection;
 
 import java.lang.reflect.Field;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
@@ -49,6 +50,10 @@ public class InjectionTypeListener implements TypeListener {
 
 			if (field.isAnnotationPresent(InjectService.class)) {
 				typeEncounter.register(new ServiceMembersInjector<T>(field));
+			}
+			
+			if (field.isAnnotationPresent(Inject.class)) {
+				typeEncounter.register(new DefaultMembersInjector<T>(field));
 			}
 			
 			
