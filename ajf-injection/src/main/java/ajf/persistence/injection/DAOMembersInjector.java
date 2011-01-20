@@ -34,6 +34,7 @@ public class DAOMembersInjector<T> implements MembersInjector<T> {
 		}
 		
 		// is not already in a DAO
+		/**
 		try {
 			DAO.class.cast(t);
 			// t is a DAO, and it's not possible to inject a DAO in a DAO
@@ -45,7 +46,8 @@ public class DAOMembersInjector<T> implements MembersInjector<T> {
 		catch (ClassCastException e) {
 			// Nothing to do, it's normal
 		}
-
+		**/
+		
 		try {
 			Object daoImpl = DAOFactory.getDAO(field.getType());
 			this.field.set(t, daoImpl);
