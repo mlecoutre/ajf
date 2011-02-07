@@ -1,24 +1,31 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<parent>
 		<groupId>am.ajf</groupId>
 		<artifactId>ajf-parent</artifactId>
 		<version>2.0-SNAPSHOT</version>
 		<relativePath>../ajf-parent/pom.xml</relativePath>
 	</parent>
-	
+
 	<groupId>am.ajf</groupId>
 	<artifactId>ajf-web</artifactId>
 	<version>2.0-SNAPSHOT</version>
 	<description>specific utility classes for ajf web application</description>
-		
+
+	<properties>
+		<!-- for scm activities scm, changelog, release -->
+		<username>${scm-svn.username}</username>
+		<password>${scm-svn.password}</password>
+	</properties>
+
 	<scm>
 		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/${project.artifactId}</connection>
 		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/${project.artifactId}</developerConnection>
+		<tag>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags</tag>
 		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/${project.artifactId}/]]></url>
-	</scm>	
+	</scm>
 
 	<dependencies>
 
@@ -64,16 +71,16 @@
 		</dependency>
 
 	</dependencies>
-	
+
 	<repositories>
 		<repository>
 			<id>powermock-repo</id>
 			<url>http://powermock.googlecode.com/svn/repo/</url>
 		</repository>
 	</repositories>
-	
+
 	<build>
-	
+
 		<resources>
 			<resource>
 				<filtering>false</filtering>
@@ -90,9 +97,26 @@
 				</includes>
 			</resource>
 		</resources>
-		
-		<plugins>
 
+		<!-- e010925: TODO move to ajf-parent -->
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<providerImplementations>
+						<svn>javasvn</svn>
+					</providerImplementations>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.google.code.maven-scm-provider-svnjava</groupId>
+						<artifactId>maven-scm-provider-svnjava</artifactId>
+						<version>1.12</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
