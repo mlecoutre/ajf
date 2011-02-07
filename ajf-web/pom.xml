@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -15,10 +14,10 @@
 	<description>specific utility classes for ajf web application</description>
 	
 	<scm>
-		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/${project.artifactId}</connection>
-		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/${project.artifactId}</developerConnection>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/${project.artifactId}</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/${project.artifactId}</developerConnection>
 		<tag>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/${project.artifactId}</tag>
-		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/${project.artifactId}/]]></url>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/tags/ajf-web?repname=ITSWE&path=/ajf/trunk/${project.artifactId}/]]></url>
 	</scm>
 
 	<dependencies>
