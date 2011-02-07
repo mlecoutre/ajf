@@ -12,15 +12,16 @@
 	<groupId>am.ajf</groupId>
 	<artifactId>ajf-testing</artifactId>
 	<packaging>jar</packaging>
-		
+
 	<scm>
 		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/${project.artifactId}</connection>
 		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/${project.artifactId}</developerConnection>
+		<tag>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/${project.artifactId}</tag>
 		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/${project.artifactId}/]]></url>
-	</scm>	
-	
+	</scm>
+
 	<dependencies>
-	
+
 		<!-- AJF 2 -->
 		<dependency>
 			<groupId>am.ajf</groupId>
@@ -33,7 +34,7 @@
 			<artifactId>junit</artifactId>
 			<version>4.8.2</version>
 		</dependency>
-		
+
 		<!-- ! to replace by javax.el groupId -->
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
@@ -73,5 +74,36 @@
 		</dependency>
 
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<providerImplementations>
+						<svn>javasvn</svn>
+					</providerImplementations>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.google.code.maven-scm-provider-svnjava</groupId>
+						<artifactId>maven-scm-provider-svnjava</artifactId>
+						<version>1.12</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<!-- http://maven.apache.org/plugins/maven-compiler-plugin/ -->
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
