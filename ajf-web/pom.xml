@@ -46,20 +46,24 @@
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-testing</artifactId>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 
 		<!-- logger -->
 
+		<!-- stdy for include scope -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>1.6.1</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<version>0.9.24</version>
+			<version>0.9.28</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>
