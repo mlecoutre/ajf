@@ -32,6 +32,7 @@ public class WebUtils {
 	 * Stops creation of a new WebUtils object.
 	 */
 	private WebUtils() {
+		super();
 	}
 
 	/**
