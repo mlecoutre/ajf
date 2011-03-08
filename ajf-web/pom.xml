@@ -31,32 +31,28 @@
 			<groupId>javax.faces</groupId>
 			<artifactId>jsf-api</artifactId>
 			<version>2.0.3</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.faces</groupId>
 			<artifactId>jsf-impl</artifactId>
 			<version>2.0.3</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.4</version>
-			<scope>provided</scope>
 		</dependency>
 
 		<!-- testing dependency -->
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-testing</artifactId>
-			<version>${project.version}</version>
+			<version>2.0.1-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 
