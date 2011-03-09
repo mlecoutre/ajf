@@ -13,7 +13,7 @@
 	<artifactId>ajf-core</artifactId>
 	<packaging>jar</packaging>
 	<version>2.0.1-SNAPSHOT</version>
-	
+
 	<scm>
 		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-core</connection>
 		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-core</developerConnection>
@@ -60,7 +60,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
@@ -79,6 +79,24 @@
 		<!-- EclipseLink Provider -->
 		<!-- <dependency> <groupId>org.eclipse.persistence</groupId> <artifactId>eclipselink</artifactId> 
 			<version>2.1.1</version> </dependency> -->
+
+		<!-- Caching -->
+		<!-- <dependency> <groupId>org.infinispan</groupId> <artifactId>infinispan-core</artifactId> 
+			<version>4.1.0.FINAL</version> </dependency> -->
+
+		<!-- Mail -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.4</version>
+		</dependency>
+
+		<!-- Activation -->
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>activation</artifactId>
+			<version>1.1.1</version>
+		</dependency>
 
 	</dependencies>
 
