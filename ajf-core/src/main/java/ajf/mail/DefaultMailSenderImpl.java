@@ -85,9 +85,9 @@ public class DefaultMailSenderImpl implements MailSender {
 		if (!eMail.getTo().isEmpty())
 			msg.setRecipients(Message.RecipientType.TO, eMail.getTo());
 		*/
-		if (!eMail.getCc().isEmpty())
+		if ((null != eMail.getCc()) && !eMail.getCc().isEmpty())
 			message.setRecipients(Message.RecipientType.CC, eMail.getCc());
-		if (!eMail.getBcc().isEmpty())
+		if ((null != eMail.getBcc()) && !eMail.getBcc().isEmpty())
 			message.setRecipients(Message.RecipientType.BCC, eMail.getBcc());
 
 		// set the subject
