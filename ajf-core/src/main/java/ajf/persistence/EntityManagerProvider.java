@@ -81,6 +81,20 @@ public abstract class EntityManagerProvider {
 	}
 	
 	/**
+	 * flush the entityManager
+	 * @param persistenceUnitName
+	 */
+	public static void flush(String persistenceUnitName) {
+		
+		Map<String, EntityManager> entityManagersMap = getEntityManagersMap();
+		EntityManager em = entityManagersMap.get(persistenceUnitName);
+		if (null != em) {
+			if (em.isOpen())
+				em.flush();
+		}
+	}
+	
+	/**
 	 * close all the the entityManagers
 	 */
 	public static void closeAll() {
