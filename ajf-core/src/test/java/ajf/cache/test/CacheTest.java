@@ -13,7 +13,7 @@ import ajf.cache.impl.InfinispanEmbeddedCacheManagerImpl;
 public class CacheTest {
 
 	@Test
-	public void getCacheTest() {
+	public void testGetCache() {
 		
 		CacheManager cacheManager = new InfinispanEmbeddedCacheManagerImpl();
 		Cache cache = cacheManager.getCache();
@@ -22,7 +22,7 @@ public class CacheTest {
 	}
 	
 	@Test
-	public void getNammedCacheTest() {
+	public void testGetNammedCache() {
 		
 		CacheManager cacheManager = new InfinispanEmbeddedCacheManagerImpl();
 		Cache cache = cacheManager.getCache("myCache");
@@ -31,7 +31,7 @@ public class CacheTest {
 	}
 	
 	@Test
-	public void getObjectFromCacheTest() {
+	public void testGetObjectFromCache() {
 		
 		CacheManager cacheManager = new InfinispanEmbeddedCacheManagerImpl();
 		Cache cache = cacheManager.getCache();
@@ -46,7 +46,7 @@ public class CacheTest {
 	}
 	
 	@Test
-	public void getObjectFromCacheWithTTLTest() throws InterruptedException {
+	public void testGetObjectFromCacheWithTTL() throws InterruptedException {
 		
 		CacheManager cacheManager = new InfinispanEmbeddedCacheManagerImpl();
 		TTLCache cache = (TTLCache) cacheManager.getCache();
