@@ -8,7 +8,7 @@ public class InfinispanCacheImpl implements ajf.cache.TTLCache {
 
 	private transient Cache<Object, Object> cache = null;
 	
-	private long ttlInMs = 0;
+	private long ttlInMs = -1;
 	
 	public InfinispanCacheImpl(Cache<Object, Object> cache) {
 		super();
@@ -90,4 +90,32 @@ public class InfinispanCacheImpl implements ajf.cache.TTLCache {
 	public boolean isEmpty() {
 		return this.cache.isEmpty();
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return this.cache.hashCode();
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		InfinispanCacheImpl other = (InfinispanCacheImpl) obj;
+		if (cache == null) {
+			if (other.cache != null) return false;
+		}
+		else
+			if (!cache.equals(other.cache)) return false;
+		return true;
+	}
+	
+	
+	
 }
