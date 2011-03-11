@@ -72,8 +72,14 @@ public abstract class EntityManagerProvider {
 		Map<String, EntityManager> entityManagersMap = getEntityManagersMap();
 		EntityManager em = entityManagersMap.get(persistenceUnitName);
 		if (null != em) {
-			if (em.isOpen())
-				em.close();
+			if (em.isOpen()) {
+				try {
+					em.close();
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+				}
+			}				
 			em = null;
 			// register the new entity manager
 			setEntityManager(persistenceUnitName, null);
@@ -103,8 +109,14 @@ public abstract class EntityManagerProvider {
 		for (String persistenceUnitName : entityManagersMap.keySet()) {
 			EntityManager em = entityManagersMap.get(persistenceUnitName);
 			if (null != em) {
-				if (em.isOpen())
-					em.close();
+				if (em.isOpen()) {
+					try {
+						em.close();
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 				em = null;
 				// register the new entity manager
 				setEntityManager(persistenceUnitName, null);
