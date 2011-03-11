@@ -3,19 +3,24 @@ package ajf.cache.impl;
 import java.util.concurrent.TimeUnit;
 
 import org.infinispan.Cache;
-import org.infinispan.manager.DefaultCacheManager;
-import org.infinispan.manager.EmbeddedCacheManager;
 
-public class InfinispanEmbeddedCacheImpl implements ajf.cache.TTLCache {
+public class InfinispanCacheImpl implements ajf.cache.TTLCache {
 
-	private transient EmbeddedCacheManager cacheManager = null;
 	private transient Cache<Object, Object> cache = null;
 	
 	private long ttlInMs = 0;
 	
-	public InfinispanEmbeddedCacheImpl() {
+	public InfinispanCacheImpl(Cache<Object, Object> cache) {
 		super();
-		init();
+		this.cache = cache;
+	}
+	
+	/**
+	 * 
+	 * @return the cache delegate
+	 */
+	public Cache<?, ?> getDelegate() {
+		return this.cache;
 	}
 	
 	/**
@@ -31,39 +36,7 @@ public class InfinispanEmbeddedCacheImpl implements ajf.cache.TTLCache {
 	public void setTtlInMs(long ttlInMs) {
 		this.ttlInMs = ttlInMs;
 	}
-
-	/**
-	 * 
-	 * @return the cache manager delegate
-	 */
-	public EmbeddedCacheManager getCacheManagerDelegate() {
-		return this.cacheManager;
-	}
-
-	/**
-	 * 
-	 * @return the cache delegate
-	 */
-	public Cache<Object, Object> getCacheDelegate() {
-		return this.cache;
-	}
-
-	/**
-	 * 
-	 * @return the cache manager delegate
-	 */
-	public EmbeddedCacheManager getDelegate() {
-		return this.cacheManager;
-	}
-	
-	/**
-	 * init method 
-	 */
-	private void init() {
-		this.cacheManager = new DefaultCacheManager();
-		this.cache = this.cacheManager.getCache();
-	}
-	
+		
 	/**
 	 * 
 	 * @param key
