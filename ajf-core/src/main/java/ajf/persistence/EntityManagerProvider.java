@@ -70,7 +70,7 @@ public abstract class EntityManagerProvider {
 	 * @param persistenceUnitName
 	 * @return
 	 */
-	private static EntityManagerFactory getEntityManagerFactory(
+	public static EntityManagerFactory getEntityManagerFactory(
 			String persistenceUnitName) {
 		EntityManagerFactory emFactory = emfMap.get(persistenceUnitName);
 		if (null == emFactory) {
