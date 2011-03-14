@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,17 +33,6 @@ public class EntityManagerMembersInjector<T> implements MembersInjector<T> {
 				puName = pCtx.unitName();
 			}
 		}
-		
-		if (null == puName) {
-			if (field.isAnnotationPresent(PersistenceUnit.class)) {
-				PersistenceUnit pUnit = field.getAnnotation(PersistenceUnit.class);
-				puName= pUnit.name();
-				if ((null == puName) || (0 == puName.length())) {
-					puName = pUnit.unitName();
-				}
-			}
-		}
-		
 		if (null == puName) 
 			puName = DEFAULT_PERSISTENCE_UNIT_NAME;
 		this.persistenceUnitName = puName;
