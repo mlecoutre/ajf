@@ -10,7 +10,8 @@ import javax.persistence.Persistence;
 
 public abstract class EntityManagerProvider {
 
-	private static ThreadLocal<Map<String, EntityManager>> emMaps = new ThreadLocal<Map<String,EntityManager>>();
+	//private static ThreadLocal<Map<String, EntityManager>> emMaps = new ThreadLocal<Map<String,EntityManager>>();
+	private static Map<String, EntityManager> emMaps = new HashMap<String,EntityManager>();
 
 	/**
 	 * set a new entity manager
@@ -33,12 +34,15 @@ public abstract class EntityManagerProvider {
 	 * @return
 	 */
 	private static Map<String, EntityManager> getEntityManagersMap() {
+		/*
 		Map<String,EntityManager> entityManagersMap = emMaps.get();
 		if (null == entityManagersMap) {
 			entityManagersMap = new HashMap<String, EntityManager>();
 			emMaps.set(entityManagersMap);
 		}
 		return entityManagersMap;
+		*/
+		return emMaps;
 	}
 	
 	/**
