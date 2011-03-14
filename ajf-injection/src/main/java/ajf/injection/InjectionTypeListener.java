@@ -4,10 +4,12 @@ import java.lang.reflect.Field;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 
 import ajf.persistence.injection.DAOMembersInjector;
+import ajf.persistence.injection.EntityManagerFactoryMembersInjector;
 import ajf.persistence.injection.EntityManagerMembersInjector;
 import ajf.persistence.injection.InjectDAO;
 import ajf.services.injection.InjectService;
@@ -39,9 +41,13 @@ public class InjectionTypeListener implements TypeListener {
 		for (Field field : typeLiteral.getRawType().getDeclaredFields()) {
 
 			if (field.getType() == EntityManager.class
-					&& (field.isAnnotationPresent(PersistenceContext.class)
-					|| field.isAnnotationPresent(PersistenceUnit.class))) {
+					&& field.isAnnotationPresent(PersistenceContext.class)) {					
 				typeEncounter.register(new EntityManagerMembersInjector<T>(field));
+			}
+			
+			if (field.getType() == EntityManagerFactory.class
+					&& field.isAnnotationPresent(PersistenceUnit.class)) {
+				typeEncounter.register(new EntityManagerFactoryMembersInjector<T>(field));
 			}
 			
 			if (field.isAnnotationPresent(InjectDAO.class)) {
