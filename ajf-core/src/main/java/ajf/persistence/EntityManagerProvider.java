@@ -10,6 +10,8 @@ import javax.persistence.Persistence;
 
 public abstract class EntityManagerProvider {
 
+	private static Object emfToken = new Object();
+	private static Map<String, EntityManagerFactory> emfMap = new HashMap<String, EntityManagerFactory>();
 	private static ThreadLocal<Map<String, EntityManager>> emMaps = new ThreadLocal<Map<String,EntityManager>>();
 	//private static Map<String, EntityManager> emMaps = new HashMap<String,EntityManager>();
 
@@ -53,8 +55,7 @@ public abstract class EntityManagerProvider {
 		
 		EntityManager em = entityManagersMap.get(persistenceUnitName);
 		if ((null == em) || (!em.isOpen())) {
-			EntityManagerFactory emFactory = Persistence
-				.createEntityManagerFactory(persistenceUnitName);
+			EntityManagerFactory emFactory = getEntityManagerFactory(persistenceUnitName);
 			em = emFactory.createEntityManager();
 			// remove auto-update
 			em.setFlushMode(FlushModeType.COMMIT);
@@ -62,6 +63,26 @@ public abstract class EntityManagerProvider {
 			setEntityManager(persistenceUnitName, em);
 		}
 		return em;
+	}
+
+	/**
+	 * 
+	 * @param persistenceUnitName
+	 * @return
+	 */
+	private static EntityManagerFactory getEntityManagerFactory(
+			String persistenceUnitName) {
+		EntityManagerFactory emFactory = emfMap.get(persistenceUnitName);
+		if (null == emFactory) {
+			synchronized(emfToken) {
+				emFactory = emfMap.get(persistenceUnitName);
+				if (null == emFactory) {
+					emFactory = Persistence.createEntityManagerFactory(persistenceUnitName);
+					emfMap.put(persistenceUnitName, emFactory);
+				}
+			}
+		}
+		return emFactory;
 	}
 	
 	/**
