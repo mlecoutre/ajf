@@ -84,7 +84,6 @@ public class DefaultMailSenderImpl implements MailSender {
 
 		if ((null == eMail.getTo()) || eMail.getTo().isEmpty())
 			throw new NullPointerException("Receiver can not be null");
-
 		
 		if ((null == eMail.getBody()) || eMail.getBody().isEmpty())
 			throw new NullPointerException("Body can not be null");
@@ -104,8 +103,7 @@ public class DefaultMailSenderImpl implements MailSender {
 		// set recipients
 		
 		Address[] toAddressArray = processToAddress(eMail.getTo());
-		if (!eMail.getTo().isEmpty())
-			message.setRecipients(Message.RecipientType.TO, toAddressArray);
+		message.setRecipients(Message.RecipientType.TO, toAddressArray);
 		
 		if ((null != eMail.getCc()) && !eMail.getCc().isEmpty())
 			message.setRecipients(Message.RecipientType.CC, eMail.getCc());
