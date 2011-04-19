@@ -91,6 +91,7 @@ public class JpaDAOProxy implements InvocationHandler {
 
 		PersistenceUnitDesc puDesc = this.daoMetadata.getPersistenceUnitDesc();
 		this.persistenceUnitName = puDesc.getName();
+		// if in JTA, obtain the transaction from JNDI with java:comp/UserTransaction
 		this.inJTA = JTA.equalsIgnoreCase(puDesc.getTransactionType());
 
 		// get a new persistence base dao impl instance
@@ -385,7 +386,7 @@ public class JpaDAOProxy implements InvocationHandler {
 
 			Long duration = System.currentTimeMillis() - start;
 			logger.info("Invoking '{}', during {} ms.",
-					methodToInvoke.getName(), duration);
+					this.requestedDAO.getSimpleName() + "#" + methodToInvoke.getName(), duration);
 
 			if ((!inJTA) && (autoCommit))
 				entityManager.getTransaction().commit();
