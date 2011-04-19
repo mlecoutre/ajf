@@ -116,6 +116,23 @@ public abstract class ClassUtils {
 		String callerClassName = stack[1].getClassName();
 		return callerClassName;
 	}
+	
+	/**
+	 * 
+	 * @return the caller simple class name
+	 */
+	public static String getSimpleClassName() {
+		/* populate the stack trace */
+		StackTraceElement[] stack = new Throwable().fillInStackTrace()
+				.getStackTrace();
+		/* get the caller class name */
+		String callerClassName = stack[1].getClassName();
+		int pos = callerClassName.lastIndexOf(".");
+		if (pos > 0) {
+			callerClassName = callerClassName.substring(pos+1);
+		}
+		return callerClassName;
+	}
 
 	/**
 	 * 
