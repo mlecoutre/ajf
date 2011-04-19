@@ -24,7 +24,6 @@ public interface MailSender {
 	 * @throws MessagingException
 	 * @throws IOException
 	 */
-	void send(MailBean eMail) throws AddressException, MessagingException,
-			IOException;
+	void send(MailBean eMail) throws Exception;
 
 }

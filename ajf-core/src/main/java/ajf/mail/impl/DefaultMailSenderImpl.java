@@ -36,6 +36,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import org.slf4j.Logger;
 
@@ -57,7 +60,14 @@ public class DefaultMailSenderImpl implements MailSender {
 
 	private static final long MEGA = 1024 * 1024;
 
+	private String jndiName = null;
+	
 	private String smtpServer = SMTP_HOST_PROPERTY;
+	private long connectionTimeout = -1;
+	private long timeout = -1;
+	
+	private Properties properties = null;
+	
 	private int maxAttachedFiles = MAX_FILES_PROPERTY;
 	private int attachedFileMaxSize = MAX_FILES_SIZE_PROPERTY;
 	private String uploadTempFileDirectory = DEFAULT_UPLOAD_TEMP_FILE_DIRECTORY;
@@ -72,8 +82,9 @@ public class DefaultMailSenderImpl implements MailSender {
 	 * @throws AddressException
 	 * @throws MessagingException
 	 * @throws IOException
+	 * @throws NamingException 
 	 */
-	public void send(MailBean eMail) throws AddressException, MessagingException, IOException {
+	public void send(MailBean eMail) throws AddressException, MessagingException, IOException, NamingException {
 
 		// check required parameters
 		if ((null == eMail.getSender()) || eMail.getSender().isEmpty())
@@ -88,15 +99,12 @@ public class DefaultMailSenderImpl implements MailSender {
 		if ((null == eMail.getBody()) || eMail.getBody().isEmpty())
 			throw new NullPointerException("Body can not be null");
 
-		// build the sending
-		Properties props = new Properties();
-		props.put("mail.host", getSmtpServer());
-
-		// obtain the session and the transport 
-		Session session = Session.getDefaultInstance(props, null);
+		// get the session
+		Session session = buildSession();
+		
 		Transport transport = session.getTransport("smtp");
 		transport.connect();
-
+		
 		MimeMessage message = new MimeMessage(session);
 		message.setFrom(new InternetAddress(eMail.getSender()));
 
@@ -153,6 +161,34 @@ public class DefaultMailSenderImpl implements MailSender {
 				}
 			}
 		}
+	}
+
+	private Session buildSession() throws NamingException {
+		
+		String jndi = getJndiName();
+		if ((null != jndi) && (!jndi.trim().isEmpty())) {
+			Context initCtx = new InitialContext();
+			Context envCtx = (Context) initCtx.lookup("java:comp/env");
+			Session session = (Session) envCtx.lookup(jndi);
+			return session;
+		}
+		
+		// build the sending
+		Properties props = new Properties();
+		// complete list of properties :
+		// 	 http://javamail.kenai.com/nonav/javadocs/com/sun/mail/smtp/package-summary.html
+		props.put("mail.smtp.host", getSmtpServer());
+		props.put("mail.smtp.connectiontimeout", getConnectionTimeout());
+		props.put("mail.smtp.timeout", getTimeout());
+		
+		Properties customProperties = getProperties();
+		if ((null != customProperties) && (!customProperties.isEmpty())) {
+			props.putAll(customProperties);
+		}
+		
+		// obtain the session and the transport 
+		Session session = Session.getDefaultInstance(props, null);
+		return session;
 	}
 
 	/**
@@ -308,6 +344,64 @@ public class DefaultMailSenderImpl implements MailSender {
 					"The number of attached files must not exceed "
 							+ getMaxAttachedFiles() + ".");
 		}
+	}
+	
+	
+	
+	/**
+	 * @return the properties
+	 */
+	public Properties getProperties() {
+		return properties;
+	}
+
+	/**
+	 * @param properties the properties to set
+	 */
+	public void setProperties(Properties properties) {
+		this.properties = properties;
+	}
+
+	/**
+	 * @return the connectionTimeout
+	 */
+	public long getConnectionTimeout() {
+		return connectionTimeout;
+	}
+
+	/**
+	 * @param connectionTimeout the connectionTimeout to set
+	 */
+	public void setConnectionTimeout(long connectionTimeout) {
+		this.connectionTimeout = connectionTimeout;
+	}
+
+	/**
+	 * @return the timeout
+	 */
+	public long getTimeout() {
+		return timeout;
+	}
+
+	/**
+	 * @param timeout the timeout to set
+	 */
+	public void setTimeout(long timeout) {
+		this.timeout = timeout;
+	}
+
+	/**
+	 * @return the jndiName
+	 */
+	public String getJndiName() {
+		return jndiName;
+	}
+
+	/**
+	 * @param jndiName the jndiName to set
+	 */
+	public void setJndiName(String jndiName) {
+		this.jndiName = jndiName;
 	}
 
 	/**
