@@ -5,7 +5,9 @@ import java.io.BufferedOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
 import javax.servlet.ServletContext;
@@ -32,6 +34,24 @@ public abstract class FileDownloader {
 		// Get requested file by path info.
 		String requestedFile = request.getPathInfo();
 
+		doDownload(baseFilesPath, requestedFile, context, response);
+	}
+
+	/**
+	 * 
+	 * @param baseFilesPath
+	 * @param requestedFile
+	 * @param context
+	 * @param response
+	 * @throws IOException
+	 * @throws UnsupportedEncodingException
+	 * @throws FileNotFoundException
+	 */
+	public static void doDownload(String baseFilesPath, String requestedFile,
+			ServletContext context, HttpServletResponse response)
+			throws IOException, UnsupportedEncodingException,
+			FileNotFoundException {
+		
 		// Check if file is actually supplied to the request URI.
 		if (requestedFile == null) {
 			// Do your thing if the file is not supplied to the request URI.
