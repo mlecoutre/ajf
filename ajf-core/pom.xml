@@ -85,6 +85,12 @@
 			<groupId>org.infinispan</groupId>
 			<artifactId>infinispan-core</artifactId>
 			<version>4.1.0.FINAL</version>
+			<exclusions>
+				<exclusion>
+				 	<groupId>log4j</groupId>
+  					<artifactId>log4j</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- Mail -->
