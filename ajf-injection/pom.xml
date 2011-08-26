@@ -70,6 +70,7 @@
 		
 		<!-- Context Dependency Injection : JSR 299 -->
 		<!-- Google Guice Impl -->
+		<!-- Replace with version 3.0 -->
 		<dependency>
 			<groupId>com.google.code.guice</groupId>
 			<artifactId>guice</artifactId>
