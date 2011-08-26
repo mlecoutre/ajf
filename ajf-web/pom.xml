@@ -45,14 +45,7 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>2.4</version>
-		</dependency>
-		
-		<!-- AJF commons dependency -->
-		<dependency>
-			<groupId>am.ajf</groupId>
-			<artifactId>ajf-commons</artifactId>
-			<version>2.0.1-SNAPSHOT</version>
+			<version>2.5</version>
 		</dependency>
 
 		<!-- testing dependency -->
