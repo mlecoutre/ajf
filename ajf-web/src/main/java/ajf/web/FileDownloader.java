@@ -34,7 +34,7 @@ public abstract class FileDownloader {
 		// Get requested file by path info.
 		String requestedFile = request.getPathInfo();
 
-		doDownload(baseFilesPath, requestedFile, context, response);
+		doDownload(baseFilesPath, requestedFile, false, null, context, response);
 	}
 
 	/**
@@ -49,6 +49,42 @@ public abstract class FileDownloader {
 	 */
 	public static void doDownload(String baseFilesPath, String requestedFile,
 			ServletContext context, HttpServletResponse response)
+			throws IOException, UnsupportedEncodingException,
+			FileNotFoundException {
+
+		doDownload(baseFilesPath, requestedFile, false, null, context, response);
+		
+	}
+
+	/**
+	 * close a closeable resource
+	 * @param resource
+	 */
+	private static void close(Closeable resource) {
+		if (resource != null) {
+			try {
+				resource.close();
+			} catch (IOException e) {
+				// Do your thing with the exception. Print it, log it or mail
+				// it.
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * @param baseFilesPath
+	 * @param requestedFile
+	 * @param inLine
+	 * @param contentType
+	 * @param context
+	 * @param response
+	 * @throws IOException
+	 * @throws UnsupportedEncodingException
+	 * @throws FileNotFoundException
+	 */
+	public static void doDownload(String baseFilesPath, String requestedFile,
+			boolean inLine, String contentType, ServletContext context, HttpServletResponse response)
 			throws IOException, UnsupportedEncodingException,
 			FileNotFoundException {
 		
@@ -74,10 +110,7 @@ public abstract class FileDownloader {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404.
 			return;
 		}
-
-		// Get content type by filename.
-		String contentType = context.getMimeType(file.getName());
-
+		
 		// If content type is unknown, then set the default value.
 		// For all content types, see:
 		// http://www.w3schools.com/media/media_mimeref.asp
@@ -91,7 +124,11 @@ public abstract class FileDownloader {
 		response.setBufferSize(DEFAULT_BUFFER_SIZE);
 		response.setContentType(contentType);
 		response.setHeader("Content-Length", String.valueOf(file.length()));
-		response.setHeader("Content-Disposition", "attachment; filename=\""
+		
+		String attachment = "attachment";
+		if (inLine)
+			attachment = "inline";
+		response.setHeader("Content-Disposition", attachment + "; filename=\""
 				+ file.getName() + "\"");
 
 		// Prepare streams.
@@ -110,28 +147,14 @@ public abstract class FileDownloader {
 			int length;
 			while ((length = input.read(buffer)) > 0) {
 				output.write(buffer, 0, length);
+				output.flush();
 			}
 		} finally {
 			// Gently close streams.
 			close(output);
 			close(input);
 		}
-	}
-
-	/**
-	 * close a closeable resource
-	 * @param resource
-	 */
-	private static void close(Closeable resource) {
-		if (resource != null) {
-			try {
-				resource.close();
-			} catch (IOException e) {
-				// Do your thing with the exception. Print it, log it or mail
-				// it.
-				e.printStackTrace();
-			}
-		}
+		
 	}
 
 }
