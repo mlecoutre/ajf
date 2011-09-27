@@ -385,7 +385,7 @@ public class JpaDAOProxy implements InvocationHandler {
 			result = methodToInvoke.invoke(daoImpl, params);
 
 			Long duration = System.currentTimeMillis() - start;
-			logger.info("Invoking '{}', during {} ms.",
+			logger.debug("Invoking '{}', during {} ms.",
 					this.requestedDAO.getSimpleName() + "#" + methodToInvoke.getName(), duration);
 
 			if ((!inJTA) && (autoCommit))
