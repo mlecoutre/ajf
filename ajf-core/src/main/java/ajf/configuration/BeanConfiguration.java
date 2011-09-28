@@ -11,13 +11,15 @@ public class BeanConfiguration extends AbstractConfiguration {
 
 	Map<String, Object> map = new HashMap<String, Object>();
 
-	public static final ELResolver resolver = new ELResolver();
+	private final static ELStyleResolver defaultResolver = new ELStyleResolver();
 	PropertyUtilsBean propUtils = new PropertyUtilsBean();
-
+	
 	public BeanConfiguration() {
 		super();
-		propUtils.setResolver(resolver);
+		propUtils.setResolver(defaultResolver);
 	}
+
+
 
 	@Override
 	public boolean isEmpty() {
@@ -26,7 +28,8 @@ public class BeanConfiguration extends AbstractConfiguration {
 
 	@Override
 	public boolean containsKey(String key) {
-		String baseKey = resolver.first(key);
+		//String baseKey = resolver.first(key);
+		String baseKey = defaultResolver.first(key);
 		return map.containsKey(baseKey);
 	}
 
