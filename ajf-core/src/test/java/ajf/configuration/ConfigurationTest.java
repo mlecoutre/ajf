@@ -15,14 +15,13 @@ import ajf.logger.LoggerFactory;
 
 public class ConfigurationTest {
 
-	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger();
 
 	public ConfigurationTest() {
 	}
 
 	@Test
-	public void testConfig() {
+	public void testConfig() throws Exception {
 
 		CompositeConfiguration configuration = new CompositeConfiguration();
 
@@ -34,7 +33,6 @@ public class ConfigurationTest {
 		}
 		
 		{
-			BeanConfiguration config = new BeanConfiguration();
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("name", "value");
 			map.put("c", "${b}");
@@ -45,20 +43,22 @@ public class ConfigurationTest {
 			list.add("z");
 			map.put("d", list);
 			
+			BeanConfiguration config = new BeanConfiguration();
 			config.addProperty("aMap", map);
 			
 			configuration.addConfiguration(config);
 			
 		}
 				
-		System.out.println(configuration.getString("a"));
-		System.out.println(configuration.getString("b"));
-		System.out.println(configuration.getString("aMap.[name]"));
-		System.out.println(configuration.getString("aMap.[c]"));
-		System.out.println(configuration.getString("aMap.[d](1)"));
+		logger.info(configuration.getString("a"));
+		logger.info(configuration.getString("b"));
+		logger.info(configuration.getString("aMap.[name]"));
+		logger.info(configuration.getString("aMap.[c]"));
+		logger.info(configuration.getString("aMap.[d](0)"));
 		
-		System.out.println(ConfigurationUtils.evaluate("the value is : ${aMap.[name]}", configuration));
-				
+		logger.info(ConfigurationUtils.evaluate("the value is : ${aMap.[name]}", configuration));
+		
+						
 	}
 
 }
