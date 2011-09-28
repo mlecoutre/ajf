@@ -2,6 +2,8 @@ package ajf.logger;
 
 import org.slf4j.Logger;
 
+import ch.qos.logback.classic.LoggerContext;
+
 
 
 public abstract class LoggerFactory {
@@ -40,6 +42,15 @@ public abstract class LoggerFactory {
 		/* get the corresponding logger */
 		Logger logger = org.slf4j.LoggerFactory.getLogger(clazz);
 		return logger;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static LoggerContext getDelegate() {
+		LoggerContext ctx = (LoggerContext) org.slf4j.LoggerFactory.getILoggerFactory();
+		return ctx;
 	}
 	
 }
