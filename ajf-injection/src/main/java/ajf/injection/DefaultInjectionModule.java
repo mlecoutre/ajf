@@ -1,26 +1,36 @@
 package ajf.injection;
 
+import java.util.List;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.matcher.Matchers;
 
 public class DefaultInjectionModule extends AbstractModule {
 	
-	private static Module instance = new DefaultInjectionModule(); 
+	private List<Module> additionalModules = null;
 	
-	private DefaultInjectionModule() {
+	public DefaultInjectionModule() {
 		super();
 	}
 	
-	public static Module getInstance() {
-		return instance;
+	public DefaultInjectionModule(List<Module> modules) {
+		super();
+		this.additionalModules = modules;
 	}
-
+		
 	@Override
 	protected void configure() {
-		bindListener(Matchers.any(), InjectionTypeListener.getInstance());
+		
+		bindListener(Matchers.any(), new InjectionTypeListener());
+		
+		if ((null != additionalModules) && (!additionalModules.isEmpty())) {
+			for (Module module : additionalModules) {
+				install(module);	
+			}
+		}
+			
+		
 	}
-	
-	
 	
 }
