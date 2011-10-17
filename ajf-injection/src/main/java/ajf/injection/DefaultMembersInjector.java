@@ -5,9 +5,7 @@ import java.lang.reflect.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ajf.persistence.DAO;
-import ajf.persistence.DAOFactory;
-import ajf.services.ServiceFactory;
+import ajf.services.ServiceLocator;
 
 import com.google.inject.MembersInjector;
 
@@ -24,23 +22,9 @@ public class DefaultMembersInjector<T> implements MembersInjector<T> {
 
 	public void injectMembers(T t) {
 		
-		// is the field type extends DAO
-		try {
-			field.getType().asSubclass(DAO.class);
-			Object daoImpl = DAOFactory.getDAO(field.getType());
-			this.field.set(t, daoImpl);
-		}
-		catch (ClassCastException e) {
-			// field is not a DAO
-		}
-		catch (Throwable e) {
-			logger.error("Exception while injecting field : " + this.field.getName(), e);
-			throw new RuntimeException(e);
-		}
-		
 		// is the field a service
 		try {
-			Object serviceImpl = ServiceFactory.getService(field.getType());
+			Object serviceImpl = ServiceLocator.getService(field.getType());
 			this.field.set(t, serviceImpl);
 		}
 		catch (Throwable e) {

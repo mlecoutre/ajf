@@ -1,82 +1,82 @@
 package ajf.injection;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import org.slf4j.Logger;
+
+import ajf.logger.LoggerFactory;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.Stage;
 
-public abstract class InjectionContext {
+public class InjectionContext {
 
-	private static final Module defaultInjectionModule = DefaultInjectionModule
-			.getInstance();
+	private final static Logger logger = LoggerFactory.getLogger(InjectionContext.class);
 	
-	private static List<Module> injectionModulesList;
-	private static List<Module> readOnlyInjectionModulesList;
+	private final static InjectionContext instance = new InjectionContext();
 	
-	private static Injector injector; 
-
-	static {
-		injectionModulesList = new ArrayList<Module>();
-		addInjectionModule(defaultInjectionModule);
+	private List<Module> injectionModulesList = new ArrayList<Module>();
+	private Injector injector = null; 
+	
+	public InjectionContext() {
+		super();
+		updateInjector();
 	}
-	
-	public static Injector getInjector() {
+
+	public static InjectionContext getInstance() {
+		return instance;
+	}
+
+	public Injector getInjector() {
 		return injector;
-	}
-	
-	public static Injector getInjector(Module module) {
-		
-		List<Module> modules = new ArrayList<Module>();
-		if (null != injectionModulesList)
-			modules.addAll(injectionModulesList);
-		modules.add(module);
-		
-		// generate the Guice Injector
-		Injector myInjector = injector = Guice.createInjector(modules);
-		return myInjector;
 	}
 
 	/**
 	 * @return the injectionModules list
 	 */
-	public static List<Module> getInjectionModules() {
-		return readOnlyInjectionModulesList;
+	public List<Module> getInjectionModules() {
+		return injectionModulesList;
 	}
 
 	/**
 	 * @param injectionModule
 	 *            to add
 	 */
-	public static void addInjectionModule(Module module) {
+	public void addInjectionModule(Module module) {
+		logger.info("Add InjectionModule instance of: ".concat(module.getClass().getName()));
 		injectionModulesList.add(module);
-		updateInternals();
+		updateInjector();
 	}
 
 	/**
 	 * @param injectionModule
 	 *            to remove
 	 */
-	public static void removeInjectionModule(Module module) {
+	public void removeInjectionModule(Module module) {
 		injectionModulesList.remove(module);
-		updateInternals();
+		updateInjector();
 	}
 
-	private static void updateInternals() {
-		// synchronize the ReadOnly collection
-		readOnlyInjectionModulesList = Collections.unmodifiableList(injectionModulesList);
+	private void updateInjector() {
 		// generate the Guice Injector
-		injector = Guice.createInjector(injectionModulesList);		
+		logger.info("Update Injector.");
+		if (injectionModulesList.isEmpty()) {
+			injector = Guice.createInjector(Stage.PRODUCTION, new DefaultInjectionModule());	
+		}
+		else {
+			injector = Guice.createInjector(Stage.PRODUCTION, new DefaultInjectionModule(injectionModulesList));
+		}
 	}
 
 	/**
 	 * reset the injectionModules list
 	 */
-	public static void resetInjectionModules() {
+	public void resetInjectionModules() {
 		injectionModulesList.clear();
-		addInjectionModule(defaultInjectionModule);
+		addInjectionModule(new DefaultInjectionModule());
 	}
 
 }

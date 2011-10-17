@@ -2,12 +2,15 @@ package ajf.injection;
 
 import java.lang.reflect.Field;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 
+import org.slf4j.Logger;
+
+import ajf.logger.injection.InjectLogger;
+import ajf.logger.injection.LoggerMembersInjector;
 import ajf.persistence.injection.DAOMembersInjector;
 import ajf.persistence.injection.EntityManagerFactoryMembersInjector;
 import ajf.persistence.injection.EntityManagerMembersInjector;
@@ -21,25 +24,20 @@ import com.google.inject.spi.TypeListener;
 
 public class InjectionTypeListener implements TypeListener {
 	
-	private static TypeListener instance = new InjectionTypeListener();
-	
-	private InjectionTypeListener() {
+	public InjectionTypeListener() {
 		super();
 	}
-
-	/**
-	 * 
-	 * @return the implementation
-	 */
-	public static TypeListener getInstance() {
-		return instance;
-	}
-
+	
 	public <T> void hear(TypeLiteral<T> typeLiteral,
 			TypeEncounter<T> typeEncounter) {
 
 		for (Field field : typeLiteral.getRawType().getDeclaredFields()) {
 
+			if (field.getType() == Logger.class
+					&& field.isAnnotationPresent(InjectLogger.class)) {
+				typeEncounter.register(new LoggerMembersInjector<T>(field));
+			}
+			
 			if (field.getType() == EntityManager.class
 					&& field.isAnnotationPresent(PersistenceContext.class)) {					
 				typeEncounter.register(new EntityManagerMembersInjector<T>(field));
@@ -50,19 +48,14 @@ public class InjectionTypeListener implements TypeListener {
 				typeEncounter.register(new EntityManagerFactoryMembersInjector<T>(field));
 			}
 			
-			if (field.isAnnotationPresent(InjectDAO.class)) {
-				typeEncounter.register(new DAOMembersInjector<T>(field));
-			}
-
 			if (field.isAnnotationPresent(InjectService.class)) {
 				typeEncounter.register(new ServiceMembersInjector<T>(field));
 			}
 			
-			if (field.isAnnotationPresent(Inject.class)) {
-				typeEncounter.register(new DefaultMembersInjector<T>(field));
+			if (field.isAnnotationPresent(InjectDAO.class)) {
+				typeEncounter.register(new DAOMembersInjector<T>(field));
 			}
-			
-			
+						
 		}
 
 	}
