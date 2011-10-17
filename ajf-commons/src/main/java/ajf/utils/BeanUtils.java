@@ -1,5 +1,7 @@
 package ajf.utils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ServiceLoader;
 
 import org.slf4j.Logger;
@@ -11,37 +13,29 @@ import ajf.logger.LoggerFactory;
  * @author vincent claeysen
  * 
  */
-public abstract class BeanUtils {
+public class BeanUtils {
 		
 	private final static Logger logger = LoggerFactory.getLogger();
+	private final static BeanUtils instance = new BeanUtils(); 
 	
-	private static boolean initialized = false;
-	private static Object token = new Object();
+	private boolean initialized = false;
+	private Object token = new Object();
 	
-	protected static ServiceLoader<BeanInitializer> biLoader = null;
-	//protected static Collection<BeanInitializer> initializers = new HashSet<BeanInitializer>();
+	private BeanInstanciator instanciator = null;
+	protected List<BeanInitializer> biList = new ArrayList<BeanInitializer>();
 	
-//	/**
-//	 * register a new BeanInitializer
-//	 * @param beanInitializer
-//	 */
-//	protected static void registerBeanInitializer(BeanInitializer beanInitializer) {
-//		if (null != beanInitializer) {
-//			if (!initializers.contains(beanInitializer))
-//				initializers.add(beanInitializer);
-//		}
-//	}
+	private BeanUtils() {
+		super();
+	}
 	
-//	/**
-//	 * unregister a new BeanInitializer
-//	 * @param beanInitializer
-//	 */
-//	protected static void unregisterBeanInitializer(BeanInitializer beanInitializer) {
-//		if (null != beanInitializer) {
-//			if (initializers.contains(beanInitializer))
-//				initializers.remove(beanInitializer);
-//		}
-//	}	
+	public static BeanUtils getInstance() {
+		return instance;
+	}
+	
+	public void setBeanInstanciator(BeanInstanciator beanInstanciator) {
+		logger.info("set BeanInstanciator to instance of: ".concat(beanInstanciator.getClass().getName()));
+		instanciator = beanInstanciator;
+	}
 
 	/**
 	 * 
@@ -51,80 +45,41 @@ public abstract class BeanUtils {
 	 * @throws IllegalAccessException
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T newInstance(Class<?> clazz)
+	public <T> T newInstance(Class<?> clazz)
 			throws InstantiationException, IllegalAccessException {
+		
+		checkInit();
 
 		// call the default constructor
-		Object bean = clazz.newInstance();
-		
+		Object bean = null;
+		if (null != instanciator) {
+			bean = instanciator.instanciate(clazz);
+		}
+		else {
+			bean = clazz.newInstance();
+		}
+				
 		// initialize bean
-		initialize(bean);
+		initializeBean(bean);
 
 		return (T) bean;
 
 	}
 	
-	/**
-	 * apply the collection of BeanInitializer on the given bean
-	 * @param bean
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
-	 */
-	private static void initialize(Object bean) {
+	private void checkInit() {
 		
 		if (!initialized) {
 			synchronized (token) { 
 				if (!initialized) {
-					initialized = true;					
-					
+					initialized = true;
 					try {
-						
-						biLoader = ServiceLoader.load(BeanInitializer.class);
-						
-//						ClassLoader cl = BeanUtils.class.getClassLoader();
-//						Enumeration<URL> componentsURL = cl.getResources("META-INF/ajf.utils.BeanInitializer");
-//					
-//						if (null != componentsURL) {
-//						
-//							while (componentsURL.hasMoreElements()) {
-//							
-//								URL url = componentsURL.nextElement();
-//								
-//								try {
-//									logger.info("Load the resource URL '" + url + "'.");
-//									String content = URLHelper.loadURLAsString(url, ";");
-//									
-//									if ((null != content) && (!content.isEmpty())) {
-//										String[] classeNames = content.split(";");
-//										for (int i = 0; i < classeNames.length; i++) {
-//											String clazzName = ("".concat(classeNames[i])).trim();											
-//											try {
-//												
-//												// load the defined class
-//												Class<?> clazz = cl.loadClass(clazzName);
-//												BeanInitializer beanInitializer = (BeanInitializer) clazz.newInstance();
-//												// get the default instance
-//												beanInitializer = beanInitializer.getInstance();
-//												logger.info("Register the BeanInitializer '" + clazzName + "'.");
-//												// add the BeanInitializer
-//												initializers.add(beanInitializer);
-//												
-//											} catch (ClassNotFoundException e) {
-//												logger.warn("Unable to load the BeanInitializer class '" + clazzName + "'.", e);
-//											} catch (InstantiationException e) {
-//												logger.warn("Unable to instanciate the BeanInitializer class '" + clazzName + "'.", e);
-//											} catch (IllegalAccessException e) {
-//												logger.warn("Unable to access the BeanInitializer constructor for class '" + clazzName + "'.", e);
-//											}
-//										}
-//									}
-//								} catch (IOException e) {
-//									logger.warn("Unable to load the resource URL '" + url + "'.", e);
-//								}
-//								
-//								
-//							}
-//						}
+						ServiceLoader<BeanInitializer> biLoader = ServiceLoader.load(BeanInitializer.class);
+						if (null != biLoader) {
+							for (BeanInitializer beanInitializer : biLoader) {
+								logger.info("Use BeanInitializer instance of: ".concat(beanInitializer.getClass().getName()));
+								biList.add(beanInitializer);
+							}
+						}
 					} catch (Exception e) {
 						logger.warn("Unable to get resources 'META-INF/services/ajf.utils.BeanInitializer'.", e);
 					}
@@ -132,17 +87,26 @@ public abstract class BeanUtils {
 			}
 		}
 		
-		/*
-		if (!initializers.isEmpty()) {
-			for (BeanInitializer initializer : initializers) {
-				initializer.initialize(bean);
-			}
-		}
-		*/
+	}
+	
+	public void reset() {
 		
-		if (null != biLoader) {
-			for (BeanInitializer beanInitializer : biLoader) {
-				beanInitializer.getInstance().initialize(bean);
+		synchronized (token) { 
+			initialized = false;
+		}
+	}
+
+	/**
+	 * apply the collection of BeanInitializer on the given bean
+	 * @param bean
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 */
+	private void initializeBean(Object bean) {
+		
+		if ((null != biList) && (!biList.isEmpty())) {
+			for (BeanInitializer beanInitializer : biList) {
+				beanInitializer.initialize(bean);
 			}
 		}
 		
