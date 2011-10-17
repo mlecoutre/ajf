@@ -56,7 +56,7 @@ public class ConfigurationTest {
 		logger.info(configuration.getString("aMap.[c]"));
 		logger.info(configuration.getString("aMap.[d](0)"));
 		
-		logger.info(ConfigurationUtils.evaluate("the value is : ${aMap.[name]}", configuration));
+		logger.info(""+ConfigurationUtils.evaluate("the value is : ${aMap.[name]}", configuration));
 		
 						
 	}
