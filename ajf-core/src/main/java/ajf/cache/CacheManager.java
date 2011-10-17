@@ -1,9 +1,9 @@
 package ajf.cache;
 
-public interface CacheManager {
+public interface CacheManager{
 
-	Cache getCache();
+	<K, V> Cache<K, V> getCache();
 	
-	Cache getCache(String cacheName);
+	<K, V> Cache<K, V> getCache(String cacheName);
 	
 }

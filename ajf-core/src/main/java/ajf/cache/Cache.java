@@ -1,33 +1,33 @@
 package ajf.cache;
 
-public interface Cache {
+public interface Cache<K, V> {
 
 	/**
 	 * put a new object in the cache
 	 * @param key
 	 * @param value
 	 */
-	void put(Object key, Object value);
+	void put(K key, V value);
 	
 	/**
 	 * get an object from the cache
 	 * @param key
 	 * @return
 	 */
-	Object get(Object key);
+	V get(K key);
 	
 	/**
 	 * remove an object from the cache
 	 * @param key
 	 */
-	void remove(Object key);
+	V remove(K key);
 	
 	/**
 	 * is the cache contain an object
 	 * @param key
 	 * @return
 	 */
-	boolean contains(Object key);
+	boolean contains(K key);
 	
 	/**
 	 * clear the cache

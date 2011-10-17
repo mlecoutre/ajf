@@ -1,6 +1,6 @@
 package ajf.cache;
 
-public interface TTLCache extends Cache {
+public interface TTLCache<K, V> extends Cache<K, V> {
 
 	/**
 	 * @return the ttlInMs

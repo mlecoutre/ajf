@@ -4,13 +4,13 @@ import java.util.concurrent.TimeUnit;
 
 import org.infinispan.Cache;
 
-public class InfinispanCacheImpl implements ajf.cache.TTLCache {
+public class InfinispanCacheImpl<K, V> implements ajf.cache.TTLCache<K, V> {
 
-	private transient Cache<Object, Object> cache = null;
+	private transient Cache<K, V> cache = null;
 	
 	private long ttlInMs = -1;
 	
-	public InfinispanCacheImpl(Cache<Object, Object> cache) {
+	public InfinispanCacheImpl(Cache<K, V> cache) {
 		super();
 		this.cache = cache;
 	}
@@ -19,7 +19,7 @@ public class InfinispanCacheImpl implements ajf.cache.TTLCache {
 	 * 
 	 * @return the cache delegate
 	 */
-	public Cache<?, ?> getDelegate() {
+	public Cache<K, V> getDelegate() {
 		return this.cache;
 	}
 	
@@ -42,7 +42,7 @@ public class InfinispanCacheImpl implements ajf.cache.TTLCache {
 	 * @param key
 	 * @param value
 	 */
-	public void put(Object key, Object value) {
+	public void put(K key, V value) {
 		if (this.ttlInMs <= 0) {
 			this.cache.put(key, value);
 		} 
@@ -56,7 +56,7 @@ public class InfinispanCacheImpl implements ajf.cache.TTLCache {
 	 * @param key
 	 * @return
 	 */
-	public Object get(Object key) {
+	public V get(K key) {
 		return this.cache.get(key);
 	}
 	
@@ -64,8 +64,8 @@ public class InfinispanCacheImpl implements ajf.cache.TTLCache {
 	 * 
 	 * @param key
 	 */
-	public void remove(Object key) {
-		this.cache.remove(key);
+	public V remove(K key) {
+		return this.cache.remove(key);
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public class InfinispanCacheImpl implements ajf.cache.TTLCache {
 	 * @param key
 	 * @return
 	 */
-	public boolean contains(Object key) {
+	public boolean contains(K key) {
 		return this.cache.containsKey(key);
 	}
 	
@@ -90,32 +90,5 @@ public class InfinispanCacheImpl implements ajf.cache.TTLCache {
 	public boolean isEmpty() {
 		return this.cache.isEmpty();
 	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		return this.cache.hashCode();
-	}
-
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
-		InfinispanCacheImpl other = (InfinispanCacheImpl) obj;
-		if (cache == null) {
-			if (other.cache != null) return false;
-		}
-		else
-			if (!cache.equals(other.cache)) return false;
-		return true;
-	}
-	
-	
 	
 }
