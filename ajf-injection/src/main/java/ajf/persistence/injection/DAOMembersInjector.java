@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ajf.persistence.DAO;
-import ajf.persistence.DAOFactory;
+import ajf.services.ServiceLocator;
 
 import com.google.inject.MembersInjector;
 
@@ -49,8 +49,8 @@ public class DAOMembersInjector<T> implements MembersInjector<T> {
 		**/
 		
 		try {
-			Object daoImpl = DAOFactory.getDAO(field.getType());
-			this.field.set(t, daoImpl);
+			Object serviceImpl = ServiceLocator.getService(field.getType());
+			this.field.set(t, serviceImpl);
 		}
 		catch (Throwable e) {
 			logger.error("Exception while injecting field : " + this.field.getName(), e);
