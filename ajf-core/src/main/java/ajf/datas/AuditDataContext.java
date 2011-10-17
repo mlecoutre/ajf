@@ -14,6 +14,15 @@ public abstract class AuditDataContext {
 
 	/**
 	 * 
+	 * @param auditData
+	 */
+	public static void initContextData() {
+		contextData.set(new DefaultAuditData());
+	}
+
+	
+	/**
+	 * 
 	 * @return
 	 */
 	public static AuditData getAuditData() {

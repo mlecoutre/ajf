@@ -1,11 +1,14 @@
 package ajf.datas;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.slf4j.MDC;
 
 /**
  * AuditData implementation Predefined key are available in AuditData.KEY_XXXX
@@ -28,6 +31,7 @@ public class DefaultAuditData implements EditableAuditData {
 		map = new HashMap<String, Object>();
 		// generate correlation ID if needed
 		try {
+			this.put(AuditData.KEY_DATE, new Date());			
 			String uuid = UUID.randomUUID().toString();
 			this.put(AuditData.KEY_UUID, uuid);
 		}
@@ -41,30 +45,38 @@ public class DefaultAuditData implements EditableAuditData {
 
 	/*
 	 * (non-Javadoc)
-	 * @see ajf2.datas.AuditData#get(java.lang.String)
+	 * @see ajf.datas.AuditData#get(java.lang.String)
 	 */
-	public String get(String key) {
+	public Object get(String key) {
 		Object value = map.get(key);
-		if (null == value) {
-			return null;
-		}
-		if (value instanceof String) {
+		return value;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see ajf.datas.AuditData#getString(java.lang.String)
+	 */
+	public String getString(String key) {
+		Object value = map.get(key);
+		if (value instanceof String) 
 			return (String) value;
-		}
 		return String.valueOf(value);
 	}
-
+	
 	/*
 	 * (non-Javadoc)
-	 * @see ajf2.datas.EditableAuditData#put(java.lang.String, java.lang.String)
+	 * @see ajf.datas.EditableAuditData#put(java.lang.String, java.lang.Object)
 	 */
-	public void put(String key, String value) {
+	public void put(String key, Object value) {
 		map.put(key, value);
+		// propagate in the logging
+		if ((null != value) && (value instanceof String))
+			MDC.put(key, (String) value);				
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see ajf2.datas.EditableAuditData#clear()
+	 * @see ajf.datas.EditableAuditData#clear()
 	 */
 	public void clear() {
 		map.clear();
@@ -72,7 +84,7 @@ public class DefaultAuditData implements EditableAuditData {
 
 	/*
 	 * (non-Javadoc)
-	 * @see ajf2.datas.AuditData#getKeys()
+	 * @see ajf.datas.AuditData#getKeys()
 	 */
 	public Set<String> getKeys() {
 		return map.keySet();
@@ -82,7 +94,5 @@ public class DefaultAuditData implements EditableAuditData {
 	public String toString() {
 		return "DefaultAuditData [map=" + map + "]";
 	}
-
-	
 
 }

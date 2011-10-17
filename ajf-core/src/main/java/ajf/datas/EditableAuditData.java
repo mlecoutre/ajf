@@ -9,7 +9,7 @@ public interface EditableAuditData extends AuditData {
 	 * @param key audit data key
 	 * @param value value to push in the audit data.
 	 */
-	public void put(String key, String value);
+	public void put(String key, Object value);
 	
 	/**
 	 * clean the AuditData element

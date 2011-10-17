@@ -8,15 +8,23 @@ import java.util.Set;
  */
 public interface AuditData extends Serializable {
 
-	static final String KEY_UUID = "_uuid";
-	static final String KEY_USERID = "_userid";
+	static final String KEY_UUID = "uuid";
+	static final String KEY_USERID = "userid";
+	static final String KEY_DATE = "date";
 
+	/**
+	 * Get Audit data value.
+	 * @param key ID to get specific data.
+	 * @return Object value in the audit Data
+	 */
+	Object get(String key);
+	
 	/**
 	 * Get Audit data value.
 	 * @param key ID to get specific data.
 	 * @return String value in the audit Data
 	 */
-	String get(String key);
+	String getString(String key);
 	
 	/**
 	 * 
