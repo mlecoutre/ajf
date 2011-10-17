@@ -9,7 +9,18 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class ClassUtils {
-
+		
+	private static final String DAO = "DAO";
+	private static final String CORE_DAO = ".core.dao.";
+	private static final String LIB_MODEL = ".lib.model.";
+	
+	private static final String LIB_SERVICES = ".lib.services."; 
+	private static final String CORE_SERVICES = ".core.services.";
+	
+	private static final String POLICY = "Policy";
+	private static final String LIB_BUSINESS = ".lib.business.";	
+	private static final int BUSINESS_BD_LEN = "BusinessBD".length();
+	private static final String CORE_BUSINESS = ".core.business.";
 	/**
 	 * Utility method used to fetch Class list based on a package name.
 	 * 
@@ -59,7 +70,7 @@ public abstract class ClassUtils {
 	 */
 	public static String processEntityClassName(Class<?> daoClass) {
 		
-		String entityClassName = daoClass.getName().replace(".core.dao.", ".lib.model.");
+		String entityClassName = daoClass.getName().replace(CORE_DAO, LIB_MODEL);
 		// remove ~DAO
 		entityClassName = entityClassName.substring(0, entityClassName.length()-3);
 		return entityClassName;
@@ -71,9 +82,9 @@ public abstract class ClassUtils {
 	 */
 	public static String processDAOClassName(Class<?> entityClass) {
 		
-		String daoClassName = entityClass.getName().replace(".lib.model.", ".core.dao.");
+		String daoClassName = entityClass.getName().replace(LIB_MODEL, CORE_DAO);
 		// add ~DAO
-		daoClassName = daoClassName.concat("DAO");
+		daoClassName = daoClassName.concat(DAO);
 		
 		return daoClassName;
 		
@@ -82,15 +93,49 @@ public abstract class ClassUtils {
 	/*
 	 * Service Interface in [project].lib.services.[ServiceName]ServiceBD
 	 * Service Impl in [project].core.services.[ServiceName]Service
+	 * Service Interface in [project].lib.business.[ServiceName]BD
+	 * Service Impl in [project].core.business.[ServiceName]Policy
 	 */
 	public static String processServiceClassName(Class<?> serviceClass) {
 		
-		String serviceClassName = serviceClass.getName().replace(".lib.services.", ".core.services.");
-		// remove ~BD
-		serviceClassName = serviceClassName.substring(0, serviceClassName.length()-2);
+		String serviceName = serviceClass.getName();
 		
-		return serviceClassName;
+		String serviceClassName = "";
+		if (serviceName.contains(LIB_SERVICES)) {
+			serviceClassName = serviceName.replace(LIB_SERVICES, CORE_SERVICES);
+			// remove ~BD
+			serviceClassName = serviceClassName.substring(0, serviceClassName.length()-2);
+			return serviceClassName;
+		}
 		
+		if (serviceName.contains(LIB_BUSINESS)) {
+			serviceClassName = serviceName.replace(LIB_BUSINESS, CORE_BUSINESS);
+			// remove ~BusinessBD
+			serviceClassName = serviceClassName.substring(0, serviceClassName.length()-2).concat(POLICY);
+			return serviceClassName;			
+		}
+		
+		return null;
+		
+	}
+	
+	/**
+	 * test is the specified interface is DAO
+	 * @param serviceClass
+	 * @return true 
+	 */
+	public static boolean isDAO(Class<?> serviceClass) {
+		return serviceClass.getName().contains(CORE_DAO);
+	}
+	
+	/**
+	 * test is the specified interface is a technical or business Service
+	 * @param serviceClass
+	 * @return
+	 */
+	public static boolean isService(Class<?> serviceClass) {
+		String svcName = serviceClass.getName();
+		return (svcName.contains(LIB_SERVICES) || svcName.contains(LIB_BUSINESS));
 	}
 	
 	/**
@@ -108,7 +153,7 @@ public abstract class ClassUtils {
 	 * 
 	 * @return the caller class name
 	 */
-	public static String getClassName() {
+	public static String giveCurrentClassName() {
 		/* populate the stack trace */
 		StackTraceElement[] stack = new Throwable().fillInStackTrace()
 				.getStackTrace();
