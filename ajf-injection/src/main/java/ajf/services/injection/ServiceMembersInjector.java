@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ajf.services.ServiceFactory;
+import ajf.services.ServiceLocator;
 
 import com.google.inject.MembersInjector;
 
@@ -22,20 +22,8 @@ public class ServiceMembersInjector<T> implements MembersInjector<T> {
 
 	public void injectMembers(T t) {
 		
-		// check the field type
-		/**
 		try {
-			field.getType().asSubclass(DAO.class);
-		}
-		catch (ClassCastException e) {
-			// file is not a DAO
-			throw new RuntimeException(
-					"The field '" + t.getClass().getName() + "#" + field.getName() + "' must be a Service");
-		}
-		**/
-		
-		try {
-			Object serviceImpl = ServiceFactory.getService(field.getType());
+			Object serviceImpl = ServiceLocator.getService(field.getType());
 			this.field.set(t, serviceImpl);
 		}
 		catch (Throwable e) {
