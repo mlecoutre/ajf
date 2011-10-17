@@ -50,7 +50,13 @@ public class ManifestHelper {
 		if (null != manifest) {
 			Attributes attrs = manifest.getMainAttributes();
 			if (attrs.containsKey(attributeName)) {
-				String value = attrs.getValue(attributeName);
+				String value = null;
+				try {
+					value = attrs.getValue(attributeName);
+				}
+				catch (Exception e) {
+					// Undefined attribute
+				}
 				return value;
 			}
 		}
@@ -71,13 +77,19 @@ public class ManifestHelper {
 			Attributes attrs = manifest.getAttributes(entryName);
 			if (null != attrs) {
 				if (attrs.containsKey(attributeName)) {
-					String value = attrs.getValue(attributeName);
+					String value = null;
+					try {
+						value = attrs.getValue(attributeName);
+					}
+					catch (Exception e) {
+						// Undefined attribute
+					}
 					return value;
 				}
 			}
 		}
 
-		logger.debug("Unknow manifest attribute '[" + entryName + "]"
+		logger.debug("Unknow manifest attribute '[" + entryName + "] "
 				+ attributeName + "'.");
 		return null;
 	}

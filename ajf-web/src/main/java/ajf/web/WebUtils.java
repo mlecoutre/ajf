@@ -12,7 +12,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import ajf.logger.LoggerFactory;
 
 /**
  * AJF web util class Can be used as static import.
@@ -25,7 +26,7 @@ public class WebUtils {
 	//private  FacesContext context;
 	private static String bundleName;
 
-	private static Logger log = LoggerFactory.getLogger(WebUtils.class);
+	private static Logger log = LoggerFactory.getLogger();
 
 
 	/**
