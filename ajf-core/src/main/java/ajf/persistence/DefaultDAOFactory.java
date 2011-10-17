@@ -3,27 +3,14 @@ package ajf.persistence;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
-import ajf.services.MockContext;
+import ajf.services.ServiceFactory;
+import ajf.utils.ClassUtils;
 
-public abstract class DAOFactory {
-
-	/**
-	 * 
-	 * @param daoClass
-	 * @param inJTA
-	 * @return 
-	 * @return
-	 * @throws Exception
-	 */
+public class DefaultDAOFactory implements ServiceFactory {
+	
 	@SuppressWarnings("unchecked")
-	public static <T extends DAO> T getDAO(Class<?> daoClass) throws Exception {
+	public <T> T lookup(Class<?> daoClass) throws Exception {
 
-		// is the DAO mocked
-		Object mock = MockContext.lookup(daoClass); 
-		if ((null != mock) && (mock instanceof DAO)) {
-			return (T) mock;
-		}
-		
 		// get the invocationHandler for DAO class
 		InvocationHandler invocationHandler = new JpaDAOProxy(daoClass);
 				
@@ -35,6 +22,14 @@ public abstract class DAOFactory {
 		// return the proxy
 		return (T) proxy;
 
+	}
+
+	public boolean accept(Class<?> serviceClass) {
+ 		return ClassUtils.isDAO(serviceClass);
+	}
+
+	public int getPriorityLevel() {
+		return 0;
 	}
 
 }

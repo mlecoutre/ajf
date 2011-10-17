@@ -1,7 +1,6 @@
 package ajf.persistence;
 
-import static ajf.utils.BeanUtils.*;
-import static ajf.utils.ClassUtils.*;
+import static ajf.utils.ClassUtils.listMethodsAsMap;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +25,7 @@ import org.xml.sax.SAXException;
 
 import ajf.persistence.exception.PersistenceLayerException;
 import ajf.persistence.utils.PersistenceUtils;
+import ajf.utils.BeanUtils;
 import ajf.utils.helpers.XMLHelper;
 
 public class JpaDAOProxy implements InvocationHandler {
@@ -95,12 +95,12 @@ public class JpaDAOProxy implements InvocationHandler {
 		this.inJTA = JTA.equalsIgnoreCase(puDesc.getTransactionType());
 
 		// get a new persistence base dao impl instance
-		this.basePersistenceDAOImpl = (JpaDAO) newInstance(BASE_PERSISTENCE_DAO_CLASS);
+		this.basePersistenceDAOImpl = (JpaDAO) BeanUtils.getInstance().newInstance(BASE_PERSISTENCE_DAO_CLASS);
 
 		// get a new persistence dao delegate impl instance
 		this.persistenceDAODelegateImpl = null;
 		if (null != this.daoMetadata.getDaoDelegateClass()) {
-			persistenceDAODelegateImpl = (JpaDAO) newInstance(this.daoMetadata
+			persistenceDAODelegateImpl = (JpaDAO) BeanUtils.getInstance().newInstance(this.daoMetadata
 					.getDaoDelegateClass());
 		}
 

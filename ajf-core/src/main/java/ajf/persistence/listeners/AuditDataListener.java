@@ -40,7 +40,7 @@ public class AuditDataListener {
 			ajf.datas.AuditData audit = AuditDataContext.getAuditData();
 			String user = null;
 			if (null != audit) {
-				user = audit.get(ajf.datas.AuditData.KEY_USERID);				
+				user = String.valueOf(audit.get(ajf.datas.AuditData.KEY_USERID));				
 			}
 			if (null == user)
 				 user = "Anonymous";
