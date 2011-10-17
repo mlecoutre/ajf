@@ -1,20 +1,29 @@
 package ajf.configuration;
 
 import org.apache.commons.configuration.AbstractConfiguration;
+import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertyConverter;
+import org.infinispan.config.ConfigurationException;
 
 public abstract class ConfigurationUtils {
 
 	/**
 	 * Evaluate the expression in the configuration context
-	 * 
 	 * @param expression
-	 * @param config
+	 * @param configuration
 	 * @return
+	 * @throws ConfigurationException
 	 */
 	public static Object evaluate(String expression,
-			AbstractConfiguration configuration) {
-		Object value = PropertyConverter.interpolate(expression, configuration);
+			Configuration configuration) throws ConfigurationException {
+		
+		if (!(configuration instanceof AbstractConfiguration)) {
+			throw new ConfigurationException("The 'configuration' must extend the abstract class 'org.apache.commons.configuration.AbstractConfiguration'.");
+		}
+		
+		
+		AbstractConfiguration abstractConfiguration = (AbstractConfiguration) configuration;		
+		Object value = PropertyConverter.interpolate(expression, abstractConfiguration);
 		return value;
 	}
 
