@@ -7,8 +7,6 @@ import ajf.utils.BeanInitializer;
 public class MockitoBeanInitializer 
 	implements BeanInitializer {
 	
-	private final static BeanInitializer beanInstance = new MockitoBeanInitializer(); 
-
 	/**
 	 * Default constructor 
 	 */
@@ -22,11 +20,6 @@ public class MockitoBeanInitializer
 	 */
 	public void initialize(Object beanInstance) {
 		MockitoAnnotations.initMocks(beanInstance);
-	}
-
-	@Override
-	public BeanInitializer getInstance() {
-		return beanInstance;
 	}
 	
 }

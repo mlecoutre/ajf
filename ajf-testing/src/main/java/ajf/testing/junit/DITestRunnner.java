@@ -1,11 +1,11 @@
 package ajf.testing.junit;
 
-import static ajf.utils.BeanUtils.*;
-
 import java.util.List;
 
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
+
+import ajf.utils.BeanUtils;
 
 public class DITestRunnner extends BlockJUnit4ClassRunner {
 
@@ -21,7 +21,7 @@ public class DITestRunnner extends BlockJUnit4ClassRunner {
 	@Override
 	protected Object createTest() throws Exception {
 
-		Object testBean = newInstance(this.getTestClass().getJavaClass());
+		Object testBean = BeanUtils.getInstance().newInstance(this.getTestClass().getJavaClass());
 		return testBean;
 
 	}
