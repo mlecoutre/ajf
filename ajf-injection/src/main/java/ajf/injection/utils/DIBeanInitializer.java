@@ -1,18 +1,20 @@
 package ajf.injection.utils;
 
-import ajf.injection.DependenciesInjector;
+import ajf.injection.InjectionContext;
 import ajf.utils.BeanInitializer;
+import ajf.utils.BeanUtils;
 
 public class DIBeanInitializer 
 	implements BeanInitializer {
 	
-	private final static BeanInitializer beanInstance = new DIBeanInitializer(); 
-
 	/**
 	 * Default constructor 
 	 */
 	public DIBeanInitializer() {
 		super();
+		
+		BeanUtils.getInstance().setBeanInstanciator(new DIBeanInstanciator());
+		
 	}
 	
 	/*
@@ -20,12 +22,7 @@ public class DIBeanInitializer
 	 * @see ajf.utils.BeanInitializer#initialize(java.lang.Object)
 	 */
 	public void initialize(Object instance) {
-		DependenciesInjector.inject(instance);
+		InjectionContext.getInstance().getInjector().injectMembers(instance);
 	}
-
-	@Override
-	public BeanInitializer getInstance() {
-		return beanInstance;
-	}
-	
+		
 }
