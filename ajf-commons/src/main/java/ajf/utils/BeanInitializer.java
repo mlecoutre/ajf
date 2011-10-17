@@ -8,9 +8,4 @@ public interface BeanInitializer {
 	 */
 	public void initialize(Object instance);
 	
-	/**
-	 * @return the default instance
-	 */
-	public BeanInitializer getInstance();
-	
 }
