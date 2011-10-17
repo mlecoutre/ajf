@@ -15,7 +15,6 @@ import ajf.utils.BlankEntityResolver;
 public abstract class XMLHelper {
 
 	/**
-	 * 
 	 * @param is
 	 * @return
 	 * @throws ParserConfigurationException
@@ -24,18 +23,32 @@ public abstract class XMLHelper {
 	 */
 	public static Document getDocument(InputStream is)
 			throws ParserConfigurationException, SAXException, IOException {
+		return getDocument(is, false); 
+	}
+	
+	/**
+	 * @param is
+	 * @param namespaceAware
+	 * @return
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 */
+	public static Document getDocument(InputStream is, boolean namespaceAware)
+		throws ParserConfigurationException, SAXException, IOException {
 		
 		DocumentBuilderFactory factory =
 			DocumentBuilderFactory.newInstance();
 		factory.setValidating(false);
 		factory.setExpandEntityReferences(true);
-		factory.setNamespaceAware(true); // never forget this!
+		factory.setNamespaceAware(namespaceAware); // never forget this!
 		factory.setIgnoringComments(false);
 		
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		builder.setEntityResolver(new BlankEntityResolver());
 		Document doc = builder.parse(is);
 		return doc;
+		
 	}
 
 }
