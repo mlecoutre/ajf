@@ -19,8 +19,6 @@ public class BeanConfiguration extends AbstractConfiguration {
 		propUtils.setResolver(defaultResolver);
 	}
 
-
-
 	@Override
 	public boolean isEmpty() {
 		return map.isEmpty();

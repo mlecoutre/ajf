@@ -5,7 +5,11 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertyConverter;
 import org.infinispan.config.ConfigurationException;
 
-public abstract class ConfigurationUtils {
+public class ConfigurationUtils {
+	
+	private ConfigurationUtils() {
+		super();
+	}
 
 	/**
 	 * Evaluate the expression in the configuration context
