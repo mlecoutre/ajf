@@ -8,8 +8,12 @@ import ajf.utils.ClassUtils;
 
 public class DefaultDAOFactory implements ServiceFactory {
 	
+	public DefaultDAOFactory() {
+		super();
+	}
+
 	@SuppressWarnings("unchecked")
-	public <T> T lookup(Class<?> daoClass) throws Exception {
+	public <T> T get(Class<?> daoClass) throws Exception {
 
 		// get the invocationHandler for DAO class
 		InvocationHandler invocationHandler = new JpaDAOProxy(daoClass);
