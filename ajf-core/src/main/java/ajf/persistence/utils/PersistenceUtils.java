@@ -13,7 +13,11 @@ import ajf.persistence.exception.PersistenceLayerException;
  * @author E010925
  * 
  */
-public abstract class PersistenceUtils {
+public class PersistenceUtils {
+	
+	private PersistenceUtils() {
+		super();
+	}
 
 	/**
 	 * Opens the entity manager.
@@ -21,7 +25,7 @@ public abstract class PersistenceUtils {
 	 * @param persistenceUnit
 	 * @return EntityManager
 	 */
-	public EntityManager openEntityManager(String persistenceUnit) {
+	public static EntityManager openEntityManager(String persistenceUnit) {
 		return EntityManagerProvider.getEntityManager(persistenceUnit);
 	}
 
@@ -31,8 +35,9 @@ public abstract class PersistenceUtils {
 	 * @param em
 	 *            EntityManager
 	 */
-	public void closeEntityManager(EntityManager em) {
-		em.close();
+	public static void closeEntityManager(EntityManager em) {
+		if ((em != null) && (em.isOpen()))
+				em.close();
 		EntityManagerProvider.clean();
 	}
 
@@ -68,6 +73,7 @@ public abstract class PersistenceUtils {
 	 */
 	public static void handlerError(Logger log, String message,
 			String errorType, Throwable cause) throws PersistenceLayerException {
+		
 		StringBuffer buffer = new StringBuffer("Managed persistence error : ")
 				.append(cause.getMessage()).append(" ");
 		if (cause.getCause() != null) {
