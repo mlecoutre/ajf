@@ -19,7 +19,6 @@ public abstract class ClassUtils {
 	
 	private static final String POLICY = "Policy";
 	private static final String LIB_BUSINESS = ".lib.business.";	
-	private static final int BUSINESS_BD_LEN = "BusinessBD".length();
 	private static final String CORE_BUSINESS = ".core.business.";
 	/**
 	 * Utility method used to fetch Class list based on a package name.
