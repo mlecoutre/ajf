@@ -4,9 +4,13 @@ import ajf.utils.BeanUtils;
 import ajf.utils.ClassUtils;
 
 public class DefaultServiceFactory implements ServiceFactory {
+	
+	public DefaultServiceFactory() {
+		super();
+	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T lookup(Class<?> serviceClass) throws Exception {
+	public <T> T get(Class<?> serviceClass) throws Exception {
 
 		String serviceImplClassName = ClassUtils
 				.processServiceClassName(serviceClass);
