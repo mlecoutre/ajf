@@ -18,7 +18,7 @@ public interface ServiceFactory {
 	 * @return
 	 * @throws Exception
 	 */
-	<T> T lookup(Class<?> serviceClass) throws Exception;
+	<T> T get(Class<?> serviceClass) throws Exception;
 	
 	/**
 	 * give the ServiceLocator priority level, default = 0
