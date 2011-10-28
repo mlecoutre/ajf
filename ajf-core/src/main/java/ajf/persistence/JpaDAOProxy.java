@@ -68,15 +68,9 @@ public class JpaDAOProxy implements InvocationHandler {
 	/**
 	 * 
 	 * @param daoClass
-	 * @throws IllegalAccessException
-	 * @throws InstantiationException
-	 * @throws IOException
-	 * @throws SAXException
-	 * @throws ParserConfigurationException
+	 * @throws Exception 
 	 */
-	public JpaDAOProxy(Class<?> daoClass) throws InstantiationException,
-			IllegalAccessException, ParserConfigurationException, SAXException,
-			IOException {
+	public JpaDAOProxy(Class<?> daoClass) throws Exception {
 
 		// check init
 		checkInit();
