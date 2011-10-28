@@ -76,6 +76,32 @@ public abstract class EntityManagerProvider {
 		}
 		return em;
 	}
+	
+	/**
+	 * 
+	 * @param persistenceUnitName
+	 * @return
+	 */
+	public static EntityManager getNewEntityManager(String persistenceUnitName) {
+
+		EntityManagerFactory emFactory = Persistence.createEntityManagerFactory(persistenceUnitName);
+		
+		EntityManager em = emFactory.createEntityManager();
+		return em;
+		
+	}
+	
+	/**
+	 * 
+	 * @param persistenceUnitName
+	 * @return
+	 */
+	public static EntityManagerFactory getNewEntityManagerFactory(String persistenceUnitName) {
+
+		EntityManagerFactory emFactory = Persistence.createEntityManagerFactory(persistenceUnitName);
+		return emFactory;
+		
+	}
 
 	/**
 	 * 
