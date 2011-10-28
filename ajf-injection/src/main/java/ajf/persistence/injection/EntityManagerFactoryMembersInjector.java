@@ -45,7 +45,7 @@ public class EntityManagerFactoryMembersInjector<T> implements
 	public void injectMembers(T t) {
 		try {
 			EntityManagerFactory em = EntityManagerProvider
-					.getEntityManagerFactory(this.persistenceUnitName);
+					.getNewEntityManagerFactory(this.persistenceUnitName);
 			this.field.set(t, em);
 		}
 		catch (Throwable e) {

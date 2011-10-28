@@ -43,7 +43,7 @@ public class EntityManagerMembersInjector<T> implements MembersInjector<T> {
 
 	public void injectMembers(T t) {
 		try {
-			EntityManager em = EntityManagerProvider.getEntityManager(this.persistenceUnitName);
+			EntityManager em = EntityManagerProvider.getNewEntityManager(this.persistenceUnitName);
 			this.field.set(t, em);
 		}
 		catch (Throwable e) {
