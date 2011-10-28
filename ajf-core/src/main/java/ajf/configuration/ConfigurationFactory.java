@@ -14,7 +14,11 @@ import org.apache.commons.configuration.PropertiesConfiguration;
  * @author vincent
  * 
  */
-public abstract class ConfigurationFactory {
+public class ConfigurationFactory {
+
+	private ConfigurationFactory() {
+		super();
+	}
 
 	/***
 	 * create Configuration object form resource
