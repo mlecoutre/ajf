@@ -32,7 +32,7 @@ public class MockServiceFactory implements ServiceFactory {
 	 * @param mockedClass
 	 * @param mock
 	 */
-	public void bind(Class<?> mockedClass, Object mock) {
+	public static void bind(Class<?> mockedClass, Object mock) {
 		
 		Map<String, Object> map = mocksMap.get();
 		if (null == map) {
@@ -43,19 +43,39 @@ public class MockServiceFactory implements ServiceFactory {
 		map.put(mockedClass.getName(), mock);
 		
 	}
-
-	/*
-	 * (non-Javadoc)
+	
+	/**
+	 * remove a Mock
 	 * 
-	 * @see ajf.testing.services.ServiceLocator#lookup(java.lang.Class)
+	 * @param mockedClass
 	 */
-	@Override
+	public static void remove(Class<?> mockedClass) {
+		
+		Map<String, Object> map = mocksMap.get();
+		if (null != map) {
+			if (map.containsKey(mockedClass.getName())) 
+				map.remove(mockedClass.getName());
+		}
+		
+	}
+
+	/**
+	 * lookup a mock
+	 * 
+	 * @param <T>
+	 * @param serviceClass
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	@SuppressWarnings("unchecked")
-	public <T> T lookup(Class<?> serviceClass) throws ClassNotFoundException,
+	public static <T> T lookup(Class<?> serviceClass) throws ClassNotFoundException,
 			InstantiationException, IllegalAccessException {
 		
 		Map<String, Object> map = mocksMap.get();
-		if (null == map) return null;
+		if (null == map) 
+			return null;
 		Object bean = map.get(serviceClass.getName());
 		return (T) bean;
 	}
@@ -63,14 +83,18 @@ public class MockServiceFactory implements ServiceFactory {
 	/**
 	 * reset a Mock context
 	 */
-	public void reset() {
+	public static void reset() {
 		
 		Map<String, Object> map = mocksMap.get();
 		if (null == map) return;
 		map.clear();
 		
 	}
-
+	
+	/*
+	 * (non-Javadoc)
+	 * @see ajf.services.ServiceFactory#accept(java.lang.Class)
+	 */
 	public boolean accept(Class<?> serviceClass) {
 		Map<String, Object> map = mocksMap.get();
 		if (null == map) 
@@ -80,6 +104,21 @@ public class MockServiceFactory implements ServiceFactory {
 	
 	public int getPriorityLevel() {
 		return -1;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see ajf.services.ServiceFactory#get(java.lang.Class)
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T get(Class<?> serviceClass) throws Exception {
+		
+		Map<String, Object> map = mocksMap.get();
+		if (null == map) 
+			return null;
+		Object bean = map.get(serviceClass.getName());
+		return (T) bean;
+		
 	}
 
 }
