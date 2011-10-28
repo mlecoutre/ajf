@@ -2,10 +2,14 @@ package ajf.cache;
 
 import ajf.cache.impl.InfinispanEmbeddedCacheManagerImpl;
 
-public abstract class CacheFactory {
+public class CacheFactory {
 
-	private final static CacheManager cacheManager = new InfinispanEmbeddedCacheManagerImpl();
+	private static final CacheManager cacheManager = new InfinispanEmbeddedCacheManagerImpl();
 	
+	private CacheFactory() {
+		super();
+	}
+
 	public static <K, V>Cache<K, V>getCache() {
 		return cacheManager.getCache();
 	}
