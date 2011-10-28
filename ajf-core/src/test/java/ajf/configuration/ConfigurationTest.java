@@ -11,6 +11,8 @@ import org.apache.commons.configuration.PropertiesConfiguration;
 import org.junit.Test;
 import org.slf4j.Logger;
 
+import ajf.configuration.BeanConfiguration;
+import ajf.configuration.ConfigurationUtils;
 import ajf.logger.LoggerFactory;
 
 public class ConfigurationTest {
