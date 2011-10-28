@@ -11,7 +11,11 @@ import ajf.services.exceptions.ServiceLayerException;
  * @author E010925
  * 
  */
-public abstract class ServiceUtils {
+public class ServiceUtils {
+	
+	private ServiceUtils() {
+		super();
+	}
 
 	/**
 	 * manage service layer exception
