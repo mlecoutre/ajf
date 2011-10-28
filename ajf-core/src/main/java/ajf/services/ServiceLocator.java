@@ -13,16 +13,20 @@ import ajf.cache.Cache;
 import ajf.cache.impl.InfinispanEmbeddedCacheManagerImpl;
 import ajf.logger.LoggerFactory;
 
-public abstract class ServiceLocator {
+public class ServiceLocator {
 
 	private final static Logger logger = LoggerFactory.getLogger();
 
 	private static List<ServiceFactory> factories = new ArrayList<ServiceFactory>();
-	private static Cache factoriesCache = new InfinispanEmbeddedCacheManagerImpl()
+	private static Cache<Class<?>, ServiceFactory> factoriesCache = new InfinispanEmbeddedCacheManagerImpl()
 			.getCache(ServiceLocator.class.getName());
 
 	static {
 		initialize();
+	}
+	
+	private ServiceLocator() {
+		super();
 	}
 
 	private static void initialize() {
@@ -31,7 +35,7 @@ public abstract class ServiceLocator {
 					.load(ServiceFactory.class);
 			for (Iterator<ServiceFactory> iterator = loader.iterator(); iterator
 					.hasNext();) {
-				ServiceFactory service = (ServiceFactory) iterator.next();
+				ServiceFactory service = iterator.next();
 				registerServiceFactory(service);
 			}
 		}
@@ -106,16 +110,16 @@ public abstract class ServiceLocator {
 			Object serviceImpl = null;
 
 			if (factoriesCache.contains(serviceClass)) {
-				ServiceFactory factory = (ServiceFactory) factoriesCache
+				ServiceFactory factory = factoriesCache
 						.get(serviceClass);
-				serviceImpl = factory.lookup(serviceClass);
+				serviceImpl = factory.get(serviceClass);
 				return (T) serviceImpl;
 			}
 
 			for (ServiceFactory factory : factories) {
 				if (factory.accept(serviceClass)) {
 					factoriesCache.put(serviceClass, factory);
-					serviceImpl = factory.lookup(serviceClass);
+					serviceImpl = factory.get(serviceClass);
 					return (T) serviceImpl;
 				}
 			}
