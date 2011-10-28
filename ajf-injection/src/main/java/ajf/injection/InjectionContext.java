@@ -67,7 +67,14 @@ public class InjectionContext {
 			injector = Guice.createInjector(Stage.PRODUCTION, new DefaultInjectionModule());	
 		}
 		else {
-			injector = Guice.createInjector(Stage.PRODUCTION, new DefaultInjectionModule(injectionModulesList));
+			Module[] modules = new Module[1+injectionModulesList.size()];
+			modules[0] = new DefaultInjectionModule();
+			int id = 0;
+			for (Module module : injectionModulesList) {
+				id++;
+				modules[id] = module;		
+			}
+			injector = Guice.createInjector(Stage.PRODUCTION, modules);
 		}
 	}
 

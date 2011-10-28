@@ -1,22 +1,16 @@
 package ajf.injection;
 
-import java.util.List;
+import ajf.datas.AuditData;
+import ajf.datas.AuditDataContext;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Module;
+import com.google.inject.Provider;
 import com.google.inject.matcher.Matchers;
 
 public class DefaultInjectionModule extends AbstractModule {
 	
-	private List<Module> additionalModules = null;
-	
 	public DefaultInjectionModule() {
 		super();
-	}
-	
-	public DefaultInjectionModule(List<Module> modules) {
-		super();
-		this.additionalModules = modules;
 	}
 		
 	@Override
@@ -24,11 +18,15 @@ public class DefaultInjectionModule extends AbstractModule {
 		
 		bindListener(Matchers.any(), new InjectionTypeListener());
 		
-		if ((null != additionalModules) && (!additionalModules.isEmpty())) {
-			for (Module module : additionalModules) {
-				install(module);	
+		bind(AuditData.class).toProvider(new Provider<AuditData>() {
+
+			@Override
+			public AuditData get() {
+				AuditData auditData = AuditDataContext.getAuditData();
+				return auditData;
 			}
-		}
+			
+		});
 			
 		
 	}
