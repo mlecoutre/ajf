@@ -4,9 +4,11 @@ import org.slf4j.Logger;
 
 import ch.qos.logback.classic.LoggerContext;
 
-
-
-public abstract class LoggerFactory {
+public class LoggerFactory {
+	
+	private LoggerFactory() {
+		super();
+	}
 
 	/**
 	 * 
@@ -25,7 +27,7 @@ public abstract class LoggerFactory {
 	/**
 	 * 
 	 * @param name
-	 * @return
+	 * @return the appropriate logger
 	 */
 	public static Logger getLogger(String name) {
 		/* get the corresponding logger */
@@ -36,7 +38,7 @@ public abstract class LoggerFactory {
 	/**
 	 * 
 	 * @param clazz
-	 * @return
+	 * @return the appropriate logger
 	 */
 	public static Logger getLogger(Class<?> clazz) {
 		/* get the corresponding logger */
