@@ -15,15 +15,15 @@ import ajf.logger.LoggerFactory;
  */
 public class BeanUtils {
 		
-	private final static Logger logger = LoggerFactory.getLogger();
-	private final static BeanUtils instance = new BeanUtils(); 
+	private static final Logger logger = LoggerFactory.getLogger(BeanUtils.class);
+	
+	private static final BeanUtils instance = new BeanUtils(); 
 	
 	private boolean initialized = false;
 	private Object token = new Object();
 	
-	private BeanInstanciator instanciator = null;
-	protected List<BeanInitializer> biList = new ArrayList<BeanInitializer>();
-	
+	private BeanUtilsDelegate beanUtilsDelegate = null;
+		
 	private BeanUtils() {
 		super();
 	}
@@ -32,9 +32,9 @@ public class BeanUtils {
 		return instance;
 	}
 	
-	public void setBeanInstanciator(BeanInstanciator beanInstanciator) {
-		logger.info("set BeanInstanciator to instance of: ".concat(beanInstanciator.getClass().getName()));
-		instanciator = beanInstanciator;
+	public void setBeanUtilsDelegate(BeanUtilsDelegate beanUtilsDelegate) {
+		logger.info("set BeanUtilsDelegate to instance of: ".concat(beanUtilsDelegate.getClass().getName()));
+		this.beanUtilsDelegate = beanUtilsDelegate;
 	}
 
 	/**
@@ -46,23 +46,27 @@ public class BeanUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T newInstance(Class<?> clazz)
-			throws InstantiationException, IllegalAccessException {
+			throws Exception {
 		
 		checkInit();
 
 		// call the default constructor
-		Object bean = null;
-		if (null != instanciator) {
-			bean = instanciator.instanciate(clazz);
+		Object newBeanInstance = null;
+		try {
+			if (null != beanUtilsDelegate) 
+				newBeanInstance = beanUtilsDelegate.instanciate(clazz);
 		}
-		else {
-			bean = clazz.newInstance();
+		catch (Exception e) {
+			logger.error("Exception while trying to instanciate bean with BeanUtilsDelegate: ".concat(beanUtilsDelegate.getClass().getName()), e);
+		}		
+		if (null == newBeanInstance) {
+			newBeanInstance = clazz.newInstance();		
+			// initialize bean
+			if (null != beanUtilsDelegate)
+				beanUtilsDelegate.initialize(newBeanInstance);
 		}
-				
-		// initialize bean
-		initializeBean(bean);
 
-		return (T) bean;
+		return (T) newBeanInstance;
 
 	}
 	
@@ -73,15 +77,15 @@ public class BeanUtils {
 				if (!initialized) {
 					initialized = true;
 					try {
-						ServiceLoader<BeanInitializer> biLoader = ServiceLoader.load(BeanInitializer.class);
-						if (null != biLoader) {
-							for (BeanInitializer beanInitializer : biLoader) {
-								logger.info("Use BeanInitializer instance of: ".concat(beanInitializer.getClass().getName()));
-								biList.add(beanInitializer);
+						ServiceLoader<BeanUtilsDelegate> budLoader = ServiceLoader.load(BeanUtilsDelegate.class);
+						if (null != budLoader) {
+							for (BeanUtilsDelegate bud : budLoader) {
+								logger.info("Use BeanUtilsDelegate instance of: ".concat(bud.getClass().getName()));
+								this.beanUtilsDelegate = bud;
 							}
 						}
 					} catch (Exception e) {
-						logger.warn("Unable to get resources 'META-INF/services/ajf.utils.BeanInitializer'.", e);
+						logger.warn("Unable to get resources 'META-INF/services/ajf.utils.BeanUtilsDelegate'.", e);
 					}
 				}
 			}
@@ -95,23 +99,5 @@ public class BeanUtils {
 			initialized = false;
 		}
 	}
-
-	/**
-	 * apply the collection of BeanInitializer on the given bean
-	 * @param bean
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
-	 */
-	private void initializeBean(Object bean) {
-		
-		if ((null != biList) && (!biList.isEmpty())) {
-			for (BeanInitializer beanInitializer : biList) {
-				beanInitializer.initialize(bean);
-			}
-		}
-		
-	}
-
-	
 
 }
