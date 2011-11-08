@@ -63,10 +63,17 @@
 
 		<!-- Dependency Injection : JSR 330 -->
 		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>inject-api</artifactId>
-			<version>1.0.0-PRD</version>
+		    <groupId>javax.inject</groupId>
+		    <artifactId>javax.inject</artifactId>
+		    <version>1</version>
 		</dependency>		
+				
+		<dependency>
+		    <groupId>javax.persistence</groupId>
+		    <artifactId>persistence-api</artifactId>
+		    <version>1.0.2</version>
+		    <scope>provided</scope>
+		</dependency>
 		
 		<!-- Context Dependency Injection : JSR 299 -->
 		<!-- Google Guice Impl -->
