@@ -29,35 +29,18 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!-- database driver -->
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId> 
-			<version>10.6.2.1</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>4.0.2.GA</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<!-- JPA provider -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>3.6.0.Final</version>
-			<scope>test</scope>
-		</dependency>
-		
 		<!-- AJF -->
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-commons</artifactId>
+			<version>2.0.1-SNAPSHOT</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-core</artifactId>
 			<version>2.0.1-SNAPSHOT</version>
-		</dependency>	
+		</dependency>		
 
 		<!-- Begin : Dependency injection dependencies -->
 
@@ -84,13 +67,7 @@
 			<artifactId>guice</artifactId>
 			<version>3.0</version>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>com.google.code.guice</groupId>
-			<artifactId>guice</artifactId>
-			<version>2.0</version>
-		</dependency>
-		-->
+		
 		<dependency>
 			<groupId>aopalliance</groupId>
 			<artifactId>aopalliance</artifactId>
