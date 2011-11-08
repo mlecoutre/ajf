@@ -15,9 +15,9 @@
 	<version>2.0.1-SNAPSHOT</version>
 
 	<scm>
-		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-core</connection>
-		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-core</developerConnection>
-		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-core/]]></url>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-persistence</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-persistence</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-persistence/]]></url>
 	</scm>
 
 	<dependencies>
