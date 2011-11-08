@@ -132,14 +132,7 @@
 			<version>1.1.1</version>
 			<scope>provided</scope>
 		</dependency>
-		
-		<!-- Event framework for monitoring -->
-		<dependency>
-  			<groupId>com.mycila</groupId>
-  			<artifactId>mycila-event</artifactId>
-  			<version>4.2.ga</version>
-  		</dependency>
-
+	
 		<!-- 
 		<dependency>
 			<groupId>commons-el</groupId>
