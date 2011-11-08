@@ -102,8 +102,10 @@ public class DefaultMailSenderImpl implements MailSender {
 		// get the session
 		Session session = buildSession();
 		
+		/*
 		Transport transport = session.getTransport("smtp");
 		transport.connect();
+		*/
 		
 		MimeMessage message = new MimeMessage(session);
 		message.setFrom(new InternetAddress(eMail.getSender()));
@@ -150,7 +152,7 @@ public class DefaultMailSenderImpl implements MailSender {
 			message.saveChanges();
 
 			// send the message
-			transport.sendMessage(message, toAddressArray);
+			Transport.send(message, toAddressArray);
 			
 		}
 		finally {
