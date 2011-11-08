@@ -28,8 +28,7 @@ public class ConfigurationInjectionModule extends AbstractModule {
 			
 			try {
 				String key = (String) iterator.next();
-				String value = configuration.getString(key);
-				bind(String.class).annotatedWith(Names.named(key)).toInstance(value);
+				bind(String.class).annotatedWith(Names.named(key)).toProvider(new ConfigurationProvider(configuration, key));
 			} catch (Exception e) {
 				logger.warn("Unattempted exception.", e);
 			}
