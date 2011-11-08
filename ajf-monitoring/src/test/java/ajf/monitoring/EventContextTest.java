@@ -25,7 +25,7 @@ public class EventContextTest {
 
 		for (int i = 0; i<1000; i++) {
 			EventContext.getInstance()
-				.sendEvent(new MyEvent("Vincent", "Claeysen"));
+				.sendEvent(new MyEvent("Vincent", "Claeysen id#".concat(String.valueOf(i))));
 		}
 
 		EventContext.getInstance().close();

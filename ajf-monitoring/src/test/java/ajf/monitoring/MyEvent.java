@@ -14,6 +14,7 @@ public class MyEvent extends AbstractEvent {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private String uuid;
 	private String firstName;
 	private String lastName;
 
@@ -21,7 +22,19 @@ public class MyEvent extends AbstractEvent {
 	 * 
 	 */
 	public MyEvent() {
-		super(UUID.randomUUID().toString());
+		super();
+		this.uuid = UUID.randomUUID().toString();
+	}
+	
+	/**
+	 * @param firstName
+	 * @param lastName
+	 */
+	public MyEvent(String firstName, String lastName) {
+		super();
+		this.uuid = UUID.randomUUID().toString();
+		this.firstName = firstName;
+		this.lastName = lastName;
 	}
 
 	public String getFirstName() {
@@ -40,14 +53,12 @@ public class MyEvent extends AbstractEvent {
 		this.lastName = lastName;
 	}
 
-	/**
-	 * @param firstName
-	 * @param lastName
-	 */
-	public MyEvent(String firstName, String lastName) {
-		super(UUID.randomUUID().toString());
-		this.firstName = firstName;
-		this.lastName = lastName;
+	public String getUuid() {
+		return uuid;
 	}
 
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	
 }
