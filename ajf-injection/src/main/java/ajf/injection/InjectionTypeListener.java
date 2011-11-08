@@ -38,6 +38,10 @@ public class InjectionTypeListener implements TypeListener {
 				typeEncounter.register(new LoggerMembersInjector<T>(field));
 			}
 			
+			if (field.isAnnotationPresent(InjectService.class)) {
+				typeEncounter.register(new ServiceMembersInjector<T>(field));
+			}
+			
 			if (field.getType() == EntityManager.class
 					&& field.isAnnotationPresent(PersistenceContext.class)) {					
 				typeEncounter.register(new EntityManagerMembersInjector<T>(field));
@@ -46,10 +50,6 @@ public class InjectionTypeListener implements TypeListener {
 			if (field.getType() == EntityManagerFactory.class
 					&& field.isAnnotationPresent(PersistenceUnit.class)) {
 				typeEncounter.register(new EntityManagerFactoryMembersInjector<T>(field));
-			}
-			
-			if (field.isAnnotationPresent(InjectService.class)) {
-				typeEncounter.register(new ServiceMembersInjector<T>(field));
 			}
 			
 			if (field.isAnnotationPresent(InjectDAO.class)) {
