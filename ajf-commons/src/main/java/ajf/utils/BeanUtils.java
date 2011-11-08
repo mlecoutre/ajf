@@ -1,7 +1,5 @@
 package ajf.utils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ServiceLoader;
 
 import org.slf4j.Logger;
@@ -46,7 +44,7 @@ public class BeanUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> T newInstance(Class<?> clazz)
-			throws Exception {
+			throws RuntimeException {
 		
 		checkInit();
 
@@ -59,17 +57,29 @@ public class BeanUtils {
 		catch (Exception e) {
 			logger.error("Exception while trying to instanciate bean with BeanUtilsDelegate: ".concat(beanUtilsDelegate.getClass().getName()), e);
 		}		
-		if (null == newBeanInstance) {
-			newBeanInstance = clazz.newInstance();		
-			// initialize bean
-			if (null != beanUtilsDelegate)
-				beanUtilsDelegate.initialize(newBeanInstance);
+		try {
+			if (null == newBeanInstance) {
+				newBeanInstance = clazz.newInstance();		
+				// initialize bean
+				if (null != beanUtilsDelegate)
+					beanUtilsDelegate.initialize(newBeanInstance);
+			}
+		}
+		catch (RuntimeException e) {
+			throw e;
+		}
+		catch (Exception e) {
+			logger.error("Exception while trying to instanciate/initialize bean: ".concat(clazz.getName()), e);
+			throw new RuntimeException(e);
 		}
 
 		return (T) newBeanInstance;
 
 	}
 	
+	/**
+	 * 
+	 */
 	private void checkInit() {
 		
 		if (!initialized) {
