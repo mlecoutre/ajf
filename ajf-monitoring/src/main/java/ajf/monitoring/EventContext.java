@@ -55,11 +55,25 @@ public class EventContext implements ErrorHandler, Closeable {
 	 * @param eventClass
 	 * @throws DuplicateEventTypeException
 	 */
-	public synchronized void registerEvent(
+	public void registerEvent(
 			Class<? extends AbstractEvent> eventClass)
 			throws DuplicateEventTypeException {
 
-		String eventType = eventClass.getName();
+		String eventType = EventUtils.getEventType(eventClass);
+		registerEvent(eventType, eventClass);
+
+	}
+	
+	/**
+	 * 
+	 * @param eventType
+	 * @param eventClass
+	 * @throws DuplicateEventTypeException
+	 */
+	public synchronized void registerEvent(
+			String eventType,
+			Class<? extends AbstractEvent> eventClass)
+			throws DuplicateEventTypeException {
 
 		if (eventsTypesMap.containsKey(eventType)) {
 			throw new DuplicateEventTypeException("The event type '"
@@ -94,8 +108,17 @@ public class EventContext implements ErrorHandler, Closeable {
 	 * @param event
 	 */
 	public void sendEvent(AbstractEvent event) {
+		String eventType = EventUtils.getEventType(event.getClass());
+		sendEvent(eventType, event);		
+	}
+	
+	/**
+	 * send event
+	 * @param eventType
+	 * @param event
+	 */
+	public void sendEvent(String eventType, AbstractEvent event) {
 		try {
-			String eventType = event.getClass().getName();
 			eventDispatcher.publish(Topic.topic(eventType), event);
 		}
 		catch (RuntimeException e) {
@@ -110,11 +133,11 @@ public class EventContext implements ErrorHandler, Closeable {
 	/**
 	 * install events handler
 	 * 
-	 * @param eventCategory
+	 * @param eventTypes
 	 * @param eventHandler
 	 */
 	public void installEventHandler(
-			Class<? extends AbstractEvent>[] eventTypes,
+			String[] eventTypes,
 			EventHandler eventHandler) {
 
 		subscribe(eventTypes, eventHandler);
@@ -150,7 +173,7 @@ public class EventContext implements ErrorHandler, Closeable {
 	 * @param eventHandler
 	 */
 	private synchronized void subscribe(
-			Class<? extends AbstractEvent>[] eventTypes,
+			String[] eventTypes,
 			EventHandler eventHandler) {
 
 		if ((null == eventTypes) || (0 == eventTypes.length)) {
@@ -167,7 +190,7 @@ public class EventContext implements ErrorHandler, Closeable {
 			
 			Topics[] matchers = new Topics[eventTypes.length];
 			for (int i = 0; i < eventTypes.length; i++) {
-				String eventType = eventTypes[i].getSimpleName();
+				String eventType = eventTypes[i];
 				matchers[i] = Topics.only(eventType);
 			}
 			eventDispatcher.subscribe(Topics.anyOf(matchers),

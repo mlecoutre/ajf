@@ -15,8 +15,6 @@ public abstract class AbstractEvent implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	protected String uuid;
-
 	/**
 	 * 
 	 */
@@ -24,20 +22,4 @@ public abstract class AbstractEvent implements Serializable {
 		super();
 	}
 	
-	/**
-	 * @param uuid
-	 */
-	public AbstractEvent(String uuid) {
-		super();
-		this.uuid = uuid;
-	}
-
-	public void setUUID(String uuid) {
-		this.uuid = uuid;
-	}
-
-	public String getUUID() {
-		return uuid;
-	}
-
 }
