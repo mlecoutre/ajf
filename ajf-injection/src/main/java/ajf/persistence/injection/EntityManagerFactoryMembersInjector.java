@@ -3,12 +3,11 @@ package ajf.persistence.injection;
 import java.lang.reflect.Field;
 
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import ajf.persistence.EntityManagerProvider;
 
 import com.google.inject.MembersInjector;
 
@@ -44,9 +43,8 @@ public class EntityManagerFactoryMembersInjector<T> implements
 
 	public void injectMembers(T t) {
 		try {
-			EntityManagerFactory em = EntityManagerProvider
-					.getNewEntityManagerFactory(this.persistenceUnitName);
-			this.field.set(t, em);
+			EntityManagerFactory emFactory = Persistence.createEntityManagerFactory(persistenceUnitName);
+			this.field.set(t, emFactory);
 		}
 		catch (Throwable e) {
 			logger.error(
