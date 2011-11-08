@@ -1,0 +1,34 @@
+<project name="Maven">
+
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-stylus-skin</artifactId>
+		<version>1.2</version>
+	</skin>
+
+	<bannerLeft>
+		<name>ArcelorMittal</name>
+		<src>images/arcelormittal.png</src>
+		<href>http://www.arcelormittal.com</href>
+	</bannerLeft>
+	<publishDate format="dd MMM yyyy" />
+	<body>
+		<links>
+			<item name="Web JAVA" href="http://web-java"/>
+			<item name="Maven Repository" href="http://web-maven-repo/nexus"/>
+			<item name="Maven IC" href="http://web-maven-ic/hudson"/>
+			<item name="AJF Framework" href="http://web-java/projects/index.html" />
+			<item name="Maven 2" href="http://maven.apache.org/maven2/" />
+		</links>
+
+		<menu name="Application">
+			<item name="Introduction" href="index.html" />
+			<!--
+			<item name="StatCVS Report" href="statcvs/index.html"/>
+			-->
+		</menu>
+
+		${reports}
+
+	</body>
+</project>

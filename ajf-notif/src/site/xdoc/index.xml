@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<document>
+	<properties>
+		<title>Welcome to ajf-notif reports</title>
+	</properties>
+	<body>
+		<section name="Welcome">
+			<p>
+				ajf core
+				<br />
+				You will find here generated Reports
+				<ul>
+					<li>JavaDoc</li>
+					<li>XRef Sources</li>
+					<li>Checkstyle report</li>
+					<li>PMD report</li>
+				</ul>
+			</p>
+		</section>
+	</body>
+</document>
