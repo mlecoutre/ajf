@@ -8,7 +8,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -62,7 +61,9 @@ public class JpaDAOProxy implements InvocationHandler {
 	private JpaDAO basePersistenceDAOImpl = null;
 	private JpaDAO persistenceDAODelegateImpl = null;
 
-	private boolean detachEntities = false;
+	/* only for JPA 2 */
+	// private boolean detachEntities = false;
+	
 	private boolean autoCommit = false;
 
 	/**
@@ -100,6 +101,7 @@ public class JpaDAOProxy implements InvocationHandler {
 
 	}
 
+	/*
 	public boolean isDetachEntities() {
 		return detachEntities;
 	}
@@ -107,6 +109,7 @@ public class JpaDAOProxy implements InvocationHandler {
 	public void setDetachEntities(boolean detachEntities) {
 		this.detachEntities = detachEntities;
 	}
+	*/
 
 	public boolean isAutoCommit() {
 		return autoCommit;
@@ -281,9 +284,11 @@ public class JpaDAOProxy implements InvocationHandler {
 		// for the settings setFirstResult(...) setMaxResults(...)
 		if (requestedMethodName.startsWith("set")) {
 
+			/*
 			if ("setDetachEntities".equals(requestedMethodName)) {
 				setDetachEntities((Boolean) args[0]);
 			}
+			*/
 			if ("setAutoCommit".equals(requestedMethodName)) {
 				setAutoCommit((Boolean) args[0]);
 			}
@@ -386,6 +391,7 @@ public class JpaDAOProxy implements InvocationHandler {
 				entityManager.getTransaction().commit();
 
 			// manage entities detachment
+			/*
 			if ((null != result) && detachEntities) {
 				if (result instanceof List<?>) {
 					if (!((List<?>) result).isEmpty()) {
@@ -412,6 +418,7 @@ public class JpaDAOProxy implements InvocationHandler {
 					entityManager.detach(result);
 				}
 			}
+			*/
 
 		}
 		catch (Throwable e) {
