@@ -17,8 +17,8 @@ public class ServiceLocator {
 
 	private final static Logger logger = LoggerFactory.getLogger();
 
-	private static List<ServiceFactory> factories = new ArrayList<ServiceFactory>();
-	private static Cache<Class<?>, ServiceFactory> factoriesCache = new InfinispanEmbeddedCacheManagerImpl()
+	private final static List<ServiceFactory> factories = new ArrayList<ServiceFactory>();
+	private final static Cache<Class<?>, ServiceFactory> factoriesCache = new InfinispanEmbeddedCacheManagerImpl()
 			.getCache(ServiceLocator.class.getName());
 
 	static {
@@ -103,25 +103,33 @@ public class ServiceLocator {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T> T getService(Class<?> serviceClass) throws Exception {
+	public static <T> T getService(Class<?> serviceClass) throws ServiceLocatorException {
 
 		if (!factories.isEmpty()) {
 
 			Object serviceImpl = null;
 
-			if (factoriesCache.contains(serviceClass)) {
-				ServiceFactory factory = factoriesCache
-						.get(serviceClass);
-				serviceImpl = factory.get(serviceClass);
-				return (T) serviceImpl;
-			}
-
-			for (ServiceFactory factory : factories) {
-				if (factory.accept(serviceClass)) {
-					factoriesCache.put(serviceClass, factory);
+			try {
+				
+				// if already served
+				if (factoriesCache.contains(serviceClass)) {
+					ServiceFactory factory = factoriesCache
+							.get(serviceClass);
 					serviceImpl = factory.get(serviceClass);
 					return (T) serviceImpl;
 				}
+
+				// iterate on the differents factories
+				for (ServiceFactory factory : factories) {
+					if (factory.accept(serviceClass)) {
+						factoriesCache.put(serviceClass, factory);
+						serviceImpl = factory.get(serviceClass);
+						return (T) serviceImpl;
+					}
+				}
+			}
+			catch (Exception e) {
+				logger.error("Receive exception while trying to obtain a reference for the service '" + serviceClass.getName() + "'.", e);
 			}
 		}
 

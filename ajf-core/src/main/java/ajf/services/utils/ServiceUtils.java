@@ -2,7 +2,6 @@ package ajf.services.utils;
 
 import org.slf4j.Logger;
 
-import ajf.persistence.exception.PersistenceLayerException;
 import ajf.services.exceptions.ServiceLayerException;
 
 /**
@@ -59,13 +58,15 @@ public class ServiceUtils {
 		log.error(errorMsg, cause);
 		
 		Throwable propagatedCause = cause;
+		/*
 		if (cause != null) {
 			if (cause instanceof PersistenceLayerException) {
 				PersistenceLayerException pLayerException = (PersistenceLayerException) cause;
 				propagatedCause = new PersistenceLayerException(pLayerException.getMessage(),
 						pLayerException.getErrorType(), null);
 			}
-		}		
+		}
+		*/		
 		throw new ServiceLayerException(errorMsg, errorType, propagatedCause);
 	}
 

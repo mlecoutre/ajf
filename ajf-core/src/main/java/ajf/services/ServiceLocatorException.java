@@ -1,6 +1,6 @@
 package ajf.services;
 
-public class ServiceLocatorException extends Exception {
+public class ServiceLocatorException extends RuntimeException {
 
 	/**
 	 * 
@@ -9,7 +9,6 @@ public class ServiceLocatorException extends Exception {
 
 	public ServiceLocatorException() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public ServiceLocatorException(String message, Throwable cause) {
