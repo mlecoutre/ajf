@@ -14,6 +14,9 @@ import com.google.inject.Stage;
 
 public class InjectionContext {
 
+	private static final DefaultInjectionModule DEFAULT_INJECTION_MODULE = new DefaultInjectionModule();
+	// private static ConfigurationInjectionModule configurationInjectionModule = null;
+
 	private final static Logger logger = LoggerFactory.getLogger(InjectionContext.class);
 	
 	private final static InjectionContext instance = new InjectionContext();
@@ -21,8 +24,19 @@ public class InjectionContext {
 	private List<Module> injectionModulesList = new ArrayList<Module>();
 	private Injector injector = null; 
 	
-	public InjectionContext() {
+	private InjectionContext() {
 		super();
+		
+		/*
+		try {
+			Configuration configuration = ApplicationContext.getConfiguration();
+			configurationInjectionModule = new ConfigurationInjectionModule(configuration);
+		}
+		catch (Exception e) {
+			logger.warn("Receive exception while trying to initialize 'ApplicationContext'.", e);
+		}		
+		*/
+		
 		updateInjector();
 	}
 
@@ -63,13 +77,17 @@ public class InjectionContext {
 	private void updateInjector() {
 		// generate the Guice Injector
 		logger.info("Update Injector.");
+		
 		if (injectionModulesList.isEmpty()) {
-			injector = Guice.createInjector(Stage.PRODUCTION, new DefaultInjectionModule());	
+			Module[] modules = new Module[] {DEFAULT_INJECTION_MODULE};
+			// , configurationInjectionModule};
+			injector = Guice.createInjector(Stage.PRODUCTION, modules);	
 		}
 		else {
-			Module[] modules = new Module[1+injectionModulesList.size()];
-			modules[0] = new DefaultInjectionModule();
-			int id = 0;
+			Module[] modules = new Module[1+injectionModulesList.size()]; // 1+
+			modules[0] = DEFAULT_INJECTION_MODULE;
+			//modules[1] = configurationInjectionModule;
+			int id = 0; // 1
 			for (Module module : injectionModulesList) {
 				id++;
 				modules[id] = module;		
@@ -83,7 +101,8 @@ public class InjectionContext {
 	 */
 	public void resetInjectionModules() {
 		injectionModulesList.clear();
-		addInjectionModule(new DefaultInjectionModule());
+		addInjectionModule(DEFAULT_INJECTION_MODULE);
+		//addInjectionModule(configurationInjectionModule);
 	}
 
 }
