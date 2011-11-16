@@ -1,5 +1,6 @@
 package ajf.monitoring.impl;
 
+import java.io.IOException;
 import java.io.StringWriter;
 
 import javax.xml.bind.JAXBContext;
@@ -31,7 +32,10 @@ public class XmlJAXBFormatter implements  EventFormatter {
 		try {
 			StringWriter writer = new StringWriter();
 			marshaller.marshal(event, writer);
+			writer.close();
 			return writer.toString();
+		} catch (IOException e) {
+			throw new EventFormatterException("Unable to close xml writer.", e);
 		} catch (JAXBException e) {
 			throw new EventFormatterException("Unable to format event of type '" + event.getClass().getName() + "'.", e);
 		}				

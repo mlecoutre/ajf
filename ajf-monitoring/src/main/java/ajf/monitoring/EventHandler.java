@@ -11,16 +11,35 @@ public final class EventHandler implements Subscriber<AbstractEvent> {
 	private final EventFormatter eventFormatter;
 	private final EventEmitter eventEmitter;
 
+	/**
+	 * 
+	 * @param eventFilter
+	 * @param eventFormatter
+	 * @param eventEmitter
+	 */
 	public EventHandler(EventFilter eventFilter, EventFormatter eventFormatter,
 			EventEmitter eventEmitter) {
-		
 		super();
-		
 		this.eventFilter = eventFilter;
 		this.eventFormatter = eventFormatter;
 		this.eventEmitter = eventEmitter;
 	}
 	
+	/**
+	 * 
+	 * @param eventFormatter
+	 * @param eventEmitter
+	 */
+	public EventHandler(EventFormatter eventFormatter,
+			EventEmitter eventEmitter) {
+		super();
+		this.eventFilter = null;
+		this.eventFormatter = eventFormatter;
+		this.eventEmitter = eventEmitter;
+	}
+
+
+
 	/**
 	 * publish the event
 	 * @param eventSource
