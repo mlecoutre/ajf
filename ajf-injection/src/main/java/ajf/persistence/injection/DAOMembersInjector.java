@@ -2,25 +2,15 @@ package ajf.persistence.injection;
 
 import java.lang.reflect.Field;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ajf.services.injection.ServiceMembersInjector;
 
-import ajf.persistence.DAO;
-import ajf.services.ServiceLocator;
-
-import com.google.inject.MembersInjector;
-
-public class DAOMembersInjector<T> implements MembersInjector<T> {
+public class DAOMembersInjector<T> extends ServiceMembersInjector<T> {
 	
-	private final static Logger logger = LoggerFactory.getLogger(DAOMembersInjector.class);
-
-	private final Field field;
-
 	public DAOMembersInjector(Field field) {
-		this.field = field;
-		this.field.setAccessible(true);
+		super(field);
 	}
 
+	/**
 	public void injectMembers(T t) {
 		
 		// is the field type extends DAO
@@ -34,19 +24,19 @@ public class DAOMembersInjector<T> implements MembersInjector<T> {
 		}
 		
 		// is not already in a DAO
-		/**
-		try {
-			DAO.class.cast(t);
-			// t is a DAO, and it's not possible to inject a DAO in a DAO
-			throw new RuntimeException(
-					"Injection exception while trying to inject "
-							+ field.getType().getName() + " in "
-							+ t.getClass().getName() + "#" + field.getName());
-		}
-		catch (ClassCastException e) {
-			// Nothing to do, it's normal
-		}
-		**/
+//		
+//		try {
+//			DAO.class.cast(t);
+//			// t is a DAO, and it's not possible to inject a DAO in a DAO
+//			throw new RuntimeException(
+//					"Injection exception while trying to inject "
+//							+ field.getType().getName() + " in "
+//							+ t.getClass().getName() + "#" + field.getName());
+//		}
+//		catch (ClassCastException e) {
+//			// Nothing to do, it's normal
+//		}
+//		
 		
 		try {
 			Object serviceImpl = ServiceLocator.getService(field.getType());
@@ -57,4 +47,6 @@ public class DAOMembersInjector<T> implements MembersInjector<T> {
 			throw new RuntimeException(e);
 		}
 	}
+	**/
+
 }
