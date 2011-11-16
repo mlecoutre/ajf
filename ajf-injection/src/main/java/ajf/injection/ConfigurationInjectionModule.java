@@ -24,6 +24,9 @@ public class ConfigurationInjectionModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		
+		if (null == configuration)
+			return;
+		
 		for (Iterator<?> iterator = configuration.getKeys(); iterator.hasNext();) {
 			
 			try {
