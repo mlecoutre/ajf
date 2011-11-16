@@ -90,12 +90,12 @@ public class JpaDAOProxy implements InvocationHandler {
 		this.inJTA = JTA.equalsIgnoreCase(puDesc.getTransactionType());
 
 		// get a new persistence base dao impl instance
-		this.basePersistenceDAOImpl = (JpaDAO) BeanUtils.getInstance().newInstance(BASE_PERSISTENCE_DAO_CLASS);
+		this.basePersistenceDAOImpl = (JpaDAO) BeanUtils.newInstance(BASE_PERSISTENCE_DAO_CLASS);
 
 		// get a new persistence dao delegate impl instance
 		this.persistenceDAODelegateImpl = null;
 		if (null != this.daoMetadata.getDaoDelegateClass()) {
-			persistenceDAODelegateImpl = (JpaDAO) BeanUtils.getInstance().newInstance(this.daoMetadata
+			persistenceDAODelegateImpl = (JpaDAO) BeanUtils.newInstance(this.daoMetadata
 					.getDaoDelegateClass());
 		}
 
