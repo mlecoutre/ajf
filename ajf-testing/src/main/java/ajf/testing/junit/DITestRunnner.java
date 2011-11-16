@@ -21,7 +21,7 @@ public class DITestRunnner extends BlockJUnit4ClassRunner {
 	@Override
 	protected Object createTest() throws Exception {
 
-		Object testBean = BeanUtils.getInstance().newInstance(this.getTestClass().getJavaClass());
+		Object testBean = BeanUtils.newInstance(this.getTestClass().getJavaClass());
 		return testBean;
 
 	}
