@@ -49,12 +49,14 @@
 			<version>1.6.1</version>
 		</dependency>
 		<!-- in order to exclude commons-logging -->
+		<!-- 
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<version>[1,)</version>
 			<scope>provided</scope>
 		</dependency>
+		-->
 
 		<!-- effective logger impl -->
 		<dependency>
