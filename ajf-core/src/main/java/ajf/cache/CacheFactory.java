@@ -4,10 +4,18 @@ import ajf.cache.impl.InfinispanEmbeddedCacheManagerImpl;
 
 public class CacheFactory {
 
-	private static final CacheManager cacheManager = new InfinispanEmbeddedCacheManagerImpl();
+	private static CacheManager cacheManager = new InfinispanEmbeddedCacheManagerImpl();
 	
-	private CacheFactory() {
+	protected CacheFactory() {
 		super();
+	}
+	
+	protected static CacheManager getCacheManager() {
+		return cacheManager;
+	}
+
+	protected static void setCacheManager(CacheManager cacheManager) {
+		CacheFactory.cacheManager = cacheManager;
 	}
 
 	public static <K, V>Cache<K, V>getCache() {
