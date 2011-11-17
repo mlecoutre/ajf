@@ -19,11 +19,9 @@ public class DefaultInjectionModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		
-		/*
 		bindInterceptor(Matchers.any(),
 				Matchers.annotatedWith(Operation.class), 
 				new OperationInterceptor());
-		*/
 		bindListener(Matchers.any(), new InjectionTypeListener());
 				
 		/* AuditData concern */

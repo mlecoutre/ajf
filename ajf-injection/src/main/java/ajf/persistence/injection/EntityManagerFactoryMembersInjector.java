@@ -33,6 +33,7 @@ public class EntityManagerFactoryMembersInjector<T> implements
 			if ((null == puName) || (0 == puName.length())) {
 				puName = pUnit.unitName();
 			}
+			
 		}
 		if (null == puName) puName = DEFAULT_PERSISTENCE_UNIT_NAME;
 		this.persistenceUnitName = puName;
