@@ -1,6 +1,9 @@
 package ajf.cache.impl;
 
+import java.util.Map;
+
 import org.infinispan.Cache;
+import org.infinispan.config.Configuration;
 import org.infinispan.manager.DefaultCacheManager;
 import org.infinispan.manager.EmbeddedCacheManager;
 
@@ -25,15 +28,27 @@ public class InfinispanEmbeddedCacheManagerImpl implements CacheManager {
 	}
 
 	@Override
-	public <K, V>ajf.cache.Cache<K, V> getCache() {
+	public <K, V>Map<K, V> getCache() {
 		Cache<K, V> cache = this.cacheManager.getCache();
-		return new InfinispanCacheImpl<K, V>(cache);
+		return cache;
 	}
 
 	@Override
-	public <K, V>ajf.cache.Cache<K, V> getCache(String cacheName) {
+	public <K, V>Map<K, V> getCache(String cacheName) {
 		Cache<K, V> cache = this.cacheManager.getCache(cacheName);
-		return new InfinispanCacheImpl<K, V>(cache);
+		return cache;
+	}
+	
+	@Override
+	public <K, V> Map<K, V> getCache(String cacheName, long ttlInMs) {
+		
+		Configuration config = new Configuration();
+		config.setExpirationLifespan(ttlInMs);
+		
+		this.cacheManager.defineConfiguration(cacheName, config);
+		Cache<K, V> cache = this.cacheManager.getCache(cacheName);
+		
+		return cache;
 	}
 
 	/* (non-Javadoc)
