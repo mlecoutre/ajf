@@ -14,17 +14,19 @@ import ajf.services.ServiceFactory;
 public class MockServiceFactory implements ServiceFactory {
 
 	// a ThreadLocal of mocks
-	private static ThreadLocal<Map<String, Object>> mocksMap = new ThreadLocal<Map<String, Object>>();
+	private static final ThreadLocal<Map<String, Object>> mocksMap = new ThreadLocal<Map<String, Object>>();
 	
-	private static final MockServiceFactory instance = new MockServiceFactory();
+	//private static final MockServiceFactory instance = new MockServiceFactory();
 	
 	public MockServiceFactory() {
 		super();
 	}
 	
+	/*
 	public static MockServiceFactory getInstance() {
 		return instance;
 	}
+	*/
 
 	/**
 	 * bind a Mock
@@ -88,6 +90,7 @@ public class MockServiceFactory implements ServiceFactory {
 		Map<String, Object> map = mocksMap.get();
 		if (null == map) return;
 		map.clear();
+		mocksMap.remove();
 		
 	}
 	
