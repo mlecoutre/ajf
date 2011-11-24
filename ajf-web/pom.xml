@@ -1,23 +1,22 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>am.ajf</groupId>
 		<artifactId>ajf-parent</artifactId>
-		<version>2.0.1-SNAPSHOT</version>
+		<version>2.0.1</version>
 		<relativePath>../ajf-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>am.ajf</groupId>
 	<artifactId>ajf-web</artifactId>
-	<version>2.0.1-SNAPSHOT</version>
+	<version>2.0.1</version>
 	<description>specific utility classes for ajf web application</description>
 
 	<scm>
-		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-web</connection>
-		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-web</developerConnection>
-		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-web/]]></url>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-parent-2.0.1/ajf-web</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-parent-2.0.1/ajf-web</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/tags/ajf-parent-2.0.1/ajf-web?repname=ITSWE&path=/ajf/trunk/ajf-web/]]></url>
 	</scm>
 
 	<dependencies>
@@ -58,14 +57,14 @@
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-commons</artifactId>
-			<version>2.0.1-SNAPSHOT</version>
+			<version>2.0.1</version>
 		</dependency>
 
 		<!-- testing dependency -->
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-testing</artifactId>
-			<version>2.0.1-SNAPSHOT</version>
+			<version>2.0.1</version>
 			<scope>test</scope>
 		</dependency>
 
