@@ -5,12 +5,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.ServiceLoader;
 
 import org.slf4j.Logger;
 
-import ajf.cache.Cache;
-import ajf.cache.impl.InfinispanEmbeddedCacheManagerImpl;
+import ajf.cache.CacheFactory;
 import ajf.logger.LoggerFactory;
 
 public class ServiceLocator {
@@ -18,8 +18,7 @@ public class ServiceLocator {
 	private final static Logger logger = LoggerFactory.getLogger();
 
 	private final static List<ServiceFactory> factories = new ArrayList<ServiceFactory>();
-	private final static Cache<Class<?>, ServiceFactory> factoriesCache = new InfinispanEmbeddedCacheManagerImpl()
-			.getCache(ServiceLocator.class.getName());
+	private final static Map<Class<?>, ServiceFactory> factoriesCache = CacheFactory.getCache(ServiceLocator.class.getName());
 
 	static {
 		initialize();
@@ -102,6 +101,13 @@ public class ServiceLocator {
 		return factories.iterator();
 	}
 
+	/**
+	 * clean the ServiceFactoriesCache
+	 */
+	public static void clearServiceFactoriesCache() {
+		factoriesCache.clear();		
+	}
+	
 	@SuppressWarnings("unchecked")
 	public static <T> T getService(Class<?> serviceClass) throws ServiceLocatorException {
 
@@ -112,18 +118,19 @@ public class ServiceLocator {
 			try {
 				
 				// if already served
-				if (factoriesCache.contains(serviceClass)) {
+				if (factoriesCache.containsKey(serviceClass)) {
 					ServiceFactory factory = factoriesCache
 							.get(serviceClass);
 					serviceImpl = factory.get(serviceClass);
-					return (T) serviceImpl;
+					if (null != serviceImpl)
+						return (T) serviceImpl;
 				}
 
 				// iterate on the differents factories
 				for (ServiceFactory factory : factories) {
 					if (factory.accept(serviceClass)) {
-						factoriesCache.put(serviceClass, factory);
 						serviceImpl = factory.get(serviceClass);
+						factoriesCache.put(serviceClass, factory);
 						return (T) serviceImpl;
 					}
 				}
