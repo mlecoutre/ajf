@@ -22,6 +22,7 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
+@SuppressWarnings("deprecation")
 public class InjectionTypeListener implements TypeListener {
 	
 	public InjectionTypeListener() {

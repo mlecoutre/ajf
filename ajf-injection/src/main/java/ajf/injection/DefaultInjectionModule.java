@@ -2,8 +2,6 @@ package ajf.injection;
 
 import ajf.datas.AuditData;
 import ajf.datas.AuditDataContext;
-import ajf.services.injection.Operation;
-import ajf.services.injection.OperationInterceptor;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
@@ -19,13 +17,12 @@ public class DefaultInjectionModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		
-		bindInterceptor(Matchers.any(),
-				Matchers.annotatedWith(Operation.class), 
-				new OperationInterceptor());
 		bindListener(Matchers.any(), new InjectionTypeListener());
-				
+						
 		/* AuditData concern */
-		bindAuditData();			
+		bindAuditData();
+		
+		//bindInterceptor(new ServiceMatcher(), new ServiceMethodMatcher(), new ServiceMethodInterceptor());
 		
 	}
 
