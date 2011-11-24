@@ -3,6 +3,8 @@ package ajf.cache;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
+import java.util.Map;
+
 import org.junit.Test;
 
 public class CacheTest {
@@ -10,7 +12,7 @@ public class CacheTest {
 	@Test
 	public void testGetCache() {
 		
-		Cache<String, String> cache = CacheFactory.getCache();
+		Map<String, String> cache = CacheFactory.getCache();
 		
 		assertNotNull("Unable to obtain a cache instance", cache);		
 	}
@@ -18,7 +20,7 @@ public class CacheTest {
 	@Test
 	public void testGetNammedCache() {
 		
-		Cache<String, String> cache = CacheFactory.getCache("myCache");
+		Map<String, String> cache = CacheFactory.getCache("myCache");
 		
 		assertNotNull("Unable to obtain a named cache instance", cache);		
 	}
@@ -26,7 +28,7 @@ public class CacheTest {
 	@Test
 	public void testGetObjectFromCache() {
 		
-		Cache<String, String> cache = CacheFactory.getCache();
+		Map<String, String> cache = CacheFactory.getCache();
 		
 		String key = "key";
 		// put in cache
@@ -40,10 +42,7 @@ public class CacheTest {
 	@Test
 	public void testGetObjectFromCacheWithTTL() throws InterruptedException {
 		
-		TTLCache<String, String> ttlCache = CacheFactory.getTTLCache("ttlCache");
-		
-		// set ttl of 2 seconds
-		ttlCache.setTtlInMs(2000);
+		Map<String, String> ttlCache = CacheFactory.getCache("ttlCache", 2000);
 		
 		String key = "key";
 		// put in cache
