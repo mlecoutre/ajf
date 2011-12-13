@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD X
+HTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+<h:head>
+	<title>AJF Test application for the JPA extension</title>				
+</h:head>
+
+<h:body>
+<h:form>
+	<h1>AJF JPA extension Sample</h1>
+	<p:panel id="main">
+	<p:outputPanel id="op" rendered="#{jpaBean.models.size() == 0}">
+		The list is currently empty.<br/>
+		Click the <b>Display</b> button to retrieve and display all the objects, and click the <b>New</b> button to create a new one.<br/> 
+	</p:outputPanel>
+	<p:dataList rendered="#{jpaBean.models.size() > 0}" value="#{jpaBean.models}" var="model" type="ordered" itemType="a" >  
+	    #{model.name} (#{model.id})  
+	</p:dataList>  
+	
+	<p:commandButton value="Display"   
+		             actionListener="#{jpaBean.computeModels}"
+		             update="main" />
+	<p:commandButton value="New"   
+		             actionListener="#{jpaBean.createModel}"
+		             update="main" />		             
+	</p:panel>
+</h:form>
+</h:body>
+</html>

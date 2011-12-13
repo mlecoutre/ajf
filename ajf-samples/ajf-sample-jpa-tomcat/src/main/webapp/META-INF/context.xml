@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- Ref : http://tomcat.apache.org/tomcat-6.0-doc/config/context.html The 
+	contents of this file will be loaded for each web application -->
+<!-- useNaming="true" -->
+<Context allowLinking="false" antiJARLocking="true" reloadable="true">
+
+	<Loader delegate="true" />
+			
+	<!--  old test database, dont use it anymore
+	<Resource name="jdbc/dcDB" auth="Container" type="javax.sql.DataSource"
+		username="dcdbuser" password="Passworddcdb00" driverClassName="com.ibm.db2.jcc.DB2Driver"
+		url="jdbc:db2://dun-tst-sgbd02:50000/DCDB" initialSize="0" maxActive="10"
+		minIdle="0" maxIdle="10" maxWait="20000" logAbandoned="true" />
+	-->
+		
+	<Resource name="jdbc/dcDB" auth="Container" type="javax.sql.DataSource"
+		username="DCDB_ADMIN" password="1P@sswd" driverClassName="com.ibm.db2.jcc.DB2Driver"
+		url="jdbc:db2://jdbc:db2://dun-dev-db201.armony.net:50000/DCDB" initialSize="0" maxActive="10"
+		minIdle="0" maxIdle="10" maxWait="20000" logAbandoned="true" />
+	
+	<!--
+	<Resource name="jdbc/dcDB" auth="Container" type="javax.sql.DataSource"
+		username="DCDB_ADMIN" password="0Passwd" driverClassName="com.ibm.db2.jcc.DB2Driver"
+		url="jdbc:db2://dun-app-db201.armony.net:50000/DCDB" initialSize="0" maxActive="10"
+		minIdle="0" maxIdle="10" maxWait="20000" logAbandoned="true" />
+	-->
+	<Resource name="mail/Session" auth="Container" type="javax.mail.Session"
+		mail.smtp.host="applicatifs.appliarmony.net" />
+
+	<!-- 
+	<ResourceLink name="jdbc/dcDB" global="jdbc/dcDB" type="javax.sql.DataSource" 
+		/> factory="org.apache.naming.factory.DataSourceLinkFactory" />
+	 -->
+	 
+</Context>
