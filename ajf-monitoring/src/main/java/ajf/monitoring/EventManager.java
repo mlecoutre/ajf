@@ -4,15 +4,11 @@ import static ajf.monitoring.EventUtils.getEventType;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.slf4j.Logger;
 
 import ajf.logger.LoggerFactory;
-import ajf.monitoring.exceptions.DuplicateEventTypeException;
 import ajf.monitoring.exceptions.EventException;
-import ajf.utils.BeanUtils;
 
 import com.mycila.event.Dispatcher;
 import com.mycila.event.Dispatchers;
@@ -23,8 +19,6 @@ import com.mycila.event.Topic;
 import com.mycila.event.Topics;
 
 public class EventManager implements ErrorHandler, Closeable {
-	
-	private final Map<String, Class<? extends AbstractEvent>> eventsTypesMap = new HashMap<String, Class<? extends AbstractEvent>>();
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -51,74 +45,7 @@ public class EventManager implements ErrorHandler, Closeable {
 			throw new EventException("The eventManage is closed.");
 		}
 	}
-
-	/**
-	 * 
-	 * @param eventClass
-	 * @throws DuplicateEventTypeException
-	 */
-	public void registerEvent(
-			Class<? extends AbstractEvent> eventClass)
-			throws DuplicateEventTypeException {
-		String eventType = getEventType(eventClass);
-		registerEvent(eventType, eventClass);
-	}
-	
-	/**
-	 * 
-	 * @param eventType
-	 * @param eventClass
-	 * @throws DuplicateEventTypeException
-	 */
-	public synchronized void registerEvent(
-			String eventType,
-			Class<? extends AbstractEvent> eventClass)
-			throws DuplicateEventTypeException {
 		
-		checkClosed();
-
-		if (eventsTypesMap.containsKey(eventType)) {
-			throw new DuplicateEventTypeException("The event type '"
-					+ eventType + "' already exist.");
-		}
-		eventsTypesMap.put(eventType, eventClass);
-
-	}
-	
-	/**
-	 * 
-	 * @param eventType
-	 * @return a new event
-	 * @throws Exception 
-	 */
-	@SuppressWarnings("unchecked")
-	public <E extends AbstractEvent> E newEvent(String eventType) {
-
-		checkClosed();
-		
-		E evt = null;
-		if (eventsTypesMap.containsKey(eventType)) {
-			Class<? extends AbstractEvent> eventClass = eventsTypesMap
-					.get(eventType);
-			evt = (E) BeanUtils.newInstance(eventClass);
-		}
-
-		return evt;
-	}
-	
-	/**
-	 * 
-	 * @param <E>
-	 * @param eventClass
-	 * @return
-	 */
-	public <E extends AbstractEvent> E newEvent(Class<? extends AbstractEvent> eventClass) {
-		String eventType = getEventType(eventClass);
-		@SuppressWarnings("unchecked")
-		E result = (E) newEvent(eventType);
-		return result;
-	}
-	
 	/**
 	 * send event
 	 * @param event
@@ -164,7 +91,7 @@ public class EventManager implements ErrorHandler, Closeable {
 	 * 
 	 * @param eventHandler
 	 */
-	public void installDefaultEventHandler(EventHandler eventHandler) {
+	public void setDefaultEventHandler(EventHandler eventHandler) {
 		subscribe(null, eventHandler);
 	}
 	

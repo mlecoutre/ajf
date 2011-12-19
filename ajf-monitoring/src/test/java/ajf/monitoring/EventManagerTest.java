@@ -32,7 +32,7 @@ public class EventManagerTest {
 
 		EventHandler handler = new EventHandler(new XmlJAXBFormatter(
 				MyEvent.class), emitter);
-		manager.installDefaultEventHandler(handler);
+		manager.setDefaultEventHandler(handler);
 
 		MyEvent event = new MyEvent("Albert", "Dupont");
 		manager.sendEvent(event);
@@ -66,12 +66,12 @@ public class EventManagerTest {
 
 		EventHandler handler = new EventHandler(new XmlJAXBFormatter(
 				MyEvent.class), emitter);
-		manager.installDefaultEventHandler(handler);
+		manager.setDefaultEventHandler(handler);
 
 		String eventType = "event/test";
-		manager.registerEvent(eventType, MyEvent.class);
+		EventFactory.registerEvent(eventType, MyEvent.class);
 
-		MyEvent event = manager.newEvent(eventType);
+		MyEvent event = EventFactory.newEvent(eventType);
 		event.setFirstName("Bob");
 		event.setLastName("Durand");
 

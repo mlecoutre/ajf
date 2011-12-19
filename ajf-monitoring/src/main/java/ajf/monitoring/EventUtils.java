@@ -12,7 +12,7 @@ public class EventUtils {
 	 * @return the event type name
 	 */
 	public static String getEventType(Class<? extends AbstractEvent> eventClass) {
-		return eventClass.getName();
+		return eventClass.getSimpleName();
 	}
 
 }
