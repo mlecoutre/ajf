@@ -62,16 +62,18 @@ public class EventFactory {
 	 * @return a new event
 	 * @throws Exception 
 	 */
+	@SuppressWarnings("unchecked")
 	public static <E> E newEvent(String eventType) {
 		
-		E evt = null;
+		Object evt = null;
 		if (eventsTypesMap.containsKey(eventType)) {
 			Class<?> eventClass = eventsTypesMap
 					.get(eventType);
 			evt = BeanUtils.newInstance(eventClass);
 		}
 
-		return evt;
+		return (E)evt;
+		
 	}
 	
 	/**
@@ -80,10 +82,13 @@ public class EventFactory {
 	 * @param eventClass
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static <E> E newEvent(Class<?> eventClass) {
+		
 		String eventType = getEventType(eventClass);
-		E result =  newEvent(eventType);
-		return result;
+		Object evt = newEvent(eventType);
+		return (E)evt;
+		
 	}
 	
 }
