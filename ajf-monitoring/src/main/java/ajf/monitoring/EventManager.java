@@ -33,6 +33,7 @@ public class EventManager implements ErrorHandler, Closeable {
 		super();
 		/* init section */
 		eventDispatcher = Dispatchers.asynchronousSafe(this);
+		//eventDispatcher = Dispatchers.synchronousSafe(this);
 		closed = false;
 	}
 	
@@ -50,7 +51,7 @@ public class EventManager implements ErrorHandler, Closeable {
 	 * send event
 	 * @param event
 	 */
-	public void sendEvent(AbstractEvent event) {
+	public void sendEvent(Object event) {
 		String eventType = getEventType(event.getClass());
 		sendEvent(eventType, event);		
 	}
@@ -60,7 +61,7 @@ public class EventManager implements ErrorHandler, Closeable {
 	 * @param eventType
 	 * @param event
 	 */
-	public void sendEvent(String eventType, AbstractEvent event) {
+	public void sendEvent(String eventType, Object event) {
 		try {
 			checkClosed();
 			eventDispatcher.publish(Topic.topic(eventType), event);
@@ -122,7 +123,7 @@ public class EventManager implements ErrorHandler, Closeable {
 				unsubscribe(eventHandler);
 				defaultEventHandler = null;
 			}
-			eventDispatcher.subscribe(Topics.any(), AbstractEvent.class,
+			eventDispatcher.subscribe(Topics.any(), Object.class,
 					eventHandler);
 			defaultEventHandler = eventHandler;
 			
@@ -134,7 +135,7 @@ public class EventManager implements ErrorHandler, Closeable {
 				matchers[i] = Topics.only(eventType);
 			}
 			eventDispatcher.subscribe(Topics.anyOf(matchers),
-					AbstractEvent.class, eventHandler);
+					Object.class, eventHandler);
 		}
 
 	}

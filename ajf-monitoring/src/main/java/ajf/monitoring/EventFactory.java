@@ -13,7 +13,7 @@ import ajf.utils.BeanUtils;
 
 public class EventFactory {
 	
-	private final static Map<String, Class<? extends AbstractEvent>> eventsTypesMap = new HashMap<String, Class<? extends AbstractEvent>>();
+	private final static Map<String, Class<?>> eventsTypesMap = new HashMap<String, Class<?>>();
 	
 	private final static Logger logger = LoggerFactory.getLogger(EventFactory.class);
 
@@ -30,7 +30,7 @@ public class EventFactory {
 	 * @throws DuplicateEventTypeException
 	 */
 	public static void registerEvent(
-			Class<? extends AbstractEvent> eventClass)
+			Class<?> eventClass)
 			throws DuplicateEventTypeException {
 		String eventType = getEventType(eventClass);
 		registerEvent(eventType, eventClass);
@@ -44,7 +44,7 @@ public class EventFactory {
 	 */
 	public static synchronized void registerEvent(
 			String eventType,
-			Class<? extends AbstractEvent> eventClass)
+			Class<?> eventClass)
 			throws DuplicateEventTypeException {
 		
 		if (eventsTypesMap.containsKey(eventType)) {
@@ -62,11 +62,11 @@ public class EventFactory {
 	 * @return a new event
 	 * @throws Exception 
 	 */
-	public static <E extends AbstractEvent> E newEvent(String eventType) {
+	public static <E> E newEvent(String eventType) {
 		
 		E evt = null;
 		if (eventsTypesMap.containsKey(eventType)) {
-			Class<? extends AbstractEvent> eventClass = eventsTypesMap
+			Class<?> eventClass = eventsTypesMap
 					.get(eventType);
 			evt = BeanUtils.newInstance(eventClass);
 		}
@@ -80,7 +80,7 @@ public class EventFactory {
 	 * @param eventClass
 	 * @return
 	 */
-	public static <E extends AbstractEvent> E newEvent(Class<? extends AbstractEvent> eventClass) {
+	public static <E> E newEvent(Class<?> eventClass) {
 		String eventType = getEventType(eventClass);
 		E result =  newEvent(eventType);
 		return result;

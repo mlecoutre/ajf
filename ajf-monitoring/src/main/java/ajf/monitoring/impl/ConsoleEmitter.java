@@ -2,7 +2,6 @@ package ajf.monitoring.impl;
 
 import java.io.PrintStream;
 
-import ajf.monitoring.AbstractEvent;
 import ajf.monitoring.EventEmitter;
 import ajf.monitoring.exceptions.EventEmitterException;
 
@@ -29,7 +28,7 @@ public class ConsoleEmitter implements EventEmitter {
 	
 
 	@Override
-	public void send(AbstractEvent source, String formattedEvent) throws EventEmitterException {
+	public void send(Object eventSource, String formattedEvent) throws EventEmitterException {
 		printStream.println(formattedEvent);	
 	}
 

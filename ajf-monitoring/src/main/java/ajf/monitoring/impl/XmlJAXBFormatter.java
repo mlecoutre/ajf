@@ -7,7 +7,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import ajf.monitoring.AbstractEvent;
 import ajf.monitoring.EventFormatter;
 import ajf.monitoring.exceptions.EventFormatterException;
 
@@ -27,17 +26,17 @@ public class XmlJAXBFormatter implements  EventFormatter {
 	}
 
 	@Override
-	public String format(AbstractEvent event) throws EventFormatterException {
+	public String format(Object eventSource) throws EventFormatterException {
 		
 		try {
 			StringWriter writer = new StringWriter();
-			marshaller.marshal(event, writer);
+			marshaller.marshal(eventSource, writer);
 			writer.close();
 			return writer.toString();
 		} catch (IOException e) {
 			throw new EventFormatterException("Unable to close xml writer.", e);
 		} catch (JAXBException e) {
-			throw new EventFormatterException("Unable to format event of type '" + event.getClass().getName() + "'.", e);
+			throw new EventFormatterException("Unable to format event of type '" + eventSource.getClass().getName() + "'.", e);
 		}				
 		
 	}

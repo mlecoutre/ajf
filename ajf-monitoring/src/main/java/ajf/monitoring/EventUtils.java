@@ -11,7 +11,7 @@ public class EventUtils {
 	 * @param eventClass
 	 * @return the event type name
 	 */
-	public static String getEventType(Class<? extends AbstractEvent> eventClass) {
+	public static String getEventType(Class<?> eventClass) {
 		return eventClass.getSimpleName();
 	}
 

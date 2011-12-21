@@ -4,6 +4,6 @@ import ajf.monitoring.exceptions.EventFilterException;
 
 public interface EventFilter {
 
-	boolean accept(AbstractEvent event) throws EventFilterException;
+	boolean accept(Object eventSource) throws EventFilterException;
 
 }
