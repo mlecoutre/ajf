@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -8,10 +9,9 @@
 		<relativePath>../ajf-parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>am.ajf</groupId>
 	<artifactId>ajf-monitoring</artifactId>
 	<packaging>jar</packaging>
-	<version>2.0.2-SNAPSHOT</version>
+
 
 	<scm>
 		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-monitoring</connection>
@@ -35,14 +35,26 @@
 			<artifactId>ajf-commons</artifactId>
 			<version>2.0.2-SNAPSHOT</version>
 		</dependency>
-		
+
 		<!-- Event framework for monitoring -->
 		<dependency>
-  			<groupId>com.mycila</groupId>
-  			<artifactId>mycila-event</artifactId>
-  			<version>4.2.ga</version>
-  		</dependency>
-		 
+			<groupId>com.mycila</groupId>
+			<artifactId>mycila-event</artifactId>
+			<version>4.2.ga</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-core</artifactId>
+			<version>5.5.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javaee</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>5</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

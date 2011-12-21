@@ -94,5 +94,25 @@ public class EventManagerTest {
 				&& (0 < res.length()));
 
 	}
+	
+	@Test
+	public void testConsoleFlatEvent() throws JAXBException, IOException,
+			InterruptedException {
+
+		EventManager manager = new EventManager();
+
+		EventEmitter emitter = new ConsoleEmitter();
+
+		EventHandler handler = new EventHandler(new XmlJAXBFormatter(
+				MyEvent.class), emitter);
+		manager.setDefaultEventHandler(handler);
+
+		MyEvent event = new MyEvent("Albert", "Dupont");
+		manager.sendEvent(event);
+		Thread.sleep(100);
+
+		manager.close();
+
+	}
 
 }
