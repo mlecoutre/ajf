@@ -19,17 +19,17 @@ public class EventManagerTest {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger();
-
+	
 	@Test
 	public void testSendSimpleEvent() throws JAXBException, IOException,
 			InterruptedException {
 
 		EventManager manager = new EventManager();
-
+		
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		PrintStream printStream = new PrintStream(outputStream, true);
 		EventEmitter emitter = new ConsoleEmitter(printStream);
-
+		
 		EventHandler handler = new EventHandler(new XmlJAXBFormatter(
 				MyEvent.class), emitter);
 		manager.setDefaultEventHandler(handler);
@@ -37,11 +37,11 @@ public class EventManagerTest {
 		MyEvent event = new MyEvent("Albert", "Dupont");
 		manager.sendEvent(event);
 
-		manager.close();
-
 		// wait some time
 		Thread.sleep(100);
-
+		
+		manager.close();
+		
 		printStream.flush();
 
 		String utf8 = Charset.forName("UTF-8").displayName();
@@ -57,7 +57,7 @@ public class EventManagerTest {
 
 	@Test
 	public void testSendRegisteredEvent() throws JAXBException, IOException, InterruptedException {
-
+		
 		EventManager manager = new EventManager();
 
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -77,11 +77,11 @@ public class EventManagerTest {
 
 		manager.sendEvent(event);
 
-		manager.close();
-
 		// wait some time
 		Thread.sleep(100);
-
+		
+		manager.close();
+		
 		printStream.flush();
 
 		String utf8 = Charset.forName("UTF-8").displayName();
@@ -95,24 +95,4 @@ public class EventManagerTest {
 
 	}
 	
-	@Test
-	public void testConsoleFlatEvent() throws JAXBException, IOException,
-			InterruptedException {
-
-		EventManager manager = new EventManager();
-
-		EventEmitter emitter = new ConsoleEmitter();
-
-		EventHandler handler = new EventHandler(new XmlJAXBFormatter(
-				MyEvent.class), emitter);
-		manager.setDefaultEventHandler(handler);
-
-		MyEvent event = new MyEvent("Albert", "Dupont");
-		manager.sendEvent(event);
-		Thread.sleep(100);
-
-		manager.close();
-
-	}
-
 }
