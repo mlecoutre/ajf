@@ -1,7 +1,9 @@
 package ajf.persistence.jpa;
 
 //import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,6 +38,8 @@ public class JpaExtension implements Extension {
 
 	private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 	private Map<Class<?>, Boolean> haveAnImplementation;
+	private Map<Class<?>, List<Class<?>>> interfaceImplementationMatch;
+	
 	public static java.lang.annotation.Annotation ANNOTATION_DEFAULT = new AnnotationLiteral<Default>() {};
 	public static java.lang.annotation.Annotation ANNOTATION_ANY = new AnnotationLiteral<Any>() {};
 	
@@ -56,7 +60,10 @@ public class JpaExtension implements Extension {
 		//init the dependency tree
 		if (haveAnImplementation == null) {
 			haveAnImplementation = new HashMap<Class<?>, Boolean>();
-		}		
+		}	
+		if (interfaceImplementationMatch == null) {
+			interfaceImplementationMatch = new HashMap<Class<?>, List<Class<?>>>();
+		}
 		
 		//process the interfaces
 		//init the interface at false if it doesnt exist (the interface was scanned before the impl)
@@ -70,10 +77,16 @@ public class JpaExtension implements Extension {
 		}
 		//process the implementations
 		//for each impl found, set the interface as having an impl.
+		//for each impl found, add the impl to the list of possible impl for the interface.
 		if (classMatcher.isServiceClass(javaClass)) {
 			for (Class<?> in : javaClass.getInterfaces()) {
 				if (in.getName().endsWith("ServiceBD")) {					
 					haveAnImplementation.put(in, true);
+					if (interfaceImplementationMatch.get(in) == null) {
+						interfaceImplementationMatch.put(in, new ArrayList<Class<?>>());
+					}
+					List<Class<?>> iim = interfaceImplementationMatch.get(in);
+					iim.add(javaClass);
 				}
 			}
 		}
@@ -96,16 +109,29 @@ public class JpaExtension implements Extension {
 			logger.debug("   bean : " + bean.getBeanClass().getName());
 		}
 		logger.debug("dump the dep graph");
-		
 		for (Class<?> in : haveAnImplementation.keySet()) {
-			logger.debug(in.getName() + " : "+haveAnImplementation.get(in));
+			logger.debug("   "+in.getName() + " : "+haveAnImplementation.get(in));
+		}
+		logger.debug("starting implementation generation process");
+		for (Class<?> in : haveAnImplementation.keySet()) {
 			if (!haveAnImplementation.get(in)) {
-				Class<?> impl = implementationGenerator.createImpl(in);
+				logger.debug("  generating impl for : "+in.getSimpleName());
+				Class<?> impl = implementationGenerator.createImpl(in, null);
 				 //use this to read annotations of the class
 		        AnnotatedType<?> at = beanManager.createAnnotatedType(impl); 
 		        //use this to instantiate the class and inject dependencies
 		        final InjectionTarget<?> it = beanManager.createInjectionTarget(at);	
 		        abd.addBean(implementationGenerator.createBeanFromImpl(impl,in, it));				
+			} else {
+				for (Class<?> implClient : interfaceImplementationMatch.get(in)) {
+					logger.debug("  generating subclass for : "+implClient.getSimpleName());
+					Class<?> impl = implementationGenerator.createImpl(in, implClient);
+					 //use this to read annotations of the class
+			        AnnotatedType<?> at = beanManager.createAnnotatedType(impl); 
+			        //use this to instantiate the class and inject dependencies
+			        final InjectionTarget<?> it = beanManager.createInjectionTarget(at);	
+			        abd.addBean(implementationGenerator.createBeanFromImpl(impl,in, it));
+				}
 			}
 		}
 		

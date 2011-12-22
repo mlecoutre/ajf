@@ -2,14 +2,12 @@ package ajf.persistence.jpa;
 
 import java.util.List;
 
-public interface CrudDbService<E,PK> {
+public interface CrudDbService<E,P> {
 	
 	List<E> find(String queryName, Object... params); 
 	E save(E entity);
-	//E add(E entity);
-	//E update(E entity);
 	boolean remove(E entity);
-	boolean delete(PK pk);
-	E fetch(PK pk); 
+	boolean delete(P pk);
+	E fetch(P pk); 
 
 }

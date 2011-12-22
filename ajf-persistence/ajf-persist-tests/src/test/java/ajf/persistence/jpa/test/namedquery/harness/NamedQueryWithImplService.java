@@ -6,17 +6,11 @@ import java.util.List;
 import javax.inject.Named;
 
 @Named
-public class NamedQueryWithImplService implements NamedQueryWithImplServiceBD {
+public abstract class NamedQueryWithImplService implements NamedQueryWithImplServiceBD {
 
+	@Override
 	public List<Model1> findManualQuery() {
 		return new ArrayList<Model1>();
 	}
-
-	public List<Model1> findAllModelsByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	
 	
 }

@@ -28,7 +28,7 @@ public interface ImplementationGenerator {
 			IllegalAccessException, IllegalArgumentException,
 			SecurityException, NoSuchFieldException;
 
-	Class<?> createImpl(Class<?> serviceBD)
+	Class<?> createImpl(Class<?> serviceBD, Class<?> serviceImpl)
 			throws CannotCompileException, NotFoundException,
 			ClassNotFoundException;
 	
