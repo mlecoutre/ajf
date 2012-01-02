@@ -1,4 +1,4 @@
-package ajf.persistence.jpa.test.namedquery.harness;
+package ajf.persistence.jpa.test.harness;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;

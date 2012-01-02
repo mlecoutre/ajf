@@ -1,6 +1,8 @@
 package ajf.persistence.jpa.impl;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javassist.CannotCompileException;
@@ -21,21 +23,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ajf.persistence.jpa.ImplementationGenerator;
-import ajf.persistence.jpa.annotation.NamedQuery;
-import ajf.persistence.jpa.annotation.QueryParam;
 
 @Named
 public class JavaassistImplementationGenerator implements ImplementationGenerator {
 
 	private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 	private ClassPool pool;
+	private List<MethodGenerator> methodGenerators;
 	
 	public JavaassistImplementationGenerator() {
 		pool = ClassPool.getDefault();
+		
+		//The order matter
+		methodGenerators = new ArrayList<MethodGenerator>();
+		methodGenerators.add(new NamedQueryMethodGenerator());
+		methodGenerators.add(new CrudDbMethodGenerator());
 	}
 	
 	private String generateClassSuffix() {
-		return "_$ajf$$javaassist$Proxy";
+		return "_$ajf$javaassist$proxy$";
 	}
 	
 	public Class<?> createImpl(Class<?> serviceBD, Class<?> serviceImpl) throws CannotCompileException, NotFoundException, ClassNotFoundException {		
@@ -61,40 +67,32 @@ public class JavaassistImplementationGenerator implements ImplementationGenerato
 				logger.debug("generate method : "+method.getLongName()+ " : "+ Modifier.toString(method.getModifiers())+" : "+method.getDeclaringClass().getName());
 				//logger.debug(newCtm.getLongName() + " : "+ Modifier.toString(method.getModifiers()));
 				//logger.debug(method.getSignature());
-				method.setModifiers(Modifier.clear(method.getModifiers(), Modifier.ABSTRACT));
-				if (method.getReturnType().equals(CtPrimitiveType.voidType)) {
-					newCtm.setBody("{ logger.fatal(\"method "+method.getLongName()+" is not yet implemented:\"); }");
-				} else {
-					Object[] annotations = method.getAnnotations();
-					NamedQuery namedQuery = (NamedQuery)annotations[0];
-					Object[][] pAnnotations = method.getParameterAnnotations();
-					Object[] pTypes = method.getParameterTypes();
-					if (pAnnotations.length != pTypes.length) {
-						throw new IllegalArgumentException("method "+method.getLongName()+" dont have annotations on all parameters");
-					}					
-					
-					StringBuffer body = new StringBuffer();
-					body.append("{\n");
-					body.append("  logger.debug(\"launching query "+namedQuery.name()+"\");\n");
-					body.append("  javax.persistence.EntityManager em = ajf.persistence.jpa.EntityManagerProvider.getEntityManager(\"default\");\n");
-					body.append("  javax.persistence.Query query = em.createNamedQuery(\""+namedQuery.name()+"\");\n");
-					for (int i = 0 ; i < pTypes.length ; i++) {
-						QueryParam param = null;
-						for (int j = 0 ; j < pAnnotations[i].length ; j++) {
-							if (QueryParam.class.isAssignableFrom(pAnnotations[i][j].getClass())) {
-								param = (QueryParam) pAnnotations[i][j];
-							}
+				
+				//verify the method declaration is valid (will throw an exception)
+				checkMethodDeclaration(newCtm);
+				
+				StringBuffer body = null; 
+				
+				//test all the generators in order, and take the first availaible one
+				boolean generatorFound = false;
+				for (MethodGenerator generator : methodGenerators) {
+					if (generator.canImplement(method)) {
+						body = generator.generateBodyFor(method);
+						if (body == null) {
+							throw new IllegalArgumentException("Error generating method body for "+method.getName() + " in : "+generator.getClass().getSimpleName());
 						}
-						if (param == null) {
-							throw new IllegalArgumentException("method "+method.getLongName()+" dont have annotation '@QueryParam' on parameter : "+i);
-						}
-						body.append("  query = query.setParameter(\""+param.value()+"\", $"+(i+1)+");\n");
+						generatorFound = true;
+						break;
 					}
-					body.append("  return query.getResultList();\n");
-					body.append("}\n");
-					logger.debug("Generated method "+method.getName()+" body : \n"+body.toString());
-					newCtm.setBody(body.toString());
 				}
+				if (!generatorFound) {
+					throw new IllegalArgumentException("Error generating method body for "+method.getName() + ". No generator found.");
+				}
+								
+				
+				logger.debug("Generated method "+method.getName()+" body : \n"+body.toString());
+				newCtm.setBody(body.toString());
+					
 				cc.addMethod(newCtm);			
 			}	
 		}
@@ -118,6 +116,20 @@ public class JavaassistImplementationGenerator implements ImplementationGenerato
 		res = res || !Modifier.isAbstract(method.getModifiers());
 		return res;
 	}
+	
+	/**
+	 * Perform routine check on method structure.
+	 * If the check doesnt pass, the method will throw an exception.
+	 * 
+	 * @param method
+	 * @throws NotFoundException
+	 */
+	private void checkMethodDeclaration(CtMethod method) throws NotFoundException {
+		if (method.getReturnType().equals(CtPrimitiveType.voidType)) {
+			throw new IllegalArgumentException("Method "+method.getName() +" of class " +method.getDeclaringClass().getName() 
+												+ " cant return void !");
+		}
+	}	
 	
 	
 	public Bean<?> createBeanFromImpl(Class<?> impl, Class<?> in, final InjectionTarget<?> it) throws NotFoundException, CannotCompileException, InstantiationException, IllegalAccessException, IllegalArgumentException, SecurityException, NoSuchFieldException {
