@@ -10,7 +10,7 @@ import ajf.persistence.jpa.EntityManagerProvider;
 public class BasicImplCrudDbService {
 
 	public static List<?> find(String queryName, Object... params) {
-		EntityManager em = EntityManagerProvider.getEntityManager("default");
+		EntityManager em = EntityManagerProvider.createEntityManager("default");
 		Query q = em.createNamedQuery(queryName);
 		for (int i = 0 ; i < params.length ; i++) {
 			q.setParameter(i+1, params[i]);
@@ -19,7 +19,7 @@ public class BasicImplCrudDbService {
 	}
 
 	public static Object save(Object entity) {
-		EntityManager em = EntityManagerProvider.getEntityManager("default");
+		EntityManager em = EntityManagerProvider.createEntityManager("default");
 		Object res = null;
 		if (em.contains(entity)) {
 			 res = em.merge(entity);
@@ -31,14 +31,14 @@ public class BasicImplCrudDbService {
 	}
 
 	public static boolean remove(Object entity) {
-		EntityManager em = EntityManagerProvider.getEntityManager("default");
+		EntityManager em = EntityManagerProvider.createEntityManager("default");
 		em.remove(entity);
 		return true;
 	}
 	
 	/*
 	public static boolean delete(Object pk) {
-		EntityManager em = EntityManagerProvider.getEntityManager("default");
+		EntityManager em = EntityManagerProvider.createEntityManager("default");
 		Object obj = em.find(E.class, pk);
 		if (obj != null) {
 			em.remove(obj);
@@ -51,7 +51,7 @@ public class BasicImplCrudDbService {
 
 	/*
 	public static <E> E fetch(Object pk) {
-		EntityManager em = EntityManagerProvider.getEntityManager("default");
+		EntityManager em = EntityManagerProvider.createEntityManager("default");
 		return em.find(E.class, pk);
 	}
 	*/
