@@ -14,6 +14,9 @@ import javassist.CtMethod;
 import javassist.CtPrimitiveType;
 import javassist.Modifier;
 import javassist.NotFoundException;
+import javassist.bytecode.AnnotationsAttribute;
+import javassist.bytecode.annotation.Annotation;
+import javassist.bytecode.annotation.StringMemberValue;
 
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.InjectionTarget;
@@ -23,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ajf.persistence.jpa.ImplementationGenerator;
+import ajf.persistence.jpa.annotation.PersistenceUnit;
 
 @Named
 public class JavaassistImplementationGenerator implements ImplementationGenerator {
@@ -38,6 +42,7 @@ public class JavaassistImplementationGenerator implements ImplementationGenerato
 		methodGenerators = new ArrayList<MethodGenerator>();
 		methodGenerators.add(new NamedQueryMethodGenerator());
 		methodGenerators.add(new CrudDbMethodGenerator());
+		methodGenerators.add(new StoredProcedureMethodGenerator());
 	}
 	
 	private String generateClassSuffix() {
@@ -55,9 +60,29 @@ public class JavaassistImplementationGenerator implements ImplementationGenerato
 			CtClass cim = pool.get(serviceImpl.getName());
 			cc.setSuperclass(cim);
 		}
+		PersistenceUnit puAnn = null;
+		if (cc.hasAnnotation(PersistenceUnit.class)) {
+			puAnn = (PersistenceUnit) cc.getAnnotation(PersistenceUnit.class);
+		}
 		
 		CtField cLogger = CtField.make("private final transient org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());", cc);		
 		cc.addField(cLogger);
+		
+		CtField cEmf = CtField.make("private transient javax.persistence.EntityManagerFactory emf;", cc);
+		AnnotationsAttribute attribute = new AnnotationsAttribute(cc.getClassFile().getConstPool(), AnnotationsAttribute.visibleTag);
+		Annotation injectAnnotation = new Annotation(cc.getClassFile().getConstPool(), ClassPool.getDefault().get("javax.inject.Inject"));
+		Annotation puAnnotation = new Annotation(cc.getClassFile().getConstPool(), ClassPool.getDefault().get("ajf.persistence.jpa.annotation.PersistenceUnit"));
+		StringMemberValue mv = (StringMemberValue) Annotation.createMemberValue(cc.getClassFile().getConstPool(), pool.get("java.lang.String"));
+		if (puAnn != null) {			
+			mv.setValue(puAnn.name());			
+		} else {			
+			mv.setValue("default");			
+		}
+		puAnnotation.addMemberValue("name", mv);
+		attribute.addAnnotation(injectAnnotation);
+		attribute.addAnnotation(puAnnotation);
+		cEmf.getFieldInfo().addAttribute(attribute);
+		cc.addField(cEmf);
 		
 		for (CtMethod method : cc.getMethods()) {
 			CtMethod newCtm = new CtMethod(method, cc, null);			

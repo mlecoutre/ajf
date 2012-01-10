@@ -7,10 +7,12 @@ import javassist.NotFoundException;
 
 public class NamedQueryMethodGenerator implements MethodGenerator {
 
+	@Override
 	public boolean canImplement(CtMethod method) {		
 		return method.hasAnnotation(NamedQuery.class);
 	}
 
+	@Override
 	public StringBuffer generateBodyFor(CtMethod method) throws ClassNotFoundException, NotFoundException {
 		Object[] annotations = method.getAnnotations();
 		NamedQuery namedQuery = (NamedQuery)annotations[0];
@@ -23,7 +25,7 @@ public class NamedQueryMethodGenerator implements MethodGenerator {
 		StringBuffer body = new StringBuffer();
 		body.append("{\n");
 		body.append("  logger.debug(\"launching query "+namedQuery.name()+"\");\n");
-		body.append("  javax.persistence.EntityManager em = ajf.persistence.jpa.EntityManagerProvider.getEntityManager(\"default\");\n");
+		body.append("  javax.persistence.EntityManager em = emf.createEntityManager();\n");
 		body.append("  javax.persistence.Query query = em.createNamedQuery(\""+namedQuery.name()+"\");\n");
 		for (int i = 0 ; i < pTypes.length ; i++) {
 			QueryParam param = null;

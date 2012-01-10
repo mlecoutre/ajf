@@ -23,6 +23,8 @@ public class Model1 {
 	private Long id;
 	private String name;
 
+	public Model1() {}
+	
 	public Model1(String name) {
 		this.name = name;
 	}

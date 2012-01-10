@@ -21,6 +21,8 @@ public class ModelCrud {
 	private Long id;
 	private String name;
 
+	public ModelCrud() {}
+	
 	public ModelCrud(String name) {
 		this.name = name;
 	}

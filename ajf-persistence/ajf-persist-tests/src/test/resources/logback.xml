@@ -11,6 +11,10 @@
   <logger name="org.hibernate" level="warn" additivity="false">
   	<appender-ref ref="STDOUT" />
   </logger>
+  
+  <logger name="org.hibernate.SQL" level="debug" additivity="false">
+  	<appender-ref ref="STDOUT" />
+  </logger>  
 
   <root level="debug">
     <appender-ref ref="STDOUT" />

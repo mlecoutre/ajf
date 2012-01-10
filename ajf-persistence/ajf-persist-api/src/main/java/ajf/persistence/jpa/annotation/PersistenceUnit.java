@@ -5,10 +5,12 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import javax.enterprise.util.Nonbinding;
 
 @Documented
 @Retention(RetentionPolicy.RUNTIME) 
-@Target({ElementType.PARAMETER})
-public @interface QueryParam {
-	String value();
+@Target({ElementType.TYPE, ElementType.METHOD})
+public @interface PersistenceUnit {
+	@Nonbinding String name() default "default";
 }
+

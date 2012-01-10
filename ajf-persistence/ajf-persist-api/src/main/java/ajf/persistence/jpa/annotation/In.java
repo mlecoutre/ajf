@@ -1,7 +1,14 @@
 package ajf.persistence.jpa.annotation;
 
-public @interface In {
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-	String value();
-	
+@Documented
+@Retention(RetentionPolicy.RUNTIME) 
+@Target({ElementType.PARAMETER})
+public @interface In {
+	String value();	
 }

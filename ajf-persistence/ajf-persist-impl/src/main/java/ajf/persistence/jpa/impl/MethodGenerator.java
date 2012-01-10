@@ -1,5 +1,6 @@
 package ajf.persistence.jpa.impl;
 
+import javassist.CannotCompileException;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 
@@ -20,6 +21,6 @@ public interface MethodGenerator {
 	 * @throws ClassNotFoundException
 	 * @throws NotFoundException
 	 */
-	StringBuffer generateBodyFor(CtMethod method) throws ClassNotFoundException, NotFoundException;
+	StringBuffer generateBodyFor(CtMethod method) throws ClassNotFoundException, NotFoundException, CannotCompileException;
 
 }

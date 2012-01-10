@@ -107,7 +107,8 @@ public class JpaExtension implements Extension {
 		Set<Bean<?>> allBeans = beanManager.getBeans(Object.class, new AnnotationLiteral<Any>() {});
 		for (Bean<?> bean : allBeans) {
 			logger.debug("   bean : " + bean.getBeanClass().getName());
-		}
+		}		
+		
 		logger.debug("dump the dep graph");
 		for (Class<?> in : haveAnImplementation.keySet()) {
 			logger.debug("   "+in.getName() + " : "+haveAnImplementation.get(in));

@@ -1,21 +1,11 @@
 package ajf.persistence.jpa.test;
 
 import java.util.List;
-import java.util.Set;
 
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
-import javax.naming.InitialContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
 
-import org.apache.webbeans.config.WebBeansContext;
-import org.apache.webbeans.spi.ContainerLifecycle;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ArchivePaths;
@@ -25,21 +15,15 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 import ajf.persistence.jpa.EntityManagerProvider;
 import ajf.persistence.jpa.test.harness.Model1;
-import ajf.persistence.jpa.test.harness.ModelCrud;
-import ajf.persistence.jpa.test.harness.NamedQueryNoImplPolicy;
 import ajf.persistence.jpa.test.harness.NamedQueryNoImplServiceBD;
 import ajf.persistence.jpa.test.harness.NamedQueryWithImplService;
 import ajf.persistence.jpa.test.harness.NamedQueryWithImplServiceBD;
-import ajf.persistence.jpa.test.harness.SimpleCrudServiceBD;
 
 @RunWith(Arquillian.class)
 public class NamedQueryTest {
@@ -48,6 +32,9 @@ public class NamedQueryTest {
 	private NamedQueryNoImplServiceBD namedQueryNoImpl;
 	@Inject
 	private NamedQueryWithImplServiceBD namedQueryWithImpl;
+	@Inject
+	private EntityManagerFactory emf;
+	
 	
 	@Deployment
 	public static JavaArchive createTestArchive() {
@@ -55,6 +42,7 @@ public class NamedQueryTest {
 				.create(JavaArchive.class, "test.jar")
 				.addClasses(NamedQueryNoImplServiceBD.class)
 				.addClasses(NamedQueryWithImplServiceBD.class)
+				.addClasses(EntityManagerProvider.class)				
 				.addClasses(NamedQueryWithImplService.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,
 						ArchivePaths.create("beans.xml"))
@@ -64,16 +52,36 @@ public class NamedQueryTest {
 	
 	@Before
 	public void setUp() throws Exception {				                
-        EntityManager em = EntityManagerProvider.getEntityManager("default");
+        //EntityManager em = EntityManagerProvider.createEntityManager("default");
+		EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.persist(new Model1("nicolas"));
-        em.persist(new Model1("vincent"));                
+        em.persist(new Model1("vincent"));
+        List<Model1> list = em.createQuery("SELECT m FROM Model1 m").getResultList();
+        for (Model1 model : list) {
+        	System.out.println("Inserted1 : ("+model.getId()+", "+model.getName()+")");
+        }
+        em.getTransaction().commit();
+        System.out.println("After commit, new emf.");
+        //EntityManager em2 = EntityManagerProvider.createEntityManager("default");
+        EntityManager em2 = emf.createEntityManager();
+        em2.getTransaction().begin();
+        List<Model1> list2 = em2.createQuery("SELECT m FROM Model1 m").getResultList();
+        for (Model1 model : list2) {
+        	System.out.println("Inserted2 : ("+model.getId()+", "+model.getName()+")");
+        }
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		EntityManagerProvider.getEntityManager("default").getTransaction().rollback();
-		EntityManagerProvider.closeAll();		
+		EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        List<Model1> list = em.createQuery("SELECT m FROM Model1 m").getResultList();
+        for (Model1 model : list) {
+        	em.remove(model);
+        }
+        em.getTransaction().commit();
+        em.close();
 	}
 
 	@Test

@@ -3,6 +3,8 @@ package ajf.persistence.jpa.test;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -17,6 +19,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import ajf.persistence.jpa.EntityManagerProvider;
+import ajf.persistence.jpa.test.harness.Model1;
 import ajf.persistence.jpa.test.harness.ModelCrud;
 import ajf.persistence.jpa.test.harness.SimpleCrudServiceBD;
 
@@ -25,12 +28,17 @@ public class CrudDbTest {
 
 	@Inject
 	private SimpleCrudServiceBD crudService;
+	
+	@Inject
+	private EntityManagerFactory emf;
+
 
 	@Deployment
 	public static JavaArchive createTestArchive() {
 		return ShrinkWrap
 				.create(JavaArchive.class, "test.jar")
 				.addClasses(SimpleCrudServiceBD.class)
+				.addClasses(EntityManagerProvider.class)
 				.addClasses(ModelCrud.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,
 						ArchivePaths.create("beans.xml"))
@@ -39,14 +47,19 @@ public class CrudDbTest {
 	}
 	
 	@Before
-	public void setUp() {
-		EntityManagerProvider.getEntityManager("default").getTransaction().begin();
+	public void setUp() {		
 	}
 	
 	@After
-	public void tearDown() {
-		EntityManagerProvider.getEntityManager("default").getTransaction().rollback();
-		EntityManagerProvider.closeAll();
+	public void tearDown() {		
+		EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        List<ModelCrud> list = em.createQuery("SELECT m FROM ModelCrud m").getResultList();
+        for (ModelCrud model : list) {
+        	em.remove(model);
+        }
+        em.getTransaction().commit();
+        em.close();
 	}
 
 	/**
