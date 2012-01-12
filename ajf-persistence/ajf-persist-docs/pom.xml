@@ -14,7 +14,27 @@
 		<plugins>
 			<plugin>
 				<groupId>org.jboss.maven.plugins</groupId>
-				<artifactId>maven-jdocbook-plugin</artifactId>												
+				<artifactId>maven-jdocbook-plugin</artifactId>
+				<version>2.3.5</version>
+				<extensions>true</extensions>				
+				<configuration>
+					<sourceDocumentName>master.xml</sourceDocumentName>
+					<!--  outputDirectory>target/site/docs</outputDirectory-->
+					<options>
+						<docbookVersion>1.0</docbookVersion>
+					</options>
+					<formats>
+						<format>
+							<formatName>pdf</formatName>
+						</format>
+						<format>
+							<formatName>html</formatName>
+						</format>
+						<format>
+							<formatName>html_single</formatName>
+						</format>
+					</formats>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

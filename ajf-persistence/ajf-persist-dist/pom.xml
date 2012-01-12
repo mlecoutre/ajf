@@ -39,38 +39,8 @@
 	<modules>
 		<module>../ajf-persist-api</module>
 		<module>../ajf-persist-impl</module>
-		<module>../ajf-persist-docs</module>
+		<!--  module>../ajf-persist-docs</module-->
 		<module>../ajf-persist-tests</module>
 	</modules>
-
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.jboss.maven.plugins</groupId>
-					<artifactId>maven-jdocbook-plugin</artifactId>
-					<version>2.3.5</version>
-					<extensions>true</extensions>
-					<configuration>
-						<sourceDocumentName>master.xml</sourceDocumentName>
-						<options>
-							<docbookVersion>1.0</docbookVersion>
-						</options>
-						<formats>
-							<format>
-								<formatName>pdf</formatName>
-							</format>
-							<format>
-								<formatName>html</formatName>
-							</format>
-							<format>
-								<formatName>html_single</formatName>
-							</format>
-						</formats>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
 
 </project>

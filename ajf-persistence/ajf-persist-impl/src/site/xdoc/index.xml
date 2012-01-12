@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<document>
+ <properties>
+  <title>Welcome to the AJF Persistence Developer Website : Module Implementation</title>
+ </properties>
+ <body>
+  <section name="Welcome">
+   <p>
+    This module contain the implementation of the Persistence CDI extension.<br/>
+    The implementation is split into the following packages :
+    <ul>
+    	<li>ajf.persistence.jpa : Contain the extension entrypoint (JPAExtension) and 
+    	the interfaces used by the implementation</li>
+    	<li>ajf.persistence.jpa.impl : Contain the different impl of the interface and the
+    	core implementation of the code generation (using Javaassist)</li>
+    </ul>
+   </p>
+  </section>
+ </body>
+</document>
