@@ -5,21 +5,145 @@
     <title>AJF - Persistence Reference</title>
 
     <para>
-        Blah, Blah
-    </para>
-    
-    <note>
-      <para>
-        Blah blah
-      </para>
-    </note>
+        The AJF Persistence extension is built on JPA to provide support accessing
+        the database based on the J2EE standard ORM solution. Based on JPA at hi core,
+        the extension add java Annotations, Interfaces and CDI beans to reduce to a minimum
+        the complexity of simple CRUD functionality and common stored procedures call.      
+    </para>       
 
     <section>
         <title>Introduction</title>
 
         <para>
-            Blah blah AJF blah blah
+            The AJF persistence extension leverage two of the most important specifications
+            in J2EE : CDI and JPA. With JPA you will be able to map your java objects to your
+            database tables while JPA will manage your connections and database code to 
+            insert, update, and query single objects. For your advanced query needs, AJF
+            delegate to the JPQL language in the form of Named Queries or even dynamic creation
+            of JPQL queries. CDI is used by the extension to let you write code as you would
+            a standard J2EE application while hooking into your code at deployment time to 
+            provides additional functionalities not provided by the J2EE specification.              
         </para>
         
+        <para>
+        	While the J2EE specification provides a lot of functionalities out of box, there
+        	is still work to be done and there is a number a number of needs more specific to
+        	Arcelor Mittal that can be added. This is where the CDI programming model is used.        	
+        </para>        
     </section>
+    
+    <section>
+    	<title>Summary of functionalities</title>
+    	
+    	<para>
+    		The functionalities of the module can be split in two parts. The one provided
+    		by JPA itself, and the one provided by the AJF Persistence module.    		
+    	</para>
+    	
+    	<note>
+    		<para>
+    			While the JPA functionalities are listed here for convenience, the list is
+    			by far from complete and the official JPA documentation should be use for 
+    			additional informations, and "how to" usage.
+    			<ulink url="http://docs.oracle.com/javaee/5/tutorial/doc/bnbpy.html"/>
+    		</para>
+    	</note>
+    	
+    	<itemizedlist>
+            <listitem>
+                <para>
+                   Connection management. JPA will manage the connections your different
+                   databases so you dont need explicit connection opening and closing. 
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    Object Relational Mapping (ORM) with Annotations. JPA provide a 
+                    declarative way with annotations to map your java objects to your 
+                    database tables.
+                </para>                
+            </listitem>
+            <listitem>
+                <para>
+                    JPQL or SQL queries on objects. JPQL help you abstract your query needs
+                    from your actual database structure by providing a query language, SQL like,
+                    on your object model.
+                </para>                
+            </listitem>            
+        </itemizedlist>
+        
+        	<para>
+				This is the list of functionalities specific to the Persistence extension.    			
+    		</para>
+        
+        <itemizedlist>
+            <listitem>
+                <para>
+                   Provide injection of an <code>EntityManager</code> and <code>EntityManagerFactory</code> with
+                   CDI (<literal>@Inject</literal>), to avoid to cumbersome creation of the EntityManagerFactory.
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    @NamedQuery
+                    TODO
+                </para>                
+            </listitem>
+            <listitem>
+                <para>
+                    CrudDbService
+                    TODO
+                </para>                
+            </listitem>
+            <listitem>
+                <para>
+                    @StoredProcedure
+                    TODO
+                </para>                
+            </listitem>            
+            <listitem>
+                <para>
+                    AuditDatas
+                    TODO
+                </para>                
+            </listitem>
+        </itemizedlist>
+    	
+    </section>
+    
+    <section>
+    	<title>Service with @NamedQuery</title>
+    	<para>TODO</para>
+    </section>
+    <section>
+    	<title>Service extend CrudDBService</title>
+    	<para>TODO</para>
+    	
+    	<programlisting role="JAVA">
+			<![CDATA[public interface CrudDbService<E,P> {
+				
+				List<E> find(String queryName, Object... params); 
+				E save(E entity);
+				boolean remove(E entity);								
+				boolean delete(P pk);
+				E fetch(P pk);
+							
+			}]]>		
+    	</programlisting>
+    	
+    	
+    </section>
+    <section>
+    	<title>Service with @StoredProcedure</title>
+    	<para>TODO</para>
+    </section>
+    <section>
+    	<title>Manual usage of JPA</title>
+    	<para>TODO</para>
+    </section>
+    <section>
+    	<title>Managing Audit Datas</title>
+    	<para>TODO</para>
+    </section>
+    
 </chapter>
