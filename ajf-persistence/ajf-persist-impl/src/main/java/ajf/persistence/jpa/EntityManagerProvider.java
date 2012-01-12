@@ -2,13 +2,11 @@ package ajf.persistence.jpa;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Named;
@@ -39,10 +37,15 @@ import ajf.persistence.jpa.annotation.PersistenceUnit;
 @ApplicationScoped
 public class EntityManagerProvider {
 	
-	private static final transient Logger logger = LoggerFactory.getLogger(EntityManagerProvider.class);	
-	private static Map<String, TransactionType> persistenceUnitsTransactions;
-	private static Map<String, EntityManagerFactory> emfs;
+	private static final transient Logger logger = LoggerFactory.getLogger(EntityManagerProvider.class);
 	
+	private static final Map<String, TransactionType> persistenceUnitsTransactions = new ConcurrentHashMap<String, EntityManagerProvider.TransactionType>();
+	private static final Map<String, EntityManagerFactory> emfs = new ConcurrentHashMap<String, EntityManagerFactory>();
+	
+	public EntityManagerProvider() {
+		super();
+	}
+
 	/**
 	 * 
 	 * @param persistenceUnitName
@@ -50,11 +53,38 @@ public class EntityManagerProvider {
 	 */
 	public static EntityManager createEntityManager(String persistenceUnitName) {
 
-		EntityManagerFactory emFactory = Persistence.createEntityManagerFactory(persistenceUnitName);
-		
+		EntityManagerFactory emFactory = createEntityManagerFactory(persistenceUnitName);
 		EntityManager em = emFactory.createEntityManager();
 		return em;
 		
+	}
+	
+	/**
+	 * 
+	 * @return the only configured persistenceUnit in the application
+	 */	 
+	public static EntityManager createEntityManager() {
+
+		EntityManager em = createEntityManager(null);
+		return em;
+		
+	}
+
+	/**
+	 * 
+	 * @return the default persistenceUnit name 
+	 */
+	public static String getDefaultPersistenceUnitName() {
+		Set<String> puNames = getPersistenceUnitNames();
+		if (null == puNames) {
+			throw new NullPointerException("Impossible to access the file META-INF/persistence.xml. Check it exist in your application.");
+		}
+		if (puNames.size() > 1) {
+			throw new IllegalStateException("Check the file META-INF/persistence.xml. Check it is not empty in your application.");
+		}
+		
+		String persistenceUnitName = puNames.iterator().next();
+		return persistenceUnitName;
 	}
 	
 	/**
@@ -69,34 +99,68 @@ public class EntityManagerProvider {
 	 */
 	@Produces
 	@Named
-	public EntityManagerFactory createEntityManagerFactory(InjectionPoint ip) {
+	public EntityManagerFactory produceEntityManagerFactory(InjectionPoint ip) {
 		PersistenceUnit pu = ip.getAnnotated().getAnnotation(PersistenceUnit.class);
-		String puName = "default";
+		
+		String persistenceUnitName = null;
 		if (pu != null) {
-			puName = pu.name();
+			persistenceUnitName = pu.name();
 		}
-		if (emfs == null) {
-			emfs = new HashMap<String, EntityManagerFactory>();
-		}
-		EntityManagerFactory emFactory = emfs.get(puName);
-		if (emFactory == null) {
-			emFactory = Persistence.createEntityManagerFactory(puName);
-			emfs.put(puName, emFactory);
-			logger.info("Entity Manager Factory ("+puName+") : loaded successfully");
-		}
+		
+		EntityManagerFactory emFactory = createEntityManagerFactory(persistenceUnitName);
 		return emFactory;		
 	}
+
+	/**
+	 * 
+	 * @param puName
+	 * @return a Thread Safe singleton like version of the selected EntityManagerFactory 
+	 */
+	public static EntityManagerFactory createEntityManagerFactory(String persistenceUnitName) {
+		if (null == persistenceUnitName) {
+			persistenceUnitName = getDefaultPersistenceUnitName();
+		}
+		
+		EntityManagerFactory emFactory = emfs.get(persistenceUnitName);
+		if (emFactory == null) {
+			synchronized (emfs) {
+				emFactory = emfs.get(persistenceUnitName);
+				if (null == emFactory) {
+					emFactory = Persistence.createEntityManagerFactory(persistenceUnitName);
+					emfs.put(persistenceUnitName, emFactory);
+					logger.info("Entity Manager Factory ("+persistenceUnitName+") : loaded successfully");
+				}
+			}
+		}
+		return emFactory;
+	}
 	
+	/**
+	 * @return a Thread Safe singleton like version of the selected EntityManagerFactory 
+	 */
+	public static EntityManagerFactory createEntityManagerFactory() {
+		return createEntityManagerFactory(null);
+	}
+	
+	/**
+	 * 
+	 * @param persistenceUnitName
+	 * @return the peristenceUnit TransactionType
+	 */
 	public static TransactionType getTransactionType(String persistenceUnitName) {
-		if (persistenceUnitsTransactions == null) {
+		if (persistenceUnitsTransactions.isEmpty()) {
 			loadPersistenceXml();
 		}
 		return persistenceUnitsTransactions.get(persistenceUnitName);
 		
 	}
 	
+	/**
+	 * 
+	 * @return the peristenceUnit Names
+	 */
 	public static Set<String> getPersistenceUnitNames() {
-		if (persistenceUnitsTransactions == null) {
+		if (persistenceUnitsTransactions.isEmpty()) {
 			loadPersistenceXml();
 		}
 		return persistenceUnitsTransactions.keySet();	
@@ -106,8 +170,11 @@ public class EntityManagerProvider {
 	/**
 	 * Load the persistence.xml file informations
 	 */
-	private static void loadPersistenceXml() {
-		persistenceUnitsTransactions = new HashMap<String, TransactionType>();
+	private static synchronized void loadPersistenceXml() {
+		
+		if (!persistenceUnitsTransactions.isEmpty())
+			return;
+		
 		InputStream is = EntityManagerProvider.class.getClassLoader().getResourceAsStream("META-INF/persistence.xml");
 		try {
 			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
@@ -117,6 +184,7 @@ public class EntityManagerProvider {
 				Node puNode = puNodes.item(i);
 				NamedNodeMap attributes = puNode.getAttributes();			
 				String puName = attributes.getNamedItem("name").getNodeValue();
+				
 				String tranTypeAsString = attributes.getNamedItem("transaction-type").getNodeValue();
 				if ("RESOURCE_LOCAL".equals(tranTypeAsString)) {
 					persistenceUnitsTransactions.put(puName, TransactionType.LOCAL);
