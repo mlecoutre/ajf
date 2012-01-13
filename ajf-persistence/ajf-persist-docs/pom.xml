@@ -10,31 +10,76 @@
 	<packaging>jdocbook</packaging>
 	<artifactId>ajf-persistence-docs</artifactId>
 
+	<properties>
+		<translation>en-US</translation>
+		<docname>master</docname>
+	</properties>
+
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.jboss.maven.plugins</groupId>
+					<artifactId>maven-jdocbook-plugin</artifactId>
+					<version>2.3.5</version>
+					<extensions>true</extensions>
+					<dependencies>
+						<dependency>
+							<groupId>org.jboss.pressgang</groupId>
+							<!--Non-namespaced version for DocBook 4.5 compatibility. For XSD 
+								namespaced version, use pressgang-xslt-ns -->
+							<artifactId>pressgang-xslt</artifactId>
+							<version>2.0.0</version>
+						</dependency>
+						<dependency>
+							<groupId>org.jboss.pressgang</groupId>
+							<artifactId>pressgang-jdocbook-style</artifactId>
+							<type>jdocbook-style</type>
+							<version>2.0.0</version>
+						</dependency>
+					</dependencies>
+					<configuration>
+						<sourceDirectory>src/main/docbook</sourceDirectory>
+						<sourceDocumentName>${docname}.xml</sourceDocumentName>
+						<masterTranslation>en-US</masterTranslation>
+						<imageResource>
+							<directory>src/main/docbook/en-US</directory>
+							<includes>
+								<include>images/*.png</include>
+							</includes>
+						</imageResource>
+						<formats>
+							<format>
+								<formatName>pdf</formatName>
+								<stylesheetResource>classpath:/xslt/org/jboss/pdf.xsl</stylesheetResource>
+								<finalName>${docname}.pdf</finalName>
+							</format>
+							<format>
+								<formatName>html</formatName>
+								<stylesheetResource>classpath:/xslt/org/jboss/xhtml.xsl</stylesheetResource>
+								<finalName>index.html</finalName>
+							</format>
+							<format>
+								<formatName>html_single</formatName>
+								<stylesheetResource>classpath:/xslt/org/jboss/xhtml-single.xsl</stylesheetResource>
+								<finalName>index.html</finalName>
+							</format>
+						</formats>
+						<options>
+							<xmlTransformerType>saxon</xmlTransformerType>
+							<xincludeSupported>true</xincludeSupported>
+							<docbookVersion>1.72.0</docbookVersion>
+							<useRelativeImageUris>true</useRelativeImageUris>
+						</options>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
+				<!-- Entry needed to enable jdocbook packaging -->
 				<groupId>org.jboss.maven.plugins</groupId>
 				<artifactId>maven-jdocbook-plugin</artifactId>
-				<version>2.3.5</version>
-				<extensions>true</extensions>				
-				<configuration>
-					<sourceDocumentName>master.xml</sourceDocumentName>
-					<!--  outputDirectory>target/site/docs</outputDirectory-->
-					<options>
-						<docbookVersion>1.0</docbookVersion>
-					</options>
-					<formats>
-						<format>
-							<formatName>pdf</formatName>
-						</format>
-						<format>
-							<formatName>html</formatName>
-						</format>
-						<format>
-							<formatName>html_single</formatName>
-						</format>
-					</formats>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
