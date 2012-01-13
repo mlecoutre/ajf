@@ -9,7 +9,7 @@ import javax.enterprise.util.Nonbinding;
 
 @Documented
 @Retention(RetentionPolicy.RUNTIME) 
-@Target({ElementType.TYPE})
+@Target({ElementType.TYPE, ElementType.METHOD})
 public @interface DataSource {
 	@Nonbinding String value();
 }
