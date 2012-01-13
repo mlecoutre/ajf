@@ -37,7 +37,7 @@ import ajf.persistence.jpa.annotation.PersistenceUnit;
 @ApplicationScoped
 public class EntityManagerProvider {
 	
-	private static final transient Logger logger = LoggerFactory.getLogger(EntityManagerProvider.class);
+	private static final Logger logger = LoggerFactory.getLogger(EntityManagerProvider.class);
 	
 	private static final Map<String, TransactionType> persistenceUnitsTransactions = new ConcurrentHashMap<String, EntityManagerProvider.TransactionType>();
 	private static final Map<String, EntityManagerFactory> emfs = new ConcurrentHashMap<String, EntityManagerFactory>();
@@ -100,11 +100,11 @@ public class EntityManagerProvider {
 	@Produces
 	@Named
 	public EntityManagerFactory produceEntityManagerFactory(InjectionPoint ip) {
-		PersistenceUnit pu = ip.getAnnotated().getAnnotation(PersistenceUnit.class);
+		PersistenceUnit pu = ip.getMember().getDeclaringClass().getAnnotation(PersistenceUnit.class);
 		
 		String persistenceUnitName = null;
 		if (pu != null) {
-			persistenceUnitName = pu.name();
+			persistenceUnitName = pu.value();
 		}
 		
 		EntityManagerFactory emFactory = createEntityManagerFactory(persistenceUnitName);

@@ -74,7 +74,7 @@ public class JavaassistImplementationGenerator implements ImplementationGenerato
 		Annotation puAnnotation = new Annotation(cc.getClassFile().getConstPool(), ClassPool.getDefault().get("ajf.persistence.jpa.annotation.PersistenceUnit"));
 		StringMemberValue mv = (StringMemberValue) Annotation.createMemberValue(cc.getClassFile().getConstPool(), pool.get("java.lang.String"));
 		if (puAnn != null) {			
-			mv.setValue(puAnn.name());			
+			mv.setValue(puAnn.value());			
 		} else {			
 			mv.setValue("default");			
 		}
