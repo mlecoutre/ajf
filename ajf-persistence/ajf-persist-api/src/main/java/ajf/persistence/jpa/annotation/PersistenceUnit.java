@@ -11,6 +11,6 @@ import javax.enterprise.util.Nonbinding;
 @Retention(RetentionPolicy.RUNTIME) 
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface PersistenceUnit {
-	@Nonbinding String name() default "default";
+	@Nonbinding String value() default "default";
 }
 
