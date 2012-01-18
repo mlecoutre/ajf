@@ -1,4 +1,4 @@
-package ajf.persistence.jpa.annotation;
+package am.ajf.persistence.jpa.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -8,7 +8,8 @@ import java.lang.annotation.Target;
 
 @Documented
 @Retention(RetentionPolicy.RUNTIME) 
-@Target({ElementType.PARAMETER})
-public @interface QueryParam {
-	String value();
+@Target({ElementType.METHOD})
+public @interface StoredProcedure {	
+	String name();
+	Class<?> resultClass();
 }

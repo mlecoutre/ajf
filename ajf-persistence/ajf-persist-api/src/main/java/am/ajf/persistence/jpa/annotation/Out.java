@@ -1,4 +1,4 @@
-package ajf.persistence.jpa.annotation;
+package am.ajf.persistence.jpa.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 
 @Documented
 @Retention(RetentionPolicy.RUNTIME) 
-@Target({ElementType.METHOD})
-public @interface NamedQuery {
-	String name();
+@Target({ElementType.FIELD})
+public @interface Out {
+	String value();	
 }
