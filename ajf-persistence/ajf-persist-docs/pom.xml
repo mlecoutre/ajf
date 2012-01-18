@@ -73,6 +73,13 @@
 						</options>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>										
+					<configuration>
+						<generatedSiteDirectory>${project.build.directory}/docbook/publish</generatedSiteDirectory>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
