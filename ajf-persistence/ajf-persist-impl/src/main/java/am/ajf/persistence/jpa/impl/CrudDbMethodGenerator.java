@@ -1,18 +1,12 @@
-package ajf.persistence.jpa.impl;
+package am.ajf.persistence.jpa.impl;
 
-import java.util.List;
-
-import ajf.persistence.jpa.CrudDbService;
-import ajf.persistence.jpa.annotation.NamedQuery;
-import ajf.persistence.jpa.annotation.QueryParam;
-import javassist.ClassPool;
-import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
+import am.ajf.persistence.jpa.CrudDbService;
 
 public class CrudDbMethodGenerator implements MethodGenerator {
 
-	private static final String CLASS_CRUD_IMPL = "ajf.persistence.jpa.impl.BasicImplCrudDbService";
+	private static final String CLASS_CRUD_IMPL = "am.ajf.persistence.jpa.impl.BasicImplCrudDbService";
 	private static final String FIND_METHOD = "find"; 
 	private static final String SAVE_METHOD = "save";
 	private static final String REMOVE_METHOD = "remove";
@@ -31,15 +25,15 @@ public class CrudDbMethodGenerator implements MethodGenerator {
 		body.append("{\n");
 		
 		if (FIND_METHOD.equals(method.getName())) {			
-			body.append("  return ajf.persistence.jpa.impl.BasicImplCrudDbService.find(emf, $1, $2);\n");		
+			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.find(emf, $1, $2);\n");		
 		} else if (SAVE_METHOD.equals(method.getName())) {
-			body.append("  return ajf.persistence.jpa.impl.BasicImplCrudDbService.save(emf, $1);\n");
+			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.save(emf, $1);\n");
 		} else if (REMOVE_METHOD.equals(method.getName())) {
-			body.append("  return ajf.persistence.jpa.impl.BasicImplCrudDbService.remove(emf, $1);\n");
+			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.remove(emf, $1);\n");
 		} else if (DELETE_METHOD.equals(method.getName())) {
-			body.append("  return ajf.persistence.jpa.impl.BasicImplCrudDbService.delete(emf, $1);\n");
+			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.delete(emf, $1);\n");
 		} else if (FETCH_METHOD.equals(method.getName())) {			
-			body.append("  return ajf.persistence.jpa.impl.BasicImplCrudDbService.fetch(emf, $1);\n");
+			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.fetch(emf, $1);\n");
 		} else {
 			throw new IllegalStateException("The method "+method.getName()+" doesnt have an automatic implementation, but should.");
 		}

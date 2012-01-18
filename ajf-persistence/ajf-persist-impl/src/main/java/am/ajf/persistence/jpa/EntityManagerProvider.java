@@ -1,4 +1,4 @@
-package ajf.persistence.jpa;
+package am.ajf.persistence.jpa;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,16 +24,15 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import ajf.persistence.jpa.annotation.PersistenceUnit;
+import am.ajf.persistence.jpa.annotation.PersistenceUnit;
 
 /**
- * Factory and Producer (in CDI meaning) of JPA EntityManager and EntityManager Factory.
+ * Factory and Producer (in CDI meaning) of JPA EntityManager and EntityManagerFactory.
  * 
  * @author Nicolas Radde (E016696)
  * @author Vincent Claeysen (U002617)
  *
  */
-@Named
 @ApplicationScoped
 public class EntityManagerProvider {
 	
@@ -98,7 +97,6 @@ public class EntityManagerProvider {
 	 * @return a Thread Safe singleton like version of the selected EntityManagerFactory 
 	 */
 	@Produces
-	@Named
 	public EntityManagerFactory produceEntityManagerFactory(InjectionPoint ip) {
 		PersistenceUnit pu = ip.getMember().getDeclaringClass().getAnnotation(PersistenceUnit.class);
 		

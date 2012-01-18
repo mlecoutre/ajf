@@ -1,4 +1,4 @@
-package ajf.persistence.jpa;
+package am.ajf.persistence.jpa;
 
 //import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javassist.CannotCompileException;
-import javassist.ClassClassPath;
-import javassist.ClassPool;
 import javassist.NotFoundException;
 
 import javax.enterprise.event.Observes;
@@ -31,8 +29,8 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ajf.persistence.jpa.impl.ExtensionClassMatcher;
-import ajf.persistence.jpa.impl.JavaassistImplementationGenerator;
+import am.ajf.persistence.jpa.impl.ExtensionClassMatcher;
+import am.ajf.persistence.jpa.impl.JavaassistImplementationGenerator;
 
 public class JpaExtension implements Extension {
 

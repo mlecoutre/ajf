@@ -1,4 +1,4 @@
-package ajf.persistence.jpa.impl;
+package am.ajf.persistence.jpa.impl;
 
 import javassist.CannotCompileException;
 import javassist.CtMethod;

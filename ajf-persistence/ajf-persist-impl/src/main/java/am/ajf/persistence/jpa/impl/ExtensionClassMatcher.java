@@ -1,8 +1,8 @@
-package ajf.persistence.jpa.impl;
+package am.ajf.persistence.jpa.impl;
 
 import javax.inject.Named;
 
-import ajf.persistence.jpa.ClassMatcher;
+import am.ajf.persistence.jpa.ClassMatcher;
 
 @Named
 public class ExtensionClassMatcher implements ClassMatcher {

@@ -1,4 +1,4 @@
-package ajf.persistence.jpa;
+package am.ajf.persistence.jpa;
 
 public interface ClassMatcher {
 	

@@ -1,4 +1,4 @@
-package ajf.persistence.jpa.impl;
+package am.ajf.persistence.jpa.impl;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -25,8 +25,8 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ajf.persistence.jpa.ImplementationGenerator;
-import ajf.persistence.jpa.annotation.PersistenceUnit;
+import am.ajf.persistence.jpa.ImplementationGenerator;
+import am.ajf.persistence.jpa.annotation.PersistenceUnit;
 
 @Named
 public class JavaassistImplementationGenerator implements ImplementationGenerator {
@@ -71,7 +71,7 @@ public class JavaassistImplementationGenerator implements ImplementationGenerato
 		CtField cEmf = CtField.make("private transient javax.persistence.EntityManagerFactory emf;", cc);
 		AnnotationsAttribute attribute = new AnnotationsAttribute(cc.getClassFile().getConstPool(), AnnotationsAttribute.visibleTag);
 		Annotation injectAnnotation = new Annotation(cc.getClassFile().getConstPool(), ClassPool.getDefault().get("javax.inject.Inject"));
-		Annotation puAnnotation = new Annotation(cc.getClassFile().getConstPool(), ClassPool.getDefault().get("ajf.persistence.jpa.annotation.PersistenceUnit"));
+		Annotation puAnnotation = new Annotation(cc.getClassFile().getConstPool(), ClassPool.getDefault().get("am.ajf.persistence.jpa.annotation.PersistenceUnit"));
 		StringMemberValue mv = (StringMemberValue) Annotation.createMemberValue(cc.getClassFile().getConstPool(), pool.get("java.lang.String"));
 		if (puAnn != null) {			
 			mv.setValue(puAnn.value());			
@@ -175,7 +175,7 @@ public class JavaassistImplementationGenerator implements ImplementationGenerato
 		cc.addMethod(CtMethod.make(getInjectionPoints, cc));
 		String getName = "public String getName() {return \"" + impl.getCanonicalName() + "\";}";
 		cc.addMethod(CtMethod.make(getName, cc));	
-		String getQualifiers = "public java.util.Set getQualifiers() {java.util.Set qualifiers = new java.util.HashSet();qualifiers.add(ajf.persistence.jpa.JpaExtension.ANNOTATION_DEFAULT);qualifiers.add(ajf.persistence.jpa.JpaExtension.ANNOTATION_ANY);return qualifiers;}";
+		String getQualifiers = "public java.util.Set getQualifiers() {java.util.Set qualifiers = new java.util.HashSet();qualifiers.add(am.ajf.persistence.jpa.JpaExtension.ANNOTATION_DEFAULT);qualifiers.add(am.ajf.persistence.jpa.JpaExtension.ANNOTATION_ANY);return qualifiers;}";
 		cc.addMethod(CtMethod.make(getQualifiers, cc));
 		String getScope = "public Class getScope() {return javax.enterprise.context.RequestScoped.class;}";
 		cc.addMethod(CtMethod.make(getScope, cc));        

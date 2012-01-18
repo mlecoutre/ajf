@@ -1,9 +1,9 @@
-package ajf.persistence.jpa.impl;
+package am.ajf.persistence.jpa.impl;
 
-import ajf.persistence.jpa.annotation.NamedQuery;
-import ajf.persistence.jpa.annotation.QueryParam;
 import javassist.CtMethod;
 import javassist.NotFoundException;
+import am.ajf.persistence.jpa.annotation.NamedQuery;
+import am.ajf.persistence.jpa.annotation.QueryParam;
 
 public class NamedQueryMethodGenerator implements MethodGenerator {
 

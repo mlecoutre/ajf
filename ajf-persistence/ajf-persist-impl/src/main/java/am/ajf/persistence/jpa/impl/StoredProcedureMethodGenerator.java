@@ -1,4 +1,4 @@
-package ajf.persistence.jpa.impl;
+package am.ajf.persistence.jpa.impl;
 
 import java.lang.reflect.Method;
 
@@ -14,7 +14,7 @@ import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ajf.persistence.jpa.annotation.StoredProcedure;
+import am.ajf.persistence.jpa.annotation.StoredProcedure;
 
 public class StoredProcedureMethodGenerator implements MethodGenerator {
 	

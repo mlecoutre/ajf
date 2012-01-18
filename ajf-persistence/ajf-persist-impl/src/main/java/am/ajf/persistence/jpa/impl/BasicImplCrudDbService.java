@@ -1,12 +1,10 @@
-package ajf.persistence.jpa.impl;
+package am.ajf.persistence.jpa.impl;
 
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
-
-import ajf.persistence.jpa.EntityManagerProvider;
 
 public class BasicImplCrudDbService {
 
