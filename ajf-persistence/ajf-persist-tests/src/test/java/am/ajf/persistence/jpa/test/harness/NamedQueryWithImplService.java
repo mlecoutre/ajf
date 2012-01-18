@@ -1,11 +1,8 @@
-package ajf.persistence.jpa.test.harness;
+package am.ajf.persistence.jpa.test.harness;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Named;
-
-@Named
 public abstract class NamedQueryWithImplService implements NamedQueryWithImplServiceBD {
 
 	@Override

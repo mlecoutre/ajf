@@ -1,4 +1,4 @@
-package ajf.persistence.jpa.test;
+package am.ajf.persistence.jpa.test;
 
 import java.util.List;
 
@@ -18,10 +18,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ajf.persistence.jpa.EntityManagerProvider;
-import ajf.persistence.jpa.test.harness.Model1;
-import ajf.persistence.jpa.test.harness.ModelCrud;
-import ajf.persistence.jpa.test.harness.SimpleCrudServiceBD;
+import am.ajf.persistence.jpa.EntityManagerProvider;
+import am.ajf.persistence.jpa.test.harness.ModelCrud;
+import am.ajf.persistence.jpa.test.harness.SimpleCrudServiceBD;
 
 @RunWith(Arquillian.class)
 public class CrudDbTest {

@@ -1,4 +1,4 @@
-package ajf.persistence.jpa.test;
+package am.ajf.persistence.jpa.test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -23,11 +23,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ajf.persistence.jpa.EntityManagerProvider;
-import ajf.persistence.jpa.test.harness.Model1;
-import ajf.persistence.jpa.test.harness.ModelCrud;
-import ajf.persistence.jpa.test.harness.ModelSp;
-import ajf.persistence.jpa.test.harness.StoredProcedureNoImplServiceBD;
+import am.ajf.persistence.jpa.EntityManagerProvider;
+import am.ajf.persistence.jpa.test.harness.Model1;
+import am.ajf.persistence.jpa.test.harness.ModelSp;
+import am.ajf.persistence.jpa.test.harness.StoredProcedureNoImplServiceBD;
 
 @RunWith(Arquillian.class)
 public class StoredProcedureTest {

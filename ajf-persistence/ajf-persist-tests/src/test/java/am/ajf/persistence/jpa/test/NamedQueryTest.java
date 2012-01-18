@@ -1,4 +1,4 @@
-package ajf.persistence.jpa.test;
+package am.ajf.persistence.jpa.test;
 
 import java.util.List;
 
@@ -15,15 +15,14 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ajf.persistence.jpa.EntityManagerProvider;
-import ajf.persistence.jpa.test.harness.Model1;
-import ajf.persistence.jpa.test.harness.NamedQueryNoImplServiceBD;
-import ajf.persistence.jpa.test.harness.NamedQueryWithImplService;
-import ajf.persistence.jpa.test.harness.NamedQueryWithImplServiceBD;
+import am.ajf.persistence.jpa.EntityManagerProvider;
+import am.ajf.persistence.jpa.test.harness.Model1;
+import am.ajf.persistence.jpa.test.harness.NamedQueryNoImplServiceBD;
+import am.ajf.persistence.jpa.test.harness.NamedQueryWithImplService;
+import am.ajf.persistence.jpa.test.harness.NamedQueryWithImplServiceBD;
 
 @RunWith(Arquillian.class)
 public class NamedQueryTest {

@@ -1,9 +1,9 @@
-package ajf.persistence.jpa.test.harness;
+package am.ajf.persistence.jpa.test.harness;
 
 import java.util.List;
 
-import ajf.persistence.jpa.annotation.NamedQuery;
-import ajf.persistence.jpa.annotation.QueryParam;
+import am.ajf.persistence.jpa.annotation.NamedQuery;
+import am.ajf.persistence.jpa.annotation.QueryParam;
 
 public interface NamedQueryWithImplServiceBD {
 

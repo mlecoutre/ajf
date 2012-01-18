@@ -1,4 +1,4 @@
-package ajf.persistence.jpa.test.harness;
+package am.ajf.persistence.jpa.test.harness;
 
 import javax.inject.Inject;
 

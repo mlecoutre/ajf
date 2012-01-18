@@ -1,6 +1,4 @@
-package ajf.persistence.jpa.test;
-
-import static org.junit.Assert.*;
+package am.ajf.persistence.jpa.test;
 
 import java.util.Set;
 
@@ -9,8 +7,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import ajf.persistence.jpa.EntityManagerProvider;
-import ajf.persistence.jpa.EntityManagerProvider.TransactionType;
+import am.ajf.persistence.jpa.EntityManagerProvider;
+import am.ajf.persistence.jpa.EntityManagerProvider.TransactionType;
 
 public class EntityManagerProviderTest {
 
