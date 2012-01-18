@@ -1,0 +1,46 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-parent</artifactId>
+		<version>2.0.2-SNAPSHOT</version>
+		<relativePath>../../ajf-parent</relativePath>
+	</parent>
+	<artifactId>ajf-transaction-dist</artifactId>
+	<packaging>pom</packaging>
+
+	<scm>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-transaction/ajf-transaction-dist</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-transaction/ajf-transaction-dist</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf-transaction/ajf-transaction-dist/]]></url>
+	</scm>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-transaction-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-transaction-impl</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-transaction-tests</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<modules>
+		<module>../ajf-transaction-api</module>
+		<module>../ajf-transaction-impl</module>
+		<!--  module>../ajf-transaction-docs</module -->
+		<module>../ajf-transaction-tests</module>
+	</modules>
+
+</project>

@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.35//EN"
+        "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<book lang="en">
+
+    <toc/>
+
+    <title>AJF Persistence</title>
+    <xi:include href="ajf-transaction.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+</book>
