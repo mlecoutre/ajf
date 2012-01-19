@@ -9,7 +9,6 @@
 	</parent>
 
 	<artifactId>ajf-monitoring</artifactId>
-	<packaging>jar</packaging>
 
 	<scm>
 		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-monitoring</connection>
@@ -27,10 +26,10 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!-- AJF commons dependency -->
+		<!-- AJF dependency -->
 		<dependency>
 			<groupId>am.ajf</groupId>
-			<artifactId>ajf-commons</artifactId>
+			<artifactId>ajf-core</artifactId>
 			<version>2.0.2-SNAPSHOT</version>
 		</dependency>
 		
@@ -47,6 +46,7 @@
 			<version>5.5.1</version>
 			<scope>test</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>javaee</groupId>
 			<artifactId>javaee-api</artifactId>
