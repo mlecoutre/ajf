@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-parent</artifactId>
+		<version>2.0.2-SNAPSHOT</version>
+		<relativePath>../ajf-parent/pom.xml</relativePath>
+	</parent>
+
+	<artifactId>ajf-security</artifactId>
+
+	<scm>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-security</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-security</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-security/]]></url>
+	</scm>
+
+	<properties>
+		<shiro.version>1.1.0</shiro.version>
+	</properties>
+
+	<dependencies>
+
+		<!-- AJF testing dependency -->
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-testing</artifactId>
+			<version>2.0.2-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- AJF core dependency -->
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-core</artifactId>
+			<version>2.0.2-SNAPSHOT</version>
+		</dependency>
+
+		<!-- Apache shiro dependency -->
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-core</artifactId>
+			<version>${shiro.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-web</artifactId>
+			<version>${shiro.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-aspectj</artifactId>
+			<version>${shiro.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+
+
+</project>

@@ -1,0 +1,62 @@
+package am.ajf.security;
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.Factory;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class LocalSubjectTest extends AbstractShiroTest {
+	
+	private final Logger logger = LoggerFactory.getLogger(LocalSubjectTest.class);
+	
+	public LocalSubjectTest() {
+		super();
+	}
+	
+	@Before
+	public void setUp() {
+		
+		Factory<org.apache.shiro.mgt.SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro-test.ini");
+		org.apache.shiro.mgt.SecurityManager securityManager = factory.getInstance();
+        
+		setSecurityManager(securityManager);
+    		
+	}
+	
+	@Test
+	public void testLogin() throws Exception{
+		
+		//Create a new subject
+		Subject subjectUnderTest = buildNewSubject();
+		//Bind the subject to the current thread:
+        setSubject(subjectUnderTest);
+		
+		Subject currentSubject = SecurityUtils.getSubject();
+		
+		//Has to authenticate the subject
+        if (!currentSubject.isAuthenticated()) {
+			UsernamePasswordToken authToken = new UsernamePasswordToken("u002617", "myPassword");
+			authToken.setRememberMe(true);
+			currentSubject.login(authToken);
+		}
+        
+        logger.info("User: {}", currentSubject.getPrincipal().toString());
+        
+		//Logout the subject
+		currentSubject.logout();
+		
+	}
+	
+	
+	@After
+    public void tearDown() {
+        clearSubject();
+    }
+
+}
