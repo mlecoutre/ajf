@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+
+  	<!-- Begin : resolve properties -->
+	<!-- 
+	<define name="log.dir" class="etnajedi.core.settings.SettingsPropertyDefiner">
+    	<propertyKey>application.logDir</propertyKey>
+  	</define>
+  	-->
+  	<!-- 
+  	<include file="ajf-logback.xml"/>
+  	<include url="http://some.host.com/includedConfig.xml"/>
+  	<include resource="logback-ajf-test.xml"/>
+  	-->
+  	
+  	<!-- Begin : resolve properties -->
+	
+		<!-- empty : properties resolved from System-->
+	
+		<!-- a constant -->
+		<!-- 
+		<property name="USER_HOME" value="/home/sebastien" />
+		-->	
+		<!-- from classPath -->
+		<!-- 
+	 	<property resource="settings.properties" />
+	 	-->
+	 	<!-- from file system -->
+	 	<!-- 
+	 	<property file="variables2.properties" />
+	 	-->
+ 	
+	 	<!-- dynamically -->
+	 	<!-- 
+	 	<define name="log.dir" class="etnajedi.core.settings.SettingsPropertyDefiner">
+	    	<propertyKey>application.logDir</propertyKey>
+	  	</define>
+	  	-->
+	  
+	<!-- End : resolve properties -->
+  	
+  	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<target>System.out</target>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %X{uuid} %X{userid} %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+		<target>System.err</target>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %X{uuid} %X{userid} %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+  	
+</included>
