@@ -8,10 +8,7 @@
 		<relativePath>../ajf-parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>am.ajf</groupId>
 	<artifactId>ajf-testing</artifactId>
-	<version>2.0.2-SNAPSHOT</version>
-	<packaging>jar</packaging>
 
 	<scm>
 		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-testing</connection>
@@ -24,7 +21,7 @@
 		<!-- AJF 2 -->
 		<dependency>
 			<groupId>am.ajf</groupId>
-			<artifactId>ajf-commons</artifactId>
+			<artifactId>ajf-core</artifactId>
 			<version>2.0.2-SNAPSHOT</version>
 		</dependency>
 
