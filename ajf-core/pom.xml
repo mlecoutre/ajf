@@ -8,56 +8,80 @@
 		<relativePath>../ajf-parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>am.ajf</groupId>
 	<artifactId>ajf-core</artifactId>
-	<packaging>jar</packaging>
-	<version>2.0.2-SNAPSHOT</version>
 
 	<scm>
 		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-core</connection>
 		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-core</developerConnection>
 		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-core/]]></url>
 	</scm>
+	
+	<properties> 
+		<slf4j.version>1.6.4</slf4j.version>
+	</properties>
 
 	<dependencies>
 
-		<!-- AJF testing dependency -->
+		<!-- testing dependencies -->
 		<dependency>
-			<groupId>am.ajf</groupId>
-			<artifactId>ajf-testing</artifactId>
-			<version>2.0.2-SNAPSHOT</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
 
-		<!-- AJF commons dependency -->
+		<!-- AJF commons dependencies -->
+		
+		<!-- Begin : Logging dependencies -->
+
+		<!-- the logger abstraction -->
 		<dependency>
-			<groupId>am.ajf</groupId>
-			<artifactId>ajf-commons</artifactId>
-			<version>2.0.2-SNAPSHOT</version>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 
+		<!-- loggers adapters -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>provided</scope>
+		</dependency>
+				
+		<!-- effective logger impl -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+
+		<!-- End : Logging dependencies -->
+		
 		<!-- Bean Validation : JSR 303 -->
+		<!-- 
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 			<version>1.0.0.GA</version>
 		</dependency>
-
-		<!-- Dependency Injection : JSR 330 -->
-		<dependency>
-		    <groupId>javax.inject</groupId>
-		    <artifactId>javax.inject</artifactId>
-		    <version>1</version>
-		</dependency>	
-		
-		<!-- cache API : JSR 107 -->
-		<dependency>
-    		<groupId>javax.cache</groupId>
-    		<artifactId>cache-api</artifactId>
-    		<version>0.3</version>
-		</dependency>
+		-->
 		
 		<!-- apache utils -->
+		<!-- 
 		<dependency>
 			<artifactId>commons-beanutils</artifactId>
 			<groupId>commons-beanutils</groupId>
@@ -75,6 +99,7 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.6</version>
 		</dependency>
+		-->
 		
 		<dependency>
 			<groupId>commons-configuration</groupId>
@@ -88,11 +113,13 @@
 			</exclusions>
 		</dependency>
 		
+		<!-- 
 		<dependency>
 		  <groupId>xerces</groupId>
 		  <artifactId>xercesImpl</artifactId>
 		  <version>2.7.1</version>
 		</dependency>
+		-->
 
 		<!-- JPA : JSR 317 -->
 		
@@ -105,12 +132,14 @@
 		</dependency>
 		-->
 		
+		<!-- 
 		<dependency>
     		<groupId>javax.persistence</groupId>
     		<artifactId>persistence-api</artifactId>
     		<version>1.0.2</version>
     		<scope>provided</scope>
 		</dependency>
+		-->
 		
 		<!-- Hibernate Provider -->
 		<!-- <dependency> <groupId>org.hibernate</groupId> <artifactId>hibernate-entitymanager</artifactId> 
@@ -120,16 +149,32 @@
 			<version>2.1.1</version> </dependency> -->
 
 		<!-- Caching -->
+		
+		<!-- cache API : JSR 107 -->
+		<dependency>
+    		<groupId>javax.cache</groupId>
+    		<artifactId>cache-api</artifactId>
+    		<version>0.4</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.infinispan</groupId>
 			<artifactId>infinispan-core</artifactId>
 			<version>4.2.1.FINAL</version>
+			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
 				 	<groupId>log4j</groupId>
   					<artifactId>log4j</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-core</artifactId>
+			<version>2.5.0</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Mail -->
@@ -139,15 +184,17 @@
 			<version>1.4.4</version>
 			<scope>provided</scope>
 		</dependency>
-
+		
 		<!-- Activation -->
+		<!-- 
 		<dependency>
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
 			<version>1.1.1</version>
 			<scope>provided</scope>
 		</dependency>
-	
+		-->
+		
 		<!-- 
 		<dependency>
 			<groupId>commons-el</groupId>
@@ -162,9 +209,44 @@
 		</dependency>
 		 -->
 		 
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>11.0.1</version>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
+	
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>versions-maven-plugin</artifactId>
+					<version>1.2</version>
+				</plugin>	
+			</plugins>
+		</pluginManagement>
+	
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<executions>
+					<execution>
+            			<id>checkDependenciesVersions</id>
+            			<phase>verify</phase>
+            			<goals>
+              				<goal>display-dependency-updates</goal>
+            			</goals>
+            			<inherited>false</inherited>
+            			<configuration>
+            			</configuration>
+          			</execution>
+				</executions>
+			</plugin>	
+		</plugins>
 
 		<resources>
 			<resource>
