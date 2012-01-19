@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<include resource="logger/includes/logback-ajf-test.xml"/>
+	
+	<root level="WARN">
+		<appender-ref ref="STDOUT" />
+	</root>
+	
+	<logger name="audit" level="INFO" additivity="false">
+		<appender-ref ref="AUDIT_FILE" />
+	</logger>
+	
+	<logger name="am.ajf" level="INFO" additivity="false">
+		<appender-ref ref="AJF_FILE" />
+	</logger>	
+		
+	<!-- 
+	<logger name="youAppBasePackageName" level="DEBUG" additivity="false">
+		<appender-ref ref="APP_FILE" />
+	</logger>
+	-->
+		
+</configuration>
