@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<artifactId>ajf-injection-dist</artifactId>
+		<groupId>am.ajf</groupId>
+		<version>2.0.2-SNAPSHOT</version>
+		<relativePath>../ajf-inject-dist</relativePath>
+	</parent>
+
+	<artifactId>ajf-injection-api</artifactId>
+
+	<scm>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-injection/ajf-injection-api</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-injection/ajf-injection-api</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf-injection/ajf-injection-api/]]></url>
+	</scm>
+	
+	<dependencies>
+
+		<!-- Begin : Dependency injection dependencies -->
+		
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-jcdi_1.0_spec</artifactId>
+			<version>1.0</version>		
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-atinject_1.0_spec</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.geronimo.specs</groupId>
+		    <artifactId>geronimo-interceptor_1.1_spec</artifactId>
+		    <version>1.0</version>
+		</dependency>
+		
+		<!-- End : Dependency injection dependencies -->
+		
+	</dependencies>
+
+	<build>
+
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.java</include>
+				</includes>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
+
+	</build>
+
+</project>
