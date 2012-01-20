@@ -1,2 +1,3 @@
 am.ajf.core.cache.impl.InfinispanEmbeddedCacheManagerImpl
 am.ajf.core.cache.impl.EHCacheCacheManagerImpl
+am.ajf.core.cache.impl.GuavaCacheManagerImpl

@@ -7,5 +7,5 @@ public interface CacheManagerAdapter extends CacheManager {
 	 * @return
 	 */	
 	Object getDelegate();
-	
+		
 }

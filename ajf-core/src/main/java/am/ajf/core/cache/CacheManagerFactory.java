@@ -37,19 +37,22 @@ public class CacheManagerFactory {
 				.hasNext();) {
 			try {
 				CacheManager cacheManager = iterator.next();
-				
-				logger.info("Find CacheManager impl {} registered as {}", cacheManager.getClass()
-						.getName(), cacheManager.getProviderName());
+
+				logger.info("Find CacheManager impl {} registered as {}",
+						cacheManager.getClass().getName(),
+						cacheManager.getProviderName());
 				BeanUtils.initialize(cacheManager);
 				cacheManager.start();
-				
+
 				// register the CacheManager impl
 				cacheManagersMap.put(cacheManager.getProviderName(),
 						cacheManager);
 				// is it the first CacheManager impl ?
 				if (null == firstCacheManager) {
 					firstCacheManager = cacheManager;
-					logger.info("Set CacheManager '{}' as default CacheManager", cacheManager.getProviderName());
+					logger.info(
+							"Set CacheManager '{}' as default CacheManager",
+							cacheManager.getProviderName());
 				}
 			}
 			catch (Throwable e) {
@@ -70,17 +73,17 @@ public class CacheManagerFactory {
 	 */
 	public static CacheManager getFirstCacheManager()
 			throws NullPointerException {
-		
+
 		if (null == firstCacheManager)
 			throw new NullPointerException(
 					"There is no registerd CacheManager impl.");
-		
+
 		return firstCacheManager;
 	}
 
 	/**
 	 * return a specific CacheManager
-	 *  
+	 * 
 	 * @param cacheManagerSimpleClassName
 	 * @return
 	 * @throws NullPointerException
@@ -96,14 +99,14 @@ public class CacheManagerFactory {
 				.get(cacheManagerProviderName);
 		return cacheManager;
 	}
-	
+
 	/**
 	 * return the CacheManager names
 	 * 
 	 * @return
 	 */
 	public static Collection<String> getCacheManagerNames() {
-		return cacheManagersMap.keySet();			 
+		return cacheManagersMap.keySet();
 	}
 
 }

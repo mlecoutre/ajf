@@ -10,6 +10,7 @@ public class InfinispanEmbeddedCacheManagerImpl extends AbstractCacheManager
 		implements CacheManagerAdapter {
 
 	private static final String INFINISPAN = "infinispan";
+	
 	EmbeddedCacheManager cacheManagerDelegate = null;
 
 	public InfinispanEmbeddedCacheManagerImpl() {
