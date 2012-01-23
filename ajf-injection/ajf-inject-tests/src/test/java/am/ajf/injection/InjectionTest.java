@@ -4,7 +4,7 @@ import static org.junit.Assert.assertNotNull;
 
 import javax.inject.Inject;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 
 import am.ajf.core.ApplicationContext;
 import am.ajf.core.datas.AuditData;
-import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.utils.BeanUtils;
 import am.ajf.injection.events.BasicEventImpl;
 import foo.core.services.MyService;
@@ -27,49 +26,54 @@ public class InjectionTest {
 	private AuditData auditData;
 	
 	@Inject 
-	private javax.enterprise.event.Event<BasicEventImpl> event; 
-			
+	private javax.enterprise.event.Event<BasicEventImpl> event;
+	
 	@BeforeClass
-	public static void setUpClass() {
-		
-		LoggerFactory.getDelegate();
-		
+	public static void setUpClass() throws Exception {
+		/* turn OFF throwing exception when a configuration key is missing */
+		ApplicationContext.getConfiguration().setThrowExceptionOnMissing(false);
+	}
+	
+	@AfterClass
+	public static void tearDownClass() throws Exception {
+		BeanUtils.terminate();
+	}
+	
+	public InjectionTest() {
+		super();
 	}
 	
 	@Before
-	public void setUp() throws Exception {
-						
-		/* turn OFF throwing exception when a configuration key is missing */
-		ApplicationContext.getConfiguration().setThrowExceptionOnMissing(false);
-		
-	}
-	
-	@After
-	public void tearDown() throws Exception {
-		
-		BeanUtils.terminate();
-		
+	public void setUp() {
+		BeanUtils.initialize(this);
 	}
 			
 	@Test
-	public void testSelfInjection() {
-		
-		BeanUtils.initialize(this);
+	public void testLoggerInjection() {
 		
 		assertNotNull(logger);
 		
-		logger.info("Injected.");
+		logger.info("Logger injected.");
 		
+	}
+	
+	@Test
+	public void testAuditDataInjection() {
+		
+		assertNotNull(auditData);
+		
+		logger.info("AuditData injected.");
+				
 	}
 	
 	@Test
 	public void testFireEvent() {
 	
-		BeanUtils.initialize(this);
-		
 		assertNotNull(event);	
 		
 		event.fire(new BasicEventImpl("myEvent"));
+		
+		logger.info("AuditData injected.");
 		
 	}
 	
@@ -77,6 +81,8 @@ public class InjectionTest {
 	public void testServiceInjection() {
 		
 		MyServiceBD svc = BeanUtils.newInstance(MyServiceBD.class);
+		
+		assertNotNull(svc);
 		
 		String res = svc.myFirstOperation("vincent");
 		
@@ -89,10 +95,12 @@ public class InjectionTest {
 		
 		MyServiceBD svc = BeanUtils.newInstance(MyService.class);
 		
+		assertNotNull(svc);
+		
 		String res = svc.myFirstOperation("vincent");
 		
 		assertNotNull(res);
-		
+				
 	}
 	
 }
