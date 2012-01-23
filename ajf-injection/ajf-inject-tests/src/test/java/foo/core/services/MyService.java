@@ -2,14 +2,15 @@ package foo.core.services;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import am.ajf.injection.Monitored;
 import am.ajf.injection.Property;
 import foo.lib.services.MyServiceBD;
 
-@Singleton
+
+@ApplicationScoped
 public class MyService
 	extends AbstractService
 	implements MyServiceBD {
