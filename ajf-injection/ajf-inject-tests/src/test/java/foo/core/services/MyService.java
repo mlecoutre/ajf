@@ -32,8 +32,8 @@ public class MyService
 	@PostConstruct
 	public void init() {
 		logger.debug("Initalized");
-		logger.info(myKeyValue);
-		logger.info(mySecondKeyValue);
+		logger.info("myKeyValue = {}", myKeyValue);
+		logger.info("mySecondKeyValue = {}",mySecondKeyValue);
 	}
 	
 	@PreDestroy
@@ -46,7 +46,6 @@ public class MyService
 	}
 
 	public void setMyKeyValue(String myKeyValue) {
-		System.out.println("setted myKeyValue");
 		this.myKeyValue = myKeyValue;
 	}
 
@@ -55,7 +54,6 @@ public class MyService
 	}
 
 	public void setMySecondKeyValue(String mySecondKeyValue) {
-		System.out.println("setted mySecondKeyValue");
 		this.mySecondKeyValue = mySecondKeyValue;
 	}
 
