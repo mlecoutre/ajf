@@ -4,11 +4,10 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
 import org.slf4j.Logger;
-
-import am.ajf.core.logger.LoggerFactory;
+import org.slf4j.LoggerFactory;
 
 public class LoggerProducer {
-
+	
 	public LoggerProducer() {
 		super();
 	}

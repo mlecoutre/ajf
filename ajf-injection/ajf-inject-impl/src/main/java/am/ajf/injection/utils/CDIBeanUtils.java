@@ -96,6 +96,7 @@ public class CDIBeanUtils
 			
 			/* only inject dependencies */
 			it.inject(beanInstance, cCtx);
+			it.postConstruct(beanInstance);
 			
 		}
 		catch (RuntimeException e) {

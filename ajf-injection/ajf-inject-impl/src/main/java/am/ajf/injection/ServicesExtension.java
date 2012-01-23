@@ -24,6 +24,8 @@ public class ServicesExtension implements Extension {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	private List<Class<?>> servicesList = null;
+	
+	@SuppressWarnings("unused")
 	private Map<Class<?>, List<Class<?>>> interfaceImplementationsMatch = null;
 	
 	public ServicesExtension() {

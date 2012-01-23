@@ -5,8 +5,7 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
 import org.slf4j.Logger;
-
-import am.ajf.core.logger.LoggerFactory;
+import org.slf4j.LoggerFactory;
 
 @Monitored
 @Interceptor
@@ -19,9 +18,10 @@ public class MonitoringInterceptor {
 	}
 	
 	@AroundInvoke
-	public Object invoke(InvocationContext ic) throws Exception {
+	public Object manageTransaction(InvocationContext ctx) throws Throwable {
 		logger.debug("In interceptor.");
-		Object res = ic.proceed();
+		System.err.println("Intercepted");
+		Object res = ctx.proceed();
 		return res;
 	}
 	

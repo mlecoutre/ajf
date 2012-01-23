@@ -7,7 +7,7 @@ import am.ajf.core.datas.AuditData;
 import am.ajf.core.datas.AuditDataContext;
 
 public class AuditDataProducer {
-
+	
 	public AuditDataProducer() {
 		super();
 	}
@@ -18,12 +18,5 @@ public class AuditDataProducer {
 		return auditData;
 	}
 	
-	/*
-	@Produces
-	public EditableAuditData produceEditableAuditData(InjectionPoint ip) {
-		EditableAuditData auditData = (EditableAuditData) AuditDataContext.getAuditData();
-		return auditData;
-	}
-	*/
 
 }
