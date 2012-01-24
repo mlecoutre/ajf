@@ -19,15 +19,14 @@ public class EHCacheCacheManagerImpl extends AbstractCacheManager implements
 
 	@Override
 	public void start() {
-
 		cacheManagerDelegate = net.sf.ehcache.CacheManager.create();
 		defaultCache = createDefaultCache();
-
 	}
 
 	@Override
 	public void stop() {
 		cacheManagerDelegate.shutdown();
+		cleanAll();		
 	}
 
 	@Override

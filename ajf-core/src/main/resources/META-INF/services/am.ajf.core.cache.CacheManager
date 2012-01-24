@@ -1,3 +1,5 @@
+am.ajf.core.cache.impl.GuavaCacheManagerImpl
+am.ajf.core.cache.impl.SimpleCacheManagerImpl
 am.ajf.core.cache.impl.InfinispanEmbeddedCacheManagerImpl
 am.ajf.core.cache.impl.EHCacheCacheManagerImpl
-am.ajf.core.cache.impl.GuavaCacheManagerImpl
+am.ajf.core.cache.impl.ThreadLocalCacheManagerImpl

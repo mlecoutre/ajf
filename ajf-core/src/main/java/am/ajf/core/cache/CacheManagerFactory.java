@@ -8,6 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 
+import com.google.common.base.Throwables;
+
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.utils.BeanUtils;
 
@@ -38,11 +40,12 @@ public class CacheManagerFactory {
 			try {
 				CacheManager cacheManager = iterator.next();
 
+				BeanUtils.initialize(cacheManager);
+				cacheManager.start();
+				
 				logger.info("Find CacheManager impl {} registered as {}",
 						cacheManager.getClass().getName(),
 						cacheManager.getProviderName());
-				BeanUtils.initialize(cacheManager);
-				cacheManager.start();
 
 				// register the CacheManager impl
 				cacheManagersMap.put(cacheManager.getProviderName(),
@@ -56,7 +59,8 @@ public class CacheManagerFactory {
 				}
 			}
 			catch (Throwable e) {
-				logger.info(e.getMessage(), e);
+				Throwable t = Throwables.getRootCause(e);
+				logger.warn("Unable to load ".concat(t.getMessage()));
 			}
 		}
 	}

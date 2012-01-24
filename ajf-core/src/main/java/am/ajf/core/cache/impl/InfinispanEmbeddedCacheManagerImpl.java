@@ -34,6 +34,7 @@ public class InfinispanEmbeddedCacheManagerImpl extends AbstractCacheManager
 	@Override
 	public void stop() {
 		cacheManagerDelegate.stop();
+		cleanAll();		
 	}
 
 	@Override

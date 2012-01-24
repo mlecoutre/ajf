@@ -45,6 +45,17 @@ public abstract class AbstractCacheManager implements CacheManager {
 		return cachesMap.get(cacheName);
 	}
 	
+	/**
+	 * clean all caches
+	 */
+	public void cleanAll() {
+		if (null != defaultCache)
+			defaultCache.clear();
+		for (Cache cache : cachesMap.values()) {
+			cache.clear();
+		}
+	}
+
 	abstract protected Cache createCache(String cacheName, long ttlInMs);
 
 }

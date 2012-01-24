@@ -27,9 +27,9 @@ public class GuavaCacheManagerImpl extends AbstractCacheManager implements
 
 	@Override
 	public void stop() {
-		// Nothing to do
+		cleanAll();		
 	}
-
+	
 	@Override
 	public String getProviderName() {
 		return GUAVA;

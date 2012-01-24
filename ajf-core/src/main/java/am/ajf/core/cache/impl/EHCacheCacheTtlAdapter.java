@@ -17,5 +17,9 @@ public class EHCacheCacheTtlAdapter extends EHCacheCacheAdapter {
 		element.setTimeToLive(ttlInSec);
 		return element;
 	}
+
+	public int getTtlInSec() {
+		return ttlInSec;
+	}
 	
 }
