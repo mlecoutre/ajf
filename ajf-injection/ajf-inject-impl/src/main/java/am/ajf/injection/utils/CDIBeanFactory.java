@@ -12,11 +12,13 @@ import org.apache.webbeans.config.WebBeansContext;
 import org.apache.webbeans.spi.ContainerLifecycle;
 import org.slf4j.Logger;
 
-import am.ajf.core.logger.LoggerFactory;
-import am.ajf.core.utils.BeanUtilsDelegate;
+import com.google.common.base.Throwables;
 
-public class CDIBeanUtils 
-	implements BeanUtilsDelegate {
+import am.ajf.core.logger.LoggerFactory;
+import am.ajf.core.utils.BeanFactory;
+
+public class CDIBeanFactory 
+	implements BeanFactory {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
@@ -26,11 +28,27 @@ public class CDIBeanUtils
 	/**
 	 * Default constructor 
 	 */
-	public CDIBeanUtils() {
+	public CDIBeanFactory() {
 		super();
 		init();
 	}
 	
+	public static ContainerLifecycle getContainer() {
+		return container;
+	}
+
+	public static void setContainer(ContainerLifecycle container) {
+		CDIBeanFactory.container = container;
+	}
+
+	public static BeanManager getBeanManager() {
+		return beanManager;
+	}
+
+	public static void setBeanManager(BeanManager beanManager) {
+		CDIBeanFactory.beanManager = beanManager;
+	}
+
 	/*
 	 * 
 	 */
@@ -40,7 +58,6 @@ public class CDIBeanUtils
 			return;
 		
 		WebBeansContext beansContext = WebBeansContext.currentInstance();
-		
 		container = beansContext.getService(ContainerLifecycle.class);
 		container.startApplication(null);
 		
@@ -57,13 +74,11 @@ public class CDIBeanUtils
 			
 			T result = null;
 			
-			/*
+			
 			if (beanClass.isInterface()) {
-			*/
 				Set<Bean<?>> beans = beanManager.getBeans(beanClass);
 				Bean<?> bean = beans.iterator().next();
 				result = (T) beanManager.getReference(bean, beanClass, cCtx);
-			/*
 			}
 			else {
 				AnnotatedType<T> type = beanManager.createAnnotatedType(beanClass);
@@ -72,7 +87,6 @@ public class CDIBeanUtils
 				it.inject(result, cCtx);
 				it.postConstruct(result);
 			}		
-			*/			
 			return result;
 			
 		}
@@ -103,7 +117,8 @@ public class CDIBeanUtils
 			throw e;
 		}
 		catch (Exception e) {
-			logger.error("Exception while trying to initialize bean: ".concat(beanInstance.getClass().getName()), e);
+			Throwable cause = Throwables.getRootCause(e);
+			logger.error("Exception occured while trying to initialize bean: ".concat(cause.getMessage()), cause);
 			throw new RuntimeException(e);
 		}		
 	}
@@ -113,7 +128,8 @@ public class CDIBeanUtils
 		
 		if (null != beanManager) {
 			beanManager = null;			
-			container.stopApplication(null);
+			if (null != container)
+				container.stopApplication(null);
 			container = null;			
 		}
 		
