@@ -7,7 +7,7 @@
 		<appender-ref ref="STDOUT" />
 	</root>
 	
-	<logger name="audit" level="INFO" additivity="false">
+	<logger name="audit" level="TRACE" additivity="false">
 		<appender-ref ref="AUDIT_FILE" />
 	</logger>
 	
