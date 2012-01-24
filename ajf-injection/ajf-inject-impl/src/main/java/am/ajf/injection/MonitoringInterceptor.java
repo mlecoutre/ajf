@@ -5,7 +5,9 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import am.ajf.core.logger.LoggerFactory;
+import am.ajf.core.utils.ClassUtils;
 
 @Monitored
 @Interceptor
@@ -18,11 +20,24 @@ public class MonitoringInterceptor {
 	}
 	
 	@AroundInvoke
-	public Object manageTransaction(InvocationContext ctx) throws Throwable {
-		logger.debug("In interceptor.");
-		System.err.println("Intercepted");
-		Object res = ctx.proceed();
-		return res;
+	public Object monitor(InvocationContext ctx) throws Throwable {
+		
+		Class<? extends Object> targetClass = ctx.getTarget().getClass();
+		String serviceName = ClassUtils.processServiceInterfaceName(targetClass);
+		String operation = ctx.getMethod().getName();
+		
+		logger.info(">> ".concat(serviceName).concat("#").concat(operation).concat("(...)"));
+		long start = System.currentTimeMillis();
+		
+		try {
+			Object res = ctx.proceed();
+			return res;
+		}
+		finally {
+			long end = System.currentTimeMillis();
+			long ellapsed = end - start;
+			logger.info("<< ".concat(serviceName).concat("#").concat(operation).concat("(...) in {} ms."), ellapsed);			
+		}
 	}
 	
 }

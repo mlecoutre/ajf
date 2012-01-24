@@ -15,15 +15,16 @@ import javax.enterprise.inject.spi.ProcessBean;
 import javax.enterprise.inject.spi.ProcessInjectionTarget;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.utils.ClassUtils;
+import am.ajf.injection.utils.CDIBeanFactory;
 
 public class ServicesExtension implements Extension {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	// private final Logger logger = LoggerFactory.getLogger(ServicesExtension.class);
 	
-	private List<Class<?>> servicesList = null;
+	// private List<Class<?>> servicesList = null;
 	
 	@SuppressWarnings("unused")
 	private Map<Class<?>, List<Class<?>>> interfaceImplementationsMatch = null;
@@ -33,16 +34,20 @@ public class ServicesExtension implements Extension {
 	}
 
 	public void beforeBeanDiscovery(@Observes BeforeBeanDiscovery bbd, BeanManager beanManager) {
+		CDIBeanFactory.setBeanManager(beanManager);
+		/*
 		logger.info("beforeBeanDiscovery, beginning the scanning process for extension 'ServicesExtension'.");
 		servicesList = new ArrayList<Class<?>>();
 		interfaceImplementationsMatch = new HashMap<Class<?>, List<Class<?>>>();
+		*/
 	}
 	
 	public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager beanManager) {
-		logger.info("afterBeanDiscovery, finished the scanning process for extension 'ServicesExtension'");
+		// logger.info("afterBeanDiscovery, finished the scanning process for extension 'ServicesExtension'");
 	}
 	
 	public <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> pat, BeanManager beanManager) {
+		/*
 		logger.debug("\tprocessAnnotatedType: "
 				+ pat.getAnnotatedType().getJavaClass().getName());
 		
@@ -52,17 +57,21 @@ public class ServicesExtension implements Extension {
 			logger.info("\tfind service interface: "
 					+ pat.getAnnotatedType().getJavaClass().getName());
 		}
-		
+		*/
 	}
 	
 	public <T> void processInjectionTarget(@Observes ProcessInjectionTarget<T> pit) {
+		/*
 		logger.debug("\tprocessInjectionTarge target: "
 				+ pit.getAnnotatedType().getJavaClass().getName());
+		*/
 	}
 	
 	public <T> void processProcessBean(@Observes ProcessBean<T> pb) {
+		/*
 		logger.debug("\tprocessProcessBean : "
 				+ pb.getBean().getBeanClass().getName());
+		*/
 	}
 	
 }
