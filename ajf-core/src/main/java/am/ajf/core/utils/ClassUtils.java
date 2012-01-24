@@ -9,17 +9,19 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class ClassUtils {
-		
+
+	private static final String BD = "BD";
 	private static final String DAO = "DAO";
 	private static final String CORE_DAO = ".core.dao.";
 	private static final String LIB_MODEL = ".lib.model.";
-	
-	private static final String LIB_SERVICES = ".lib.services."; 
+
+	private static final String LIB_SERVICES = ".lib.services.";
 	private static final String CORE_SERVICES = ".core.services.";
-	
+
 	private static final String POLICY = "Policy";
-	private static final String LIB_BUSINESS = ".lib.business.";	
+	private static final String LIB_BUSINESS = ".lib.business.";
 	private static final String CORE_BUSINESS = ".core.business.";
+
 	/**
 	 * Utility method used to fetch Class list based on a package name.
 	 * 
@@ -41,7 +43,8 @@ public abstract class ClassUtils {
 				throw new ClassNotFoundException("No resource for " + path);
 			}
 			directory = new File(resource.getFile());
-		} catch (NullPointerException x) {
+		}
+		catch (NullPointerException x) {
 			throw new ClassNotFoundException(packageName + " (" + directory
 					+ ") does not appear to be a valid package");
 		}
@@ -55,103 +58,135 @@ public abstract class ClassUtils {
 							+ fileName.substring(0, fileName.length() - 6)));
 				}
 			}
-		} else {
+		}
+		else {
 			throw new ClassNotFoundException(packageName
 					+ " is not a valid package");
 		}
 
 		return classes;
 	}
-	
+
 	/*
-	 * DAO in [project].core.dao.[Entity]DAO
-	 * Entity in [project].lib.model.[Entity]
+	 * DAO in [project].core.dao.[Entity]DAO Entity in
+	 * [project].lib.model.[Entity]
 	 */
 	public static String processEntityClassName(Class<?> daoClass) {
-		
-		String entityClassName = daoClass.getName().replace(CORE_DAO, LIB_MODEL);
+
+		String entityClassName = daoClass.getName()
+				.replace(CORE_DAO, LIB_MODEL);
 		// remove ~DAO
-		entityClassName = entityClassName.substring(0, entityClassName.length()-3);
+		entityClassName = entityClassName.substring(0,
+				entityClassName.length() - 3);
 		return entityClassName;
 	}
-	
+
 	/*
-	 * Entity in [project].lib.model.[Entity]
-	 * DAO in [project].core.dao.[Entity]DAO
+	 * Entity in [project].lib.model.[Entity] DAO in
+	 * [project].core.dao.[Entity]DAO
 	 */
 	public static String processDAOClassName(Class<?> entityClass) {
-		
-		String daoClassName = entityClass.getName().replace(LIB_MODEL, CORE_DAO);
+
+		String daoClassName = entityClass.getName()
+				.replace(LIB_MODEL, CORE_DAO);
 		// add ~DAO
 		daoClassName = daoClassName.concat(DAO);
-		
+
 		return daoClassName;
-		
+
 	}
-	
+
 	/*
 	 * Service Interface in [project].lib.services.[ServiceName]ServiceBD
-	 * Service Impl in [project].core.services.[ServiceName]Service
-	 * Service Interface in [project].lib.business.[ServiceName]BD
-	 * Service Impl in [project].core.business.[ServiceName]Policy
+	 * Service Impl in [project].core.services.[ServiceName]Service Service
+	 * Interface in [project].lib.business.[ServiceName]BD Service Impl in
+	 * [project].core.business.[ServiceName]Policy
 	 */
-	public static String processServiceClassName(Class<?> serviceClass) {
-		
+	public static String processServiceImplName(Class<?> serviceClass) {
+
 		String serviceName = serviceClass.getName();
-		
-		String serviceClassName = "";
+
+		String serviceImplName = "";
 		if (serviceName.contains(LIB_SERVICES)) {
-			serviceClassName = serviceName.replace(LIB_SERVICES, CORE_SERVICES);
+			serviceImplName = serviceName.replace(LIB_SERVICES, CORE_SERVICES);
 			// remove ~BD
-			serviceClassName = serviceClassName.substring(0, serviceClassName.length()-2);
-			return serviceClassName;
+			serviceImplName = serviceImplName.substring(0,
+					serviceImplName.length() - 2);
+			return serviceImplName;
 		}
-		
+
 		if (serviceName.contains(LIB_BUSINESS)) {
-			serviceClassName = serviceName.replace(LIB_BUSINESS, CORE_BUSINESS);
-			// remove ~BusinessBD
-			serviceClassName = serviceClassName.substring(0, serviceClassName.length()-2).concat(POLICY);
-			return serviceClassName;			
+			serviceImplName = serviceName.replace(LIB_BUSINESS, CORE_BUSINESS);
+			// remove ~BD and add ~Policy
+			serviceImplName = serviceImplName.substring(0,
+					serviceImplName.length() - BD.length()).concat(POLICY);
+			return serviceImplName;
 		}
-		
+
 		return null;
-		
+
 	}
 	
+	public static String processServiceInterfaceName(Class<?> serviceClass) {
+
+		String serviceName = serviceClass.getName();
+
+		String serviceInterfaceName = "";
+		if (serviceName.contains(CORE_SERVICES)) {
+			serviceInterfaceName = serviceName.replace(CORE_SERVICES, LIB_SERVICES);
+			// add ~BD
+			serviceInterfaceName = serviceInterfaceName.concat(BD);
+			return serviceInterfaceName;
+		}
+
+		if (serviceName.contains(CORE_BUSINESS)) {
+			serviceInterfaceName = serviceName.replace(CORE_BUSINESS, LIB_BUSINESS);
+			// remove ~Policy and add ~BD
+			serviceInterfaceName = serviceInterfaceName.substring(0,
+					serviceInterfaceName.length() - POLICY.length()).concat(BD);
+			return serviceInterfaceName;
+		}
+
+		return null;
+
+	}
+
 	/**
 	 * test is the specified interface is DAO
+	 * 
 	 * @param serviceClass
-	 * @return true 
+	 * @return true
 	 */
 	public static boolean isDAO(Class<?> serviceClass) {
-		if (!serviceClass.isInterface())
-			return false;
+		if (!serviceClass.isInterface()) return false;
 		return serviceClass.getName().contains(CORE_DAO);
 	}
-	
+
 	/**
 	 * test is the specified interface is a technical or business Service
+	 * 
 	 * @param serviceClass
 	 * @return
 	 */
 	public static boolean isService(Class<?> serviceClass) {
-		if (!serviceClass.isInterface())
-			return false;
+		if (!serviceClass.isInterface()) return false;
 		String svcName = serviceClass.getName();
-		return (svcName.contains(LIB_SERVICES) || svcName.contains(LIB_BUSINESS));
+		return (svcName.contains(LIB_SERVICES) || svcName
+				.contains(LIB_BUSINESS));
 	}
-	
+
 	/**
 	 * 
 	 * @param className
 	 * @return
-	 * @throws ClassNotFoundException 
+	 * @throws ClassNotFoundException
 	 */
-	public static Class<?> loadClass(String className) throws ClassNotFoundException {
+	public static Class<?> loadClass(String className)
+			throws ClassNotFoundException {
 		ClassLoader cld = Thread.currentThread().getContextClassLoader();
 		return cld.loadClass(className);
 	}
-	
+
 	/**
 	 * 
 	 * @return the caller class name
@@ -164,7 +199,7 @@ public abstract class ClassUtils {
 		String callerClassName = stack[1].getClassName();
 		return callerClassName;
 	}
-	
+
 	/**
 	 * 
 	 * @return the caller simple class name
@@ -177,7 +212,7 @@ public abstract class ClassUtils {
 		String callerClassName = stack[1].getClassName();
 		int pos = callerClassName.lastIndexOf(".");
 		if (pos > 0) {
-			callerClassName = callerClassName.substring(pos+1);
+			callerClassName = callerClassName.substring(pos + 1);
 		}
 		return callerClassName;
 	}
@@ -194,7 +229,7 @@ public abstract class ClassUtils {
 		String callerMethodName = stack[1].getMethodName();
 		return callerMethodName;
 	}
-	
+
 	/**
 	 * 
 	 * @param clazz
@@ -212,6 +247,19 @@ public abstract class ClassUtils {
 		}
 		return daoMethodsMap;
 	}
-	
-	
+
+	/**
+	 * 
+	 * @param className
+	 * @return the requested class
+	 * @throws ClassNotFoundException
+	 */
+	public static Class<?> getClass(String className) throws ClassNotFoundException {
+
+		ClassLoader classLoader = Thread.currentThread()
+				.getContextClassLoader();
+		Class<?> clazz = classLoader.loadClass(className);
+		return clazz;
+	}
+
 }

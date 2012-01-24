@@ -18,18 +18,19 @@ public class BeanUtils {
 	private static boolean initialized = false;
 	private static final Object token = new Object();
 	
-	private static BeanUtilsDelegate beanUtilsDelegate = null;
+	private static BeanFactory beanUtilsDelegate = null;
 		
 	private BeanUtils() {
 		super();
 	}
 	
-	public synchronized static void setBeanUtilsDelegate(BeanUtilsDelegate delegate) {
+	public synchronized static void setBeanUtilsDelegate(BeanFactory delegate) {
 		logger.info("set BeanUtilsDelegate to instance of: ".concat(delegate.getClass().getName()));
 		beanUtilsDelegate = delegate;
 	}
 	
-	public static BeanUtilsDelegate getBeanUtilsDelegate() {
+	public static BeanFactory getBeanUtilsDelegate() {
+		checkInit();
 		return beanUtilsDelegate;
 	}
 
@@ -100,16 +101,16 @@ public class BeanUtils {
 			synchronized (token) { 
 				if (!initialized) {
 					try {
-						ServiceLoader<BeanUtilsDelegate> budLoader = ServiceLoader.load(BeanUtilsDelegate.class);
+						ServiceLoader<BeanFactory> budLoader = ServiceLoader.load(BeanFactory.class);
 						if (null != budLoader) {
-							for (BeanUtilsDelegate bud : budLoader) {
+							for (BeanFactory bud : budLoader) {
 								logger.info("Use BeanUtilsDelegate instance of: ".concat(bud.getClass().getName()));
 								beanUtilsDelegate = bud;
 								break;
 							}
 						}
 					} catch (Exception e) {
-						logger.warn("Unable to get resources 'META-INF/services/".concat(BeanUtilsDelegate.class.getName()).concat("'."), e);
+						logger.warn("Unable to get resources 'META-INF/services/".concat(BeanFactory.class.getName()).concat("'."), e);
 					}
 					initialized = true;
 				}
@@ -118,19 +119,16 @@ public class BeanUtils {
 		
 	}
 	
-	public void reset() {
+	public static void terminate() {
 		
 		synchronized (token) { 
 			initialized = false;
+		
+			if (null != beanUtilsDelegate)
+				beanUtilsDelegate.terminate();
+			beanUtilsDelegate = null;
 		}
+		
 	}
-
-	public static void terminate() {
-		if (null != beanUtilsDelegate)
-			beanUtilsDelegate.terminate();
-		beanUtilsDelegate = null;
-	}
-	
-	
 
 }
