@@ -19,17 +19,32 @@
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-persistence-api</artifactId>
 			<version>2.0.2-SNAPSHOT</version>
-		</dependency>
+		</dependency>				
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-persistence-impl</artifactId>
 			<version>2.0.2-SNAPSHOT</version>
-		</dependency>   		  	   				
+		</dependency>   	
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-transaction-api</artifactId>
+			<version>2.0.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-transaction-impl</artifactId>
+			<version>2.0.2-SNAPSHOT</version>
+		</dependency>	  	   				
 		<!-- JPA2 impl -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>3.6.7.Final</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-validator</artifactId>
+		    <version>4.2.0.Final</version>		    
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces</groupId>
@@ -116,6 +131,16 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>0.9.28</version>			
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.6.1</version>
 		</dependency>
 		
 		<dependency>

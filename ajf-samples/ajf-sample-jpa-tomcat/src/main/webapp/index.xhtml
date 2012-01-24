@@ -26,9 +26,12 @@ HTML 1.0 Transitional//EN"
 	<p:commandButton value="Display"   
 		             actionListener="#{jpaBean.computeModels}"
 		             update="main" />
-	<p:commandButton value="New"   
-		             actionListener="#{jpaBean.createModel}"
-		             update="main" />		             
+	<p:commandButton value="New - Manual"   
+		             actionListener="#{jpaBean.createModelManual}"
+		             update="main" />
+	<p:commandButton value="New - CrudDbService"   
+		             actionListener="#{jpaBean.createModelCrud}"
+		             update="main" />	             
 	</p:panel>
 </h:form>
 </h:body>
