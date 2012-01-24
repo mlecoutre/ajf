@@ -56,7 +56,7 @@ public class CacheTest {
 		cache.put(key, "myValue");
 		// get from cache
 		String cachedValue = (String) cache.get(key);
-		
+
 		assertNotNull("Unable to get the default cached object", cachedValue);		
 	}
 	

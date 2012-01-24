@@ -28,7 +28,7 @@ public class AuditorTest {
 	
 	@Test
 	public void testParameterizedMessage() {
-		audit("get resource: {1}", "myResource");
+		audit("get resource: {0}", "myResource");
 	}
 	
 	
