@@ -17,26 +17,33 @@ public class BasicImplCrudDbService {
 		return q.getResultList();
 	}
 
-	public static Object save(EntityManagerFactory emf, Object entity) {
-		EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
-		Object res = null;
-		//if (em.contains(entity)) {
-			 res = em.merge(entity);
-		//} else {
-			//em.persist(entity);
-			//res = entity;
-		//}
-		em.getTransaction().commit();
+	public static Object save(boolean manageTransaction, EntityManagerFactory emf, Object entity) {
+		EntityManager em = emf.createEntityManager();		
+		if (manageTransaction) {
+			em.getTransaction().begin();
+		} else {
+			em.joinTransaction();
+		}
+		Object res = em.merge(entity);
+					
+		if (manageTransaction) {
+			em.getTransaction().commit();
+		}
 		return res;
 	}
 
-	public static boolean remove(EntityManagerFactory emf, Object entity) {
+	public static boolean remove(boolean manageTransaction, EntityManagerFactory emf, Object entity) {
 		EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
+		if (manageTransaction) {
+			em.getTransaction().begin();
+		} else {
+			em.joinTransaction();
+		}
 		Object attachedEntity = em.merge(entity);  // need to reattached in local transaction
 		em.remove(attachedEntity);
-		em.getTransaction().commit();
+		if (manageTransaction) {
+			em.getTransaction().commit();
+		}
 		return true;
 	}
 	
