@@ -5,6 +5,7 @@ import java.util.Random;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.HeuristicMixedException;
@@ -17,10 +18,11 @@ import javax.transaction.UserTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import am.ajf.transaction.TransactionInterceptor;
 import am.ajf.transaction.Transactional;
 
 @RequestScoped
-public class SamplePolicy /*implements SamplePolicyBD*/ {
+public class SamplePolicy implements SamplePolicyBD {
 
 	private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -28,7 +30,7 @@ public class SamplePolicy /*implements SamplePolicyBD*/ {
 	@Inject private UserTransaction utx;
 	@Inject private EntityManagerFactory emf;
 	
-	//@Override
+	@Override
 	public ListAllModelsRB listAllModels() {
 		logger.debug("SamplePolicy : listAllModels");
 		ListAllModelsRB listAllModelsRB = new ListAllModelsRB();
@@ -37,15 +39,16 @@ public class SamplePolicy /*implements SamplePolicyBD*/ {
 		return listAllModelsRB;
 	}
 
-	//@Override
-	@Transactional
+	@Override
+	//@Transactional //-- should work but no !
+	@Interceptors(TransactionInterceptor.class)
 	public void createModelCrud() {
 		int modelId = new Random().nextInt(); 
 		logger.debug("SamplePolicy : create a new Model with Crud service("+modelId+")");
-		sampleService.save(new Model("model : "+modelId));		
+		sampleService.save(new Model("model - crud: "+modelId));		
 	}
 	
-	//@Override	
+	@Override	
 	public void createModelManual() throws NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
 		utx.begin();
 		int modelId = new Random().nextInt(); 

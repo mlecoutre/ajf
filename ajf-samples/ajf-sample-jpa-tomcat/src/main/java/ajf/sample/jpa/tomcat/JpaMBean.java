@@ -25,7 +25,7 @@ public class JpaMBean implements Serializable {
 	private static final long serialVersionUID = 1687667378623102828L;
 	private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	@Inject private SamplePolicy policy;	
+	@Inject private SamplePolicyBD policy;	
 	
 	private List<Model> models;
 	
