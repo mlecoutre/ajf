@@ -84,9 +84,12 @@ public class InjectionTest {
 		
 		assertNotNull(svc);
 		
-		String res = svc.myFirstOperation("vincent");
+		String res = svc.myFirstOperation("vincent", "toto");
 		
 		assertNotNull(res);
+		
+		MyServiceBD svc2 = BeanUtils.newInstance(MyServiceBD.class);
+		res = svc2.myFirstOperation("vincent", "toto");
 		
 	}
 	
@@ -97,7 +100,7 @@ public class InjectionTest {
 		
 		assertNotNull(svc);
 		
-		String res = svc.myFirstOperation("vincent");
+		String res = svc.myFirstOperation("vincent", "toto");
 		
 		assertNotNull(res);
 				

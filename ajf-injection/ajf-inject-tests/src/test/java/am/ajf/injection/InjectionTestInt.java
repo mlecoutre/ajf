@@ -1,5 +1,6 @@
 package am.ajf.injection;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -19,13 +20,12 @@ import foo.lib.services.MyServiceBD;
 public class InjectionTestInt {
 	
 	@Inject
-	private MyServiceBD myService; 
+	private Instance<MyServiceBD> myServiceFactory; 
 	
 	@BeforeClass
 	public static void setUpClass() {
 		
 		ApplicationContext.init();
-		ApplicationContext.getConfiguration().setThrowExceptionOnMissing(false);
 		
 	}
 
@@ -44,13 +44,18 @@ public class InjectionTestInt {
 	}
 	
 	@Test
-	public void testStandardInjection() {
+	public void testServiceInjection() {
 		
 		// Given
-		String firstParam = "arg";
+		String firstParam = "firstParam";
+		String secondParam = "secondParam";
 		
 		// When
-		String res = myService.myFirstOperation(firstParam);
+		MyServiceBD myService = myServiceFactory.get();
+		String res = myService.myFirstOperation(firstParam, secondParam);
+		
+		myService = myServiceFactory.get();
+		res = myService.myFirstOperation(firstParam, secondParam);
 		
 		// Then
 		Assert.assertNotNull("Injection failed", res);
