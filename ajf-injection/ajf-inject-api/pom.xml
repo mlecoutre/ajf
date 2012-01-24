@@ -17,6 +17,13 @@
 	</scm>
 	
 	<dependencies>
+	
+		<!-- AJF -->
+		
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-core</artifactId>
+		</dependency>
 
 		<!-- Begin : Dependency injection dependencies -->
 		
