@@ -25,6 +25,11 @@
 			<version>1.0.1.GA</version>
 		</dependency>
 
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-core</artifactId>
+		</dependency>		
+
 		<!-- the logger abstraction -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
