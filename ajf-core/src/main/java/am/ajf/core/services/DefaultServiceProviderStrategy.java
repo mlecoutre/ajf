@@ -20,7 +20,7 @@ public class DefaultServiceProviderStrategy implements ServiceProviderStrategy {
 	public <T> T get(Class<T> serviceClass) throws Exception {
 
 		String serviceImplClassName = ClassUtils
-				.processServiceClassName(serviceClass);
+				.processServiceImplName(serviceClass);
 
 		Class<?> serviceImplClass = ClassUtils.loadClass(serviceImplClassName);
 		T result = (T) BeanUtils.newInstance(serviceImplClass);
