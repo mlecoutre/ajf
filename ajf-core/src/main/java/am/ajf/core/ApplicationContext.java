@@ -215,7 +215,7 @@ public class ApplicationContext {
 			e.printStackTrace(System.out);
 		}
 
-		configuration.setThrowExceptionOnMissing(true);
+		//configuration.setThrowExceptionOnMissing(true);
 		// allow to throw the exception 'java.util.NoSuchElementException' when
 		// a required property is missing
 
