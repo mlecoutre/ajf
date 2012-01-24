@@ -5,10 +5,10 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import am.ajf.injection.Cached;
 import am.ajf.injection.Monitored;
 import am.ajf.injection.Property;
 import foo.lib.services.MyServiceBD;
-
 
 @ApplicationScoped
 public class MyService
@@ -58,9 +58,11 @@ public class MyService
 		this.mySecondKeyValue = mySecondKeyValue;
 	}
 
+	@Override
 	@Monitored
-	public String myFirstOperation(String string) {
-		String res = "Hello ".concat(string);
+	@Cached
+	public String myFirstOperation(String string1, String string2) {
+		String res = "Hello ".concat(string1).concat(", ").concat(string2);
 		logger.debug("Process: ".concat(res));
 		return res;
 	}

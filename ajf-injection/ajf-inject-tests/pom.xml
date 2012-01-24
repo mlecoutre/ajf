@@ -124,11 +124,13 @@
 		<!-- End : Dependency injection dependencies -->
 		
 		<!-- JEE 5 -->
+		<!-- 
 		<dependency>
 		    <groupId>javaee</groupId>
 		    <artifactId>javaee-api</artifactId>
 		    <version>5</version>
 		</dependency>
+		-->
 		
 	</dependencies>
 

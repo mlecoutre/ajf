@@ -4,8 +4,10 @@
    xsi:schemaLocation="
       http://java.sun.com/xml/ns/javaee
       http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+ 
    <interceptors>
       <class>am.ajf.injection.MonitoringInterceptor</class>
+      <class>am.ajf.injection.CacheInterceptor</class>
    </interceptors>
 
 </beans>
