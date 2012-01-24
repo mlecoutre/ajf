@@ -149,11 +149,13 @@
 		<!-- Caching -->
 		
 		<!-- cache API : JSR 107 -->
+		<!-- 
 		<dependency>
     		<groupId>javax.cache</groupId>
     		<artifactId>cache-api</artifactId>
     		<version>0.4</version>
 		</dependency>
+		-->
 		
 		<dependency>
 			<groupId>org.infinispan</groupId>
