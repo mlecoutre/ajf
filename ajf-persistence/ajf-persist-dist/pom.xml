@@ -33,14 +33,20 @@
 				<artifactId>ajf-persistence-tests</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-persistence-dao</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<modules>
 		<module>../ajf-persist-api</module>
 		<module>../ajf-persist-impl</module>
-		<!--  module>../ajf-persist-docs</module-->
+		<!--module>../ajf-persist-docs</module-->
 		<module>../ajf-persist-tests</module>
+		<module>../ajf-persist-dao</module>
 	</modules>
 
 </project>

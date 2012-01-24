@@ -42,7 +42,9 @@
 	<modules>
 		<module>../ajf-core</module>
 		<module>../ajf-testing</module>
-		<module>../ajf-injection</module>
+		<!-- 
+		<module>../ajf-injection/ajf-inject-dist</module>
+		-->
 		<module>../ajf-monitoring</module>
 		<module>../ajf-notif</module>
 		<module>../ajf-security</module>
