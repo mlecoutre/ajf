@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- Ref : http://tomcat.apache.org/tomcat-6.0-doc/config/context.html The 
+	contents of this file will be loaded for each web application -->
+<!-- useNaming="true" -->
+<Context allowLinking="false" antiJARLocking="true" reloadable="true">
+
+	<Loader delegate="true" />
+ 	 
+</Context>
