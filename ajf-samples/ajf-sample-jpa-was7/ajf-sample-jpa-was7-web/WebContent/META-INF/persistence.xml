@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0"
+             xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+             
+	<persistence-unit name="default" transaction-type="JTA">
+    	<provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+    	<jta-data-source>jdbc/jpa-sample</jta-data-source>
+    	<class>am.ajf.samples.jpa.was7.Model</class>    	
+    	<properties>	        	
+		      <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(foreignKeys=true,schemaAction='add')"/>
+		      <property name="openjpa.Log" value="DefaultLevel=WARN, Tool=INFO"/> 
+      		  <property name="openjpa.TransactionMode" value="managed"/>
+   			  <property name="openjpa.ConnectionFactoryMode" value="managed"/>  
+	    </properties>
+	</persistence-unit>
+
+</persistence>
