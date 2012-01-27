@@ -1,6 +1,7 @@
 package am.ajf.core.cache.impl;
 
 import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.config.CacheConfiguration;
 import am.ajf.core.cache.CacheManagerAdapter;
 
@@ -19,14 +20,14 @@ public class EHCacheCacheManagerImpl extends AbstractCacheManager implements
 
 	@Override
 	public void start() {
-		cacheManagerDelegate = net.sf.ehcache.CacheManager.create();
+		cacheManagerDelegate = new CacheManager();
 		defaultCache = createDefaultCache();
 	}
 
 	@Override
 	public void stop() {
 		cacheManagerDelegate.shutdown();
-		cleanAll();		
+		clearAll();
 	}
 
 	@Override
@@ -47,7 +48,7 @@ public class EHCacheCacheManagerImpl extends AbstractCacheManager implements
 					.overflowToDisk(false).eternal(true));
 			cacheManagerDelegate.addCache(cache);
 		}
-		
+
 		am.ajf.core.cache.Cache cache = new EHCacheCacheAdapter(
 				cacheManagerDelegate.getCache(cacheName));
 		return cache;
@@ -58,18 +59,36 @@ public class EHCacheCacheManagerImpl extends AbstractCacheManager implements
 
 		if (!cacheManagerDelegate.cacheExists(cacheName)) {
 			Cache cache = new Cache(new CacheConfiguration(cacheName, 0)
-				.overflowToDisk(false).eternal(true));
+					.overflowToDisk(false).eternal(false)
+					.timeToIdleSeconds(ttlInMs));
+
 			cacheManagerDelegate.addCache(cache);
 		}
 
-		am.ajf.core.cache.Cache cache = new EHCacheCacheTtlAdapter(
-				cacheManagerDelegate.getCache(cacheName), ttlInMs);
+		am.ajf.core.cache.Cache cache = new EHCacheCacheAdapter(
+				cacheManagerDelegate.getCache(cacheName));
 		return cache;
 	}
 
 	@Override
 	public String getProviderName() {
 		return EHCACHE;
+	}
+
+	@Override
+	public void addNativeCache(String cacheName, Object nativeCache) {
+		
+		if (!(nativeCache instanceof Cache)) {
+			throw new ClassCastException("Parameter must be instanceof '"
+					.concat(Cache.class.getName()).concat("'."));
+		}
+
+		Cache cache = (Cache) nativeCache;
+		cacheManagerDelegate.addCache(cache);
+		am.ajf.core.cache.Cache adapterCache = new EHCacheCacheAdapter(
+				cacheManagerDelegate.getCache(cacheName));
+		cachesMap.put(cacheName, adapterCache);
+
 	}
 
 }

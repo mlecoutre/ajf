@@ -1,5 +1,7 @@
 package am.ajf.core.cache;
 
+import java.util.Collection;
+
 
 public interface CacheManager{
 	
@@ -27,7 +29,7 @@ public interface CacheManager{
 	/**
 	 * 
 	 * @param cacheName
-	 * @return ajf nammed cache
+	 * @return ajf named cache
 	 */
 	Cache getCache(String cacheName);
 	
@@ -35,8 +37,24 @@ public interface CacheManager{
 	 * 
 	 * @param cacheName
 	 * @param ttlInMs
-	 * @return ajf nammed ttl cache
+	 * @return ajf named ttl cache
 	 */
 	Cache getCache(String cacheName, long ttlInMs);
+	
+	/**
+	 * remove a cache from the CacheManager
+	 * @param cacheName
+	 */
+	void removeCache(String cacheName);
+	
+	/**
+	 * @return the collection of caches name
+	 */
+	Collection<String> caches();
+	
+	/**
+	 * clear all managed caches
+	 */
+	void clearAll();
 	
 }

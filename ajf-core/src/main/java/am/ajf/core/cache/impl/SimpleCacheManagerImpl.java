@@ -22,7 +22,7 @@ public class SimpleCacheManagerImpl extends AbstractCacheManager implements
 
 	@Override
 	public void stop() {
-		cleanAll();		
+		clearAll();		
 	}
 
 	@Override

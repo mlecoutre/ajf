@@ -2,10 +2,10 @@ package am.ajf.core.cache.impl;
 
 import java.util.concurrent.TimeUnit;
 
-import com.google.common.cache.CacheBuilder;
-
 import am.ajf.core.cache.Cache;
 import am.ajf.core.cache.CacheManagerAdapter;
+
+import com.google.common.cache.CacheBuilder;
 
 public class GuavaCacheManagerImpl extends AbstractCacheManager implements
 		CacheManagerAdapter {
@@ -27,7 +27,7 @@ public class GuavaCacheManagerImpl extends AbstractCacheManager implements
 
 	@Override
 	public void stop() {
-		cleanAll();		
+		clearAll();		
 	}
 	
 	@Override
@@ -57,6 +57,21 @@ public class GuavaCacheManagerImpl extends AbstractCacheManager implements
 				.expireAfterAccess(ttlInMs, TimeUnit.MILLISECONDS).build();
 		GuavaCacheAdapter guavaCacheAdapter = new GuavaCacheAdapter(cacheName, delegateCache);
 		return guavaCacheAdapter;
+	}
+	
+	@Override
+	public void addNativeCache(String cacheName, Object nativeCache) {
+		if (!(nativeCache instanceof com.google.common.cache.Cache<?, ?>)) {
+			throw new ClassCastException("Parameter must be instanceof '"
+					.concat(com.google.common.cache.Cache.class.getName()).concat("'."));
+		}
+
+		@SuppressWarnings("unchecked")
+		com.google.common.cache.Cache<Object, Object> cache = (com.google.common.cache.Cache<Object, Object>) nativeCache;
+		
+		am.ajf.core.cache.Cache adapterCache = new GuavaCacheAdapter(cacheName, cache);
+		cachesMap.put(cacheName, adapterCache);
+
 	}
 
 }

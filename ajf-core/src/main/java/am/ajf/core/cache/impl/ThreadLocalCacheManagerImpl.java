@@ -22,7 +22,7 @@ public class ThreadLocalCacheManagerImpl extends AbstractCacheManager implements
 
 	@Override
 	public void stop() {
-		cleanAll();		
+		clearAll();		
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package am.ajf.core.cache.impl;
 
+import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import am.ajf.core.cache.Cache;
@@ -45,15 +47,28 @@ public abstract class AbstractCacheManager implements CacheManager {
 		return cachesMap.get(cacheName);
 	}
 	
-	/**
-	 * clean all caches
-	 */
-	public void cleanAll() {
+	@Override
+	public void clearAll() {
 		if (null != defaultCache)
 			defaultCache.clear();
 		for (Cache cache : cachesMap.values()) {
 			cache.clear();
 		}
+	}
+	
+	@Override
+	public void removeCache(String cacheName) {
+		if (cachesMap.containsKey(cacheName)) { 
+			Cache cache = cachesMap.get(cacheName);
+			cache.clear();
+			cachesMap.remove(cacheName);
+		}		
+	}
+
+	@Override
+	public Collection<String> caches() {
+		Set<String> keys = cachesMap.keySet();
+		return keys;
 	}
 
 	abstract protected Cache createCache(String cacheName, long ttlInMs);

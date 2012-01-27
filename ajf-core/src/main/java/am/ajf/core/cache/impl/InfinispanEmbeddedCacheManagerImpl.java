@@ -10,7 +10,7 @@ public class InfinispanEmbeddedCacheManagerImpl extends AbstractCacheManager
 		implements CacheManagerAdapter {
 
 	private static final String INFINISPAN = "infinispan";
-	
+
 	EmbeddedCacheManager cacheManagerDelegate = null;
 
 	public InfinispanEmbeddedCacheManagerImpl() {
@@ -34,7 +34,7 @@ public class InfinispanEmbeddedCacheManagerImpl extends AbstractCacheManager
 	@Override
 	public void stop() {
 		cacheManagerDelegate.stop();
-		cleanAll();		
+		clearAll();
 	}
 
 	@Override
@@ -65,6 +65,23 @@ public class InfinispanEmbeddedCacheManagerImpl extends AbstractCacheManager
 	@Override
 	public String getProviderName() {
 		return INFINISPAN;
+	}
+
+	@Override
+	public void addNativeCache(String cacheName, Object nativeCacheConfiguration) {
+
+		if (!(nativeCacheConfiguration instanceof Configuration)) {
+			throw new ClassCastException("Parameter must be instanceof '"
+					.concat(Configuration.class.getName()).concat("'."));
+		}
+
+		Configuration cacheConfig = (Configuration) nativeCacheConfiguration;
+		cacheManagerDelegate.defineConfiguration(cacheName, cacheConfig);
+
+		am.ajf.core.cache.Cache adapterCache = new InfinispanCacheAdapter(
+				cacheManagerDelegate.getCache(cacheName));
+		cachesMap.put(cacheName, adapterCache);
+
 	}
 
 }
