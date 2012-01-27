@@ -1,5 +1,7 @@
 package am.ajf.injection.impl;
 
+import java.lang.reflect.Method;
+
 import am.ajf.injection.Cached;
 import am.ajf.injection.KeyBuilder;
 
@@ -14,7 +16,7 @@ public class SimpleKeyBuilderImpl implements KeyBuilder {
 	}
 
 	@Override
-	public Object build(Cached cachedAnnotation, Object[] parameters) {
+	public Object build(Class<?> targetClass, Method targetMethod, Cached cachedAnnotation, Object[] parameters) {
 		
 		String processedKey = joiner.join(parameters);
 		return processedKey;

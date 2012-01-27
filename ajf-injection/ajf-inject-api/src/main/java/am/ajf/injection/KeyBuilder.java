@@ -1,5 +1,7 @@
 package am.ajf.injection;
 
+import java.lang.reflect.Method;
+
 public interface KeyBuilder {
 
 	/**
@@ -8,6 +10,6 @@ public interface KeyBuilder {
 	 * @param parameters
 	 * @return a key as cache entry
 	 */
-	Object build(Cached cachedAnnotation, Object[] parameters); 
+	Object build(Class<?> targetClass, Method targetMethod, Cached cachedAnnotation, Object[] parameters); 
 	
 }
