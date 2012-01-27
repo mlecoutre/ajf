@@ -28,6 +28,7 @@
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-testing</artifactId>
 			<version>2.0.2-SNAPSHOT</version>
+			<scope>test</scope>
 		</dependency>
 		
 		<!-- AJF -->
@@ -35,15 +36,18 @@
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-core</artifactId>
+			<scope>test</scope>
 		</dependency>		
 		
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-injection-api</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-injection-impl</artifactId>
+			<scope>test</scope>
 		</dependency>	
 
 		<!-- Begin : Dependency injection dependencies -->
@@ -71,29 +75,34 @@
 		<dependency>
 			<groupId>org.apache.geronimo.specs</groupId>
 			<artifactId>geronimo-jcdi_1.0_spec</artifactId>
-			<version>1.0</version>		
+			<version>1.0</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.geronimo.specs</groupId>
 			<artifactId>geronimo-atinject_1.0_spec</artifactId>
 			<version>1.0</version>
+			<scope>test</scope>		
 		</dependency>
 		<dependency>
 		    <groupId>org.apache.geronimo.specs</groupId>
 		    <artifactId>geronimo-interceptor_1.1_spec</artifactId>
 		    <version>1.0</version>
+			<scope>test</scope>		    
 		</dependency>
 		
 		<!-- OpenWebBeans Dependency -->
 		<dependency>
-		  <groupId>org.apache.openwebbeans</groupId>
-		  <artifactId>openwebbeans-impl</artifactId>
-		  <version>1.1.3</version>
+		  	<groupId>org.apache.openwebbeans</groupId>
+		  	<artifactId>openwebbeans-impl</artifactId>
+		  	<version>1.1.3</version>
+			<scope>test</scope>		  
 		</dependency>
 		<dependency>
-		  <groupId>org.apache.openwebbeans</groupId>
-		  <artifactId>openwebbeans-spi</artifactId>
-		  <version>1.1.3</version>
+		  	<groupId>org.apache.openwebbeans</groupId>
+		  	<artifactId>openwebbeans-spi</artifactId>
+		  	<version>1.1.3</version>
+			<scope>test</scope>
 		</dependency>
 		
 		<!-- 
@@ -114,11 +123,13 @@
 			<groupId>org.jboss.arquillian.junit</groupId>
 			<artifactId>arquillian-junit-container</artifactId>
 			<version>${arquillian.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
-		  <groupId>org.jboss.arquillian.container</groupId>
-		  <artifactId>arquillian-openwebbeans-embedded-1</artifactId>
-		  <version>1.0.0.CR2</version>
+			<groupId>org.jboss.arquillian.container</groupId>
+			<artifactId>arquillian-openwebbeans-embedded-1</artifactId>
+			<version>1.0.0.CR2</version>
+			<scope>test</scope>
 		</dependency>
 		
 		<!-- End : Dependency injection dependencies -->
