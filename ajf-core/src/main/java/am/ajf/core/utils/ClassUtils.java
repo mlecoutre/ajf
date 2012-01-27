@@ -2,15 +2,18 @@ package am.ajf.core.utils;
 
 import java.io.File;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class ClassUtils {
+public class ClassUtils {
 
+	private static final String SERVICE = "Service";
 	private static final String BD = "BD";
+	private static final String SERVICE_BD = "ServiceBD";
 	private static final String DAO = "DAO";
 	private static final String CORE_DAO = ".core.dao.";
 	private static final String LIB_MODEL = ".lib.model.";
@@ -21,6 +24,10 @@ public abstract class ClassUtils {
 	private static final String POLICY = "Policy";
 	private static final String LIB_BUSINESS = ".lib.business.";
 	private static final String CORE_BUSINESS = ".core.business.";
+
+	private ClassUtils() {
+		super();
+	}
 
 	/**
 	 * Utility method used to fetch Class list based on a package name.
@@ -168,11 +175,46 @@ public abstract class ClassUtils {
 	 * @param serviceClass
 	 * @return
 	 */
-	public static boolean isService(Class<?> serviceClass) {
-		if (!serviceClass.isInterface()) return false;
-		String svcName = serviceClass.getName();
-		return (svcName.contains(LIB_SERVICES) || svcName
-				.contains(LIB_BUSINESS));
+	public static boolean isServiceInterface(Class<?> serviceClass) {
+		if (!serviceClass.isInterface()) 
+			return false;
+		
+		String serviceName = serviceClass.getName();
+		
+		if (serviceName.contains(LIB_SERVICES)) {
+			// end with ~BD
+			return serviceName.endsWith(SERVICE_BD);
+		}
+
+		if (serviceName.contains(LIB_BUSINESS)) {
+			// end with ~BD
+			return serviceName.endsWith(BD);
+		}
+		
+		return false;
+		
+	}
+	
+	public static boolean isServiceImpl(Class<?> serviceClass) {
+		if (serviceClass.isInterface()) 
+			return false;
+		if (Modifier.isAbstract(serviceClass.getModifiers()))
+			return false;
+		
+		String serviceName = serviceClass.getName();
+		
+		if (serviceName.contains(CORE_SERVICES)) {
+			// end with ~BD
+			return serviceName.endsWith(SERVICE);
+		}
+
+		if (serviceName.contains(CORE_BUSINESS)) {
+			// end with ~BD
+			return serviceName.endsWith(POLICY);
+		}
+		
+		return false;
+		
 	}
 
 	/**
