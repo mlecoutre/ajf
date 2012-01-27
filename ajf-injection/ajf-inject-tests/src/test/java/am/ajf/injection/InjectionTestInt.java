@@ -22,6 +22,12 @@ public class InjectionTestInt {
 	@Inject
 	private Instance<MyServiceBD> myServiceFactory; 
 	
+	@Inject
+	private MyServiceBD myService1;
+	
+	@Inject
+	private MyServiceBD myService2;
+	
 	@BeforeClass
 	public static void setUpClass() {
 		
@@ -56,6 +62,10 @@ public class InjectionTestInt {
 		
 		myService = myServiceFactory.get();
 		res = myService.myFirstOperation(firstParam, secondParam);
+		
+		res = myService1.myFirstOperation(firstParam, secondParam);
+		
+		res = myService2.myFirstOperation(firstParam, secondParam);
 		
 		// Then
 		Assert.assertNotNull("Injection failed", res);

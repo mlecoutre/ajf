@@ -6,7 +6,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import am.ajf.injection.Cached;
-import am.ajf.injection.Monitored;
 import am.ajf.injection.Property;
 import foo.lib.services.MyServiceBD;
 
@@ -59,8 +58,7 @@ public class MyService
 	}
 
 	@Override
-	@Monitored
-	@Cached
+	@Cached(cacheProvider="threadlocal")
 	public String myFirstOperation(String string1, String string2) {
 		String res = "Hello ".concat(string1).concat(", ").concat(string2);
 		logger.debug("Process: ".concat(res));
