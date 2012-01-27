@@ -1,11 +1,13 @@
 package am.ajf.injection;
 
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
 import am.ajf.core.datas.AuditData;
 import am.ajf.core.datas.AuditDataContext;
 
+@RequestScoped
 public class AuditDataProducer {
 	
 	public AuditDataProducer() {
