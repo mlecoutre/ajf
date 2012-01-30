@@ -38,7 +38,11 @@ public class InjectionTestInt {
 	@Deployment
 	public static JavaArchive createTestArchive() {
 		JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
-				.addPackages(true, "am.ajf.injection", "foo.lib", "foo.core")
+				.addPackages(true/*, "am.ajf.injection"*/, "foo.lib", "foo.core")
+				.addClasses(AuditDataProducer.class)
+				.addClasses(LoggerProducer.class)
+				.addClasses(CacheProducer.class)
+				.addClasses(PropertyProducer.class)
 				.addClasses(MonitoringInterceptor.class)
 				.addAsManifestResource("META-INF/beans.xml",
 						ArchivePaths.create("beans.xml"));

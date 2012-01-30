@@ -5,18 +5,20 @@ import org.junit.Before;
 import org.junit.Test;
 import org.testng.Assert;
 
+import am.ajf.core.ApplicationContext;
+
 /**
  * Test the repository management and especially the addService method.
  * 
  * @author Nicolas Radde (E016696) 
  */
-public class ServicesRepositoryTest {
+public class ImplementationsRepositoryTest {
 	
-	public ServicesRepository cut;
+	public ImplementationsRepository cut;
 
 	@Before
 	public void setUp() throws Exception {
-		cut = new ServicesRepository();
+		cut = new ImplementationsRepository();
 	}
 
 	@After

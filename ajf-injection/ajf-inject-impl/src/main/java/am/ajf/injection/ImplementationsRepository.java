@@ -25,9 +25,9 @@ import am.ajf.core.logger.LoggerFactory;
  * @author Nicolas Radde (E016696)
  *
  */
-public class ServicesRepository {
+public class ImplementationsRepository {
 	
-	private static final Logger logger = LoggerFactory.getLogger(ServicesRepository.class);
+	private static final Logger logger = LoggerFactory.getLogger(ImplementationsRepository.class);
 	//private static ServicesRepository instance;
 	
 	/*
@@ -43,7 +43,7 @@ public class ServicesRepository {
 	private Map<Class<?>, List<Class<?>>> repository;
 	
 	
-	public ServicesRepository() {
+	public ImplementationsRepository() {
 		repositoryScanComplete = false;
 		repository = new HashMap<Class<?>, List<Class<?>>>();
 	}
@@ -58,11 +58,24 @@ public class ServicesRepository {
 	}
 	
 	void completeScan() {
+		logger.debug("Dumping the AJF services found :");
 		repositoryScanComplete = true;
 		int nbInterfaces = repository.size();
 		int nbImpls = 0;
-		for (List<Class<?>> impls : repository.values()) {
-			nbImpls += impls.size();
+		for (Class<?> in : repository.keySet()) {
+			StringBuffer sb = new StringBuffer();
+			boolean isFirst = true;
+			sb.append("[");
+			for (Class<?> impl : repository.get(in)) {
+				if (!isFirst) {
+					sb.append(",");
+				}
+				sb.append(impl.getSimpleName());				
+				isFirst = false;
+			}
+			sb.append("]");
+			logger.debug("  " + in.getSimpleName() + " : "+sb.toString());
+			nbImpls += repository.get(in).size();
 		}
 		logger.info("Services scan finished : found "+nbInterfaces+" interface(s) and "+nbImpls+" implementation(s).");
 	}
@@ -71,7 +84,10 @@ public class ServicesRepository {
 	public void addService(Class<?> service) throws MalformedServiceException {	
 		//first test the interface case
 		if (isServiceInterface(service)) {
-			repository.put(service, new ArrayList<Class<?>>());
+			//dont add it if the interface was already added
+			if (!repository.containsKey(service)) {
+				repository.put(service, new ArrayList<Class<?>>());
+			}
 		} else if (isService(service)) {
 			//get the BD interface for the service, there should be only one
 			Class<?>[] interfaces = service.getInterfaces();
@@ -83,7 +99,9 @@ public class ServicesRepository {
 				}
 			}
 			if (vInterface == null) {
-				throw new MalformedServiceException(service);
+				//This is not a service
+				return;
+				//throw new MalformedServiceException(service);
 			}
 							
 			//Add the service and/or interface to the repo
@@ -181,7 +199,7 @@ public class ServicesRepository {
 		private static final long serialVersionUID = 5600143302809274093L;
 		private Class<?> service;
 		public MalformedServiceException(Class<?> service) {
-			super();
+			super("Malformed service : "+service.getName() + "\n" + service.toString());
 			this.service = service;
 		}
 		

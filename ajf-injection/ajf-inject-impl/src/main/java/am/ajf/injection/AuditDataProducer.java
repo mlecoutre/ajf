@@ -1,13 +1,15 @@
 package am.ajf.injection;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
 import am.ajf.core.datas.AuditData;
 import am.ajf.core.datas.AuditDataContext;
 
-@RequestScoped
+//NRE : Changed because the implicit scope is @Dependent on the produce
+//method, the scope of the producer object dont need to be request scoped.
+@ApplicationScoped 
 public class AuditDataProducer {
 	
 	public AuditDataProducer() {

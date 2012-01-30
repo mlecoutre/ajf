@@ -8,15 +8,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import am.ajf.injection.servicehandlerstest.SimpleServiceBD;
-import am.ajf.injection.servicehandlerstest.SimpleServiceHandler;
+import am.ajf.injection.servicehandlerstest.SimpleImplHandler;
 
-public class ServiceHandlersRepositoryTest {
+public class ImplementationHandlersRepositoryTest {
 
-	public ServiceHandlersRepository cut;
+	public ImplementationHandlersRepository cut;
 
 	@Before
 	public void setUp() throws Exception {
-		cut = new ServiceHandlersRepository();
+		cut = new ImplementationHandlersRepository();
 	}
 
 	@After
@@ -26,7 +26,7 @@ public class ServiceHandlersRepositoryTest {
 
 	@Test
 	public void testAddHandler() throws Exception {
-		cut.addHandler(SimpleServiceHandler.class);
+		cut.addHandler(SimpleImplHandler.class);
 		cut.completeScan();
 		
 		Assert.assertNotNull(cut.getHandlers());
@@ -35,19 +35,19 @@ public class ServiceHandlersRepositoryTest {
 
 	@Test
 	public void testIsHandler() {
-		Assert.assertTrue(cut.isHandler(SimpleServiceHandler.class));
+		Assert.assertTrue(cut.isHandler(SimpleImplHandler.class));
 	}
 
 	@Test
 	public void testBuildImplFor() throws Exception {
-		cut.addHandler(SimpleServiceHandler.class);
+		cut.addHandler(SimpleImplHandler.class);
 		cut.completeScan();
 		Class<?> impl = cut.buildImplFor(SimpleServiceBD.class, null);
 		
 		//ugly but only for testing (issue with inner class and default constructor)
 		Constructor<?> c = impl.getDeclaredConstructors()[0];
 		
-		SimpleServiceBD instance = (SimpleServiceBD) c.newInstance(new SimpleServiceHandler());
+		SimpleServiceBD instance = (SimpleServiceBD) c.newInstance(new SimpleImplHandler());
 		String result = instance.doSomething();
 		
 		Assert.assertEquals("result", result);

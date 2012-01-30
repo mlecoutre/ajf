@@ -3,9 +3,9 @@ package am.ajf.injection.servicehandlerstest;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import am.ajf.injection.ServiceHandler;
+import am.ajf.injection.ImplementationHandler;
 
-public class SimpleServiceHandler implements ServiceHandler {
+public class SimpleImplHandler implements ImplementationHandler {
 
 	@Override
 	public boolean canHandle(Method method) {		
@@ -13,7 +13,7 @@ public class SimpleServiceHandler implements ServiceHandler {
 	}
 
 	@Override
-	public Class<?> implementMethodsFor(Class<?> superClass,
+	public Class<?> implementMethodsFor(Class<?> superClass, Class<?> interfaceClass,
 			List<Method> methods) {
 		return SimpleServiceDoSomething.class;
 	}

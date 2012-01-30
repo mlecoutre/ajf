@@ -4,10 +4,16 @@ import static org.junit.Assert.assertNotNull;
 
 import javax.inject.Inject;
 
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ArchivePaths;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
 import am.ajf.core.ApplicationContext;
@@ -19,6 +25,7 @@ import am.ajf.injection.events.BasicEventImpl;
 import foo.core.services.MyService;
 import foo.lib.services.MyServiceBD;
 
+@RunWith(Arquillian.class)
 public class InjectionTest {
 
 	@Inject
@@ -37,6 +44,20 @@ public class InjectionTest {
 	public static void setUpClass() throws Exception {
 		/* turn OFF throwing exception when a configuration key is missing */
 		ApplicationContext.getConfiguration().setThrowExceptionOnMissing(false);
+	}
+	
+	@Deployment
+	public static JavaArchive createTestArchive() {
+		JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
+				.addPackages(true/*, "am.ajf.injection"*/, "foo.lib", "foo.core")
+				.addClasses(AuditDataProducer.class)
+				.addClasses(LoggerProducer.class)
+				.addClasses(CacheProducer.class)
+				.addClasses(PropertyProducer.class)
+				.addClasses(MonitoringInterceptor.class)
+				.addAsManifestResource("META-INF/beans.xml",
+						ArchivePaths.create("beans.xml"));
+		return archive;
 	}
 	
 	@AfterClass
