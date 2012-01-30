@@ -38,6 +38,21 @@
 				<artifactId>ajf-persistence-dao</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-injection-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-injection-impl</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

@@ -19,11 +19,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import am.ajf.persistence.jpa.EntityManagerProvider;
+import am.ajf.persistence.jpa.impl.CrudImplHandler;
 import am.ajf.persistence.jpa.test.harness.ModelCrud;
 import am.ajf.persistence.jpa.test.harness.SimpleCrudServiceBD;
 
 @RunWith(Arquillian.class)
-public class CrudDbTest {
+public class CrudTest {
 
 	@Inject
 	private SimpleCrudServiceBD crudService;
@@ -39,6 +40,7 @@ public class CrudDbTest {
 				.addClasses(SimpleCrudServiceBD.class)
 				.addClasses(EntityManagerProvider.class)
 				.addClasses(ModelCrud.class)
+				.addClasses(CrudImplHandler.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,
 						ArchivePaths.create("beans.xml"))
 				.addAsManifestResource("META-INF/persistence.xml", 

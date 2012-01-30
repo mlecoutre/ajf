@@ -18,6 +18,10 @@
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-persistence-impl</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-injection-impl</artifactId>
+		</dependency>
 
 		<!-- JPA2 impl for tests -->
 		<dependency>

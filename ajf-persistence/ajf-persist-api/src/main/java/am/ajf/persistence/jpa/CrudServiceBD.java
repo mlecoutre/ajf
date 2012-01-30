@@ -2,7 +2,7 @@ package am.ajf.persistence.jpa;
 
 import java.util.List;
 
-public interface CrudDbService<E,P> {
+public interface CrudServiceBD<E,P> {
 	
 	List<E> find(String queryName, Object... params); 
 	E save(E entity);

@@ -18,7 +18,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import am.ajf.core.ApplicationContext;
 import am.ajf.persistence.jpa.EntityManagerProvider;
+import am.ajf.persistence.jpa.impl.CrudImplHandler;
+import am.ajf.persistence.jpa.impl.NamedQueryImplHandler;
 import am.ajf.persistence.jpa.test.harness.Model1;
 import am.ajf.persistence.jpa.test.harness.NamedQueryNoImplServiceBD;
 import am.ajf.persistence.jpa.test.harness.NamedQueryWithImplService;
@@ -43,6 +46,7 @@ public class NamedQueryTest {
 				.addClasses(NamedQueryWithImplServiceBD.class)
 				.addClasses(EntityManagerProvider.class)				
 				.addClasses(NamedQueryWithImplService.class)
+				.addClasses(NamedQueryImplHandler.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,
 						ArchivePaths.create("beans.xml"))
 				.addAsManifestResource("META-INF/persistence.xml", 
@@ -50,8 +54,7 @@ public class NamedQueryTest {
 	}
 	
 	@Before
-	public void setUp() throws Exception {				                
-        //EntityManager em = EntityManagerProvider.createEntityManager("default");
+	public void setUp() throws Exception {				                        
 		EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.persist(new Model1("nicolas"));

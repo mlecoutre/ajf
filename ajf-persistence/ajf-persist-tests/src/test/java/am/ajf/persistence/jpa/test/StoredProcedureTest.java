@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import am.ajf.persistence.jpa.EntityManagerProvider;
+import am.ajf.persistence.jpa.impl.StoredProcedureImplHandler;
 import am.ajf.persistence.jpa.test.harness.Model1;
 import am.ajf.persistence.jpa.test.harness.ModelSp;
 import am.ajf.persistence.jpa.test.harness.StoredProcedureNoImplServiceBD;
@@ -43,6 +44,7 @@ public class StoredProcedureTest {
 				.create(JavaArchive.class, "test.jar")
 				.addClasses(StoredProcedureNoImplServiceBD.class)		
 				.addClasses(EntityManagerProvider.class)
+				.addClasses(StoredProcedureImplHandler.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,
 						ArchivePaths.create("beans.xml"))
 				.addAsManifestResource("META-INF/persistence.xml", 
