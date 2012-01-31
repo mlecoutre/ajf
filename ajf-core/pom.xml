@@ -215,6 +215,12 @@
 			<version>11.0.1</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>javassist</groupId>
+		  	<artifactId>javassist</artifactId>  
+		  	<version>3.12.0.GA</version>
+  		</dependency>
+		
 	</dependencies>
 
 	<build>
