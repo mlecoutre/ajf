@@ -91,8 +91,9 @@ public class ImplementationHandlersRepository {
 	 * @param pInterface
 	 * @param impl
 	 * @return
+	 * @throws ClassGenerationException 
 	 */
-	public Class<?> buildImplFor(Class<?> pInterface, Class<?> impl) {
+	public Class<?> buildImplFor(Class<?> pInterface, Class<?> impl) throws ClassGenerationException {
 		//logger.debug("Building impl for ("+pInterface.getSimpleName()+") : "+impl);
 		//first create the methods to generate for each handler
 		Map<ImplementationHandler, List<Method>> generators = new HashMap<ImplementationHandler, List<Method>>();		

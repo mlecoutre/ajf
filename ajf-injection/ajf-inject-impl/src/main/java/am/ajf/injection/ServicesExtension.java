@@ -107,6 +107,8 @@ public class ServicesExtension implements Extension {
 			issues.add(e);
 		} catch (NoSuchMethodException e) {
 			issues.add(e);
+		} catch (ClassGenerationException e) {
+			issues.add(e);
 		}
 		
 		// Add the issues
