@@ -45,8 +45,8 @@ public class BeanConfiguration extends AbstractConfiguration {
 		return result;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
+	@SuppressWarnings("unchecked")
 	public Iterator getKeys() {
 		return map.keySet().iterator();
 	}

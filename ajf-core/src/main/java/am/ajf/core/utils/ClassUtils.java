@@ -35,7 +35,7 @@ public class ClassUtils {
 	 * @param packageName
 	 *            (should be the package containing your annotated beans.
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "unchecked" })
 	public static List<Class> getClasses(String packageName) throws Exception {
 		List<Class> classes = new ArrayList<Class>();
 		File directory = null;
