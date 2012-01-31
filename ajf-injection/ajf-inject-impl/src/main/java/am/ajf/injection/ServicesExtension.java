@@ -48,6 +48,7 @@ public class ServicesExtension implements Extension {
 		logger.info("Loading AJF CDI extension 'ServicesExtension' : beginning the scanning process.");
 
 		CDIBeanFactory.setBeanManager(beanManager);
+		
 		issues = new ArrayList<Throwable>();
 		serviceRepository = new ImplementationsRepository();
 		serviceHandlerRepository = new ImplementationHandlersRepository();		
@@ -200,13 +201,11 @@ public class ServicesExtension implements Extension {
 	}
 	
 	public <T> void processInjectionTarget(@Observes ProcessInjectionTarget<T> pit, BeanManager beanManager) {
-		logger.debug("Process injection for: {}", pit.getAnnotatedType().getJavaClass().getName());
+		logger.debug("process injection for: {}", pit.getAnnotatedType().getJavaClass().getName());
 	}
 	
 	public <T> void processProcessBean(@Observes ProcessBean<T> pb, BeanManager beanManager) {
-		/*
 		logger.debug("process bean: {} as name {}", pb.getBean().getBeanClass().getName(), pb.getBean().getName());
-		*/
 	}
 	
 }
