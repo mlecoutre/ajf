@@ -7,6 +7,8 @@ import javassist.CannotCompileException;
 import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
+import am.ajf.core.utils.JavassistUtils;
+import am.ajf.injection.ClassGenerationException;
 import am.ajf.injection.ImplementationHandler;
 import am.ajf.persistence.jpa.CrudServiceBD;
 import am.ajf.persistence.jpa.EntityManagerProvider;
@@ -39,14 +41,17 @@ public class CrudImplHandler extends AbstractPersistenceImplHandler
 
 	@Override
 	public Class<?> implementMethodsFor(Class<?> superClass,
-			Class<?> interfaceClass, List<Method> methods) {
-		CtClass cc = null;
+			Class<?> interfaceClass, List<Method> methods) throws ClassGenerationException{
+		Class<?> clazz = null;
+		
 		try {
+			CtClass cc = null;
+			
 			// Manage the cases where superClass is null and co
-			cc = initClass(superClass, interfaceClass);
+			cc = JavassistUtils.initClass(superClass, interfaceClass, pool);
 			
 			//Add the class attributes (logger, EntityManagerFactory, @PersitenceUnit...)
-			cc.addField(createLogger(cc));
+			cc.addField(JavassistUtils.createLogger(cc));
 			cc.addField(createEntityManagerFactory(cc));
 			
 			//generate each method
@@ -60,19 +65,17 @@ public class CrudImplHandler extends AbstractPersistenceImplHandler
 				cc.addMethod(newCtm);			
 			}
 			
-			return cc.toClass();
+			clazz = cc.toClass();
 		
 		} catch (NotFoundException e) {
-			e.printStackTrace();
+			throw new ClassGenerationException("Impossible to find the class : ", e); 
 		} catch (CannotCompileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ClassGenerationException("Impossible to compile code : ", e);
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new ClassGenerationException("Impossible to find the class : ", e);
 		}
 		
-		return null;
+		return clazz;
 	}
 
 	public StringBuffer generateBodyFor(Method method) throws ClassNotFoundException, NotFoundException {

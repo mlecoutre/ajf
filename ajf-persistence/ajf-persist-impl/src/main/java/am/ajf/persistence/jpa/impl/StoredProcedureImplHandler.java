@@ -15,6 +15,7 @@ import javassist.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import am.ajf.core.utils.JavassistUtils;
 import am.ajf.injection.ImplementationHandler;
 import am.ajf.persistence.jpa.annotation.StoredProcedure;
 
@@ -39,10 +40,10 @@ public class StoredProcedureImplHandler extends AbstractPersistenceImplHandler
 		CtClass cc = null;
 		try {
 			// Manage the cases where superClass is null and co
-			cc = initClass(superClass, interfaceClass);
+			cc = JavassistUtils.initClass(superClass, interfaceClass, pool);
 			
 			//Add the class attributes (logger, EntityManagerFactory, @PersitenceUnit...)
-			cc.addField(createLogger(cc));
+			cc.addField(JavassistUtils.createLogger(cc));
 			cc.addField(createEntityManagerFactory(cc));
 			
 			//generate each method
