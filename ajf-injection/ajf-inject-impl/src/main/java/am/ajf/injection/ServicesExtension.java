@@ -2,10 +2,8 @@ package am.ajf.injection;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -28,76 +26,96 @@ import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.utils.ClassUtils;
 import am.ajf.injection.ImplementationsRepository.MalformedServiceException;
 import am.ajf.injection.ImplementationsRepository.NotInitializedException;
-import am.ajf.injection.internal.AnnotatedTypeWrapper;
+import am.ajf.injection.internal.EnrichableAnnotatedTypeWrapper;
 import am.ajf.injection.utils.CDIBeanFactory;
 
 public class ServicesExtension implements Extension {
 
-	private static final Logger logger = LoggerFactory.getLogger(ServicesExtension.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(ServicesExtension.class);
 	private ImplementationsRepository serviceRepository;
 	private ImplementationHandlersRepository serviceHandlerRepository;
 
-
 	private List<Throwable> issues;
-	
+
 	public ServicesExtension() {
 		super();
 	}
 
-	public void beforeBeanDiscovery(@Observes BeforeBeanDiscovery bbd, BeanManager beanManager) {
-		logger.info("Loading AJF CDI extension 'ServicesExtension' : beginning the scanning process.");
+	public void beforeBeanDiscovery(@Observes BeforeBeanDiscovery bbd,
+			BeanManager beanManager) {
+		logger
+				.info("Loading AJF CDI extension 'ServicesExtension' : beginning the scanning process.");
 
 		CDIBeanFactory.setBeanManager(beanManager);
-		
+
 		issues = new ArrayList<Throwable>();
 		serviceRepository = new ImplementationsRepository();
-		serviceHandlerRepository = new ImplementationHandlersRepository();		
+		serviceHandlerRepository = new ImplementationHandlersRepository();
 	}
-	
-	public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager beanManager) {
+
+	public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd,
+			BeanManager beanManager) {
 		logger.info("Finished the scanning process.");
 		serviceHandlerRepository.completeScan();
-		serviceRepository.completeScan();         
-		
-		//for each interface get the methods and generate the subclass for each handlers.
+		serviceRepository.completeScan();
+
+		// for each interface get the methods and generate the subclass for each
+		// handlers.
 		try {
 			Set<Class<?>> interfaces = serviceRepository.getInterfaces();
 			for (Class<?> in : interfaces) {
-				List<Class<?>> impls = serviceRepository.getServicesForInterface(in);
-				
-				//easy first, no impl
+				List<Class<?>> impls = serviceRepository
+						.getServicesForInterface(in);
+
+				// easy first, no impl
 				Class<?> generatedImpl = null;
 				if (impls.size() == 0) {
-					 //generate the impl
-					 generatedImpl = serviceHandlerRepository.buildImplFor(in, null);
-					 if (generatedImpl == null) {
-						 throw new ClassGenerationException("Generation of implementation for interface ("+in.getName()+") failed. Is there a Handler for your methods ?");
-					 }
-					 serviceRepository.addService(generatedImpl);
-					 //generate the bean CDI
-					 AnnotatedType<?> at = beanManager.createAnnotatedType(generatedImpl); 
-				     final InjectionTarget<?> it = beanManager.createInjectionTarget(at); 
-					 Bean<?> bean = serviceHandlerRepository.buildBeanFor(generatedImpl, in, it);
-					 abd.addBean(bean);					 
-				} else { 				
+					// generate the impl
+					generatedImpl = serviceHandlerRepository.buildImplFor(in,
+							null);
+					if (generatedImpl == null) {
+						throw new ClassGenerationException(
+								"Generation of implementation for interface ("
+										+ in.getName()
+										+ ") failed. Is there a Handler for your methods ?");
+					}
+					serviceRepository.addService(generatedImpl);
+					// generate the bean CDI
+					AnnotatedType<?> at = beanManager
+							.createAnnotatedType(generatedImpl);
+					final InjectionTarget<?> it = beanManager
+							.createInjectionTarget(at);
+					Bean<?> bean = serviceHandlerRepository.buildBeanFor(
+							generatedImpl, in, it);
+					abd.addBean(bean);
+				} else {
 					for (Class<?> impl : impls) {
-						//If the implementation is not abstract, then no need to go further 
+						// If the implementation is not abstract, then no need
+						// to go further
 						if (Modifier.isAbstract(impl.getModifiers())) {
-							generatedImpl = serviceHandlerRepository.buildImplFor(in, impl);
+							generatedImpl = serviceHandlerRepository
+									.buildImplFor(in, impl);
 							if (generatedImpl == null) {
-								 throw new ClassGenerationException("Generation of implementation for interface ("+in.getName()+") failed. Is there a Handler for your methods ?");
-							 }
+								throw new ClassGenerationException(
+										"Generation of implementation for interface ("
+												+ in.getName()
+												+ ") failed. Is there a Handler for your methods ?");
+							}
 							serviceRepository.addService(generatedImpl);
-							//generate the bean CDI
-							AnnotatedType<?> at = beanManager.createAnnotatedType(generatedImpl); 
-						    final InjectionTarget<?> it = beanManager.createInjectionTarget(at); 
-							Bean<?> bean = serviceHandlerRepository.buildBeanFor(generatedImpl, in, it);
-							abd.addBean(bean);	
+							// generate the bean CDI
+							AnnotatedType<?> at = beanManager
+									.createAnnotatedType(generatedImpl);
+							final InjectionTarget<?> it = beanManager
+									.createInjectionTarget(at);
+							Bean<?> bean = serviceHandlerRepository
+									.buildBeanFor(generatedImpl, in, it);
+							abd.addBean(bean);
 						}
 					}
 				}
 			}
-			//serviceRepository.completeScan();
+			// serviceRepository.completeScan();
 		} catch (NotInitializedException e) {
 			issues.add(e);
 		} catch (MalformedServiceException e) {
@@ -117,57 +135,75 @@ public class ServicesExtension implements Extension {
 		} catch (ClassGenerationException e) {
 			issues.add(e);
 		}
-		
+
 		// Add the issues
 		for (Throwable t : issues) {
 			abd.addDefinitionError(t);
 		}
 		logger.info("Loaded AJF CDI extension 'ServicesExtension'.");
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> pat, BeanManager beanManager) {
-		
+	public <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> pat,
+			BeanManager beanManager) {
+
 		Class<T> javaClass = pat.getAnnotatedType().getJavaClass();
 		logger.info("Scanning type: " + javaClass.getName());
-		
+
 		// is it a service implementation
 		if (ClassUtils.isServiceImpl(javaClass)) {
-			
+
 			try {
-				
+
 				// get the corresponding service interface
-				String serviceInterfaceName = ClassUtils.processServiceInterfaceName(javaClass);
-				Class<?> serviceInterface = ClassUtils.loadClass(serviceInterfaceName);
-				
+				String serviceInterfaceName = ClassUtils
+						.processServiceInterfaceName(javaClass);
+				Class<?> serviceInterface = ClassUtils
+						.loadClass(serviceInterfaceName);
+
 				// get the annotated service interface
-				AnnotatedType<T> interfaceAnnotatedType = (AnnotatedType<T>) beanManager.createAnnotatedType(serviceInterface);
-				
+				AnnotatedType<T> interfaceAnnotatedType = (AnnotatedType<T>) beanManager
+						.createAnnotatedType(serviceInterface);
+
 				// get the service operations
-				Collection<Method> serviceMethods = listMethods(interfaceAnnotatedType);
+				Set<AnnotatedMethod<? super T>> serviceMethods = interfaceAnnotatedType
+						.getMethods();
 
 				// get the annotated service implementation
 				AnnotatedType<T> annotatedType = pat.getAnnotatedType();
+				// wrapp the service implementation
+				EnrichableAnnotatedTypeWrapper<T> wrapped = new EnrichableAnnotatedTypeWrapper<T>(
+						annotatedType);
+
+				// add monitored annotation for each overrided method
+
+				Class<? extends Annotation> annotationType = Monitored.class;
+				Monitored annotation = new Monitored() {
+					@Override
+					public Class<? extends Annotation> annotationType() {
+						return Monitored.class;
+					}
+				};
 				
-				// wrapp the service implementation  
-				AnnotatedType<T> wrapped = new AnnotatedTypeWrapper<T>(
-						annotatedType, serviceMethods, Monitored.class, new Monitored() {
-							@Override
-							public Class<? extends Annotation> annotationType() {
-								return Monitored.class;
-							}
-						});
-				
-				pat.setAnnotatedType(wrapped);				
-				
+				for (AnnotatedMethod<? super T> svcMethod : serviceMethods) {
+					wrapped.addMethodAnnotation(svcMethod.getJavaMember(), annotationType, annotation);					
+				}
+
+				// process the annotatedMethods
+				wrapped.processAnnotatedMethods();
+				// process the type annotations
+				wrapped.processAnnotations();
+
+				pat.setAnnotatedType(wrapped);
+
 			} catch (ClassNotFoundException e) {
 				logger.error("Error loading the interface.", e);
 			}
-						
+
 		}
-	
+
 		try {
-			Class<?> cus = pat.getAnnotatedType().getJavaClass();			
+			Class<?> cus = pat.getAnnotatedType().getJavaClass();
 			if (serviceHandlerRepository.isHandler(cus)) {
 				Class<ImplementationHandler> cusHandler = (Class<ImplementationHandler>) cus;
 				serviceHandlerRepository.addHandler(cusHandler);
@@ -180,32 +216,19 @@ public class ServicesExtension implements Extension {
 		} catch (IllegalAccessException e) {
 			issues.add(e);
 		}
-		
+
 	}
-	
-	/**
-	 * 
-	 * @param <T>
-	 * @param annotatedType
-	 * @return a list of methods
-	 */
-	private <T> Collection<Method> listMethods(AnnotatedType<T> annotatedType) {
-		List<Method> methods = new ArrayList<Method>();
-		
-		Set<AnnotatedMethod<? super T>> methodsSet = annotatedType.getMethods();
-		for (AnnotatedMethod<? super T> annotatedMethod : methodsSet) {
-			Method method = annotatedMethod.getJavaMember();
-			methods.add(method);
-		}
-		return methods;
+
+	public <T> void processInjectionTarget(
+			@Observes ProcessInjectionTarget<T> pit, BeanManager beanManager) {
+		logger.debug("process injection for: {}", pit.getAnnotatedType()
+				.getJavaClass().getName());
 	}
-	
-	public <T> void processInjectionTarget(@Observes ProcessInjectionTarget<T> pit, BeanManager beanManager) {
-		logger.debug("process injection for: {}", pit.getAnnotatedType().getJavaClass().getName());
+
+	public <T> void processProcessBean(@Observes ProcessBean<T> pb,
+			BeanManager beanManager) {
+		logger.debug("process bean: {} as name {}", pb.getBean().getBeanClass()
+				.getName(), pb.getBean().getName());
 	}
-	
-	public <T> void processProcessBean(@Observes ProcessBean<T> pb, BeanManager beanManager) {
-		logger.debug("process bean: {} as name {}", pb.getBean().getBeanClass().getName(), pb.getBean().getName());
-	}
-	
+
 }
