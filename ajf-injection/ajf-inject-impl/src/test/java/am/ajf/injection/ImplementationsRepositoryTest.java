@@ -5,8 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.testng.Assert;
 
-import am.ajf.core.ApplicationContext;
-
 /**
  * Test the repository management and especially the addService method.
  * 
