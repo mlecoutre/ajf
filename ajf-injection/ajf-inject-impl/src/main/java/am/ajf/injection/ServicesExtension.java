@@ -69,6 +69,9 @@ public class ServicesExtension implements Extension {
 				if (impls.size() == 0) {
 					 //generate the impl
 					 generatedImpl = serviceHandlerRepository.buildImplFor(in, null);
+					 if (generatedImpl == null) {
+						 throw new ClassGenerationException("Generation of implementation for interface ("+in.getName()+") failed. Is there a Handler for your methods ?");
+					 }
 					 serviceRepository.addService(generatedImpl);
 					 //generate the bean CDI
 					 AnnotatedType<?> at = beanManager.createAnnotatedType(generatedImpl); 
@@ -80,6 +83,9 @@ public class ServicesExtension implements Extension {
 						//If the implementation is not abstract, then no need to go further 
 						if (Modifier.isAbstract(impl.getModifiers())) {
 							generatedImpl = serviceHandlerRepository.buildImplFor(in, impl);
+							if (generatedImpl == null) {
+								 throw new ClassGenerationException("Generation of implementation for interface ("+in.getName()+") failed. Is there a Handler for your methods ?");
+							 }
 							serviceRepository.addService(generatedImpl);
 							//generate the bean CDI
 							AnnotatedType<?> at = beanManager.createAnnotatedType(generatedImpl); 
