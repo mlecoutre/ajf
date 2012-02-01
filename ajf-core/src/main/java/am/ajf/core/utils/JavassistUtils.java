@@ -1,6 +1,7 @@
 package am.ajf.core.utils;
 
 import javassist.CannotCompileException;
+import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtField;
@@ -41,6 +42,12 @@ public class JavassistUtils {
 	 */
 	public static CtClass initClass(Class<?> superClass, Class<?> interfaceClass, ClassPool pool)
 			throws NotFoundException, CannotCompileException {
+				//init the classloader this might need to be optimized
+				pool.insertClassPath(new ClassClassPath(interfaceClass));
+				if (superClass != null) {// Fix NPE on 18653
+					pool.insertClassPath(new ClassClassPath(superClass));
+				}
+		
 				CtClass cc;
 				CtClass cin = pool.get(interfaceClass.getName());
 				if (superClass == null) {// no impl, so impl the interface
