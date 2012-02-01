@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-parent</artifactId>
+		<version>2.0.2-SNAPSHOT</version>
+		<relativePath>../../ajf-parent</relativePath>
+	</parent>
+	<artifactId>ajf-remoting-dist</artifactId>
+	<packaging>pom</packaging>
+
+	<scm>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-remoting/ajf-remoting-dist</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-remoting/ajf-remoting-dist</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/ajf-remoting/ajf-remoting-dist/]]></url>
+	</scm>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-remoting-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-remoting-impl</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-remoting-tests</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-injection-api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<modules>
+		<module>../ajf-remoting-api</module>
+		<module>../ajf-remoting-impl</module>
+		<!--  module>../ajf-persist-docs</module-->
+		<module>../ajf-remoting-tests</module>
+	</modules>
+
+</project>
