@@ -24,7 +24,7 @@ public class JavassistUtils {
 	 * @throws CannotCompileException
 	 */
 	public static CtField createLogger(CtClass cc) throws CannotCompileException {
-		CtField cLogger = CtField.make("private final transient org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());", cc);				
+		CtField cLogger = CtField.make("private final transient org.slf4j.Logger logger = am.ajf.core.logger.LoggerFactory.getLogger(this.getClass());", cc);				
 		return cLogger;
 	}
 
