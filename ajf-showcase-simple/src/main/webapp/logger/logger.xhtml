@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="../WEB-INF/templates/simpleLayout.xhtml">
+
+	<ui:define name="content">
+		<h:form id="form">
+
+			<center>
+			<br/>
+			<p:fieldset legend="#{m['title.loggers']}"
+				style="width:90%;">
+	
+				<br/>
+				<div align="left" style="width: 100%">
+					<div align="left">	
+					 	<p:commandButton  value="#{m['button.refresh']}" 					
+							update="loggersForm:loggersTab"					 
+							actionListener="#{loggerMBean.refresh}"
+							image="ui-icon-refresh" />
+					</div>
+				</div>
+				<br/>
+				<p:dataTable id="loggersTab" var="loggerVar"
+					value="#{loggerMBean.loggers}"
+					rowEditListener="#{loggerMBean.editListener}"
+	 				paginator="true" rows="20" rowsPerPageTemplate="15,20,30" 
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"      
+					style="width:100%;">
+					
+					<!--
+					 rendered="#{authorization.admin}"> 
+					 -->
+					<p:column headerText="#{m['logger.action']}" style="width:40px;height:40px;">  
+	            		<p:rowEditor />  
+	        		</p:column>
+	        		
+	        		<p:column headerText="#{m['logger.additive']}" style="width:60px">  
+		            	<p:cellEditor>  
+			                <f:facet name="output">  
+			                    <h:selectBooleanCheckbox value="#{loggerVar.additive}" readonly="true" disabled="true" />
+			                </f:facet>  
+			                <f:facet name="input">  
+			                    <h:selectBooleanCheckbox value="#{loggerVar.additive}" />
+			                </f:facet>  
+		            	</p:cellEditor>  
+	        		</p:column>      	
+					
+					<p:column headerText="#{m['logger.category']}" sortBy="#{loggerVar.name}" style="width:60%">  
+	                    <h:outputText value="#{loggerVar.name}" />  
+	        		</p:column>  
+	        
+					<p:column headerText="#{m['logger.level']}" sortBy="#{loggerVar.level}">  
+		            	<p:cellEditor>  
+			                <f:facet name="output">  
+			                    <h:outputText value="#{loggerVar.level}" />  
+			                </f:facet>  
+			                <f:facet name="input">  
+			                    <h:selectOneMenu value="#{loggerVar.level}">
+				    				<f:selectItems value="#{loggerMBean.loggerLevelValues}" var="level"
+	   										itemLabel="#{level}" itemValue="#{level}" />
+				    			</h:selectOneMenu>
+			                </f:facet>  
+		            	</p:cellEditor>  
+	        		</p:column>
+	        		        		        		
+				</p:dataTable>
+	
+			</p:fieldset>
+		</center>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
