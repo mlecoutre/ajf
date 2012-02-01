@@ -8,16 +8,17 @@ import javax.transaction.Status;
 import javax.transaction.UserTransaction;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import am.ajf.core.logger.LoggerFactory;
 
 @Transactional
 @Interceptor
 public class TransactionInterceptor {
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	@Inject
 	UserTransaction utx;
-
-	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * Add the transaction logic to the method. Dont start a transaction if @NoTransaction
