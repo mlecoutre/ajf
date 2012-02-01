@@ -38,13 +38,13 @@ public class JpaMBean implements Serializable {
 		models = new ArrayList<Model>();
 	}
 
-	public void computeModels(ActionEvent event) {
+	public void computeModels(/*ActionEvent event*/) {
 		logger.debug("JpaMBean : compute models");
 		models = policy.listAllModels().getModels();
 		logger.debug("models changed. found "+models.size()+" value(s)");
 	}
 	
-	public void createModelCrud(ActionEvent event)  {
+	public void createModelCrud(/*ActionEvent event*/)  {
 		logger.debug("JpaMBean : creates crud models");
 		
 		policy.createModelCrud();
@@ -53,7 +53,7 @@ public class JpaMBean implements Serializable {
 		logger.debug("models changed. found "+models.size()+" value(s)");
 	}
 	
-	public void createModelManual(ActionEvent event) throws NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+	public void createModelManual(/*ActionEvent event*/) throws NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
 		logger.debug("JpaMBean : creates manual model");
 		
 		policy.createModelManual();

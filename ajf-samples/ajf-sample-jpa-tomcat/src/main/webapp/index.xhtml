@@ -5,7 +5,7 @@ HTML 1.0 Transitional//EN"
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.prime.com.tr/ui">
+	xmlns:p="http://primefaces.org/ui">
 	
 <h:head>
 	<title>AJF Test application for the JPA extension</title>				
@@ -24,13 +24,13 @@ HTML 1.0 Transitional//EN"
 	</p:dataList>  
 	
 	<p:commandButton value="Display"   
-		             actionListener="#{jpaBean.computeModels}"
+		             actionListener="#{jpaBean.computeModels()}"
 		             update="main" />
 	<p:commandButton value="New - Manual"   
-		             actionListener="#{jpaBean.createModelManual}"
+		             actionListener="#{jpaBean.createModelManual()}"
 		             update="main" />
-	<p:commandButton value="New - CrudDbService"   
-		             actionListener="#{jpaBean.createModelCrud}"
+	<p:commandButton value="New - CrudService"   
+		             actionListener="#{jpaBean.createModelCrud()}"
 		             update="main" />	             
 	</p:panel>
 </h:form>

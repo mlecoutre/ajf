@@ -9,11 +9,11 @@ import javax.persistence.NamedQuery;
 
 @Entity
 @NamedQueries({ @NamedQuery(name = Model.FIND_BY_NAME, 
-					query = "FROM Model model WHERE model.name = :name") ,
+					query = "SELECT m FROM Model m WHERE m.name = :name") ,
 				@NamedQuery(name = Model.FIND_ALL, 
-					query = "FROM Model model"),
+					query = "SELECT m FROM Model m"),
 				@NamedQuery(name = Model.COUNT_ALL, 
-					query = "SELECT count(model) FROM Model model")})
+					query = "SELECT count(m) FROM Model m")})
 public class Model {
 
 	public static final String FIND_BY_NAME = "Model.findByName";

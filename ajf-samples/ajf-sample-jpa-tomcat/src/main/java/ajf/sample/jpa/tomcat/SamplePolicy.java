@@ -40,8 +40,8 @@ public class SamplePolicy implements SamplePolicyBD {
 	}
 
 	@Override
-	//@Transactional //-- should work but no !
-	@Interceptors(TransactionInterceptor.class)
+	@Transactional //-- should work but no !
+	//@Interceptors(TransactionInterceptor.class)
 	public void createModelCrud() {
 		int modelId = new Random().nextInt(); 
 		logger.debug("SamplePolicy : create a new Model with Crud service("+modelId+")");
