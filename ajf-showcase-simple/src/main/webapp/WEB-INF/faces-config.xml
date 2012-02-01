@@ -12,14 +12,14 @@
 		<!-- <system-event-listener> <system-event-listener-class>weldguess.GuiceVariableResolver</system-event-listener-class> 
 			<system-event-class>javax.faces.event.PreRenderComponentEvent</system-event-class> 
 			</system-event-listener> -->
-		<message-bundle>am.ajf.messages</message-bundle>
+		<message-bundle>i18n.messages</message-bundle>
 		<locale-config>
 			<default-locale>en</default-locale>
 			<supported-locale>fr</supported-locale>
 			<supported-locale>en</supported-locale>
 		</locale-config>
 		<resource-bundle>
-			<base-name>am.ajf.messages</base-name>
+			<base-name>i18n.messages</base-name>
 			<var>m</var>
 		</resource-bundle>
 	</application>
