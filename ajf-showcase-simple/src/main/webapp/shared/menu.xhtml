@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:menubar
+		style="border:0;width:60%;margin-left:auto;margin-right:auto">
+
+		<!--  ADD YOUR CONTENT HERE  -->
+		<p:submenu label="#{m['menu.employee.management.title']}">
+			<p:menuitem value="#{m['menu.employee.list.title']}"
+				url="/employeemanagement/person.jsf" style="font-size:85%" />
+		</p:submenu>
+		<p:submenu label="#{m['menu.showcase.title']}">
+			<p:menuitem value="#{m['menu.showcase.uimessages']}"
+				url="/showcase/uimessages.jsf" style="font-size:85%" />
+		</p:submenu>
+	</p:menubar>
+
+
+
+</ui:composition>

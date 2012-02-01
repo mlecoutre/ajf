@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Created-By: Apache Maven
+Built-By: E010925
+Build-Jdk: 1.6.0_22
+Version: 1.0-SNAPSHOT

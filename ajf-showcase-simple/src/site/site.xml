@@ -1,0 +1,31 @@
+<project name="Maven">
+  <skin>
+ 	<groupId>am.skins</groupId>
+  	<artifactId>am-skin-standard</artifactId>
+  	<version>1.2</version>
+  </skin>
+	<bannerLeft>
+		<name>ArcelorMittal</name>
+		<src>images/arcelormittal.png</src>
+		<href>http://www.arcelormittal.com</href>
+	</bannerLeft>
+	<publishDate format="dd MMM yyyy HH:mm" />
+	<body>
+		<links>
+			<item name="Web JAVA" href="http://web-maven-site"/>
+			<item name="Maven Repository" href="http://web-maven-repo/nexus"/>
+			<item name="Maven IC" href="http://web-maven-ic/hudson"/>
+			<item name="AJF Framework" href="http://web-java/projects/index.html" />
+			<item name="Maven" href="http://maven.apache.org/maven2/" />
+			<item name="TAE website" href="https://www.myarcelormittal.com/BGAuth/LoginScreen?RPReferer=/sps1/portal/teamsites/ITFCETAE/default.aspx" />
+			<item name="TAE Wiki" href="http://web-xwiki" />
+		</links>
+<!--
+		<menu name="Application">
+			<item name="Introduction" href="index.html" />
+		</menu>
+-->
+		${reports}
+
+	</body>
+</project>

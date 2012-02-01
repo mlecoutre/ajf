@@ -1,0 +1,81 @@
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+<Configure id="Server" class="org.mortbay.jetty.Server">
+
+	<!-- connectors -->
+
+	<Set name="connectors">
+		<Array type="org.mortbay.jetty.Connector">
+			<Item>
+				<New class="org.mortbay.jetty.nio.SelectChannelConnector">
+					<Set name="host">
+						<SystemProperty name="jetty.host"/>
+					</Set>
+					<Set name="port">
+						<SystemProperty name="jetty.port" default="8780"/>
+					</Set>
+					<Set name="maxIdleTime">60000</Set>
+
+				</New>
+			</Item>
+		</Array>
+	</Set>
+	<!-- handlers -->
+	<!-- webapps/contexts -->
+
+	<Array id="plusConfig" type="java.lang.String">
+		<Item>org.mortbay.jetty.webapp.WebInfConfiguration</Item>
+		<Item>org.mortbay.jetty.plus.webapp.EnvConfiguration</Item>
+		<Item>org.mortbay.jetty.plus.webapp.Configuration</Item>
+		<Item>org.mortbay.jetty.webapp.JettyWebXmlConfiguration</Item>
+		<Item>org.mortbay.jetty.webapp.TagLibConfiguration</Item>
+	</Array>
+
+	<New id="eppuiContext" class="org.mortbay.jetty.webapp.WebAppContext">
+
+		<Set name="ConfigurationClasses">
+			<Ref id="plusConfig"/>
+		</Set>
+
+	</New>
+	<!-- optional configuration -->
+
+	<!-- session id manager -->
+	<!-- authentication realms -->
+	<!-- request logs -->
+
+	<!-- extra server options -->
+
+	<!-- threadpool -->
+	<Set name="ThreadPool">
+		<New class="org.mortbay.thread.QueuedThreadPool">
+			<Set name="minThreads">10</Set>
+			<Set name="maxThreads">200</Set>
+			<Set name="lowThreads">20</Set>
+			<Set name="SpawnOrShrinkAt">2</Set>
+		</New>
+	</Set>
+
+	<!-- FILE SECURITY 
+
+	<Set name="UserRealms">
+		<Array type="org.mortbay.jetty.security.UserRealm">
+			<Item>
+				<New class="org.mortbay.jetty.security.HashUserRealm">
+					<Set name="name">MyRealm</Set>
+					<Set name="config">src/test/resources/jetty-users.properties
+					</Set>
+				</New>
+			</Item>
+		</Array>
+	</Set>
+
+    -->
+	<!--
+		<Call name="addUserRealm"> <Arg> <New class="org.mortbay.jetty.plus.jaas.JAASUserRealm"> <Set name="name">
+		MyRealm</Set> <Set name="LoginModuleName">ldaploginmodule</Set> <Set name="RoleCheckPolicy"> <New
+		class="org.mortbay.jetty.plus.jaas.StrictRoleCheckPolicy" /> </Set> <Set name="CallbackHandlerClass">
+		org.mortbay.jetty.plus.jaas.callback.DefaultCallbackHandler </Set> <Set name="roleClassNames"> <Array
+		type="java.lang.String"> <Item>org.mortbay.jetty.plus.jaas.JAASRole</Item> </Array> </Set> </New> </Arg> </Call>
+	-->
+
+</Configure>

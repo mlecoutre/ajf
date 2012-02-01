@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Map Sample</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<h:outputStylesheet library="css" name="screen.css" />
+	<link rel="stylesheet" href="css/style.css" type="text/css"
+		media="screen" />
+</h:head>
+<h:body>
+	<div id="wrapper">
+		<!-- #wrapper -->
+		<header><!-- header -->
+		<h1>My JEE7 Sample webApp</h1>
+		</header>
+		<!-- end of header -->
+		<nav><!-- top nav -->
+		<div class="menu">
+			<ul>
+				<li><a href="#">Home</a>
+				</li>
+				<li><a href="#">About</a>
+				</li>
+				<li><a href="#">Services</a>
+				</li>
+				<li><a href="#">Support</a>
+				</li>
+				<li><a href="#">Contact Us</a>
+				</li>
+			</ul>
+		</div>
+		</nav>
+		<!-- end of top nav -->
+		<ui:insert name="content">
+                    [Template tray will be inserted here]
+    </ui:insert>
+
+		<ui:insert name="tray">
+                    [Template content will be inserted here]
+    </ui:insert>
+	</div>
+</h:body>
+</html>

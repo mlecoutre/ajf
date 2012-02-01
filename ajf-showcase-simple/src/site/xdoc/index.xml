@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<document>
+	<properties>
+		<title>About to JEDI-WS App</title>
+	</properties>
+	<body>
+		<section name="Welcome">
+			<p>
+				Java EDI POC project
+			</p>
+		</section>
+	</body>
+</document>

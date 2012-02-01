@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="../WEB-INF/templates/simpleLayout.xhtml">
+
+	<ui:define name="content">
+		<h:form id="form">
+
+			<center>
+				<H1>
+					<h:outputText value="#{m['employee.management.title']}" />
+				</H1>
+
+				<p:panel header="Search" style="width:90%" toggleable="true">
+					<h:panelGrid columns="3" style="margin-bottom:5px" cellpadding="2"
+						columnClasses="label, column">
+						<h:outputText value="parameter " />
+
+						<p:inputText id="parameter" value="#{showcaseMBean.parameter}">
+							<f:ajax execute="parameter" event="blur" render="parameter-error" />
+						</p:inputText>
+						<h:panelGroup>
+
+							<p:message id="parameter-error" for="parameter" />
+						</h:panelGroup>
+
+						<p:commandButton id="Search" action="#{showcaseMBean.doSthg}"
+							value="Search">
+						</p:commandButton>
+						<p:commandButton id="RaiseError"
+							action="#{showcaseMBean.createError}" value="Raise Error">
+						</p:commandButton>
+
+						<p:commandButton id="RaiseWarning"
+							action="#{showcaseMBean.createWarning}" value="Raise Warning">
+						</p:commandButton>
+					</h:panelGrid>
+				</p:panel>
+
+			</center>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>
