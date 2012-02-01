@@ -8,7 +8,7 @@
  * Contributors:
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
-package am.ajf.showcase.web.controllers;
+package am.ajf.web.controllers;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

@@ -29,7 +29,7 @@ import am.ajf.showcase.lib.model.Person;
 
 @RunWith(DITestRunnner.class)
 public class PersonTest {
-
+ 
 	@InjectLogger
 	Logger log;
 
@@ -56,7 +56,8 @@ public class PersonTest {
 			dataset = new FlatXmlDataSet(Thread.currentThread()
 					.getContextClassLoader().getResourceAsStream(_dbFile));
 
-			DatabaseOperation.CLEAN_INSERT.execute(connection, dataset);
+			DatabaseOperation.INSERT.execute(connection, dataset);
+			connection.close();
 		} catch (Throwable th) {
 
 			th.printStackTrace();
@@ -82,9 +83,9 @@ public class PersonTest {
 		person.setBirthday(new Date());
 		person.setSex('M');
 		em.persist(person);
+		log.debug("PersonId "+person.getPersonid()+ " inserted");
 
 		tx.commit();
-
 	}
 
 	@Test
