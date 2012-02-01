@@ -1,6 +1,8 @@
 package am.ajf.remoting.procs.impl;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import javassist.CannotCompileException;
@@ -64,6 +66,7 @@ public class StoredProcedureImplHandler implements ImplementationHandler {
 				CtMethod ctmethod = declaringClass.getDeclaredMethod(method.getName());			
 				CtMethod newCtm = new CtMethod(ctmethod, cc, null);
 				StringBuffer methodBody = generateBodyFor(method);
+				logger.debug("Method ("+method.getName()+") generated :\n" + methodBody.toString());				
 				newCtm.setBody(methodBody.toString());
 				cc.addMethod(newCtm);			
 			}
@@ -93,11 +96,22 @@ public class StoredProcedureImplHandler implements ImplementationHandler {
 		Object[] pTypes = method.getParameterTypes();
 		String jndi = AnnotationHelper.getJndiInfo(method);
 		boolean isResList = List.class.isAssignableFrom(method.getReturnType());
-		
+		//logger.debug(method.getReturnType().getTypeParameters()[0].toString());
+		//logger.debug(((ParameterizedType) method.getGenericReturnType()).getActualTypeArguments()[0].toString());
 		Class<?> resultType;
 		if (isResList) {
-			resultType = method.getGenericReturnType().getClass();
-		} else {
+			Type listType = method.getGenericReturnType();
+			if (listType instanceof ParameterizedType) {
+				Type subType = ((ParameterizedType) listType).getActualTypeArguments()[0];
+				if (subType instanceof Class<?>) {
+					resultType = (Class<?>) subType;
+				} else {
+					throw new ConfigurationException("The method ("+method.getName()+") doesnt define a parameterized List of Beans. List of native types are nor supported.");
+				}
+			} else {
+				throw new ConfigurationException("The method ("+method.getName()+") doesnt define a parameterized List as the return type. You need to define the type of your list content.");
+			}			
+		} else {			
 			resultType = method.getReturnType();
 		}
 		Class<?> mapperClass = storedProcedure.mapper();
@@ -115,20 +129,29 @@ public class StoredProcedureImplHandler implements ImplementationHandler {
 		StringBuffer body = new StringBuffer();
 		body.append("{\n");
 		body.append("  logger.debug(\"launching stored procedure "+storedProcedure.name()+"\");\n");
-		body.append("  return StoredProcedureHelper.callStoredProcedure(");
+		body.append("  Object[] parameters = new Object["+pTypes.length+"];\n");	
+		for (int i = 0 ; i < pTypes.length ; i++) {
+			body.append("  parameters["+i+"] = $"+(i+1)+";\n");			
+		}
+		body.append("  return ");
+		if (isResList) {
+			body.append(      "(java.util.List)");
+		} else {
+			if (Void.class.equals(method.getReturnType())) {
+				// no casting
+			} else {
+				body.append(      "("+resultType.getName()+")"); 
+			}			
+		}
+		body.append(      " am.ajf.remoting.procs.impl.StoredProcedureHelper.callStoredProcedure(");
 		body.append(      "\""+jndi+"\", ");
 		body.append(      "\""+storedProcedure.name()+"\", ");
-		body.append(      method.getReturnType().equals(Void.class)+", ");
+		body.append(      Void.class.equals(method.getReturnType())+", ");
 		body.append(      isResList+", ");
 		body.append(      mapperClass.getName()+".class, ");
 		body.append(      resultType.getName()+".class, ");
-		for (int i = 1 ; i <= pTypes.length ; i++) {
-			body.append("$"+i);
-			if (i != pTypes.length) {
-				body.append(", ");
-			}
-		}
-		body.append(      ")\n");
+		body.append(      "parameters");		
+		body.append(      ");\n");
 		body.append("}\n");
 		return body;		
 	}

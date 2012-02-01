@@ -19,12 +19,12 @@ import am.ajf.remoting.Mapper;
 
 public class StoredProcedureHelper {
 	
-	public static Object callStoredProcedure(String jndi, String name, boolean isResultNull, boolean isResList, Class<? extends Mapper> mapperClass, Class<?> resultType, Object... params ) 
+	public static Object callStoredProcedure(String jndi, String name, boolean isResultNull, boolean isResList, Class<?> mapperClass, Class<?> resultType, Object... params ) 
 			throws SQLException, NamingException, InstantiationException, IllegalAccessException {		
 		InitialContext ctx = new InitialContext();
 		DataSource ds = (DataSource) ctx.lookup(jndi);
 		Connection con = ds.getConnection();
-		Mapper mapper = mapperClass.newInstance();
+		Mapper mapper = (Mapper) mapperClass.newInstance();
 		
 		//If we use the system mapper, so we need to specify the entity type for the instanciation
 		if (mapper instanceof EditableMapper) {

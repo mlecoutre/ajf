@@ -6,7 +6,7 @@ import am.ajf.remoting.Remote;
 import am.ajf.remoting.procs.annotation.In;
 import am.ajf.remoting.procs.annotation.StoredProcedure;
 
-@Remote(jndi="jdbc/myDatasource")
+@Remote(jndi="java:comp/env/jdbc/remoting")
 public interface StoredProcedureNoImplServiceBD {
 
 	@StoredProcedure(name="ZZTESTNOPARAM")

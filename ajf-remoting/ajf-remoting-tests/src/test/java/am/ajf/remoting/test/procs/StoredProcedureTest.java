@@ -1,18 +1,9 @@
 package am.ajf.remoting.test.procs;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.naming.InitialContext;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
 
-import org.hibernate.Session;
-import org.hibernate.jdbc.Work;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ArchivePaths;
@@ -25,9 +16,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import am.ajf.remoting.test.procs.harness.Model1;
+import am.ajf.remoting.procs.impl.StoredProcedureHelper;
+import am.ajf.remoting.procs.impl.StoredProcedureImplHandler;
 import am.ajf.remoting.test.procs.harness.ModelSp;
 import am.ajf.remoting.test.procs.harness.StoredProcedureNoImplServiceBD;
+import am.ajf.remoting.test.procs.helper.DBHelper;
 
 @RunWith(Arquillian.class)
 public class StoredProcedureTest {
@@ -35,106 +28,56 @@ public class StoredProcedureTest {
 	@Inject
 	private StoredProcedureNoImplServiceBD storedProcedureNoImpl;
 	
-	@Inject
-	private EntityManagerFactory emf;
-	
 	@Deployment
 	public static JavaArchive createTestArchive() {
 		return ShrinkWrap
 				.create(JavaArchive.class, "test.jar")
-				.addClasses(StoredProcedureNoImplServiceBD.class)		
+				.addClasses(StoredProcedureNoImplServiceBD.class)
+				.addClasses(StoredProcedureImplHandler.class)
+				.addClasses(StoredProcedureHelper.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,
-						ArchivePaths.create("beans.xml"))
-				.addAsManifestResource("META-INF/persistence.xml", 
-						ArchivePaths.create("persistence.xml"));
+						ArchivePaths.create("beans.xml"));
 	}
 	
 	@Before
 	public void setUp() throws Exception {		
-		InitialContext ic = new InitialContext();
-		DataSource ds = (DataSource) ic.lookup("jdbc/");
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        
-        em.persist(new Model1("nicolas"));
-        em.persist(new Model1("vincent"));
-        em.persist(new Model1("matthieu"));
-        
-        Session hSession = (Session) em.getDelegate();
-        hSession.doWork(new Work() {
-			
-			@Override
-			public void execute(Connection con) throws SQLException {				
-				Statement stmt1 = con.createStatement();
-				String sp1 = "CREATE PROCEDURE ZZTESTNOPARAM()\n"+
-							 " MODIFIES SQL DATA DYNAMIC RESULT SETS 1\n"+
-						     " BEGIN ATOMIC\n"+
-							 "  DECLARE result CURSOR FOR SELECT id, name FROM model1;\n"+
-						     "  OPEN result;\n"+
-							 " END";
-				stmt1.executeUpdate(sp1);
-				stmt1.close();
-				
-				Statement stmt2 = con.createStatement();
-				String sp2 = "CREATE PROCEDURE ZZTESTWITHPARAM(pName VARCHAR(50))\n"+
-							 " MODIFIES SQL DATA DYNAMIC RESULT SETS 1\n"+
-							 " BEGIN ATOMIC\n"+
-							 "  DECLARE result CURSOR FOR SELECT id, name FROM model1 m WHERE m.name = pName;\n"+
-							 "   OPEN result;\n"+
-							 " END";
-				stmt2.executeUpdate(sp2);
-				stmt2.close();
-				
-				Statement stmt3 = con.createStatement();
-				String sp3 = "CREATE PROCEDURE ZZTESTONEWITHPARAM(pName VARCHAR(50))\n"+
-							 " MODIFIES SQL DATA DYNAMIC RESULT SETS 1\n"+
-							 " BEGIN ATOMIC\n"+
-						 	 "  DECLARE result CURSOR FOR SELECT id, name FROM model1 m WHERE m.name = pName;\n"+
-						 	 "  OPEN result;\n"+
-							 " END";
-				stmt3.executeUpdate(sp3);
-				stmt3.close();										
-				
-			}
-		});
-        em.getTransaction().commit();
-        em.close();
-        
+		DBHelper.setupDataSources();		
+		DBHelper.executeSQLInTransaction("create table model (id INT, name VARCHAR(50));");
+		DBHelper.executeSQLInTransaction(
+				"insert into model values (1, 'nicolas');",
+				"insert into model values (2, 'vincent');",
+				"insert into model values (3, 'matthieu');"
+		);
+		DBHelper.executeSQLInTransaction(
+				"CREATE PROCEDURE ZZTESTNOPARAM()\n"+
+						 " MODIFIES SQL DATA DYNAMIC RESULT SETS 1\n"+
+					     " BEGIN ATOMIC\n"+
+						 "  DECLARE result CURSOR FOR SELECT id, name FROM model;\n"+
+					     "  OPEN result;\n"+
+						 " END",
+				 "CREATE PROCEDURE ZZTESTWITHPARAM(pName VARCHAR(50))\n"+
+						 " MODIFIES SQL DATA DYNAMIC RESULT SETS 1\n"+
+						 " BEGIN ATOMIC\n"+
+						 "  DECLARE result CURSOR FOR SELECT id, name FROM model m WHERE m.name = pName;\n"+
+						 "   OPEN result;\n"+
+						 " END",
+				 "CREATE PROCEDURE ZZTESTONEWITHPARAM(pName VARCHAR(50))\n"+
+						 " MODIFIES SQL DATA DYNAMIC RESULT SETS 1\n"+
+						 " BEGIN ATOMIC\n"+
+					 	 "  DECLARE result CURSOR FOR SELECT id, name FROM model m WHERE m.name = pName;\n"+
+					 	 "  OPEN result;\n"+
+						 " END"
+		);                 		        
 	}
 
 	@After
-	public void tearDown() throws Exception {
-		EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        @SuppressWarnings("unchecked")
-        List<Model1> list = em.createQuery("SELECT m FROM Model1 m").getResultList();
-        for (Model1 model : list) {
-        	em.remove(model);
-        }
-        Session hSession = (Session) em.getDelegate();
-        hSession.doWork(new Work() {
-			
-			@Override
-			public void execute(Connection con) throws SQLException {				
-				Statement stmt1 = con.createStatement();
-				String sp1 = "DROP PROCEDURE IF EXISTS ZZTESTNOPARAM";
-				stmt1.executeUpdate(sp1);
-				stmt1.close();
-				
-				Statement stmt2 = con.createStatement();
-				String sp2 = "DROP PROCEDURE IF EXISTS ZZTESTWITHPARAM";
-				stmt2.executeUpdate(sp2);
-				stmt2.close();
-				
-				Statement stmt3 = con.createStatement();
-				String sp3 = "DROP PROCEDURE IF EXISTS ZZTESTONEWITHPARAM";
-				stmt3.executeUpdate(sp3);
-				stmt3.close();										
-				
-			}
-		});
-        em.getTransaction().commit();
-        em.close();	
+	public void tearDown() throws Exception {		
+		DBHelper.executeSQLInTransaction(
+				"DROP PROCEDURE IF EXISTS ZZTESTNOPARAM",
+				"DROP PROCEDURE IF EXISTS ZZTESTONEWITHPARAM",
+				"DROP PROCEDURE IF EXISTS ZZTESTWITHPARAM"
+		);
+		DBHelper.executeSQLInTransaction("drop table model");
 	}
 
 	@Test

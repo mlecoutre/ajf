@@ -40,6 +40,11 @@
 			</dependency>
 			<dependency>
 				<groupId>am.ajf</groupId>
+				<artifactId>ajf-injection-impl</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
 				<artifactId>ajf-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
