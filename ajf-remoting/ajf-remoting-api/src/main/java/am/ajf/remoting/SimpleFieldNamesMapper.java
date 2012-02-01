@@ -15,13 +15,13 @@ public class SimpleFieldNamesMapper extends EditableMapper implements Mapper {
 	public Object map(Map<String, Object> data) {
 		Object obj = null;
 		try {
-			obj = getEntity().newInstance();
+			obj = am.ajf.core.utils.BeanUtils.newInstance(getEntity());
 			BeanUtils.populate(obj, data);
 		} catch (IllegalAccessException e) {
 			logger.warn("Mapping impossible, error populating the bean : "+getEntity().getName(), e);
 		} catch (InvocationTargetException e) {
 			logger.warn("Mapping impossible, error populating the bean : "+getEntity().getName(), e);
-		} catch (InstantiationException e) {
+		} catch (Exception e) {
 			logger.warn("Mapping impossible, error instanciating the bean : "+getEntity().getName(), e);
 		}
 		return obj;
