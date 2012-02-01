@@ -55,7 +55,7 @@ public class JavassistUtils {
 			}
 
 	private static String generateClassSuffix() {
-		return "_$ajf$javaassist$proxy$";
+		return "_$ajf$javaassist$proxy$Service";
 	}
 
 }
