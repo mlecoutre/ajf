@@ -36,7 +36,7 @@
    <item name="ajf-security" href="../ajf-security/index.html" />
    <item name="ajf-persistence" href="../ajf-persistence/ajf-persistence-dist/index.html" />
    <item name="ajf-remoting" href="../ajf-remoting/ajf-remoting-dist/index.html" />
-   <item name="ajf-testing" href="../ajf-testing/index.html" />
+   <!--item name="ajf-testing" href="../ajf-testing/index.html" /-->
    <item name="ajf-transaction" href="../ajf-transaction/ajf-transaction-dist/index.html" />   
   </menu>
 

@@ -22,11 +22,18 @@
   </links>
 
 
+  <menu name="Documentation">
+  	  <item name="AJF" href="../../ajf-parent/index.html" />
+  	  <item name="AJF - Persistence" href="../ajf-persistence-dist/index.html" />
+      <item name="Home" href="index.html" />
+  </menu>
+
+
   <menu name="Modules">
-   <item name="ajf-persist-api" href="../ajf-persist-api/index.html" />
-   <item name="ajf-persist-impl" href="../ajf-persist-impl/index.html" />
-   <item name="ajf-persist-tests" href="../ajf-persist-tests/index.html" />
-   <item name="ajf-persist-dist" href="../ajf-persist-dist/index.html" />
+   <item name="ajf-persistence-api" href="../ajf-persistence-api/index.html" />
+   <item name="ajf-persistence-impl" href="../ajf-persistence-impl/index.html" />
+   <item name="ajf-persistence-tests" href="../ajf-persistence-tests/index.html" />
+   <item name="ajf-persistence-dist" href="../ajf-persistence-dist/index.html" />
   </menu>
 
   <menu ref="reports"/>
