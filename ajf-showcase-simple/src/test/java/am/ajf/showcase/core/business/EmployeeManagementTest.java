@@ -16,8 +16,8 @@ import ajf.services.injection.InjectService;
 import ajf.testing.junit.DITestRunnner;
 import am.ajf.showcase.core.services.PersonService;
 import am.ajf.showcase.lib.business.EmployeeManagementBD;
-import am.ajf.showcase.lib.dto.ListEmployeesPB;
-import am.ajf.showcase.lib.dto.ListEmployeesRB;
+import am.ajf.showcase.lib.business.dto.ListEmployeesPB;
+import am.ajf.showcase.lib.business.dto.ListEmployeesRB;
 import am.ajf.showcase.lib.model.Person;
 import am.ajf.showcase.lib.services.PersonServiceBD;
 
