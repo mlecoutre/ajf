@@ -17,7 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import am.ajf.transaction.TransactionExtension;
 import am.ajf.transaction.TransactionInterceptor;
 import am.ajf.transaction.UserTransactionProducer;
 import am.ajf.transaction.test.harness.JPAQueriesOnDBHsqlPolicy;
@@ -38,7 +37,6 @@ public class MonoDbTransactionTest {
 	public static JavaArchive createTestArchive() {
 		return ShrinkWrap
 				.create(JavaArchive.class, "test.jar")
-				.addClasses(TransactionExtension.class)
 				.addClasses(TransactionInterceptor.class)
 				.addClasses(UserTransactionProducer.class)
 				.addClasses(JPAQueriesOnDBHsqlPolicy.class)
