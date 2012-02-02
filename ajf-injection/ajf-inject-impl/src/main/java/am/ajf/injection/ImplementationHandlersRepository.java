@@ -14,6 +14,7 @@ import javax.enterprise.inject.spi.InjectionTarget;
 import org.slf4j.Logger;
 
 import am.ajf.core.logger.LoggerFactory;
+import am.ajf.core.utils.BeanUtils;
 import am.ajf.injection.internal.ServiceBeanImpl;
 
 /**
@@ -70,7 +71,7 @@ public class ImplementationHandlersRepository {
 	public void addHandler(Class<? extends ImplementationHandler> handler) throws InstantiationException, IllegalAccessException {	
 		//add only if it implement 'ServiceHandler'
 		if (ImplementationHandler.class.isAssignableFrom(handler)) {
-			ImplementationHandler instance = handler.newInstance();
+			ImplementationHandler instance = BeanUtils.newInstance(handler);
 			repository.add(instance);		
 		}
 	}
@@ -78,8 +79,7 @@ public class ImplementationHandlersRepository {
 	public boolean isHandler(Class<?> handler) {
 		return ImplementationHandler.class.isAssignableFrom(handler);
 	}
-	
-	
+		
 	public List<ImplementationHandler> getHandlers() {
 		return repository;
 	}
