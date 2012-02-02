@@ -5,8 +5,9 @@
  </properties>
  <body>
   <section name="Welcome">
-   
-    
+  <p>This optional module contain the code to manage transactions outside the scope of EJBs</p>
+  <p>The transaction management is done with the use of the <b>TransactionInterceptor</b> that
+  use the 2 annotations : <b>@Transactional</b> and <b>@NonTransactional</b></p>      
   </section>
  </body>
 </document>

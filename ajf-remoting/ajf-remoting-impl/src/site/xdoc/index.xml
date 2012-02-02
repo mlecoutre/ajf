@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <document>
  <properties>
-  <title>Welcome to the AJF Persistence Developer Website : Module Implementation</title>
+  <title>Welcome to the AJF Remoting Developer Website : Module Implementation</title>
  </properties>
  <body>
   <section name="Welcome">
@@ -9,10 +9,8 @@
     This module contain the implementation of the Persistence CDI extension.<br/>
     The implementation is split into the following packages :
     <ul>
-    	<li>ajf.persistence.jpa : Contain the extension entrypoint (JPAExtension) and 
-    	the interfaces used by the implementation</li>
-    	<li>ajf.persistence.jpa.impl : Contain the different impl of the interface and the
-    	core implementation of the code generation (using Javaassist)</li>
+    	<li>ajf.remoting.procs : Contain the Handler for managing stored procedures (@StoredProcedure)</li>
+    	<li>ajf.remoting.XXX : Contain the Handler for...</li>
     </ul>
    </p>
   </section>

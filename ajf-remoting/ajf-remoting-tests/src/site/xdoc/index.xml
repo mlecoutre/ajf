@@ -1,20 +1,12 @@
 <?xml version="1.0"?>
 <document>
  <properties>
-  <title>Welcome to the AJF Persistence Developer Website : Module Integration Tests</title>
+  <title>Welcome to the AJF Remoting Developer Website : Module Integration Tests</title>
  </properties>
  <body>
   <section name="Welcome">
    <p>
-    This module contain the integration tests of the Persistence CDI extension.<br/>
-    The tests are organized as follow :
-    <ul>
-    	<li>ajf.persistence.jpa.test : Contain the base test class for each core concept
-    	of the persistence extension (@NamedQuery, @StoredProcedure, EntityManager provider, ...)</li>
-    	<li>ajf.persistence.jpa.test.harness : Contain the class used by the tests to test one 
-    	possible use of the framework. If you want to add a new use case, you will need to add
-    	a class in harness illustring your example, then you can add a unit test in the base package.</li>
-    </ul>
+    This module contain the integration tests of the Remoting module.<br/>    
    </p>
   </section>
  </body>
