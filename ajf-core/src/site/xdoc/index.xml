@@ -1,21 +1,26 @@
 <?xml version="1.0"?>
 <document>
-	<properties>
-		<title>Welcome to ajf-core reports</title>
-	</properties>
-	<body>
-		<section name="Welcome">
-			<p>
-				ajf core
-				<br />
-				You will find here generated Reports
-				<ul>
-					<li>JavaDoc</li>
-					<li>XRef Sources</li>
-					<li>Checkstyle report</li>
-					<li>PMD report</li>
-				</ul>
-			</p>
-		</section>
-	</body>
+  <properties>
+	<title>Welcome to the AJF Framework Developer Website : Core Module</title>
+  </properties>
+  <body>
+    <section name="Welcome">
+	  <p>
+	  	This module is the core module of AJF and contain all the bases functionalities :		
+		<ul>
+			<li>Cache management</li>
+			<li>Configuration tools</li>
+			<li>AuditData definitions</li>
+			<li>Logger definitions</li>
+			<li>Mail Service</li>
+			<li>Helpers for Bean management, Code generation, Class managements, ...</li>
+		</ul>
+	  </p>
+	  <subsection name="Reporting">
+	  	You will found the reports in the left Project Documentation section.
+	  	The most interestings are : <a href="cobertura/index.html">coverage</a>, 
+	  	<a href="apidocs/index.html">javadoc</a> and <a href="findbugs.html">findbugs</a> 
+	  </subsection>
+    </section>
+  </body>
 </document>
