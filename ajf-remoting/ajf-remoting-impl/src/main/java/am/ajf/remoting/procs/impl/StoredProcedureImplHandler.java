@@ -21,7 +21,6 @@ import am.ajf.injection.ClassGenerationException;
 import am.ajf.injection.ImplementationHandler;
 import am.ajf.remoting.AnnotationHelper;
 import am.ajf.remoting.ConfigurationException;
-import am.ajf.remoting.HibernateMapper;
 import am.ajf.remoting.SimpleFieldNamesMapper;
 import am.ajf.remoting.procs.annotation.StoredProcedure;
 
@@ -86,8 +85,15 @@ public class StoredProcedureImplHandler implements ImplementationHandler {
 		return clazz;
 	}	
 
-
-
+	/**
+	 * 
+	 * @param method
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws NotFoundException
+	 * @throws CannotCompileException
+	 * @throws ConfigurationException
+	 */
 	public StringBuffer generateBodyFor(Method method) throws ClassNotFoundException, NotFoundException, CannotCompileException, ConfigurationException {		
 		//Retrieve the parameters needed to launch the stored procedure 		
 		Object[] annotations = method.getAnnotations();
