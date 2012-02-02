@@ -10,7 +10,7 @@
 				<br />
 				You will find here generated Reports
 				<ul>
-					<li>JavaDoc</li>
+					<li>JavaDoc : <a href="apidocs/index.html">javadocs</a></li>
 					<li>XRef Sources</li>
 					<li>Checkstyle report</li>
 					<li>PMD report</li>
