@@ -42,17 +42,14 @@
 	<modules>
 		<module>../ajf-core</module>
 		<module>../ajf-testing</module>
-		<!-- 
 		<module>../ajf-injection/ajf-inject-dist</module>
-		-->
 		<module>../ajf-monitoring</module>
 		<module>../ajf-notif</module>
+		<module>../ajf-remoting/ajf-remoting-dist</module>
 		<module>../ajf-security</module>
 		<module>../ajf-web</module>
-		<!-- 
 		<module>../ajf-persistence/ajf-persist-dist</module>
 		<module>../ajf-transaction/ajf-transaction-dist</module>
-		-->
 	</modules>
 	
 </project>

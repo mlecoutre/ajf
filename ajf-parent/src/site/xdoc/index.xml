@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<document>
+ <properties>
+  <title>Welcome to the AJF Framework Developer Website</title>
+ </properties>
+ <body>
+  <section name="Welcome">
+   <p>
+   	This Website provide informations on the current AJF build. You can use the left
+   	navigation to have details on each of the AJF modules.
+   </p>
+   <p>
+   	The following aggregated report are also available :   	
+   </p>
+   <ul>
+     <li>Aggregated javadocs : <a href="apidocs/index.html">javadocs</a></li>
+     <li>Aggregated sources : <a href="xref/index.html">sources</a></li>
+   </ul>  
+   <subsection name="The modules">   
+	   <p>    
+	    The AJF framework is split into core modules and optionals modules. You need to
+	    have the core modules in your application to use ajf, but the optionals modules can
+	    be added as needed.
+	   </p>
+	   <p>
+	   The core modules are the following :    
+	    <ul>
+	     <li>ajf-core : The core functionalities of the framework.</li>
+	     <li>ajf-injection : The CDI extension of the framework.</li>
+	   	</ul>
+	   	
+	   The optional modules are the following :
+	   	<ul>
+	     <li>ajf-monitoring : Provide monitoring functionalities for your application</li>
+	     <li>ajf-notif : RSS generators</li>
+	     <li>ajf-security : Security wrapper to popular security frameworks</li>
+	     <li>ajf-persistence : JPA helpers and Crud helpers for your application</li>
+	     <li>ajf-transaction : Unified transaction toolbox</li>
+	     <li>ajf-remoting : Helpers to use connect to remote resources (EJB, Webservices SOAP,Rest, StoredProcedures, ...)</li>
+	    </ul>
+	   </p>
+   </subsection>
+  </section>
+ </body>
+</document>
