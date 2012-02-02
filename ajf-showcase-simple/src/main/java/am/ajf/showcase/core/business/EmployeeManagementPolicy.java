@@ -10,8 +10,8 @@ import ajf.logger.injection.InjectLogger;
 import ajf.services.exceptions.BusinessLayerException;
 import ajf.services.injection.InjectService;
 import am.ajf.showcase.lib.business.EmployeeManagementBD;
-import am.ajf.showcase.lib.dto.ListEmployeesPB;
-import am.ajf.showcase.lib.dto.ListEmployeesRB;
+import am.ajf.showcase.lib.business.dto.ListEmployeesPB;
+import am.ajf.showcase.lib.business.dto.ListEmployeesRB;
 import am.ajf.showcase.lib.model.Person;
 import am.ajf.showcase.lib.services.PersonServiceBD;
 
