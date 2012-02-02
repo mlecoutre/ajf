@@ -1,21 +1,19 @@
 <?xml version="1.0"?>
 <document>
-	<properties>
-		<title>Welcome to ajf-monitoring reports</title>
-	</properties>
-	<body>
-		<section name="Welcome">
-			<p>
-				ajf monitoring
-				<br />
-				You will find here generated Reports
-				<ul>
-					<li>JavaDoc</li>
-					<li>XRef Sources</li>
-					<li>Checkstyle report</li>
-					<li>PMD report</li>
-				</ul>
-			</p>
-		</section>
-	</body>
+  <properties>
+	<title>Welcome to the AJF Framework Developer Website : Monitoring Module</title>
+  </properties>
+  <body>
+    <section name="Welcome">
+	  <p>
+	  	This module is the optional module for Monitoring AJF applications. It include
+	  	Events generation Emiters and Formaters for the application.			
+	  </p>
+	  <subsection name="Reporting">
+	  	You will found the reports in the left Project Documentation section.
+	  	The most interestings are : <a href="cobertura/index.html">coverage</a>, 
+	  	<a href="apidocs/index.html">javadoc</a> and <a href="findbugs.html">findbugs</a> 
+	  </subsection>
+    </section>
+  </body>
 </document>
