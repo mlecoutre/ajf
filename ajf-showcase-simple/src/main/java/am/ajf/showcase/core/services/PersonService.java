@@ -48,8 +48,8 @@ public class PersonService implements PersonServiceBD {
 			em = emFactory.createEntityManager();
 			EntityTransaction tx = em.getTransaction();
 			tx.begin();
-			em.createNamedQuery("")
-			.setParameter("personid", personId).executeUpdate();
+			Person p = em.find(Person.class, personId);
+			em.remove(p);
 			tx.commit();
 		} catch (Exception ple) {
 			logger.error("create method: " + ple.getMessage(), ple);
