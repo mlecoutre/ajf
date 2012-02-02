@@ -1,4 +1,4 @@
-package am.ajf.showcase.lib.dto;
+package am.ajf.showcase.lib.business.dto;
 
 public class ListEmployeesPB {
 
