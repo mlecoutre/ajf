@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import am.ajf.transaction.TransactionInterceptor;
+import am.ajf.transaction.Transactional;
 
 public class SamplePolicy implements SamplePolicyBD {
 
@@ -41,8 +42,8 @@ public class SamplePolicy implements SamplePolicyBD {
 		utx.commit();
 	}
 	
-	//@Transactional
-	@Interceptors(TransactionInterceptor.class)
+	@Transactional
+	//@Interceptors(TransactionInterceptor.class)
 	public void createModelAutoTransaction(Model model) {
 		logger.debug("SamplePolicy : createModel - auto transaction");		
 		sampleService.save(model);				
