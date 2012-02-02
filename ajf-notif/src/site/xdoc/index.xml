@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<document>
+  <properties>
+	<title>Welcome to the AJF Framework Developer Website : Notification Module</title>
+  </properties>
+  <body>
+    <section name="Welcome">
+	  <p>
+	  	This module is the optional module for Notification on AJF applications. It includes
+	  	RSS generation.			
+	  </p>
+	  <subsection name="Reporting">
+	  	You will found the reports in the left Project Documentation section.
+	  	The most interestings are : <a href="cobertura/index.html">coverage</a>, 
+	  	<a href="apidocs/index.html">javadoc</a> and <a href="findbugs.html">findbugs</a> 
+	  </subsection>
+    </section>
+  </body>
+</document>
