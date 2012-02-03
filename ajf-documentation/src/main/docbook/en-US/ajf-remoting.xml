@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
+<chapter id="remoting">
+	<title>AJF - Remoting Reference</title>
+	<para>
+		The AJF Remoting extension provides a common interface and design model to call 
+		remote services. Those services can be StoredProcedures, JMS queues, Remote EJBs, 
+		WebServices (SOAP, REST), ...		
+	</para>
+	<xi:include href="ajf-remoting-introduction.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+	<xi:include href="ajf-remoting-storedprocedures.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+</chapter>

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+ <properties>
+  <title>Welcome to the AJF Developer Website : Module Documentation</title>
+ </properties>
+ <body>
+  <section name="Welcome">
+   <p>
+    This module contain the documentations of AJF. You can access it from the left menu,
+    or download it from the links below.
+   </p>
+   <p>The wiki is also a good source of samples and cases study : <a href="http://web-xwiki/xwiki/bin/view/AJF2/">AJF wiki</a></p>
+   <p>
+  	<b>User Guide :</b>
+	<a href="docbook/publish/en-US/html/index.html">HTML</a>, 
+	<a href="docbook/publish/en-US/html_single/index.html">HTML single page</a>, 
+	<a href="docbook/publish/en-US/pdf/master.pdf">PDF</a>
+   </p>	
+  </section>
+ </body>
+</document>
