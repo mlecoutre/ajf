@@ -24,17 +24,19 @@
 			method(s) just add the following annotation on the class or method and thats it :
 		</para>
 		<important>
-			To use CDI interceptors, you need to enable them in the file <emphasis>beans.xml</emphasis>
-			for <emphasis>each project</emphasis> you use the interceptor annotation in.
-			The name of the interceptor for @Transactional is : 
-			<emphasis>am.ajf.transaction.TransactionInterceptor</emphasis> 
-			<programlisting language="Xml" role="Xml">
-				<beans>
-					<interceptors>
-				      <class>am.ajf.transaction.TransactionInterceptor</class>
-				    </interceptors>
-			    </beans>				
-			</programlisting>
+			<para>
+				To use CDI interceptors, you need to enable them in the file <emphasis>beans.xml</emphasis>
+				for <emphasis>each project</emphasis> you use the interceptor annotation in.
+				The name of the interceptor for @Transactional is : 				
+			</para> 
+			<para><emphasis>am.ajf.transaction.TransactionInterceptor</emphasis></para>
+			<programlisting language="Xml" role="Xml"><![CDATA[
+<beans>
+	<interceptors>
+      <class>am.ajf.transaction.TransactionInterceptor</class>
+    </interceptors>
+</beans>				
+			]]></programlisting>
 		</important>
 		<example>
 			<title>@Transactional usage</title>
@@ -88,8 +90,10 @@ public class SamplePolicy {
 			]]></programlisting>		
 		</example>
 		<important>
-			If you want to use JTA managed transaction, i.e. either the @Transactional annotation
-			or the UserTransaction object, you need to met the following rules :
+			<para>
+				If you want to use JTA managed transaction, i.e. either the @Transactional 
+				annotation or the UserTransaction object, you need to met the following rules :
+			</para>
 			<itemizedlist>
 				<listitem>
 					<para>
@@ -136,9 +140,11 @@ public class SamplePolicy {
 			]]></programlisting>
 		</example>
 		<warning>
-			If you choose to manually managed your transaction you need to be careful
-			to handle every possible outcomes for the commit/rollback. The default
-			transaction model should be able to handle nearly all your use cases.
+			<para>
+				If you choose to manually managed your transaction you need to be careful
+				to handle every possible outcomes for the commit/rollback. The default
+				transaction model should be able to handle nearly all your use cases.
+			</para>
 		</warning>	
 	</section>
 </chapter>
