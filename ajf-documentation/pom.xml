@@ -39,12 +39,12 @@
 						</dependency>
 					</dependencies>
 					<configuration>
-						<sourceDirectory>src/main/docbook</sourceDirectory>
+						<sourceDirectory>${basedir}/src/main/docbook</sourceDirectory>
 						<sourceDocumentName>${docname}.xml</sourceDocumentName>
 						<masterTranslation>en-US</masterTranslation>
 						<baseOutputDirectory>${project.build.directory}/site</baseOutputDirectory>
 						<imageResource>
-							<directory>src/main/docbook/en-US</directory>
+							<directory>${basedir}/src/main/docbook/en-US</directory>
 							<includes>
 								<include>images/*.png</include>
 							</includes>

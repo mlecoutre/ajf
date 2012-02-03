@@ -15,6 +15,10 @@
    <ul>
      <li>Aggregated javadocs : <a href="apidocs/index.html">javadocs</a></li>
      <li>Aggregated sources : <a href="xref/index.html">sources</a></li>
+     <li>Aggregated User Guide : <a href="../ajf-documentation/docbook/publish/en-US/html/index.html">HTML</a>,
+     	<a href="../ajf-documentation/docbook/publish/en-US/html_single/index.html">HTML Single page</a>,
+     	<a href="../ajf-documentation/docbook/publish/en-US/pdf/master.pdf">PDF</a>
+     </li>
    </ul>  
    <subsection name="The modules">   
 	   <p>    

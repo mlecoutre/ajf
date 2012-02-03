@@ -23,6 +23,7 @@
 
   <menu name="Documentation">
       <item name="Home" href="index.html" />
+      <item name="ajf-documentation" href="../ajf-documentation/index.html" />
   </menu>
 
   <menu name="Core Modules">
