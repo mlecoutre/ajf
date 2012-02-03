@@ -41,6 +41,7 @@
 
 	<modules>
 		<module>../ajf-core</module>
+		<module>../ajf-documentation</module>
 		<module>../ajf-testing</module>
 		<module>../ajf-injection/ajf-inject-dist</module>
 		<module>../ajf-monitoring</module>
