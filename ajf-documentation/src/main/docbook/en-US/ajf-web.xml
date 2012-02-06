@@ -16,14 +16,49 @@ Business Layer. </para>
     <para> Blabla</para>
   </section>
   <section>
-    <title>Standard facelet</title>
+    <title>Norms and module organization</title>
     <para>Blabla
 </para>
   </section>
   <section>
-    <title>Norms and module organization</title>
-    <para>Blabla
+    <title>Standard facelet</title>
+    <para> the facelet aims to describe the view showed to the end user.
+
+    <programlisting language="XML" role="XML">
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:p="http://primefaces.org/ui"
+template="WEB-INF/templates/simpleLayout.xhtml">
+
+<ui:define name="applicationTitle">AJF2 Showcase</ui:define>
+<ui:define name="content">
+  <div class="centerPanel">
+    <h:form >
+        <!-- PUT YOUR CONTENT HERE -->
+    </h:form>
+  </div>
+</ui:define>
+</ui:composition>
+]]></programlisting>
 </para>
+    <section>
+      <title>Graphical components: primefaces</title>
+      <para>The choice has been done to use an existing graphical components library that propose a lot of rich components. We will not describe here how use these components. A documentation and well explained samples are available on their website <ulink url="http://www.primefaces.org"/>
+</para>
+    </section>
+    <section>
+      <title>Security about web artifacts </title>
+      <para>
+ Web resources can securized using standard JEE security.
+ </para>
+      <para>
+In order to hide graphical components according to the role of the end user authenticated, we have the possibility to use the <emphasis role="bold">rendered</emphasis> attribute of graphical components linked to the <emphasis role="bold">habilitationMBean</emphasis>.
+ </para>
+    </section>
   </section>
 <!-- I18N Sub section -->  <section>
     <title>Internationalization</title>
@@ -72,7 +107,55 @@ button.submit=Soumettre
   </section>
   <section>
     <title>Backing Bean</title>
-    <para> </para>
+    <para> The Backing bean allow to make the link between JAVA , the business Logic, and the facelet exposed to the end users. The goal of the backing bean is to get data from the user, validate these data, call the business logic and process the result to initialize the result page or fragment.</para>
+    <programlisting language="Java" role="java">
+<![CDATA[@ManagedBean
+@ViewScoped
+public class EmployeeMBean implements Serializable {
+
+private static final long serialVersionUID = 1L;
+  @InjectLogger
+  private Logger logger;
+
+  /* ATTRIBUTES */
+  @Size(min = 1, max = 32)
+  @NotNull
+  private String searhLastname; //+getter/setter
+
+  @InjectService
+  EmployeeManagementBD employeeManagement;
+
+  /* CONSTANTS */
+  private int MAX_RESULT = 200;
+
+  public EmployeeMBean() {
+    super();
+  }
+
+  @PostConstruct
+  public void init() {
+    InjectionContext.getInstance().getInjector().injectMembers(this);
+  }
+
+  public void listEmployees() {
+
+    try {
+      // Initialize ParamBean
+      ListEmployeesPB pb = new ListEmployeesPB(searhLastname);
+
+      // Call business layer
+      ListEmployeesRB rb = employeeManagement.listEmployees(pb);
+
+      //get result and initialize properties for result page
+      List<Person> persons = rb.getEmployees();
+    }
+  } catch (Exception e) {
+    // manage error import static ajf.web.WebUtils.*;
+    handleError(e, logger, "Error when try to list employees");
+  }
+}
+]]></programlisting>
+    <note>Note that each ManageBean that use SessionScope or ViewScope has to implement Serializable interface. </note>
   </section>
   <section><title>User Input Validation</title><para>User Input validation mechanism is responsible of validate data before executing the business logic, avoiding to execute code if we know that inputs will not work.</para>In the managed bean, you can decorate the properties of the java bean using standard annotations defined in the JSF 303 <programlisting language="Java" role="java">
 <![CDATA[
@@ -89,11 +172,77 @@ public int getAge() {
 <f:ajax execute="age" event="blur" render="age-error" />
 </h:inputText>
 <p:messages id="age-error" for="age" />
-]]></programlisting></section>
+]]></programlisting>
+
   <section>
     <title>Main validators</title>
-    <para>blabla</para>
-  </section>
+    <para>
+    
+    <table frame="all">
+        <title/>
+        <tgroup cols="2">
+          <colspec colname="c1"/>
+          <colspec colname="c2"/>
+          <tbody>
+            <row>
+              <entry>@Null</entry>
+              <entry>Element should be null</entry>
+            </row>
+            <row>
+              <entry>@NotNull</entry>
+              <entry>Element shouldn&apos;t be null</entry>
+            </row>
+            <row>
+              <entry>@AssertTrue</entry>
+              <entry>Element shouldn&apos;t be null</entry>
+            </row>
+            <row>
+              <entry>@AssertFalse</entry>
+              <entry>Element shouldn&apos;t be null</entry>
+            </row>
+            <row>
+              <entry>@Min</entry>
+              <entry>Element shouldn&apos;t be null</entry>
+            </row>
+            <row>
+              <entry>@Max</entry>
+              <entry>Element shouldn&apos;t be null</entry>
+            </row>
+            <row>
+              <entry>@DecimalMin</entry>
+              <entry>Element should be less than value specified for BigDecimal, BigInteger, String, byte, short, int,long</entry>
+            </row>
+            <row>
+              <entry>@DecimalMax</entry>
+              <entry>Element should be greater than value specified for BigDecimal, BigInteger, String, byte, short, int,long</entry>
+            </row>
+            <row>
+              <entry>@Size</entry>
+              <entry>Element should be set between two size specified. Format String, Collection, Map, Array</entry>
+            </row>
+            <row>
+              <entry>@Digits</entry>
+              <entry>Element should be a numeric set in a specified range.</entry>
+            </row>
+            <row>
+              <entry>@Past</entry>
+              <entry>Element should be a Date or a Calendar in the past</entry>
+            </row>
+            <row>
+              <entry>@Future</entry>
+              <entry>Element should be a Date or a Calendar in the future</entry>
+            </row>
+            <row>
+              <entry>@Pattern</entry>
+              <entry>Element should respect a pattern</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+Hibernate the choosed implementation add additional validators., @Email, @NotBlank, @NotEmpty,@Range, @ScriptAssert, @URL. @ScriptAssert use the  JSR-223 which define an  APIto introduce script languages.</para>
+  </section>
+</section>
+
   <section>
     <title>Templating</title>
     <para>AJF propose a standard layout named &quot;WEB-INF/templates/simpleLayout.xhtml&quot; that you can use in order to organize your page. This layout is divide in three parts:</para>
@@ -115,42 +264,24 @@ The &quot;<emphasis role="bold">footer</emphasis>&quot; part.
 </para>
       </listitem>
     </itemizedlist>
-   <para>
+    <para>
 <figure id="layout.fig">
-    <title>Simple Layout</title>
-    <mediaobject>
-      <imageobject>
-        <imagedata align="center" fileref="images/layout.png"/>
-      </imageobject>
-    </mediaobject>
-    </figure>
+        <title>Simple Layout</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" fileref="images/layout.png"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
 </para>
-    <programlisting language="XML" role="XML">
-<![CDATA[
-<?xml version="1.0" encoding="UTF-8"?>
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-xmlns:ui="http://java.sun.com/jsf/facelets"
-xmlns:f="http://java.sun.com/jsf/core"
-xmlns:h="http://java.sun.com/jsf/html"
-xmlns:p="http://primefaces.org/ui"
-template="WEB-INF/templates/simpleLayout.xhtml">
-
-<ui:define name="applicationTitle">AJF2 Showcase</ui:define>
-<ui:define name="content">
-  <div class="centerPanel">
-    <h:form >
-        <!-- PUT YOUR CONTENT HERE -->
-    </h:form>
-  </div>
-</ui:define>
-</ui:composition>
-]]></programlisting>
     <para>By default, the SimpleLayout.xhtml template will load  menu and title which will be defined ion src/main/webapp/shared folder.</para>
     <para>You also have the possibility for each page to overload the <emphasis role="bold">applicationTitle</emphasis> which will be used as title of the brower window. By default, the i18n key <emphasis role="bold">application.title</emphasis> will be displayed.</para>
     <section>
       <title>Template customization</title>
-      <para>You can add you own css class style in src/main/webapp/resources/css/custom.css</para>
-      <para/>
+      <para>You can update src/main/webapp/share/title.xhtml to add your logo or define the custom representation of the logo of your application</para>
+      <para>You can update the menu of your application in the page src/main/webapp/share/menu.xhtml to add your logo or define the custom representation of the logo of your application</para>
+      <para>You can add you own css class style in src/main/webapp/resources/css/custom.css; They will be automatically loaded by the simpleLayout.</para>
+      <para>You can add you own javascript scripts in src/main/webapp/resources/js/custom.js; They will be automatically loaded by the simpleLayout.</para>
     </section>
     <section>
       <title>Template creation</title>
