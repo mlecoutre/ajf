@@ -76,11 +76,8 @@
 	</dependencyManagement>
 
 	<modules>
-		<!--  
-		<module>../ajf-core</module>
-		-->
+		<module>../ajf-core</module>		
 		<module>../ajf-documentation</module>
-		<!--
 		<module>../ajf-testing</module>
 		<module>../ajf-injection/ajf-inject-dist</module>
 		<module>../ajf-monitoring</module>
@@ -90,7 +87,6 @@
 		<module>../ajf-web</module>
 		<module>../ajf-persistence/ajf-persist-dist</module>
 		<module>../ajf-transaction/ajf-transaction-dist</module>
-		-->
 	</modules>
 	
 </project>
