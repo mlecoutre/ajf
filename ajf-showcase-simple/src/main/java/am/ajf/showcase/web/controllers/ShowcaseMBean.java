@@ -34,6 +34,14 @@ public class ShowcaseMBean {
 				"mon message de warning");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
+	
+	public void createInfo() {
+		FacesMessage facesMessage = new FacesMessage(
+				FacesMessage.SEVERITY_INFO,
+				getFieldLabel("application.error.occured"),
+				"mon message d'information");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+	}
 
 	public String getParameter() {
 		return parameter;

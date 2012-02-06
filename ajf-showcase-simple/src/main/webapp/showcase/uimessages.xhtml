@@ -6,6 +6,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	template="../WEB-INF/templates/simpleLayout.xhtml">
 
+	<ui:define name="applicationTitle">Showcase page for ui message</ui:define>
 	<ui:define name="content">
 		<h:form id="form">
 
@@ -13,8 +14,10 @@
 				<H1>
 					<h:outputText value="#{m['employee.management.title']}" />
 				</H1>
+			</center>
 
-				<p:panel header="Search" style="width:90%" toggleable="true">
+			<div class="centerPanel">
+				<p:panel header="Search" style="width:800px" toggleable="true">
 					<h:panelGrid columns="3" style="margin-bottom:5px" cellpadding="2"
 						columnClasses="label, column">
 						<h:outputText value="parameter " />
@@ -37,11 +40,22 @@
 						<p:commandButton id="RaiseWarning"
 							action="#{showcaseMBean.createWarning}" value="Raise Warning">
 						</p:commandButton>
+
+						<p:commandButton id="RaiseInfo"
+							action="#{showcaseMBean.createInfo}" value="Raise Info">
+						</p:commandButton>
 					</h:panelGrid>
 				</p:panel>
 
-			</center>
-
+			</div>
+			<p:panel styleClass="rightPanel">
+				this screen show the different way to expose a message to the user.
+				<ul>
+					<li>input error</li>
+					<li>business error, warning, info</li>
+					<li>popup msg to confirm an action</li>
+				</ul>
+			</p:panel>
 		</h:form>
 	</ui:define>
 

@@ -19,31 +19,42 @@
 						columnClasses="label, column">
 						<h:outputText value="Lastname " />
 
-						<p:inputText id="lastname" value="#{personMBean.lastname}">
-							<f:ajax execute="lastname" event="blur" render="lastname-error" />
+						<p:inputText id="searchLastname"
+							value="#{employeeMBean.searchLastname}">
+							<f:ajax execute="searchLastname" event="blur"
+								render="searchLastname-error" />
 						</p:inputText>
 						<h:panelGroup>
-							<p:message id="lastname-error" for="lastname" />
+							<p:message id="searchLastname-error" for="searchLastname" />
 						</h:panelGroup>
 						<p:commandButton id="Search" update=":form:iPnl"
-							action="#{personMBean.listEmployees}" value="Search">
+							action="#{employeeMBean.listEmployees}"
+							value="#{m['button.search']}">
 						</p:commandButton>
 
 					</h:panelGrid>
 				</p:panel>
 
 				<p:panel header="Result" id="iPnl" style="width:90%">
-					<p:dataTable var="person" value="#{personMBean.employees}"
-						paginator="true" rows="5">
+					<p:dataTable var="person" value="#{employeeMBean.employees}"
+						paginator="true" rows="5" selectionMode="single"
+						selection="#{employeeMBean.selectedEmployee}"
+						rowKey="#{person.personid}">
 						<p:column headerText="lastname">
 							<h:outputText value="#{person.lastname}" />
 						</p:column>
 						<p:column headerText="firstname">
 							<h:outputText value="#{person.firstname}" />
 						</p:column>
+							<p:column headerText="Sex">
+							<h:outputText value="#{person.sex}" />
+						</p:column>
 
 					</p:dataTable>
-
+					<p:commandButton id="Delete" update=":form:iPnl"
+						action="#{employeeMBean.fireEmployee}"
+						value="#{m['button.delete']}">
+					</p:commandButton>
 				</p:panel>
 			</center>
 

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="../WEB-INF/templates/simpleLayout.xhtml">
+
+	<ui:define name="content">
+		<h:form id="form">
+
+			<center>
+				<H1>
+					<h:outputText value="#{m['employee.management.title']}" />
+				</H1>
+			</center>
+
+
+			<p:panel header="Search" styleClass="centerPanel" style="width:600px"
+				toggleable="true">
+				<h:panelGrid columns="3" style="margin-bottom:5px" cellpadding="2"
+					columnClasses="label, column">
+					<h:outputText value="Lastname " />
+
+					<p:inputText id="lastname" value="#{employeeMBean.lastname}">
+						<f:ajax execute="lastname" event="blur" render="lastname-error" />
+					</p:inputText>
+					<h:panelGroup>
+						<p:message id="lastname-error" for="lastname" />
+					</h:panelGroup>
+					<h:outputText value="Firstname " />
+					<p:inputText id="firstname" value="#{employeeMBean.firstname}">
+						<f:ajax execute="firstname" event="blur" render="firstname-error" />
+					</p:inputText>
+					<h:panelGroup>
+						<p:message id="firstname-error" for="firstname" />
+					</h:panelGroup>
+
+					<h:outputText value="Sex " />
+					<p:selectOneRadio id="sex" value="#{employeeMBean.sex}">
+						<f:selectItem itemLabel="M" itemValue="M" />
+						<f:selectItem itemLabel="F" itemValue="F" />
+					</p:selectOneRadio>
+					<h:panelGroup>
+
+					</h:panelGroup>
+					<h:outputText value="Birthday " />
+					<p:calendar value="#{employeeMBean.birthday}" id="popupCal" yearRange="c-80:c-18" />
+					<h:panelGroup>
+
+					</h:panelGroup>
+					
+					<p:commandButton id="Create" action="#{employeeMBean.hireEmployee}"
+						value="#{m['button.create']}">
+					</p:commandButton>
+
+				</h:panelGrid>
+			</p:panel>
+
+
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

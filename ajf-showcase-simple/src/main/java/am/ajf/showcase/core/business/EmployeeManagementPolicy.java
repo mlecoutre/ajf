@@ -10,13 +10,17 @@ import ajf.logger.injection.InjectLogger;
 import ajf.services.exceptions.BusinessLayerException;
 import ajf.services.injection.InjectService;
 import am.ajf.showcase.lib.business.EmployeeManagementBD;
+import am.ajf.showcase.lib.business.dto.FireEmployeePB;
+import am.ajf.showcase.lib.business.dto.FireEmployeeRB;
+import am.ajf.showcase.lib.business.dto.HireEmployeePB;
+import am.ajf.showcase.lib.business.dto.HireEmployeeRB;
 import am.ajf.showcase.lib.business.dto.ListEmployeesPB;
 import am.ajf.showcase.lib.business.dto.ListEmployeesRB;
 import am.ajf.showcase.lib.model.Person;
 import am.ajf.showcase.lib.services.PersonServiceBD;
 
 /**
- * Singleton
+ * Singleton implementation of EmployeeManagement Palas Function
  * 
  * @author E010925
  * 
@@ -43,11 +47,9 @@ public class EmployeeManagementPolicy implements EmployeeManagementBD {
 		logger.debug("listEmployees policy");
 		ListEmployeesRB rb = new ListEmployeesRB();
 		try {
-
 			List<Person> persons = personServiceBD.findByLastname(pb
 					.getLastname());
 			rb.setEmployees(persons);
-
 		} catch (Throwable th) {
 
 			handleError("listEmployees", th);
@@ -55,9 +57,38 @@ public class EmployeeManagementPolicy implements EmployeeManagementBD {
 		return rb;
 	}
 
+	@Override
+	public HireEmployeeRB hireEmployee(HireEmployeePB employeeePB)
+			throws BusinessLayerException {
+		logger.debug("hireEmployee policy");
+		HireEmployeeRB rb = new HireEmployeeRB();
+		try {
+			boolean isHired = personServiceBD.create(employeeePB.getPerson());
+			rb.setHired(isHired);
+		} catch (Throwable th) {
+			handleError("hireEmployee", th);
+		}
+		return rb;
+	}
+
+	@Override
+	public FireEmployeeRB fireEmployee(FireEmployeePB employeePB)
+			throws BusinessLayerException {
+		logger.debug("fireEmployee policy");
+		FireEmployeeRB rb = new FireEmployeeRB();
+		try {
+			boolean isFired = personServiceBD.removeByPrimaryKey(employeePB
+					.getPerson().getPersonid());
+			rb.setRemoved(isFired);
+		} catch (Throwable th) {
+			handleError("fireEmployee", th);
+		}
+		return rb;
+	}
+
 	/**
-	 * Manage Errors coming from other layers TODO put this method in the
-	 * framework
+	 * Manage Errors coming from other layers 
+	 * TODO put this method in the framework
 	 * 
 	 * @param msg
 	 *            custom message
@@ -80,4 +111,5 @@ public class EmployeeManagementPolicy implements EmployeeManagementBD {
 		}
 		throw ble;
 	}
+
 }

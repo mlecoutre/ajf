@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	template="../WEB-INF/templates/simpleLayout.xhtml">
+
+	<ui:define name="applicationTitle">Showcase layout page</ui:define>
+	<ui:define name="content">
+		<h:form id="form">
+
+			<p:panel styleClass="leftPanel">this is my left panel</p:panel>
+			<p:panel styleClass="centerPanel" header="centerPanel">this is my center panel</p:panel>
+
+			<div class="rightPanel">
+				<p:panel header="content">this screen expose the use of already define class that you use to organize your page.
+				<ul>
+						<li>leftPanel</li>
+						<li>centerPanel</li>
+						<li>rightPanel</li>
+					</ul>
+					You can use it directly on a component or on a div element.
+				</p:panel>
+				<br />
+				<p:panel>this is my right panel</p:panel>
+				<br />
+				<p:panel>this is my second right panel</p:panel>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>
