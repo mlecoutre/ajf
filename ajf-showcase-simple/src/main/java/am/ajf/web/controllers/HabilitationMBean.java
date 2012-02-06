@@ -14,7 +14,7 @@ public class HabilitationMBean {
 			.getLogger(HabilitationMBean.class);
 
 	// DUN-GG-APP-WS_MCR_ADM-R
-	public static String ROLE_ADMIN = "DUN-GG-APP-WS_MCR_ADM-R";
+	public static String ROLE_ADMIN = "admin";
 	public static String ROLE_POWERUSER = "poweruser";
 	public static String ROLE_USER = "user";
 
@@ -39,8 +39,8 @@ public class HabilitationMBean {
 	}
 
 	/**
-	 * Method to be used with at least version 2.2 of EL.
-	 * Return true if the user has the rights of the Role set as input.
+	 * Method to be used with at least version 2.2 of EL. Return true if the
+	 * user has the rights of the Role set as input.
 	 * 
 	 * @param role
 	 * @return boolean
@@ -56,7 +56,7 @@ public class HabilitationMBean {
 	}
 
 	/**
-	 * Return true if the user is logged in (what ever the role) 
+	 * Return true if the user is logged in (what ever the role)
 	 * 
 	 * 
 	 * @return
@@ -79,7 +79,7 @@ public class HabilitationMBean {
 	 * 
 	 * @param event
 	 */
-	public void logout(ActionEvent event) {
+	public String logout() {
 
 		logger.debug("logout method");
 		String userName = FacesContext.getCurrentInstance()
@@ -89,6 +89,8 @@ public class HabilitationMBean {
 
 		FacesContext.getCurrentInstance().getExternalContext()
 				.invalidateSession();
+
+		return "loggedOut";
 
 	}
 
