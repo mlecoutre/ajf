@@ -20,8 +20,27 @@
 			<ui:include src="/shared/menu.xhtml" />
 
 			<p:menubar style="padding:0;border:0;padding-bottom:0px;float:right;">
-				<p:menuitem value="Logout" style="font-size:16px"
-					icon="ui-icon ui-icon-close" />
+				<!-- When not logged in : Log in button -->
+				<p:menuitem value="Log in" style="font-size:16px"
+					onclick="loginDialog.show();" icon="ui-icon ui-icon-key"
+					rendered="#{!habilitationMBean.isLogIn}" />
+
+				<!-- When already logged in : user Name button with logout submenu -->
+				<p:submenu label="#{habilitationMBean.userName}"
+					rendered="#{habilitationMBean.isLogIn}" style="font-size:16px"
+					icon="ui-icon ui-icon-key">
+					<p:menuitem value="Log Out" action="#{habilitationMBean.logout}"
+						oncomplete="window.location.reload();"
+						icon="ui-icon ui-icon-close" style="font-size:16px" />
+				</p:submenu>
+
+				<!-- Logger management : only for admin -->
+				<p:submenu label="IT" icon="ui-icon-wrench"
+					rendered="#{habilitationMBean.isAdmin}" style="font-size:16px">
+					<p:menuitem value="Logger" style="font-size:16px"
+						icon="ui-icon-print" onclick="loggerDialog.show()" />
+				</p:submenu>
+
 				<p:menuitem value="About" style="font-size:16px"
 					icon="ui-icon ui-icon-info" oncomplete="aboutProjectDialog.show()" />
 			</p:menubar>
@@ -29,6 +48,8 @@
 		</h:panelGrid>
 
 		<ui:include src="aboutProject.xhtml" />
+		<ui:include src="loginBox.xhtml" />
+		<ui:include src="logger.xhtml" />
 	</h:form>
 
 </ui:composition>

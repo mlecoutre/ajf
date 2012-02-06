@@ -3,8 +3,6 @@
 
 <Configure id="epp-ui" class="org.mortbay.jetty.webapp.WebAppContext">
 
-
-
 	<!-- an DataSource -->
 	<!--
 		<New id="epprepo" class="org.mortbay.jetty.plus.naming.Resource">

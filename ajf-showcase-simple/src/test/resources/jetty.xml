@@ -8,10 +8,10 @@
 			<Item>
 				<New class="org.mortbay.jetty.nio.SelectChannelConnector">
 					<Set name="host">
-						<SystemProperty name="jetty.host"/>
+						<SystemProperty name="jetty.host" />
 					</Set>
 					<Set name="port">
-						<SystemProperty name="jetty.port" default="8780"/>
+						<SystemProperty name="jetty.port" default="8780" />
 					</Set>
 					<Set name="maxIdleTime">60000</Set>
 
@@ -33,7 +33,7 @@
 	<New id="eppuiContext" class="org.mortbay.jetty.webapp.WebAppContext">
 
 		<Set name="ConfigurationClasses">
-			<Ref id="plusConfig"/>
+			<Ref id="plusConfig" />
 		</Set>
 
 	</New>
@@ -55,7 +55,7 @@
 		</New>
 	</Set>
 
-	<!-- FILE SECURITY 
+	<!-- FILE SECURITY -->
 
 	<Set name="UserRealms">
 		<Array type="org.mortbay.jetty.security.UserRealm">
@@ -69,13 +69,12 @@
 		</Array>
 	</Set>
 
-    -->
-	<!--
-		<Call name="addUserRealm"> <Arg> <New class="org.mortbay.jetty.plus.jaas.JAASUserRealm"> <Set name="name">
-		MyRealm</Set> <Set name="LoginModuleName">ldaploginmodule</Set> <Set name="RoleCheckPolicy"> <New
-		class="org.mortbay.jetty.plus.jaas.StrictRoleCheckPolicy" /> </Set> <Set name="CallbackHandlerClass">
-		org.mortbay.jetty.plus.jaas.callback.DefaultCallbackHandler </Set> <Set name="roleClassNames"> <Array
-		type="java.lang.String"> <Item>org.mortbay.jetty.plus.jaas.JAASRole</Item> </Array> </Set> </New> </Arg> </Call>
-	-->
+	<!-- JAAS based security configuration -->
+	<!-- <Call name="addUserRealm"> <Arg> <New class="org.mortbay.jetty.plus.jaas.JAASUserRealm"> 
+		<Set name="name"> MyRealm</Set> <Set name="LoginModuleName">ldaploginmodule</Set> 
+		<Set name="RoleCheckPolicy"> <New class="org.mortbay.jetty.plus.jaas.StrictRoleCheckPolicy" 
+		/> </Set> <Set name="CallbackHandlerClass"> org.mortbay.jetty.plus.jaas.callback.DefaultCallbackHandler 
+		</Set> <Set name="roleClassNames"> <Array type="java.lang.String"> <Item>org.mortbay.jetty.plus.jaas.JAASRole</Item> 
+		</Array> </Set> </New> </Arg> </Call> -->
 
 </Configure>
