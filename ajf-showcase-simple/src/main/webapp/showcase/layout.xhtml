@@ -11,10 +11,16 @@
 		<h:form id="form">
 
 			<p:panel styleClass="leftPanel">this is my left panel</p:panel>
-			<p:panel styleClass="centerPanel" header="centerPanel">this is my center panel</p:panel>
+			<p:panel styleClass="centerPanel" header="centerPanel">this is my center panel
+			
+			<h1>Title1</h1>
+				<h2>Title2</h2>
+				<h3>Title3</h3>
+				<p class="mytest">style defined in resources/css/custom.css</p>
+			</p:panel>
 
 			<div class="rightPanel">
-				<p:panel header="content">this screen expose the use of already define class that you use to organize your page.
+				<p:panel>this screen expose the use of already defined class  in ajf.css that you use to organize your page.
 				<ul>
 						<li>leftPanel</li>
 						<li>centerPanel</li>
@@ -23,9 +29,9 @@
 					You can use it directly on a component or on a div element.
 				</p:panel>
 				<br />
-				<p:panel>this is my right panel</p:panel>
-				<br />
 				<p:panel>this is my second right panel</p:panel>
+				<br />
+				<p:panel>this is my third right panel</p:panel>
 			</div>
 		</h:form>
 	</ui:define>

@@ -8,18 +8,24 @@
 
 
 	<center>
-	<h2><h:outputText value="Please Login" /></h2>
-	<p:panel header="Login page" style="width:400px">
-		<form action="j_security_check"><h:panelGrid columns="2">
-			<h:outputLabel value="User ID:" />
-			<input type="text" name="j_username" tabindex="1" />
+		<h2>
+			<h:outputText value="Please Login" />
+		</h2>
+		<p:panel header="Login page" style="width:400px">
+			<form action="j_security_check" method="post">
+				<h:panelGrid columns="2">
+					<p:focus />
+					<h:outputLabel value="User ID:" />
+					<input type="text" name="j_username" tabindex="1" />
 
-			<h:outputLabel value="Password:" />
-			<input type="password" name="j_password" />
+					<h:outputLabel value="Password:" />
+					<input type="password" name="j_password" />
 
-			<h:outputLabel value="" />
-			<p:focus for="login" />
-			<h:commandButton id="login" value="Login" />
-		</h:panelGrid></form>
-	</p:panel></center>
+					<h:outputLabel value="" />
+
+					<button type="submit" value="log on"></button>
+				</h:panelGrid>
+			</form>
+		</p:panel>
+	</center>
 </ui:composition>
