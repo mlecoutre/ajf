@@ -8,6 +8,13 @@
 		<relativePath>../ajf-persist-dist</relativePath>
 	</parent>
 	<artifactId>ajf-persistence-impl</artifactId>
+	
+	<scm>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-persistence/ajf-persist-impl</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-persistence/ajf-persist-impl</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf-persistence/ajf-persist-impl/]]></url>
+	</scm>
+	
 
 	<dependencies>
 

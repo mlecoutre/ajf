@@ -8,6 +8,12 @@
   </parent>
   <artifactId>ajf-persistence-api</artifactId>
   
+	<scm>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-persistence/ajf-persist-api</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-persistence/ajf-persist-api</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf-persistence/ajf-persist-api/]]></url>
+	</scm>
+  
   <dependencies>
 	
 	<!-- JPA2 impl for tests-->

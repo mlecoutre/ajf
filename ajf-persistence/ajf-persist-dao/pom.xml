@@ -11,10 +11,11 @@
 	<artifactId>ajf-persistence-dao</artifactId>
 
 	<scm>
-		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-persistence</connection>
-		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-persistence</developerConnection>
-		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-persistence/]]></url>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-persistence/ajf-persist-dao</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-persistence/ajf-persist-dao</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf-persistence/ajf-persist-dao/]]></url>
 	</scm>
+
 
 	<dependencies>
 			
@@ -30,7 +31,6 @@
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-core</artifactId>
-			<version>2.0.2-SNAPSHOT</version>
 		</dependency>
 		
 		<!-- Bean Validation : JSR 303 -->
