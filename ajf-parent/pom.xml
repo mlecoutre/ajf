@@ -20,6 +20,42 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+	
+	<developers>
+		<developer>
+			<id>u002617</id>
+			<name>Vincent Claeysen</name>
+			<email>vincent.claeysen@arcelormittal.com</email>
+			<roles>
+				<role>Project Leader</role>
+				<role>Technical Architect</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>e010925</id>
+			<name>Matthieu Lecoutre</name>
+			<email>matthieu.lecoutre@arcelormittal.com</email>
+			<roles>
+				<role>Technical Architect</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>e016696</id>
+			<name>Nicolas Radde</name>
+			<email>nicolas.radde-partner@arcelormittal.com</email>
+			<roles>
+				<role>Technical Architect</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>e019851</id>
+			<name>Guillaume Gustin</name>
+			<email>guillaume.gustin-partner@arcelormittal.com</email>
+			<roles>
+				<role>Technical Architect</role>
+			</roles>
+		</developer>
+	</developers>
 
 	<dependencyManagement>
 		<dependencies>
@@ -40,8 +76,11 @@
 	</dependencyManagement>
 
 	<modules>
+		<!--  
 		<module>../ajf-core</module>
+		-->
 		<module>../ajf-documentation</module>
+		<!--
 		<module>../ajf-testing</module>
 		<module>../ajf-injection/ajf-inject-dist</module>
 		<module>../ajf-monitoring</module>
@@ -51,6 +90,7 @@
 		<module>../ajf-web</module>
 		<module>../ajf-persistence/ajf-persist-dist</module>
 		<module>../ajf-transaction/ajf-transaction-dist</module>
+		-->
 	</modules>
 	
 </project>
