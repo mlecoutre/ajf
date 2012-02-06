@@ -2,7 +2,6 @@ package am.ajf.web.controllers;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,9 +78,8 @@ public class HabilitationMBean {
 	 * 
 	 * @param event
 	 */
-	public String logout() {
+	public void logout() {
 
-		logger.debug("logout method");
 		String userName = FacesContext.getCurrentInstance()
 				.getExternalContext().getUserPrincipal().getName();
 
@@ -89,8 +87,6 @@ public class HabilitationMBean {
 
 		FacesContext.getCurrentInstance().getExternalContext()
 				.invalidateSession();
-
-		return "loggedOut";
 
 	}
 
