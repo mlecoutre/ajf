@@ -9,6 +9,7 @@
 	</parent>
 	<artifactId>ajf-transaction-dist</artifactId>
 	<packaging>pom</packaging>
+	<name>AJF - Transaction</name>
 
 	<scm>
 		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-transaction/ajf-transaction-dist</connection>
