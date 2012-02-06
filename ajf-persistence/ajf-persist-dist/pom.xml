@@ -9,6 +9,7 @@
 	</parent>
 	<artifactId>ajf-persistence-dist</artifactId>
 	<packaging>pom</packaging>
+	<name>AJF - Persistence</name>
 
 	<scm>
 		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-persistence/ajf-persist-dist</connection>
