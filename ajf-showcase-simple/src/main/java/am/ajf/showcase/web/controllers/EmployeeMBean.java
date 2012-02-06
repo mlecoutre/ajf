@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 
 import ajf.injection.InjectionContext;
 import ajf.logger.injection.InjectLogger;
-import ajf.services.injection.InjectService;
+import ajf.services.injection.InjectService; 
 import am.ajf.showcase.lib.business.EmployeeManagementBD;
 import am.ajf.showcase.lib.business.dto.FireEmployeePB;
 import am.ajf.showcase.lib.business.dto.FireEmployeeRB;
@@ -60,8 +60,8 @@ public class EmployeeMBean implements Serializable {
 	private Date birthday;
 	private List<Person> employees = new ArrayList<Person>();
 	private Person selectedEmployee;
-	
-	@Size(min=1, max=32) 
+
+	@Size(min = 1, max = 32)
 	@NotNull
 	private String searchLastname;
 
@@ -135,6 +135,8 @@ public class EmployeeMBean implements Serializable {
 			FireEmployeeRB rb = employeeManagement.fireEmployee(pb);
 
 			if (rb.isRemoved()) {
+				//remove in the local list;another choice could be to request the DB
+				this.employees.remove(selectedEmployee);
 				FacesMessage facesMessage = new FacesMessage(
 						FacesMessage.SEVERITY_INFO, "Employee fired!", "");
 				FacesContext.getCurrentInstance()
@@ -153,7 +155,7 @@ public class EmployeeMBean implements Serializable {
 
 		logger.debug("listEmployees MBean");
 		try {
-			
+
 			ListEmployeesPB pb = new ListEmployeesPB(searchLastname);
 
 			// Call business layer
