@@ -3,7 +3,83 @@
 <section id="remoting-storedprocedures">
 	<title>Stored Procedures</title>
 	<para>
-		Blah stored procedures...
-		TODO
+		The stored procedure module will call the given stored procedure with the given
+		method parameters and map the results to the method return object. 
 	</para>
+		<example>
+		<title />
+		<programlisting language="Java" role="Java"><![CDATA[
+@Remote(jndi="java:comp/env/jdbc/remoting")
+public interface StoredProcedureServiceBD {
+
+	@StoredProcedure(name="ZZTESTNOPARAM")
+	List<ModelSp> findAllModels();
+	
+	@StoredProcedure(name="ZZTESTWITHPARAM")
+	List<ModelSp> findAllModelsByName(String name);
+	
+	@StoredProcedure(name="ZZTESTONEWITHPARAM")
+	ModelSp findOneModelByName(String name);
+	
+}
+				]]></programlisting>					
+	</example>
+	<para>
+		The <parameter>@Remote</parameter> annotation hold the jndi link to the datasource
+		to use for the whole service. On each method you need to specify the name of the
+		stored procedure to call on the datasource.
+	</para>
+	<para>The following restrictions applies :</para>
+	<itemizedlist>
+		<listitem>
+			<para>
+				Out parameters are not supported for the moment.
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				The parameter list need to be in the same order than defined in the stored 
+				procedure signature.
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				The return type need to be a Bean, List of beans, java type or void. 
+				Map, Set and non bean objects are not supported by the default mapper.
+				But you can use a custom <classname>Mapper</classname> if you want a more
+				complex return type mapping.
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				Nested objects structures are not supported by the default mapper.
+			</para>
+		</listitem>				
+	</itemizedlist>
+	<para>
+		If you want to cutomize the return type mapping you can provide an implementation
+		of the class <classname>am.ajf.remoting.Mapper</classname> to the <parameter>@StoredProcedure</parameter>
+		annotation as follow :
+	</para>
+	<example>
+		<title />
+		<programlisting language="Java" role="Java"><![CDATA[
+@StoredProcedure(name="ZZTESTNOPARAM", mapper=MyCustomMapper.class)
+List<ModelSp> findAllModels();
+				]]></programlisting>					
+	</example>
+	<para>
+		The Mapper interface is :
+	</para>
+	<example>
+		<title />
+		<programlisting language="Java" role="Java"><![CDATA[
+public interface Mapper {
+	Object map(Map<String, Object> data);
+}				]]></programlisting>					
+	</example>
+	<para>
+		The parameter <parameter>data</parameter> map the column names to the corresponding
+		row value and the result is the Object mapped for one line of data.
+	</para>	
 </section>

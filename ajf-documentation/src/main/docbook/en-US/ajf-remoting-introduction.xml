@@ -3,6 +3,65 @@
 <section id="remoting-introduction">
 	<title>Introduction</title>
 	<para>
-		Blah blah remoting intro
+		AJF Remoting is a collection of annotations and interfaces to help you bridge the
+		gap between the AJF structured model (Policies and Services) and calling remote
+		components. It will generate the plumbing for configuring and calling those remote
+		components for common use cases where only a few annotations are sufficients.
 	</para>		
+	<para>
+		The extension use the <parameter>@Remote</parameter> annotation on the class level
+		to define the jndi name(s) necessary to access your remote resource. All the 
+		methods of your service will only be able to call the remote component configured 
+		by this configuration. 
+	</para>
+	<example>
+		<title />
+		<programlisting language="Java" role="Java"><![CDATA[
+@Remote(jndi="jdbc/database")
+public interface MyRemoteServiceBD {
+	...
+}
+				]]></programlisting>
+			or
+		<programlisting language="Java" role="Java"><![CDATA[
+@Remote(@Jndi(name="queue" jndi="q/queue"), @Jndi(name="session" jndi="mqcf/session"))
+public interface MyRemoteServiceBD {
+	...
+}
+				]]></programlisting>				
+	</example>
+	<note>
+		<para>
+			This extension goal is to ease the call to remote services on common use cases.
+			It is by no mean a way to call each remote service with all the available 
+			configuration provided by thoses remote services.
+		</para>
+		<para>
+			If you find yourself cornered by the extension possibilities, you can always
+			code the call by yourself inside the Service implementation. 
+		</para>
+	</note>
+	<para>
+		The following remote resources are available :
+	</para>
+	<variablelist>
+		<varlistentry>
+			<term>Stored Procedures</term>
+			<listitem>
+				<para>
+					With the help of the annotation <parameter>@StoredProcedure</parameter>
+					the extension will generate the necessary code to call the stored procedure
+					with the given parameters and map the result(s) to the given object. 
+				</para>
+			</listitem>
+		</varlistentry>
+		<varlistentry>
+			<term>More to comes !</term>
+			<listitem>
+				<para>
+					...
+				</para>
+			</listitem>
+		</varlistentry>
+	</variablelist>				
 </section>
