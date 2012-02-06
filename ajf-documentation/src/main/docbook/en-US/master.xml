@@ -6,7 +6,7 @@
 	<title>AJF User Guide</title>
 
     <toc/>
-    
+    <xi:include href="ajf-web.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
     <xi:include href="ajf-persistence.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
     <xi:include href="ajf-transaction.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
     <xi:include href="ajf-remoting.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>

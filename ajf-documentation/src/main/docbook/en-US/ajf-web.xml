@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!-- This document was created with Syntext Serna Free. --><!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
+<chapter id="web">
+  <title>AJF - Web and User interface</title>
+  <para> The AJF Web module provides a common interface and design
+model to create a dynamic web site in order to interact with end users.
+The user interface will use standard services offered and exposed by the
+Business Layer. </para>
+  <section>
+    <title>Introduction</title>
+    <para>
+</para>
+  </section>
+  <section>
+    <title>Organization</title>
+    <para> Blabla</para>
+  </section>
+  <section>
+    <title>Standard facelet</title>
+    <para>Blabla
+</para>
+  </section>
+  <section>
+    <title>Norms and module organization</title>
+    <para>Blabla
+</para>
+  </section>
+<!-- I18N Sub section -->  <section>
+    <title>Internationalization</title>
+    <para>Internationalization mechanism allows your application to be able to manage languages of your different end users. It used configuration of the web browser to know which language apply and choose translation  defined in some property files.
+These files are stored in the folder <emphasis role="bold">/src/main/resources/i18n</emphasis>  in your web module. we define for example two files, messages.properties and messages_FR.properties that will contains keys and translations.</para>
+    <section><title>Global configuration</title>The main configuration is stored in the WEB-INF/faces-config.xml. This configuration is the same for all AJF project and shouldn&apos;t be modified if not mandatory.<programlisting language="XML" role="XML"><![CDATA[
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"      
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"  version="2.0">
+  <application>
+    <message-bundle>i18n.messages</message-bundle>
+
+    <locale-config>
+      <default-locale>en</default-locale>
+      <supported-locale>fr</supported-locale>
+      <supported-locale>en</supported-locale>
+    </locale-config>
+    <resource-bundle>
+      <base-name>i18n.messages</base-name>
+      <var>m</var>
+    </resource-bundle>
+  </application>
+</faces-config>
+
+]]></programlisting>. Depending of the configuration of the Web Brower, the Application Server will use one or the other configuration. If the key doesn&apos;t exist, you will see something like <emphasis role="bold">???the.key???</emphasis>. if the key doesn&apos;t exist on the language used in the web browser of the end user, he will use the default language configured in the application (&apos;en&apos; by default). <example>In the first one (src/main/resources/i18n/messages.properties), <programlisting language="Properties" role="configuration"><![CDATA[
+  button.submit=Submit 
+  ]]></programlisting>In the second one (src/main/resources/i18n/messages_FR.properties); <programlisting language="Properties" role="configuration"><![CDATA[
+button.submit=Soumettre
+]]></programlisting></example><!-- Using I 18N key in the JSF page --><section>
+        <title>Using key in the JSF page</title>
+        <para>
+ I18N can be use in every label or JSF component directly. , in the JSP </para>
+        <example>
+          <programlisting language="XHTML" role="XHTML"><![CDATA[
+<p:commandButton value="#{m['button.submit']}" .../>
+]]></programlisting>
+        </example>
+      </section><note>For key without using &quot;.&quot;, we can use direct pointed notation #{m.toto} instead of using the array notation. It doesn&apos;t work with complex key. the key &apos;toto.txt&apos; doesn&apos;t allow to use #{m.toto} but we will use #{m[&apos;toto.txt&apos;] </note></section>
+    <section>
+      <title>Using key in a backing bean </title>
+      <para>
+ AJF offered some method to get a translation directly in java using class WebUtils.getLabel()
+ </para>
+    </section>
+  </section>
+  <section>
+    <title>Backing Bean</title>
+    <para> </para>
+  </section>
+  <section><title>User Input Validation</title><para>User Input validation mechanism is responsible of validate data before executing the business logic, avoiding to execute code if we know that inputs will not work.</para>In the managed bean, you can decorate the properties of the java bean using standard annotations defined in the JSF 303 <programlisting language="Java" role="java">
+<![CDATA[
+@NotNull
+@Min(value = 5)
+@Max(value = 99)
+private int age;
+public int getAge() {
+  return age;
+}
+]]></programlisting>In the JSP <!--  ajax validation --><programlisting language="XHTML" role="XML">
+<![CDATA[
+<h:inputText id="age" value="#{inputPanelManagedBean.age}">
+<f:ajax execute="age" event="blur" render="age-error" />
+</h:inputText>
+<p:messages id="age-error" for="age" />
+]]></programlisting></section>
+  <section>
+    <title>Main validators</title>
+    <para>blabla</para>
+  </section>
+  <section>
+    <title>Templating</title>
+    <para>AJF propose a standard layout named &quot;WEB-INF/templates/simpleLayout.xhtml&quot; that you can use in order to organize your page. This layout is divide in three parts:</para>
+    <para/>
+    <itemizedlist>
+      <listitem>
+        <para>
+The &quot;<emphasis role="bold">header</emphasis>&quot; that will contains ArcelorMittal logo, title of the application, menu, login/logout mechanism, Technical stuff ,  HelpAbout part.
+</para>
+      </listitem>
+      <listitem>
+        <para>
+The &quot;<emphasis role="bold">content</emphasis>&quot; part that you will use to  add your components
+</para>
+      </listitem>
+      <listitem>
+        <para>
+The &quot;<emphasis role="bold">footer</emphasis>&quot; part.
+</para>
+      </listitem>
+    </itemizedlist>
+   <para>
+<figure id="layout.fig">
+    <title>Simple Layout</title>
+    <mediaobject>
+      <imageobject>
+        <imagedata align="center" fileref="images/layout.png"/>
+      </imageobject>
+    </mediaobject>
+    </figure>
+</para>
+    <programlisting language="XML" role="XML">
+<![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+xmlns:ui="http://java.sun.com/jsf/facelets"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:p="http://primefaces.org/ui"
+template="WEB-INF/templates/simpleLayout.xhtml">
+
+<ui:define name="applicationTitle">AJF2 Showcase</ui:define>
+<ui:define name="content">
+  <div class="centerPanel">
+    <h:form >
+        <!-- PUT YOUR CONTENT HERE -->
+    </h:form>
+  </div>
+</ui:define>
+</ui:composition>
+]]></programlisting>
+    <para>By default, the SimpleLayout.xhtml template will load  menu and title which will be defined ion src/main/webapp/shared folder.</para>
+    <para>You also have the possibility for each page to overload the <emphasis role="bold">applicationTitle</emphasis> which will be used as title of the brower window. By default, the i18n key <emphasis role="bold">application.title</emphasis> will be displayed.</para>
+    <section>
+      <title>Template customization</title>
+      <para>You can add you own css class style in src/main/webapp/resources/css/custom.css</para>
+      <para/>
+    </section>
+    <section>
+      <title>Template creation</title>
+      <para>If needed, put your own templates in src/main/webapp/shared/templates folder. We will not explain in his document how to do it, but you can pick an eye on the SimpleLayout.xhtml in WEB-INF/template folder.</para>
+    </section>
+  </section>
+</chapter>
