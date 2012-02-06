@@ -14,15 +14,6 @@
 				onclick="loginDialog.show();" icon="ui-icon ui-icon-key"
 				rendered="#{!habilitationMBean.isLogIn}" />
 
-			<!-- When already logged in : user Name button with logout submenu -->
-			<p:submenu label="#{habilitationMBean.userName}"
-				rendered="#{habilitationMBean.isLogIn}" style="font-size:16px"
-				icon="ui-icon ui-icon-key">
-				<p:menuitem value="Log Out" onclick="logoutDialog.show()"
-					icon="ui-icon ui-icon-close" style="font-size:16px"
-					immediate="false" />
-			</p:submenu>
-
 			<!-- Logger management : only for admin -->
 			<p:submenu label="IT" icon="ui-icon-wrench" style="font-size:16px"
 				rendered="#{habilitationMBean.isAdmin}">
@@ -34,9 +25,12 @@
 			<p:menuitem value="About" style="font-size:16px"
 				icon="ui-icon ui-icon-info" oncomplete="aboutProjectDialog.show()" />
 		</p:menubar>
-
-
 	</h:form>
+
+	<p:commandButton actionListener="#{habilitationMBean.logout}"
+		value="log out #{habilitationMBean.userName}" style="font-size:16px;padding:0;border:0"
+		rendered="#{habilitationMBean.isLogIn}"
+		action="/index.xhtml?faces-redirect=true"></p:commandButton>
 
 
 </ui:composition>

@@ -31,7 +31,7 @@ public class HabilitationMBean {
 	// }
 
 	public boolean getIsAdmin() {
-		logger.debug(" ** getIsAdmin ");
+
 		return FacesContext.getCurrentInstance().getExternalContext()
 				.isUserInRole(ROLE_ADMIN);
 		// //return SecurityUtils.ifAnyGranted(ROLE_ADMIN);
