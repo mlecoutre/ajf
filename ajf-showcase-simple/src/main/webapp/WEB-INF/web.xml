@@ -40,7 +40,7 @@
 		<realm-name>MyRealm</realm-name>
 		<form-login-config>
 			<form-login-page>/ajf/login/login.xhtml</form-login-page>
-			<form-error-page>/ajf/errors/loginError.xhtml</form-error-page>
+			<form-error-page>/ajf/login/loginError.xhtml</form-error-page>
 		</form-login-config>
 	</login-config>
 	<security-role>
