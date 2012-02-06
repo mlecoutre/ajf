@@ -75,7 +75,7 @@ public class EmployeeManagementTest {
 		boolean isBle = false;
 		try {
 			rb = employeeManagement.listEmployees(employeesPBEx);
-		}catch (BusinessLayerException ble) {
+		} catch (BusinessLayerException ble) {
 			isBle = true;
 		}
 		assertTrue("We should have raised a BusinessLayerException", isBle);
