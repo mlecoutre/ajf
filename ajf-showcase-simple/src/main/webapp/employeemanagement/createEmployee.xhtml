@@ -15,8 +15,15 @@
 				</H1>
 			</center>
 
+			<p:panel styleClass="rightPanel">
+				
+				<ul>
+					<li><h:link outcome="listEmployees"
+							value="#{m['menu.employee.list.title']}" /></li>
+				</ul>
+			</p:panel>
 
-			<p:panel header="Search" styleClass="centerPanel" style="width:600px"
+			<p:panel header="Create" styleClass="centerPanel" style="width:600px"
 				toggleable="true">
 				<h:panelGrid columns="3" style="margin-bottom:5px" cellpadding="2"
 					columnClasses="label, column">
@@ -45,7 +52,7 @@
 
 					</h:panelGroup>
 					<h:outputText value="Birthday " />
-					<p:calendar value="#{employeeMBean.birthday}" id="popupCal" yearRange="c-80:c-18" />
+					<p:calendar value="#{employeeMBean.birthday}" id="popupCal" navigator="true" yearRange="c-60:c-16" />
 					<h:panelGroup>
 
 					</h:panelGroup>

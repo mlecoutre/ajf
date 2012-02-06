@@ -5,12 +5,14 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	template="WEB-INF/templates/simpleLayout.xhtml">
-
+	
+	<ui:define name="applicationTitle">AJF2 Showcase</ui:define>
+	
 	<ui:define name="content">
 
 		<div class="centerPanel">
 			<h:form id="indexForm">
-				<p>
+				<br />
 				<center>
 					<h1>
 						<h:outputText value="#{m.appliWelcome}" />
@@ -19,13 +21,11 @@
 				<p:panel header="Summary" style="width:400px;">
 					<h2>Showcase content</h2>
 					<ul>
-						<li>Personnel management demo</li>
+						<li>Personnel management demo used for Training</li>
 						<li>Showcase and tests on framework parts</li>
 					</ul>
-					<p class="mytest">This application is also used for AJF2
-						Training.</p>
 				</p:panel>
-				</p>
+
 			</h:form>
 		</div>
 

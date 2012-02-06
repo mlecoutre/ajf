@@ -13,8 +13,21 @@
 				<H1>
 					<h:outputText value="#{m['employee.management.title']}" />
 				</H1>
+			</center>
 
-				<p:panel header="Search" style="width:90%" toggleable="true">
+
+			<p:panel styleClass="rightPanel">
+				
+				<ul>
+					<li><h:link outcome="createEmployee"
+							value="#{m['menu.employee.create.title']}" /></li>
+				</ul>
+			</p:panel>
+
+			<div class="centerPanel">
+				<p:panel id="searchPanel" header="Search" style="width:600px"
+					toggleable="true">
+					<p:focus context="searchPanel" />
 					<h:panelGrid columns="3" style="margin-bottom:5px" cellpadding="2"
 						columnClasses="label, column">
 						<h:outputText value="Lastname " />
@@ -35,7 +48,7 @@
 					</h:panelGrid>
 				</p:panel>
 
-				<p:panel header="Result" id="iPnl" style="width:90%">
+				<p:panel header="Result" id="iPnl" style="width:600px">
 					<p:dataTable var="person" value="#{employeeMBean.employees}"
 						paginator="true" rows="5" selectionMode="single"
 						selection="#{employeeMBean.selectedEmployee}"
@@ -46,8 +59,13 @@
 						<p:column headerText="firstname">
 							<h:outputText value="#{person.firstname}" />
 						</p:column>
-							<p:column headerText="Sex">
+						<p:column headerText="Sex">
 							<h:outputText value="#{person.sex}" />
+						</p:column>
+						<p:column headerText="Birthday">
+							<h:outputText value="#{person.birthday}">
+								<f:convertDateTime pattern="dd.MM.yyyy" />
+							</h:outputText>
 						</p:column>
 
 					</p:dataTable>
@@ -56,8 +74,7 @@
 						value="#{m['button.delete']}">
 					</p:commandButton>
 				</p:panel>
-			</center>
-
+			</div>
 		</h:form>
 	</ui:define>
 
