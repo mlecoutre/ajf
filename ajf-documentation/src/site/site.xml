@@ -28,7 +28,5 @@
    <item name="User Guide" href="docbook/publish/en-US/html/index.html" />   
   </menu>
 
-  <menu ref="reports"/>
-
  </body>
 </project>
