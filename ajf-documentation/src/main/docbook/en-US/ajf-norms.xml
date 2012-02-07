@@ -1,0 +1,612 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!-- This document was created with Syntext Serna Free. --><!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
+<chapter id="norms">
+  <title>AJF - Norms</title>
+  <para>This chapter will describe all norms regarding project architecture deployment and naming norms regarding modules, packages, classes.  
+ </para>
+<section>
+    <title>Coding rules</title>
+    <para>
+		An AJF application should respect the standard rules coming from SUN. Here is the link to access to these rules: TODO
+    </para>
+ </section>
+
+ <section>
+    <title>The different modules &quot;maven&quot;: simple application</title>
+    <para>
+		The simple case is demonstrated using the ajf-showcase-simple application
+    </para>
+ </section>
+
+  <section>
+    <title>The different modules &quot;maven&quot;: complex application</title>
+    <para>
+<itemizedlist>
+        <listitem>
+          <para>[Project Name]-parent :  it&apos;s the project parent of the application and it&apos;ll inherit the &quot;am.parent&quot; project.</para>
+        </listitem>
+        <listitem>
+          <para>[Project Name]-lib       : </para>
+        </listitem>
+        <listitem>
+          <para>[Project Name]-config : </para>
+        </listitem>
+        <listitem>
+          <para>[Project Name]-core    : </para>
+        </listitem>
+        <listitem>
+          <para>[Project Name]-ear      : </para>
+        </listitem>
+        <listitem>
+          <para>[Project Name]-ejb      : </para>
+        </listitem>
+        <listitem>
+          <para>[Project Name]-ui        : </para>
+        </listitem>
+        <listitem>
+          <para>[Project Name]-ws       : </para>
+        </listitem>
+      </itemizedlist>
+</para>
+    <figure id="naming modules norms.fig">
+      <title>Naming Modules norms</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" fileref="images/norms_StandardArchitecture.png"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+    <para>Le projet am.parent (ArcelorMittal) est le projet principal de tout développement de projet java, c?est la devFactory. Et il contient les différents « plugin » pour l&apos;ensemble d&apos;un projet par exemple « maven-compiler-plugin »</para>
+    <para>
+The project descriptor for a Maven project is:
+</para>
+    <table frame="all">
+      <title>standard maven descriptor</title>
+      <tgroup cols="2">
+        <colspec colname="c1"/>
+        <colspec colname="c2"/>
+        <tbody>
+          <row>
+            <entry>src/main/java</entry>
+            <entry>Application/Library sources</entry>
+          </row>
+          <row>
+            <entry>src/main/resources</entry>
+            <entry>Application/Library resources</entry>
+          </row>
+          <row>
+            <entry>src/main/filters</entry>
+            <entry>Resource filter files</entry>
+          </row>
+          <row>
+            <entry>src/main/assembly</entry>
+            <entry>Assembly descriptors</entry>
+          </row>
+          <row>
+            <entry>src/main/webapp</entry>
+            <entry>Web application sources</entry>
+          </row>
+          <row>
+            <entry>src/test/java</entry>
+            <entry>Test sources</entry>
+          </row>
+          <row>
+            <entry>src/test/resources</entry>
+            <entry>Test resources</entry>
+          </row>
+          <row>
+            <entry>src/test/filters</entry>
+            <entry>Test resource filter files</entry>
+          </row>
+          <row>
+            <entry>src/site</entry>
+            <entry>Site of documentation</entry>
+          </row>
+          <row>
+            <entry>LICENSE.txt</entry>
+            <entry>Project&apos;s license</entry>
+          </row>
+          <row>
+            <entry>NOTICE.txt</entry>
+            <entry>Notices and attributions required by libraries that the project depends on</entry>
+          </row>
+          <row>
+            <entry>README.txt</entry>
+            <entry>Project&apos;s readme</entry>
+          </row>
+          <row>
+            <entry>pom.xml</entry>
+            <entry>maven configuration file</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <section>
+      <title>Organisation of the different type of modules</title>
+      <para>The project descriptor for a Maven Arcelor Project is:</para>
+      <section>
+        <title>Parent module</title>
+        <para/>
+        <table frame="all">
+          <title>[Project Name]-parent content</title>
+          <tgroup cols="3">
+            <colspec colname="c1"/>
+            <colspec colname="c2"/>
+            <colspec colname="c3"/>
+            <thead>
+              <row>
+                <entry colname="1">Container</entry>
+                <entry colname="2">Content</entry>
+                <entry colname="3">Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>[Project Name]-parent</entry>
+                <entry/>
+                <entry>Project maven packages</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>pom.xml</entry>
+                <entry>Define the project version, reference the project modules</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+      <section>
+        <title>Config module</title>
+        <para/>
+        <table frame="all">
+          <title>[Project Name]-config content</title>
+          <tgroup cols="3">
+            <colspec colname="c1"/>
+            <colspec colname="c2"/>
+            <colspec colname="c3"/>
+            <thead>
+              <row>
+                <entry colname="1">Container</entry>
+                <entry colname="2">Content</entry>
+                <entry colname="3">Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>[Project Name]-config</entry>
+                <entry/>
+                <entry>Project maven packages, contain the project configuration files</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>src / main / resources / META-INF / persistence.xml</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>logback.xml</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>target </entry>
+                <entry>Generated binaries</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>pom.xml</entry>
+                <entry>Define the project version, reference the project modules</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+      <section>
+        <title>ear module</title>
+        <para/>
+        <table frame="all">
+          <title>[Project Name]-ear content</title>
+          <tgroup cols="3">
+            <colspec colname="c1"/>
+            <colspec colname="c2"/>
+            <colspec colname="c3"/>
+            <thead>
+              <row>
+                <entry colname="1">Container</entry>
+                <entry colname="2">Content</entry>
+                <entry colname="3">Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>[Project Name]-ear</entry>
+                <entry/>
+                <entry>Project maven packages, containing all libraries required by the application</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>src/ main / resources </entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>pom.xml</entry>
+                <entry>information to aggregate module in one EAR</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+      <section>
+        <title>[Project Name]-core </title>
+        <para/>
+        <table frame="all">
+          <title>[Project Name]-core content</title>
+          <tgroup cols="3">
+            <colspec colname="c1"/>
+            <colspec colname="c2"/>
+            <colspec colname="c3"/>
+            <thead>
+              <row>
+                <entry colname="1">Container</entry>
+                <entry colname="2">Content</entry>
+                <entry colname="3">Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>[Project Name]-core</entry>
+                <entry/>
+                <entry>Project maven packages</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="bold">src / main / java</emphasis>
+                </entry>
+                <entry>
+                  <emphasis role="bold">below the Java Package Naming</emphasis>
+                </entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="italic">[Project Name].core.dao.[Entity Name]DAO</emphasis>
+                </entry>
+                <entry>Define the project version, reference the project modules</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="italic">[Project Name].core.dao.[Entity Name]DAODelegate</emphasis>
+                </entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="italic">[Project Name].core.services.[Service Name]Service</emphasis>
+                </entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="italic">[Project Name].core.services.[service name].[Service Name][Operation name]Delegate</emphasis>
+                </entry>
+                <entry>optional, needed if you want to split your service class in several parts due to number of atomic operations.</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="italic">[Project Name].core.business.[function name].[Function Name]Policy</emphasis>
+                </entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="italic">[Project Name].core.business.[function name].[Ut Name]Delegate</emphasis>
+                </entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>src / main / resources</entry>
+                <entry>should be empty</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="bold">src / test / java </emphasis>
+                </entry>
+                <entry>
+                  <emphasis role="bold">below the Java Package Naming for test</emphasis>
+                </entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="italic">[Project Name].core.*.[class Name]Test</emphasis>
+                </entry>
+                <entry>&#8220;*&#8221; corresponding at all src/main/java /[Project Name].core sub packages</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="bold">src / test / resources</emphasis>
+                </entry>
+                <entry>Test resources directories naming: </entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="italic">
+                    <emphasis role="italic">[Project <emphasis role="italic">Name].core.*.[class Name]Test.[extension file]</emphasis></emphasis>
+                  </emphasis>
+                </entry>
+                <entry> &#8220;*&#8221; corresponding at all src/main/java /[Project Name].core sub packages</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>Maven Dependencies</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>JRE System Library [JavaSE-1.6]</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>target</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>pom.xml</entry>
+                <entry/>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+      <section>
+        <title>[Project Name]-lib</title>
+        <para/>
+        <table frame="all">
+          <title>[Project Name]-lib content</title>
+          <tgroup cols="3">
+            <colspec colname="c1"/>
+            <colspec colname="c2"/>
+            <colspec colname="c3"/>
+            <thead>
+              <row>
+                <entry colname="1">Container</entry>
+                <entry colname="2">Content</entry>
+                <entry colname="3">Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>[Project Name]-lib</entry>
+                <entry/>
+                <entry>Project maven packages</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="bold">src / main / java</emphasis>
+                </entry>
+                <entry>
+                  <emphasis role="bold">below the Java Package Naming</emphasis>
+                </entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>[Project Name].lib.model.*.java</entry>
+                <entry>JPA Entities and POJO of your data model</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>[Project Name].lib.dto.*DTO.java</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>[Project Name].lib.services.[Service Name]ServiceBD.java</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>[Project Name].lib.business.[function name] .[Function Name]BD.java</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>[Project Name].lib.business.[function name] .dto.[UT]PB.java</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>[Project Name].lib.business.[function name] .dto.[UT]RB.java</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="bold">src / test / resources</emphasis>
+                </entry>
+                <entry>Test resources directories naming: </entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>Maven Dependencies</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>JRE System Library [JavaSE-1.6]</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>target</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>pom.xml</entry>
+                <entry>Define the project version, reference the project modules</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+      <section>
+        <title>[Project Name]-ui module</title>
+        <para/>
+        <table frame="all">
+          <title>[Project Name]-ui content</title>
+          <tgroup cols="3">
+            <colspec colname="c1"/>
+            <colspec colname="c2"/>
+            <colspec colname="c3"/>
+            <thead>
+              <row>
+                <entry colname="1">Container</entry>
+                <entry colname="2">Content</entry>
+                <entry colname="3">Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>[Project Name]-ui </entry>
+                <entry/>
+                <entry>Project maven packages</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="bold">src / main / java</emphasis>
+                </entry>
+                <entry>
+                  <emphasis role="bold">below the Java Package Naming</emphasis>
+                </entry>
+              </row>
+              <row>
+                <entry/>
+                <entry/>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="bold">src / test / resources</emphasis>
+                </entry>
+                <entry>Test resources directories naming: </entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>Maven Dependencies</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>JRE System Library [JavaSE-1.6]</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>target</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>pom.xml</entry>
+                <entry>Define the project version, reference the project modules</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+      <section>
+        <title>[Project Name]-ws module</title>
+        <para/>
+        <table frame="all">
+          <title>[Project Name]-ws content</title>
+          <tgroup cols="3">
+            <colspec colname="c1"/>
+            <colspec colname="c2"/>
+            <colspec colname="c3"/>
+            <thead>
+              <row>
+                <entry colname="1">Container</entry>
+                <entry colname="2">Content</entry>
+                <entry colname="3">Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>[Project Name]-ws</entry>
+                <entry/>
+                <entry>Project maven packages</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                  <emphasis role="bold">src / main / java</emphasis>
+                </entry>
+                <entry>
+                  <emphasis role="bold">below the Java Package Naming</emphasis>
+                </entry>
+              </row>
+              <row>
+                <entry/>
+                <entry> src / main / resources </entry>
+                <entry> below the Java Package Naming </entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>
+                   <emphasis role="bold"> src / main / webapp</emphasis>
+                 </entry>
+                <entry> web resources </entry>
+              </row>
+              <row>
+                <entry/>
+                <entry> src / test / java </entry>
+                <entry> below the Java Package Naming </entry>
+              </row>
+              <row>
+                <entry/>
+                <entry> src / test / resources </entry>
+                <entry>Test resources directories naming: </entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>Maven Dependencies</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>JRE System Library [JavaSE-1.6]</entry>
+                <entry/>
+              </row>
+              <row>
+                <entry/>
+                <entry>target</entry>
+                <entry>generated binaries resources</entry>
+              </row>
+              <row>
+                <entry/>
+                <entry>pom.xml</entry>
+                <entry>contains module description, dependencies, test application server configuration and web module aggregation rules.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+    </section>
+  </section>
+</chapter>
