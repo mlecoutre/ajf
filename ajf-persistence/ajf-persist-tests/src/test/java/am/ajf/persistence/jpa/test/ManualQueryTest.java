@@ -19,32 +19,28 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import am.ajf.persistence.jpa.EntityManagerProvider;
-import am.ajf.persistence.jpa.impl.NamedQueryImplHandler;
+import am.ajf.persistence.jpa.test.harness.ManualService;
+import am.ajf.persistence.jpa.test.harness.ManualServiceBD;
 import am.ajf.persistence.jpa.test.harness.Model1;
-import am.ajf.persistence.jpa.test.harness.NamedQueryNoImplServiceBD;
-import am.ajf.persistence.jpa.test.harness.NamedQueryWithImplService;
-import am.ajf.persistence.jpa.test.harness.NamedQueryWithImplServiceBD;
+import am.ajf.persistence.jpa.test.harness.ModelManual;
 
 @RunWith(Arquillian.class)
-public class NamedQueryTest {
+public class ManualQueryTest {
 	
 	@Inject
-	private NamedQueryNoImplServiceBD namedQueryNoImpl;
-	@Inject
-	private NamedQueryWithImplServiceBD namedQueryWithImpl;
-	@Inject
 	private EntityManagerFactory emf;
+
+	@Inject
+	private ManualServiceBD manualService;
 	
 	
 	@Deployment
 	public static JavaArchive createTestArchive() {
 		return ShrinkWrap
 				.create(JavaArchive.class, "test.jar")
-				.addClasses(NamedQueryNoImplServiceBD.class)
-				.addClasses(NamedQueryWithImplServiceBD.class)
-				.addClasses(EntityManagerProvider.class)				
-				.addClasses(NamedQueryWithImplService.class)
-				.addClasses(NamedQueryImplHandler.class)
+				.addClasses(ManualServiceBD.class)
+				.addClasses(ManualService.class)
+				.addClasses(EntityManagerProvider.class)								
 				.addAsManifestResource(EmptyAsset.INSTANCE,
 						ArchivePaths.create("beans.xml"))
 				.addAsManifestResource("META-INF/persistence.xml", 
@@ -55,8 +51,15 @@ public class NamedQueryTest {
 	public void setUp() throws Exception {				                        
 		EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
-        em.persist(new Model1("nicolas"));
-        em.persist(new Model1("vincent"));
+        em.persist(new ModelManual("Doc", "nain"));
+        em.persist(new ModelManual("Sneezy", "nain"));
+        em.persist(new ModelManual("Sleepy", "nain"));
+        em.persist(new ModelManual("Grumpy", "nain"));
+        em.persist(new ModelManual("Happy", "nain"));
+        em.persist(new ModelManual("Bashful", "nain"));
+        em.persist(new ModelManual("Dopey", "nain"));
+        
+        
         List<Model1> list = em.createQuery("SELECT m FROM Model1 m").getResultList();
         for (Model1 model : list) {
         	System.out.println("Inserted1 : ("+model.getId()+", "+model.getName()+")");
@@ -85,21 +88,21 @@ public class NamedQueryTest {
 	}
 
 	@Test
-	public void testNamedQueryWithNoImpl() {	        
-		List<Model1> res = namedQueryNoImpl.findAllModelsByName("nicolas");
+	public void testFindManualQuery() {	        
+		List<ModelManual> res = manualService.findByNameOrderBy("nain", "firstName");
 		Assert.assertNotNull(res);
-		Assert.assertEquals(1, res.size());		
+		Assert.assertEquals(7, res.size());
+		Assert.assertEquals("Bashful", res.get(0).getFirstName());
+		Assert.assertEquals("Sneezy", res.get(6).getFirstName());
 	}
 	
 	@Test
-	public void testNamedQueryWithImpl() {	        
-		List<Model1> res1 = namedQueryWithImpl.findAllModelsByName("nicolas");		
-		Assert.assertNotNull(res1);
-		Assert.assertEquals(1, res1.size());			
-		
-		List<Model1> res2 = namedQueryWithImpl.findManualQuery();		
-		Assert.assertNotNull(res2);
-		Assert.assertEquals(0, res2.size());		
+	public void testNewManualQuery() {	        
+		manualService.insertNew(new ModelManual("Snow", "White"));
+		List<ModelManual> res = manualService.findByNameOrderBy("White", "firstName");
+		Assert.assertNotNull(res);
+		Assert.assertEquals(1, res.size());
+		Assert.assertEquals("Snow", res.get(0).getFirstName());		
 	}
 	
 }

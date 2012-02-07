@@ -2,16 +2,7 @@ package am.ajf.persistence.jpa;
 
 import java.util.List;
 
-/**
- * Database CRUD operations definition for use in a service. 
- * 
- * 
- * @author Nicolas Radde (E016696)
- *
- * @param <E> The JPA Entity type
- * @param <P> The JPA Entity primary key type
- */
-public interface CrudServiceBD<E,P> {
+public interface CrudBD<E,P> {
 	
 	List<E> find(String queryName, Object... params); 
 	E save(E entity);

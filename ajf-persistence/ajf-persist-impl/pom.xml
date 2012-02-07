@@ -33,6 +33,10 @@
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-injection-api</artifactId>			
 		</dependency>
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-transaction-api</artifactId>			
+		</dependency>
 
 		<!-- JPA2 impl for tests -->
 		<dependency>
