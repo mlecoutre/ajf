@@ -31,38 +31,47 @@
 							<artifactId>pressgang-xslt</artifactId>
 							<version>2.0.0</version>
 						</dependency>
+						<!-- 
 						<dependency>
 							<groupId>org.jboss.pressgang</groupId>
 							<artifactId>pressgang-jdocbook-style</artifactId>
 							<type>jdocbook-style</type>
 							<version>2.0.0</version>
 						</dependency>
+						 -->
 					</dependencies>
 					<configuration>
 						<sourceDirectory>${basedir}/src/main/docbook</sourceDirectory>
 						<sourceDocumentName>${docname}.xml</sourceDocumentName>
 						<masterTranslation>en-US</masterTranslation>
-						<baseOutputDirectory>${project.build.directory}/site</baseOutputDirectory>
+						<baseOutputDirectory>${project.build.directory}/site</baseOutputDirectory>						
 						<imageResource>
 							<directory>${basedir}/src/main/docbook/en-US</directory>
 							<includes>
-								<include>images/*.png</include>
+								<include>images/**/*.png</include>								
+								<include>images/**/*.gif</include>
 							</includes>
 						</imageResource>
+						<cssResource>
+							<directory>${basedir}/src/main/docbook/en-US</directory>
+							<includes>
+								<include>css/*.css</include>
+							</includes>
+						</cssResource>
 						<formats>
 							<format>
 								<formatName>pdf</formatName>
-								<stylesheetResource>classpath:/xslt/org/jboss/pdf.xsl</stylesheetResource>
+								<stylesheetResource>file:${basedir}/src/main/resources/xslt/am/ajf/pdf.xsl</stylesheetResource>
 								<finalName>${docname}.pdf</finalName>
 							</format>
 							<format>
 								<formatName>html</formatName>
-								<stylesheetResource>classpath:/xslt/org/jboss/xhtml.xsl</stylesheetResource>
+								<stylesheetResource>file:${basedir}/src/main/resources/xslt/am/ajf/xhtml.xsl</stylesheetResource>
 								<finalName>index.html</finalName>
 							</format>
 							<format>
 								<formatName>html_single</formatName>
-								<stylesheetResource>classpath:/xslt/org/jboss/xhtml-single.xsl</stylesheetResource>
+								<stylesheetResource>file:${basedir}/src/main/resources/xslt/am/ajf/xhtml-single.xsl</stylesheetResource>
 								<finalName>index.html</finalName>
 							</format>
 						</formats>
