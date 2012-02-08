@@ -4,6 +4,6 @@
   <xsl:import href="classpath:/xslt/org/jboss/xhtml-single.xsl"/>
   <xsl:param name="html.stylesheet" select="'css/ajf.css'"/>
   <xsl:param name="siteHref" select="'http://www.arcelormittal.com'"/>
-  <xsl:param name="docHref" select="'http://web-xwiki/xwiki/bin/view/AJF2/'"/>
+  <xsl:param name="docHref" select="'http://web-maven-site/'"/>
 
 </xsl:stylesheet>
