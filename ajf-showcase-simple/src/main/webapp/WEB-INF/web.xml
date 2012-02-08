@@ -28,6 +28,10 @@
 		<param-value>cupertino</param-value>
 	</context-param>
 
+	<!-- EL2.2 -->
+	<!-- <context-param> <param-name>com.sun.faces.expressionFactory</param-name> 
+		<param-value>com.sun.el.ExpressionFactoryImpl</param-value> </context-param> -->
+
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
