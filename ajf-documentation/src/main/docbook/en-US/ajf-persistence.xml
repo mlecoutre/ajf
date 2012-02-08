@@ -379,6 +379,279 @@ public class ManualService implements ManualServiceBD {
 	</section>
 	<section>
 		<title>Managing Audit Datas</title>
-		<para>Not Yet Implemented</para>
+		<para>
+			JPA comes with a number of tools that can be used to manage Audit Datas.
+			AJF cant help more than providing the necessary components for know scenarios
+			used by our teams to store audit datas. If you cant use one of the built-in
+			component you can still use directly JPA to store the Audit Datas yourself. 
+		</para>
+		<section>
+			<title>Using the standard Audit Data component</title>
+			<para>
+				The standard implementation come with the following 3 components :
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>
+						<classname>am.ajf.persistence.jpa.audit.standard.StdAuditable</classname>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<classname>am.ajf.persistence.jpa.audit.standard.StdAuditDataComponent</classname>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<classname>am.ajf.persistence.jpa.audit.standard.StdAuditDataListener</classname>
+					</para>
+				</listitem>
+			</itemizedlist>
+			<para>
+				To enable the standard Audting mechanism on your JPA <classname>Entity</classname>
+				You need to add the following annotations and methods :
+			</para>
+			<programlistingco role="Java">
+		        <areaspec>
+		          <area coords="7" id="audit-1" />		
+		          <area coords="8" id="audit-2" />		
+		          <area coords="15" id="audit-3" />
+		          <area coords="42" id="audit-4" />
+		        </areaspec>
+				<programlisting language="Java" role="Java"><![CDATA[
+@Entity
+	@NamedQueries({ @NamedQuery(name = ModelAudit.FIND_BY_NAME, 
+		query = "FROM ModelAudit model WHERE model.name = ?1") ,
+	@NamedQuery(name = ModelAudit.FIND_ALL, 
+		query = "FROM ModelAudit model")})	
+@EntityListeners(StdAuditDataListener.class)
+public class ModelAudit implements StdAuditable {
+
+	public static final String FIND_ALL = "ModelAudit.findAll";
+	public static final String FIND_BY_NAME = "ModelAudit.findByName";
+	
+	private Long id;
+	private String name;
+	private StdAuditDataComponent auditDatas;
+
+	public ModelAudit() {}
+	
+	public ModelAudit(String name) {
+		this.name = name;
+	}	
+	
+	@Id @GeneratedValue
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	@Basic
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public EvolAuditDataComponent getAuditData() {
+		return auditDatas;
+	}
+
+	@Override
+	public void setAuditData(EvolAuditDataComponent auditData) {
+		this.auditDatas = auditData;		
+	}
+	
+}			
+				]]></programlisting>
+			<calloutlist>	         
+	          <callout arearefs="audit-1">
+	            <para>
+	            	<literal>@EntityListeners(StdAuditDataListener.class)</literal> : With the listener of your
+	            	choice from the package <package>am.ajf.persistence.jpa.audit</package>.
+	            	This is component responsible for launching the associated hooks when
+	            	you save/update your JPA element.
+	            </para>
+	          </callout>
+	          <callout arearefs="audit-2">
+	            <para>
+	            	<literal>implements StdAuditable</literal> : the interface that will
+	            	give you access to the audit component from the Listener.
+	            </para>
+	          </callout>
+	          <callout arearefs="audit-3">
+	            <para>
+	            	<literal>private StdAuditDataComponent auditDatas;</literal> : the fields
+	            	declaration as an embedded object of all your audit datas. See the content of 
+	            	the class <classname>StdAuditDataComponent</classname> for the content details.
+				</para>
+	          </callout>
+	          <callout arearefs="audit-4">
+	            <para>
+	            	<literal>getter/setter</literal> : the getters and setters for the
+	            	declared Audit Data component.
+	            </para>
+	          </callout>
+	       </calloutlist>
+	     </programlistingco>
+		 <para>
+			The content of the class <classname>StdAuditDataComponent</classname> is :	
+		 </para>
+		 <programlisting language="Java" role="Java"><![CDATA[
+@Embeddable
+public class StdAuditDataComponent implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
+	@Column(nullable = false, name="CREATE_DATE")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createDate;
+	
+	@Column(nullable = false, length = 25, name="CREATE_USER")
+	private String createUser;
+	
+	@Column(nullable = true, name="UPDATE_DATE")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updateDate;
+	
+	@Column(nullable = true, length = 25, name="UPDATE_USER")
+	private String updateUser;
+	
+	//... getters and setters ...
+}		 
+		 ]]></programlisting>
+		</section>
+		<section>
+			<title>Implementing you own AuditDatas</title>
+			<para>
+				If the structure of your audit datas doesnt match one of the existing
+				AJF AuditDataComponent, you will need to implement the 3 classes your self.
+			</para>
+			<variablelist>
+				<varlistentry>
+					<term><classname>XXXAuditable</classname></term>
+					<listitem>
+						<para>
+							This class is the interface with the getter and setter to
+							access the XXXAuditDataComponent
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><classname>XXXAuditDataComponent</classname></term>
+					<listitem>
+						<para>
+							This class is the main class that represent the audit datas.
+							It is an <parameter>@Embeddable</parameter> JPA class where
+							you declare all the mappings between your object and the 
+							columns database.
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term><classname>XXXAuditDataListener</classname></term>
+					<listitem>
+						<para>
+							This class is the processor that will save the audit datas
+							when the object is saved or updated by JPA. This is where
+							you will write custom code to access AuditDatas from the 
+							ajf-core and ajf-injection module and store them in your custom
+							component. 
+						</para>
+					</listitem>
+				</varlistentry>
+			</variablelist>
+			<para>
+				A good start to write your own AuditDataListener will be to use the
+				<classname>StdAuditDataListner</classname> as a starting point.
+				The update on the AuditDataComponent is done inside JPA hooks methods
+				<methodname>@PrePersist</methodname> and <methodname>@PreUpdate</methodname>  
+			</para>
+					 <programlisting language="Java" role="Java"><![CDATA[
+@PrePersist
+public void setAuditData(Object bean) {
+	processAuditData(bean);
+}
+
+@PreUpdate
+public void updateAuditData(Object bean) {
+	processAuditData(bean);		
+}
+
+/**
+ * process the entity audit data
+ * @param bean
+ */
+private void processAuditData(Object bean) {
+	
+	if (bean instanceof StdAuditable) {
+		
+		AuditData audit = AuditDataContext.getAuditData();
+		String user = null;
+		if (null != audit) {
+			user = String.valueOf(audit.get(AuditData.KEY_USERID));				
+		}
+		if (null == user)
+			 user = "Anonymous";
+		
+		StdAuditable auditableBean = (StdAuditable) bean;
+		StdAuditDataComponent auditData = auditableBean.getAuditData();
+		
+		if (null == auditData) {
+			// instanciate and attach the AuditData
+			auditData = new StdAuditDataComponent();
+			auditableBean.setAuditData(auditData);
+			// initialize the AuditData
+			auditData.setCreateDate(new Date());
+			auditData.setCreateUser(user);
+			auditData.setUpdateDate(null);
+			auditData.setUpdateUser(null);
+		}
+		else {
+			auditData.setUpdateDate(new Date());
+			auditData.setUpdateUser(user);
+		}
+	}
+}		 
+		 ]]></programlisting>
+		 <para>
+		 	There is an implementation for Auditing inside AJF for the following case : 
+		 </para>
+		 <variablelist>
+			<varlistentry>
+				<term><classname>StdAuditable</classname></term>
+				<listitem>
+					<para>
+						Use this set of components if you are free of DBA constraints
+						on your database and you just want to enable auditing for your beans. 
+					</para>
+				</listitem>
+			 </varlistentry>
+			 <varlistentry>
+				<term><classname>EvolAuditable</classname></term>
+				<listitem>
+					<para>
+						Use this set of components if you are on Florange Mainframe DB2. 
+					</para>
+				</listitem>
+			 </varlistentry>
+			 <varlistentry>
+				<term><classname>YourAuditable !</classname></term>
+				<listitem>
+					<para>
+						If the AuditData you use are common for a number of project. Send
+						us your code and we will add them to the framework. This will ensure
+						all the projects in your area use the same audit data structure. 
+					</para>
+				</listitem>
+			 </varlistentry>
+		  </variablelist>		  
+		</section>
 	</section>
 </chapter>
