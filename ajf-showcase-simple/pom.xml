@@ -14,6 +14,14 @@
 	<packaging>war</packaging>
 	<name>ajf-showcase-simple</name>
 
+
+	<scm>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-showcase-simple</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-showcase-simple</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-showcase-simple/]]></url>
+	</scm>
+
+
 	<properties>
 		<ajfversion>2.0.1</ajfversion>
 	</properties>
@@ -300,9 +308,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<scm>
-		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/maven-pom/parent/AMParentStandard/tags/ajf-parent-2.0.1</connection>
-		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/maven-pom/parent/AMParentStandard/tags/ajf-parent-2.0.1</developerConnection>
-	</scm>
 </project>
