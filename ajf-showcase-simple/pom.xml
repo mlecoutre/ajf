@@ -9,15 +9,15 @@
 
 	<groupId>am.ajf</groupId>
 	<artifactId>ajf-showcase-simple</artifactId>
-	<version>2.0.1</version>
+	<version>2.1.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>ajf-showcase-simple</name>
 
 
 	<scm>
-		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-showcase-simple-2.0.1</connection>
-		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-showcase-simple-2.0.1</developerConnection>
-		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/tags/ajf-showcase-simple-2.0.1?repname=ITSWE&path=/ajf/trunk/ajf-showcase-simple/]]></url>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-showcase-simple</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-showcase-simple</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-showcase-simple/]]></url>
 	</scm>
 
 
