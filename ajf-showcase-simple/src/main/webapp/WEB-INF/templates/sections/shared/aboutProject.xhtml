@@ -6,22 +6,25 @@
 	xmlns:p="http://primefaces.org/ui">
 
 
-	<p:dialog header="About Project " widgetVar="aboutProjectDialog"
-		showEffect="bounce" hideEffect="explode" height="200">
+	<p:dialog header="#{m['title.AboutProject']}"
+		widgetVar="aboutProjectDialog" showEffect="bounce"
+		hideEffect="explode" height="200">
 
 
-		<h:outputLabel for="impl_title" value="Project title: "
-			style="weight:bold"></h:outputLabel>
+		<h:outputLabel for="impl_title"
+			value="#{m['AboutProject.label.ProjectTitle']}: " style="weight:bold"></h:outputLabel>
 		<h:outputText id="impl_title"
 			value="#{aboutMBean.implementationTitle}"></h:outputText>
 
 		<br />
-		<h:outputLabel for="impl_vendor" value="Project vendor: "
+		<h:outputLabel for="impl_vendor"
+			value="#{m['AboutProject.label.ProjectVendor']}: "
 			style="weight:bold"></h:outputLabel>
 		<h:outputText id="impl_vendor"
 			value="#{aboutMBean.implementationVendor}"></h:outputText>
 		<br />
-		<h:outputLabel for="impl_version" value="Version: "
+		<h:outputLabel for="impl_version"
+			value="#{m['AboutProject.label.ProjectVersion']}: "
 			style="weight:bold"></h:outputLabel>
 		<h:outputText id="impl_version"
 			value="#{aboutMBean.implementationVersion}"></h:outputText>

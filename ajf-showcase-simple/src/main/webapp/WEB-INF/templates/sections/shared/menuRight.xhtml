@@ -6,31 +6,38 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 
-	<h:form>
-		<p:menubar style="padding:0;border:0;float:right;">
+	<p:menubar style="padding:0;border:0;float:right;">
 
-			<!-- When not logged in : Log in button -->
-			<p:menuitem value="Log in" style="font-size:16px"
-				onclick="loginDialog.show();" icon="ui-icon ui-icon-key"
-				rendered="#{!habilitationMBean.isLogIn}" />
+		<!-- When not logged in : Log in button -->
+		<p:menuitem value="#{m['menuRight.menuitem.login']}"
+			style="font-size:16px" onclick="loginDialog.show();"
+			icon="ui-icon ui-icon-key" rendered="#{!habilitationMBean.isLogIn}" />
 
-			<!-- Logger management : only for admin -->
-			<p:submenu label="IT" icon="ui-icon-wrench" style="font-size:16px"
-				rendered="#{habilitationMBean.isAdmin}">
-				<p:menuitem value="Logger" style="font-size:16px"
-					icon="ui-icon-print" onclick="loggerDialog.show()" />
-			</p:submenu>
+		<!-- When already logged in : user Name button with logout submenu -->
+		<p:submenu label="#{habilitationMBean.userName}"
+			rendered="#{habilitationMBean.isLogIn}" style="font-size:16px"
+			icon="ui-icon ui-icon-key">
 
-			<!-- 'About' menu -->
-			<p:menuitem value="About" style="font-size:16px"
-				icon="ui-icon ui-icon-info" oncomplete="aboutProjectDialog.show()" />
-		</p:menubar>
-	</h:form>
+			<p:menuitem value="#{m['menuRight.menuitem.logout']}"
+				actionListener="#{habilitationMBean.logout}"
+				action="/index.xhtml?faces-redirect=true"
+				icon="ui-icon ui-icon-close" style="font-size:16px" />
 
-	<p:commandButton actionListener="#{habilitationMBean.logout}"
-		value="log out #{habilitationMBean.userName}" style="font-size:16px;padding:0;border:0"
-		rendered="#{habilitationMBean.isLogIn}"
-		action="/index.xhtml?faces-redirect=true"></p:commandButton>
+		</p:submenu>
+
+		<!-- Logger management : only for admin -->
+		<p:submenu label="IT" icon="ui-icon-wrench"
+			rendered="#{habilitationMBean.isAdmin}" style="font-size:16px">
+			<p:menuitem value="#{m['title.loggers']}" style="font-size:16px"
+				icon="ui-icon-print" onclick="loggerDialog.show()" />
+		</p:submenu>
+
+		<!-- 'About' menu -->
+		<p:menuitem value="#{m['menuRight.menuitem.About']}"
+			style="font-size:16px" icon="ui-icon ui-icon-info"
+			oncomplete="aboutProjectDialog.show()" />
+	</p:menubar>
+
 
 
 </ui:composition>
