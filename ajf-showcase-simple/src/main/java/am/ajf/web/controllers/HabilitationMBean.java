@@ -19,24 +19,6 @@ public class HabilitationMBean {
 
 	public static String UNREFERENCED_USER = "UnRefrenced User";
 
-	// Interface user
-	// public static User interfaceUser;
-
-	// public boolean isAuthenticated(String value) {
-	// log.info(" ** isAuthenticated " + value);
-	// return SecurityUtils.ifAllGranted(value);
-	// // org.primefaces.util.SecurityUtils.ifGranted(role)
-	// //
-	// FacesContext.getCurrentInstance().getExternalContext().isUserInRole(role)
-	// }
-
-	public boolean getIsAdmin() {
-
-		return FacesContext.getCurrentInstance().getExternalContext()
-				.isUserInRole(ROLE_ADMIN);
-		// //return SecurityUtils.ifAnyGranted(ROLE_ADMIN);
-	}
-
 	/**
 	 * Method to be used with at least version 2.2 of EL. Return true if the
 	 * user has the rights of the Role set as input.
@@ -93,7 +75,7 @@ public class HabilitationMBean {
 	/**
 	 * Retrieve the session username
 	 * 
-	 * @return
+	 * @return String user name
 	 */
 	public String getUserName() {
 
@@ -110,17 +92,37 @@ public class HabilitationMBean {
 
 	}
 
-	// public boolean getIsPowerUser() {
-	// // log.debug(" ** getIsPowerUser ");
-	// // return SecurityUtils.ifAnyGranted("user,poweruser");
-	// return SecurityUtils.ifAnyGranted("poweruser,admin");
-	// }
-	//
-	// public boolean getIsUser() {
-	// logger.debug(" ** getIsUser ");
-	// // return SecurityUtils.ifAnyGranted("user");
-	// return FacesContext.getCurrentInstance().getExternalContext()
-	// .isUserInRole(ROLE_USER);
-	// }
+	/**
+	 * Return true if the user is in the ADMIN role
+	 * 
+	 * @return boolean
+	 */
+	public boolean getIsAdmin() {
+
+		return FacesContext.getCurrentInstance().getExternalContext()
+				.isUserInRole(ROLE_ADMIN);
+
+	}
+
+	/**
+	 * Return true if the user is in the POWER USER role
+	 * 
+	 * @return boolean
+	 */
+	public boolean getIsPowerUser() {
+		return FacesContext.getCurrentInstance().getExternalContext()
+				.isUserInRole(ROLE_POWERUSER);
+	}
+
+	/**
+	 * Return true if the user is in the USER role
+	 * 
+	 * @return boolean
+	 */
+	public boolean getIsUser() {
+
+		return FacesContext.getCurrentInstance().getExternalContext()
+				.isUserInRole(ROLE_USER);
+	}
 
 }
