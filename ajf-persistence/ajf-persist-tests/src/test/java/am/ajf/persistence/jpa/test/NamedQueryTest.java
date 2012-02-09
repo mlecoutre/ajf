@@ -3,8 +3,6 @@ package am.ajf.persistence.jpa.test;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -24,6 +22,7 @@ import am.ajf.persistence.jpa.test.harness.Model1;
 import am.ajf.persistence.jpa.test.harness.NamedQueryNoImplServiceBD;
 import am.ajf.persistence.jpa.test.harness.NamedQueryWithImplService;
 import am.ajf.persistence.jpa.test.harness.NamedQueryWithImplServiceBD;
+import am.ajf.persistence.jpa.test.helper.DBHelper;
 
 @RunWith(Arquillian.class)
 public class NamedQueryTest {
@@ -31,10 +30,7 @@ public class NamedQueryTest {
 	@Inject
 	private NamedQueryNoImplServiceBD namedQueryNoImpl;
 	@Inject
-	private NamedQueryWithImplServiceBD namedQueryWithImpl;
-	@Inject
-	private EntityManagerFactory emf;
-	
+	private NamedQueryWithImplServiceBD namedQueryWithImpl;	
 	
 	@Deployment
 	public static JavaArchive createTestArchive() {
@@ -52,36 +48,14 @@ public class NamedQueryTest {
 	}
 	
 	@Before
-	public void setUp() throws Exception {				                        
-		EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(new Model1("nicolas"));
-        em.persist(new Model1("vincent"));
-        List<Model1> list = em.createQuery("SELECT m FROM Model1 m").getResultList();
-        for (Model1 model : list) {
-        	System.out.println("Inserted1 : ("+model.getId()+", "+model.getName()+")");
-        }
-        em.getTransaction().commit();
-        System.out.println("After commit, new emf.");
-        //EntityManager em2 = EntityManagerProvider.createEntityManager("default");
-        EntityManager em2 = emf.createEntityManager();
-        em2.getTransaction().begin();
-        List<Model1> list2 = em2.createQuery("SELECT m FROM Model1 m").getResultList();
-        for (Model1 model : list2) {
-        	System.out.println("Inserted2 : ("+model.getId()+", "+model.getName()+")");
-        }
+	public void setUp() throws Exception {
+		DBHelper.executeSQLInTransaction("default", "INSERT INTO model1 VALUES (0,'nicolas')");
+		DBHelper.executeSQLInTransaction("default", "INSERT INTO model1 VALUES (1,'vincent')");
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        List<Model1> list = em.createQuery("SELECT m FROM Model1 m").getResultList();
-        for (Model1 model : list) {
-        	em.remove(model);
-        }
-        em.getTransaction().commit();
-        em.close();
+		DBHelper.executeSQLInTransaction("default", "DELETE FROM model1");
 	}
 
 	@Test

@@ -50,11 +50,9 @@ public class EntityManagerProvider {
 	 * @return
 	 */
 	public static EntityManager createEntityManager(String persistenceUnitName) {
-
 		EntityManagerFactory emFactory = createEntityManagerFactory(persistenceUnitName);
 		EntityManager em = emFactory.createEntityManager();
 		return em;
-		
 	}
 	
 	/**
@@ -62,27 +60,8 @@ public class EntityManagerProvider {
 	 * @return the only configured persistenceUnit in the application
 	 */	 
 	public static EntityManager createEntityManager() {
-
-		EntityManager em = createEntityManager(null);
+		EntityManager em = createEntityManager(getDefaultPersistenceUnitName());
 		return em;
-		
-	}
-
-	/**
-	 * 
-	 * @return the default persistenceUnit name 
-	 */
-	public static String getDefaultPersistenceUnitName() {
-		Set<String> puNames = getPersistenceUnitNames();
-		if (null == puNames) {
-			throw new NullPointerException("Impossible to access the file META-INF/persistence.xml. Check it exist in your application.");
-		}
-		if (puNames.size() > 1) {
-			throw new IllegalStateException("Check the file META-INF/persistence.xml. Check it is not empty in your application.");
-		}
-		
-		String persistenceUnitName = puNames.iterator().next();
-		return persistenceUnitName;
 	}
 	
 	/**
@@ -136,7 +115,7 @@ public class EntityManagerProvider {
 	 * @return a Thread Safe singleton like version of the selected EntityManagerFactory 
 	 */
 	public static EntityManagerFactory createEntityManagerFactory() {
-		return createEntityManagerFactory(null);
+		return createEntityManagerFactory(getDefaultPersistenceUnitName());
 	}
 	
 	/**
@@ -161,6 +140,31 @@ public class EntityManagerProvider {
 			loadPersistenceXml();
 		}
 		return persistenceUnitsTransactions.keySet();	
+	}
+	
+	/**
+	 * If there is only one PU, then return this one. If there is more, 
+	 * return the one named "default".
+	 * All other cases cant be consistent and lead to an Exception.
+	 * 
+	 * @return the default persistenceUnit name 
+	 */
+	public static String getDefaultPersistenceUnitName() {
+		Set<String> puNames = getPersistenceUnitNames();
+		if (null == puNames) {
+			throw new IllegalStateException("Impossible to access the file META-INF/persistence.xml. Check it exist in your application.");
+		}
+		if (puNames.size() <= 0) {
+			throw new IllegalStateException("Your META-INF/persistence.xml doesnt contain any persistence units.");
+		} else if (puNames.size() == 1) {
+			return puNames.iterator().next();
+		} else {
+			if (puNames.contains("default")) {
+				return "default";
+			} else {
+				throw new IllegalStateException("Your META-INF/persistence.xml contain multiple persistence units and none named 'default'. Impossible to get the default persistence unit.");
+			}
+		}
 	}
 
 	

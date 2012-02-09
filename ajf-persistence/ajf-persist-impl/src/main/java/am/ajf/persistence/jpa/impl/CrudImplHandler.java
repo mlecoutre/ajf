@@ -52,7 +52,7 @@ public class CrudImplHandler extends AbstractPersistenceImplHandler
 			
 			//Add the class attributes (logger, EntityManagerFactory, @PersitenceUnit...)
 			cc.addField(JavassistUtils.createLogger(cc));
-			cc.addField(createEntityManagerFactory(cc));
+			cc.addField(createEntityManager(cc));
 			
 			//generate each method
 			for (Method method : methods) {
@@ -94,23 +94,23 @@ public class CrudImplHandler extends AbstractPersistenceImplHandler
 		body.append("{\n");
 		
 		if (FIND_METHOD.equals(method.getName())) {			
-			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.find(emf, $1, $2);\n");		
+			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.find(em, $1, $2);\n");		
 		} else if (SAVE_METHOD.equals(method.getName())) {
 			if (transactionType.equals(TransactionType.JTA)) {
-				body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.save(false, emf, $1);\n");
+				body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.save(false, em, $1);\n");
 			} else {
-				body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.save(true, emf, $1);\n");
+				body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.save(true, em, $1);\n");
 			}
 		} else if (REMOVE_METHOD.equals(method.getName())) {
 			if (transactionType.equals(TransactionType.JTA)) {
-				body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.remove(false, emf, $1);\n");
+				body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.remove(false, em, $1);\n");
 			} else {
-				body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.remove(true, emf, $1);\n");
+				body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.remove(true, em, $1);\n");
 			}
 		} else if (DELETE_METHOD.equals(method.getName())) {
-			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.delete(emf, $1);\n");
+			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.delete(em, $1);\n");
 		} else if (FETCH_METHOD.equals(method.getName())) {			
-			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.fetch(emf, $1);\n");
+			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.fetch(em, $1);\n");
 		} else {
 			throw new IllegalStateException("The method "+method.getName()+" doesnt have an automatic implementation, but should.");
 		}

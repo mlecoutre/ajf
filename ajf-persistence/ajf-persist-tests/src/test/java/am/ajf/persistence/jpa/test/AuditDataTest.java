@@ -3,8 +3,6 @@ package am.ajf.persistence.jpa.test;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -21,21 +19,14 @@ import org.junit.runner.RunWith;
 import am.ajf.persistence.jpa.CrudServiceBD;
 import am.ajf.persistence.jpa.EntityManagerProvider;
 import am.ajf.persistence.jpa.impl.CrudService;
-import am.ajf.persistence.jpa.impl.NamedQueryImplHandler;
-import am.ajf.persistence.jpa.test.harness.Model1;
 import am.ajf.persistence.jpa.test.harness.ModelAudit;
-import am.ajf.persistence.jpa.test.harness.NamedQueryNoImplServiceBD;
-import am.ajf.persistence.jpa.test.harness.NamedQueryWithImplService;
-import am.ajf.persistence.jpa.test.harness.NamedQueryWithImplServiceBD;
+import am.ajf.persistence.jpa.test.helper.DBHelper;
 
 @RunWith(Arquillian.class)
 public class AuditDataTest {
 	
 	@Inject
 	private CrudServiceBD<ModelAudit, Long> service;	
-	@Inject
-	private EntityManagerFactory emf;
-	
 	
 	@Deployment
 	public static JavaArchive createTestArchive() {
@@ -56,14 +47,7 @@ public class AuditDataTest {
 
 	@After
 	public void tearDown() throws Exception {
-		EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        List<ModelAudit> list = em.createQuery("SELECT m FROM ModelAudit m").getResultList();
-        for (ModelAudit model : list) {
-        	em.remove(model);
-        }
-        em.getTransaction().commit();
-        em.close();
+		DBHelper.executeSQLInTransaction("default", "DELETE FROM ModelAudit");
 	}
 
 	@Test

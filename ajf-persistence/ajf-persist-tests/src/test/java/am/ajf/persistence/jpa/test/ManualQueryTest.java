@@ -3,8 +3,6 @@ package am.ajf.persistence.jpa.test;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -19,16 +17,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import am.ajf.persistence.jpa.EntityManagerProvider;
+import am.ajf.persistence.jpa.JpaExtension;
+import am.ajf.persistence.jpa.annotation.PersistenceUnit;
 import am.ajf.persistence.jpa.test.harness.ManualService;
 import am.ajf.persistence.jpa.test.harness.ManualServiceBD;
-import am.ajf.persistence.jpa.test.harness.Model1;
 import am.ajf.persistence.jpa.test.harness.ModelManual;
+import am.ajf.persistence.jpa.test.helper.DBHelper;
 
 @RunWith(Arquillian.class)
+@PersistenceUnit("jpa2")
 public class ManualQueryTest {
-	
-	@Inject
-	private EntityManagerFactory emf;
 
 	@Inject
 	private ManualServiceBD manualService;
@@ -40,6 +38,7 @@ public class ManualQueryTest {
 				.create(JavaArchive.class, "test.jar")
 				.addClasses(ManualServiceBD.class)
 				.addClasses(ManualService.class)
+				.addClasses(JpaExtension.class)
 				.addClasses(EntityManagerProvider.class)								
 				.addAsManifestResource(EmptyAsset.INSTANCE,
 						ArchivePaths.create("beans.xml"))
@@ -48,48 +47,26 @@ public class ManualQueryTest {
 	}
 	
 	@Before
-	public void setUp() throws Exception {				                        
-		EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(new ModelManual("Doc", "nain"));
-        em.persist(new ModelManual("Sneezy", "nain"));
-        em.persist(new ModelManual("Sleepy", "nain"));
-        em.persist(new ModelManual("Grumpy", "nain"));
-        em.persist(new ModelManual("Happy", "nain"));
-        em.persist(new ModelManual("Bashful", "nain"));
-        em.persist(new ModelManual("Dopey", "nain"));
-        
-        
-        List<Model1> list = em.createQuery("SELECT m FROM Model1 m").getResultList();
-        for (Model1 model : list) {
-        	System.out.println("Inserted1 : ("+model.getId()+", "+model.getName()+")");
-        }
-        em.getTransaction().commit();
-        System.out.println("After commit, new emf.");
-        //EntityManager em2 = EntityManagerProvider.createEntityManager("default");
-        EntityManager em2 = emf.createEntityManager();
-        em2.getTransaction().begin();
-        List<Model1> list2 = em2.createQuery("SELECT m FROM Model1 m").getResultList();
-        for (Model1 model : list2) {
-        	System.out.println("Inserted2 : ("+model.getId()+", "+model.getName()+")");
-        }
+	public void setUp() throws Exception {			                        		
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        List<Model1> list = em.createQuery("SELECT m FROM Model1 m").getResultList();
-        for (Model1 model : list) {
-        	em.remove(model);
-        }
-        em.getTransaction().commit();
-        em.close();
+		DBHelper.executeSQLInTransaction("jpa2", "DELETE FROM ModelManual");
 	}
 
 	@Test
-	public void testFindManualQuery() {	        
+	public void testFindManualQuery() {	  
+		manualService.insertNew(new ModelManual("Doc", "nain"));
+		manualService.insertNew(new ModelManual("Sneezy", "nain"));
+		manualService.insertNew(new ModelManual("Sleepy", "nain"));
+		manualService.insertNew(new ModelManual("Grumpy", "nain"));
+		manualService.insertNew(new ModelManual("Happy", "nain"));
+		manualService.insertNew(new ModelManual("Bashful", "nain"));
+		manualService.insertNew(new ModelManual("Dopey", "nain"));
+		
 		List<ModelManual> res = manualService.findByNameOrderBy("nain", "firstName");
+		
 		Assert.assertNotNull(res);
 		Assert.assertEquals(7, res.size());
 		Assert.assertEquals("Bashful", res.get(0).getFirstName());

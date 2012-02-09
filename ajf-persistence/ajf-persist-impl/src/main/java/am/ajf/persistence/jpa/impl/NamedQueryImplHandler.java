@@ -20,7 +20,6 @@ public class NamedQueryImplHandler extends AbstractPersistenceImplHandler implem
 		super();
 	}
 	
-	
 	@Override
 	public boolean canHandle(Method method) {
 		return method.isAnnotationPresent(NamedQuery.class);
@@ -39,7 +38,7 @@ public class NamedQueryImplHandler extends AbstractPersistenceImplHandler implem
 			
 			//Add the class attributes (logger, EntityManagerFactory, @PersitenceUnit...)
 			cc.addField(JavassistUtils.createLogger(cc));
-			cc.addField(createEntityManagerFactory(cc));
+			cc.addField(createEntityManager(cc));
 			
 			//generate each method
 			for (Method method : methods) {
@@ -77,7 +76,7 @@ public class NamedQueryImplHandler extends AbstractPersistenceImplHandler implem
 		StringBuffer body = new StringBuffer();
 		body.append("{\n");
 		body.append("  logger.debug(\"launching query "+namedQuery.name()+"\");\n");
-		body.append("  javax.persistence.EntityManager em = emf.createEntityManager();\n");
+		//body.append("  javax.persistence.EntityManager em = emf.createEntityManager();\n");
 		body.append("  javax.persistence.Query query = em.createNamedQuery(\""+namedQuery.name()+"\");\n");
 		for (int i = 0 ; i < pTypes.length ; i++) {
 			QueryParam param = null;

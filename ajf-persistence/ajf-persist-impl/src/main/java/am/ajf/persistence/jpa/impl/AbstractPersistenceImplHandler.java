@@ -20,10 +20,10 @@ public class AbstractPersistenceImplHandler {
 		pool = ClassPool.getDefault();
 	}
 
-	protected CtField createEntityManagerFactory(CtClass cc)
+	protected CtField createEntityManager(CtClass cc)
 			throws CannotCompileException, ClassNotFoundException,
 			NotFoundException {
-		CtField cEmf = CtField.make("private transient javax.persistence.EntityManagerFactory emf;", cc);
+		CtField cEm = CtField.make("private transient javax.persistence.EntityManager em;", cc);
 		PersistenceUnit puAnn = null;
 		if (cc.hasAnnotation(PersistenceUnit.class)) {
 			puAnn = (PersistenceUnit) cc.getAnnotation(PersistenceUnit.class);
@@ -37,11 +37,11 @@ public class AbstractPersistenceImplHandler {
 		} else {			
 			mv.setValue(PERSISTENCE_UNIT_DEFAULT_NAME);			
 		}
-		puAnnotation.addMemberValue("name", mv);
+		puAnnotation.addMemberValue("value", mv);
 		attribute.addAnnotation(injectAnnotation);
 		attribute.addAnnotation(puAnnotation);
-		cEmf.getFieldInfo().addAttribute(attribute);
-		return cEmf;
+		cEm.getFieldInfo().addAttribute(attribute);
+		return cEm;
 	}
 	
 /*

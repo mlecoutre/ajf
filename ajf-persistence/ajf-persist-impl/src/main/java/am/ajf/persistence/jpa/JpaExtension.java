@@ -1,34 +1,36 @@
 package am.ajf.persistence.jpa;
 
 //import java.lang.annotation.Annotation;
+import java.util.Set;
+
 import javassist.CannotCompileException;
 import javassist.NotFoundException;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
+import javax.enterprise.inject.spi.AnnotatedType;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
+import javax.enterprise.inject.spi.InjectionTarget;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.enterprise.inject.spi.ProcessBean;
 import javax.enterprise.inject.spi.ProcessInjectionTarget;
+import javax.persistence.EntityManager;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import am.ajf.persistence.jpa.impl.EntityManagerBean;
 
 public class JpaExtension implements Extension {
-	/*
-	private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
-	private Map<Class<?>, Boolean> haveAnImplementation;
-	private Map<Class<?>, List<Class<?>>> interfaceImplementationMatch;
 	
-	public static java.lang.annotation.Annotation ANNOTATION_DEFAULT = new AnnotationLiteral<Default>() {};
-	public static java.lang.annotation.Annotation ANNOTATION_ANY = new AnnotationLiteral<Any>() {};
-	
-	 @Inject private ImplementationGenerator implementationGenerator;
-	 @Inject private ClassMatcher classMatcher;
-	*/
+	private static final Logger logger = LoggerFactory.getLogger(JpaExtension.class);
 	
 	public void beforeBeanDiscovery(@Observes BeforeBeanDiscovery bbd) {
-		/*
+		
 		logger.debug("beginning the scanning process for extension JpaExtension");
+		/*
 		//FIXME since injection doesnt seem to work on the extension object...
 		implementationGenerator = new JavaassistImplementationGenerator();
 		classMatcher = new ExtensionClassMatcher();
@@ -90,40 +92,15 @@ public class JpaExtension implements Extension {
 	}
 
 	public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd, BeanManager beanManager) throws CannotCompileException, NotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, SecurityException, NoSuchFieldException, ClassNotFoundException {
-		/*
-		logger.debug("finished the scanning process for extension JpaExtension, printing all beans found :");
-		Set<Bean<?>> allBeans = beanManager.getBeans(Object.class, new AnnotationLiteral<Any>() {});
-		for (Bean<?> bean : allBeans) {
-			logger.debug("   bean : " + bean.getBeanClass().getName());
+		logger.debug("After Bean discovery : JPA Extension");
+		Set<String> puNames = EntityManagerProvider.getPersistenceUnitNames();
+		//AnnotatedType<EntityManager> at = beanManager.createAnnotatedType(EntityManager.class);
+		//final InjectionTarget<EntityManager> it = beanManager.createInjectionTarget(at);
+		for (String puName : puNames) {
+			EntityManagerBean emBean = new EntityManagerBean(puName);
+			abd.addBean(emBean);
+			logger.info("Added injectable EntityManager for : "+puName);
 		}		
-		
-		logger.debug("dump the dep graph");
-		for (Class<?> in : haveAnImplementation.keySet()) {
-			logger.debug("   "+in.getName() + " : "+haveAnImplementation.get(in));
-		}
-		logger.debug("starting implementation generation process");
-		for (Class<?> in : haveAnImplementation.keySet()) {
-			if (!haveAnImplementation.get(in)) {
-				logger.debug("  generating impl for : "+in.getSimpleName());
-				Class<?> impl = implementationGenerator.createImpl(in, null);
-				 //use this to read annotations of the class
-		        AnnotatedType<?> at = beanManager.createAnnotatedType(impl); 
-		        //use this to instantiate the class and inject dependencies
-		        final InjectionTarget<?> it = beanManager.createInjectionTarget(at);	
-		        abd.addBean(implementationGenerator.createBeanFromImpl(impl,in, it));				
-			} else {
-				for (Class<?> implClient : interfaceImplementationMatch.get(in)) {
-					logger.debug("  generating subclass for : "+implClient.getSimpleName());
-					Class<?> impl = implementationGenerator.createImpl(in, implClient);
-					 //use this to read annotations of the class
-			        AnnotatedType<?> at = beanManager.createAnnotatedType(impl); 
-			        //use this to instantiate the class and inject dependencies
-			        final InjectionTarget<?> it = beanManager.createInjectionTarget(at);	
-			        abd.addBean(implementationGenerator.createBeanFromImpl(impl,in, it));
-				}
-			}
-		}
-		*/		
 	}
 	
 	

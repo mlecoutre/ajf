@@ -31,7 +31,7 @@ public class EntityManagerProviderTest {
 	public void testGetPersistenceUnitNames() {
 		Set<String> pus = EntityManagerProvider.getPersistenceUnitNames();
 		Assert.assertNotNull(pus);
-		Assert.assertEquals(1, pus.size());
+		Assert.assertEquals(2, pus.size());
 	}
 
 }
