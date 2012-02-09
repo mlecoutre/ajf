@@ -5,9 +5,7 @@ import java.util.Random;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -18,7 +16,6 @@ import javax.transaction.UserTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import am.ajf.transaction.TransactionInterceptor;
 import am.ajf.transaction.Transactional;
 
 @RequestScoped
@@ -28,7 +25,7 @@ public class SamplePolicy implements SamplePolicyBD {
 	
 	@Inject private SampleServiceBD sampleService;
 	@Inject private UserTransaction utx;
-	@Inject private EntityManagerFactory emf;
+	@Inject private EntityManager em;
 	
 	@Override
 	public ListAllModelsRB listAllModels() {
@@ -40,8 +37,7 @@ public class SamplePolicy implements SamplePolicyBD {
 	}
 
 	@Override
-	@Transactional //-- should work but no !
-	//@Interceptors(TransactionInterceptor.class)
+	@Transactional
 	public void createModelCrud() {
 		int modelId = new Random().nextInt(); 
 		logger.debug("SamplePolicy : create a new Model with Crud service("+modelId+")");
@@ -53,11 +49,7 @@ public class SamplePolicy implements SamplePolicyBD {
 		utx.begin();
 		int modelId = new Random().nextInt(); 
 		logger.debug("SamplePolicy : Manual create a new Model ("+modelId+")");
-		EntityManager em = emf.createEntityManager();
 		em.persist(new Model("model - manual : "+modelId));
 		utx.commit();		
 	}
-	
-	
-	
 }
