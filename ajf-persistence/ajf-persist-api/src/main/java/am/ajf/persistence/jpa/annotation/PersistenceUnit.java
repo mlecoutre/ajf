@@ -6,12 +6,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import javax.enterprise.util.Nonbinding;
+import javax.inject.Qualifier;
 
 @Documented
 @Retention(RetentionPolicy.RUNTIME) 
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Qualifier
+@Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD})
 public @interface PersistenceUnit {
-	@Nonbinding String value() default "default";
+	String value() default "default";
 }
 
