@@ -17,9 +17,9 @@ public class BasicImplCrudDbService {
 	}
 
 	public static Object save(boolean manageTransaction, EntityManager em, Object entity) {
-		//EntityManager em = emf.createEntityManager();		
-		boolean transActive = em.getTransaction().isActive();
+		boolean transActive = false;
 		if (manageTransaction) {
+			transActive = em.getTransaction().isActive();
 			if (!transActive) {
 				em.getTransaction().begin();
 			}
@@ -37,17 +37,19 @@ public class BasicImplCrudDbService {
 	}
 
 	public static boolean remove(boolean manageTransaction, EntityManager em, Object entity) {
-		//EntityManager em = emf.createEntityManager();
-		boolean transActive = em.getTransaction().isActive();
+		boolean transActive = false;
 		if (manageTransaction) {
+			transActive = em.getTransaction().isActive();
 			if (!transActive) {
 				em.getTransaction().begin();
 			}
 		} else {
 			em.joinTransaction();
 		}
+		
 		Object attachedEntity = em.merge(entity);  // need to reattached in local transaction
 		em.remove(attachedEntity);
+		
 		if (manageTransaction) {
 			if (!transActive) {
 				em.getTransaction().commit();
