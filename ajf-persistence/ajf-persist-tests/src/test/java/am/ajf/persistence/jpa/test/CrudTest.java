@@ -115,11 +115,10 @@ public class CrudTest {
 		Assert.assertEquals(1, models.size());				
 	}
 	
-	/*
+	
 	@Test
 	public void testFetch() {
-		ModelCrud model1 = crudService.save(new ModelCrud("Matthieu"));
-		ModelCrud model2 = crudService.save(new ModelCrud("Vincent"));
+		ModelCrud model1 = crudService.save(new ModelCrud("Matthieu"));		
 		Long id = model1.getId();
 		
 		Assert.assertNotNull(model1);			
@@ -129,7 +128,7 @@ public class CrudTest {
 		Assert.assertNotNull(model);
 		Assert.assertEquals("Matthieu", model.getName());				
 	}
-	*/
+	
 	
 	@Test
 	public void testRemove() {
@@ -150,7 +149,7 @@ public class CrudTest {
 		
 	}
 	
-	/*
+	
 	@Test
 	public void testDelete() {
 		ModelCrud model1 = crudService.save(new ModelCrud("Matthieu"));
@@ -169,6 +168,5 @@ public class CrudTest {
 		
 		Assert.assertNull(model);
 	}
-	*/
 
 }

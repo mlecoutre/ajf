@@ -1,9 +1,14 @@
 package am.ajf.persistence.jpa.impl;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
+import am.ajf.persistence.jpa.CrudServiceBD;
 
 public class BasicImplCrudDbService {
 
@@ -58,24 +63,58 @@ public class BasicImplCrudDbService {
 		return true;
 	}
 	
-	/*
-	public static boolean delete(EntityManagerFactory emf, Object pk) {
-		EntityManager em = emf.createEntityManager();
-		Object obj = em.find(E.class, pk);
+	public static <E> boolean delete(boolean manageTransaction, EntityManager em, Class<E> entityClass, Object pk) {
+		//Manage the JTA vs RESOURCE_LOCAL and start/close a local transaction if
+		//one is not active
+		boolean transActive = false;
+		if (manageTransaction) {
+			transActive = em.getTransaction().isActive();
+			if (!transActive) {
+				em.getTransaction().begin();
+			}
+		} else {
+			em.joinTransaction();
+		}
+		
+		boolean res = false;
+		Object obj = em.find(entityClass, pk);
 		if (obj != null) {
 			em.remove(obj);
-			return true;
-		} else {
-			return false;
-		}		
+			res = true;
+		}				
+		
+		if (manageTransaction) {
+			if (!transActive) {
+				em.getTransaction().commit();
+			}
+		}
+		return res;
 	}
-	*/
+	
 
-	/*
-	public static <E> E fetch(EntityManagerFactory emf, Object pk) {
-		EntityManager em = emf.createEntityManager();
-		return em.find(E.class, pk);
+	
+	public static <E> E fetch(EntityManager em, Class<E> entityClass, Object pk) {		
+		return em.find(entityClass, pk);
 	}
-	*/
+	
+	/**
+	 * Return the actual CrudServiceBD Generic instance used by the base service class
+	 * This is used to resolve the Generics at runtime.
+	 * @param baseClass the Service class
+	 * @return a CrudServiceDB interface
+	 */
+	public static Type getCrudInterface(Class<?> baseClass) {
+		for (Class<?> in : baseClass.getInterfaces()) {
+			Class<?>[] interfaces = in.getInterfaces();
+			for (int i = 0 ; i < interfaces.length ; i++) {
+				Class<?> inSuper = interfaces[i];
+				if (CrudServiceBD.class.equals(inSuper)) {
+					return in.getGenericInterfaces()[i];
+				}
+			}			
+		}
+		return null;		
+	}
+	
 
 }

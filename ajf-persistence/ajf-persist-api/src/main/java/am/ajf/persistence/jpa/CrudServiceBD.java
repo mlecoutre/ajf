@@ -13,14 +13,51 @@ import java.util.List;
  */
 public interface CrudServiceBD<E,P> {
 	
-	List<E> find(String queryName, Object... params); 
+	/**
+	 * Launch the selected NamedQuery on <E> with parameters
+	 *  
+	 * @param queryName
+	 * @param params
+	 * @return
+	 */
+	List<E> find(String queryName, Object... params);
+	
+	/**
+	 * Save the entity in the database and return the
+	 * result of this operation.
+	 * The returned entity is always attached.
+	 * If the entity didnt exist, it will be created first.
+	 * 
+	 * @param entity
+	 * @return
+	 */
 	E save(E entity);
+	
+	/**
+	 * Delete the selected entity from the database.
+	 * If the entity was detached, it is re-atached first.
+	 * 
+	 * @param entity
+	 * @return
+	 */
 	boolean remove(E entity);
 	
-	//TODO Temporary removal until a solution is found to use generics in the javaassist impl
-	/*
+	/**
+	 * Retrieve the entity specified with the primary key
+	 * and removed it from the database.
+	 * 
+	 * @param pk
+	 * @return
+	 */
 	boolean delete(P pk);
+	
+	/**
+	 * Retrieve the selected entity from the database.
+	 * The returned entity is attached.
+	 * 
+	 * @param pk
+	 * @return
+	 */
 	E fetch(P pk);
-	*/ 
 
 }

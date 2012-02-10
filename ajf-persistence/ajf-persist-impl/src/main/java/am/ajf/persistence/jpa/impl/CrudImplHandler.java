@@ -5,8 +5,15 @@ import java.util.List;
 
 import javassist.CannotCompileException;
 import javassist.CtClass;
+import javassist.CtConstructor;
+import javassist.CtField;
 import javassist.CtMethod;
+import javassist.CtNewConstructor;
 import javassist.NotFoundException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import am.ajf.core.utils.JavassistUtils;
 import am.ajf.injection.ClassGenerationException;
 import am.ajf.injection.ImplementationHandler;
@@ -23,6 +30,7 @@ import am.ajf.persistence.jpa.annotation.PersistenceUnit;
 public class CrudImplHandler extends AbstractPersistenceImplHandler 
 								implements ImplementationHandler {
 	
+	private static final Logger logger = LoggerFactory.getLogger(CrudImplHandler.class);
 	private static final String FIND_METHOD = "find"; 
 	private static final String SAVE_METHOD = "save";
 	private static final String REMOVE_METHOD = "remove";
@@ -53,7 +61,12 @@ public class CrudImplHandler extends AbstractPersistenceImplHandler
 			//Add the class attributes (logger, EntityManagerFactory, @PersitenceUnit...)
 			cc.addField(JavassistUtils.createLogger(cc));
 			cc.addField(createEntityManager(cc));
+			cc.addField(createClassName(cc));
 			
+			//generate a default constructor that init the entityClass field at runtime
+			// see http://blog.xebia.com/2009/02/07/acessing-generic-types-at-runtime-in-java/
+			cc.addConstructor(createDefaultConstructor(cc));
+						
 			//generate each method
 			for (Method method : methods) {
 				CtClass declaringClass = pool.get(method.getDeclaringClass().getName());
@@ -76,7 +89,7 @@ public class CrudImplHandler extends AbstractPersistenceImplHandler
 		}
 		
 		return clazz;
-	}
+	}	
 
 	public StringBuffer generateBodyFor(Method method) throws ClassNotFoundException, NotFoundException {
 		StringBuffer body = new StringBuffer();
@@ -108,9 +121,13 @@ public class CrudImplHandler extends AbstractPersistenceImplHandler
 				body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.remove(true, em, $1);\n");
 			}
 		} else if (DELETE_METHOD.equals(method.getName())) {
-			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.delete(em, $1);\n");
+			if (transactionType.equals(TransactionType.JTA)) {
+				body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.delete(false, em, entityClass, $1);\n");
+			} else {
+				body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.delete(true, em, entityClass, $1);\n");
+			}
 		} else if (FETCH_METHOD.equals(method.getName())) {			
-			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.fetch(em, $1);\n");
+			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.fetch(em, entityClass, $1);\n");
 		} else {
 			throw new IllegalStateException("The method "+method.getName()+" doesnt have an automatic implementation, but should.");
 		}
@@ -118,6 +135,24 @@ public class CrudImplHandler extends AbstractPersistenceImplHandler
 		body.append("}\n");
 				
 		return body;
+	}
+	
+	protected CtField createClassName(CtClass cc)
+			throws CannotCompileException, ClassNotFoundException,
+			NotFoundException {
+		CtField cEntityClass = CtField.make("private transient Class entityClass;", cc);
+		return cEntityClass;
+	}
+	
+	private CtConstructor createDefaultConstructor(CtClass cc) throws CannotCompileException {
+		StringBuffer method = new StringBuffer();
+		method.append("public "+cc.getSimpleName()+"() {\n");
+		method.append("  super();\n");
+		method.append("  java.lang.reflect.ParameterizedType pt = (java.lang.reflect.ParameterizedType) am.ajf.persistence.jpa.impl.BasicImplCrudDbService.getCrudInterface(getClass());\n");
+		method.append("  this.entityClass = (Class) pt.getActualTypeArguments()[0];\n");
+		method.append("}\n");				
+		CtConstructor constructor = CtNewConstructor.make(method.toString(), cc);
+		return constructor;
 	}
 
 }

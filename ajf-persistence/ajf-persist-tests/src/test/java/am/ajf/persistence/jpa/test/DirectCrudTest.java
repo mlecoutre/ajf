@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 import am.ajf.persistence.jpa.CrudServiceBD;
 import am.ajf.persistence.jpa.EntityManagerProvider;
 import am.ajf.persistence.jpa.impl.CrudImplHandler;
-import am.ajf.persistence.jpa.impl.CrudService;
+import am.ajf.persistence.jpa.impl.CrudServiceProvider;
 import am.ajf.persistence.jpa.test.harness.ModelCrud;
 import am.ajf.persistence.jpa.test.helper.DBHelper;
 
@@ -38,7 +38,7 @@ public class DirectCrudTest {
 				.addClasses(ModelCrud.class)
 				.addClasses(CrudImplHandler.class)
 				.addClasses(CrudServiceBD.class)
-				.addClasses(CrudService.class)
+				.addClasses(CrudServiceProvider.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,
 						ArchivePaths.create("beans.xml"))
 				.addAsManifestResource("META-INF/persistence.xml", 
@@ -117,11 +117,9 @@ public class DirectCrudTest {
 		Assert.assertEquals(1, models.size());				
 	}
 	
-	/*
 	@Test
 	public void testFetch() {
 		ModelCrud model1 = crudService.save(new ModelCrud("Matthieu"));
-		ModelCrud model2 = crudService.save(new ModelCrud("Vincent"));
 		Long id = model1.getId();
 		
 		Assert.assertNotNull(model1);			
@@ -131,7 +129,7 @@ public class DirectCrudTest {
 		Assert.assertNotNull(model);
 		Assert.assertEquals("Matthieu", model.getName());				
 	}
-	*/
+	
 	
 	@Test
 	public void testRemove() {
@@ -151,8 +149,7 @@ public class DirectCrudTest {
 		Assert.assertEquals(1, models.size());
 		
 	}
-	
-	/*
+		
 	@Test
 	public void testDelete() {
 		ModelCrud model1 = crudService.save(new ModelCrud("Matthieu"));
@@ -171,6 +168,6 @@ public class DirectCrudTest {
 		
 		Assert.assertNull(model);
 	}
-	*/
+	
 
 }
