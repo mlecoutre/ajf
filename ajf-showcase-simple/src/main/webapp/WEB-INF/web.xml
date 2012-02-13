@@ -4,6 +4,26 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<display-name>AJF SHOWCASE SIMPLE</display-name>
 
+	<!--  SHIRO SECURITY -->
+	<listener>
+		<listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
+	</listener>
+	<filter>
+		<filter-name>ShiroFilter</filter-name>
+		<filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ShiroFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+
+
+	<context-param>
+		<param-name>com.sun.faces.expressionFactory</param-name>
+		<param-value>com.sun.el.ExpressionFactoryImpl</param-value>
+	</context-param>
+
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -21,16 +41,12 @@
 	</context-param>
 	<context-param>
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
-		<param-value>Development</param-value>
+		<param-value>Production</param-value>
 	</context-param>
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
 		<param-value>cupertino</param-value>
 	</context-param>
-
-	<!-- EL2.2 -->
-	<!-- <context-param> <param-name>com.sun.faces.expressionFactory</param-name> 
-		<param-value>com.sun.el.ExpressionFactoryImpl</param-value> </context-param> -->
 
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
@@ -38,9 +54,9 @@
 		<welcome-file>index.jsf</welcome-file>
 		<welcome-file>main.xhtml</welcome-file>
 	</welcome-file-list>
-
+<!-- 
 	<login-config>
-		<auth-method>FORM</auth-method>
+		<auth-method>BASIC</auth-method>
 		<realm-name>MyRealm</realm-name>
 		<form-login-config>
 			<form-login-page>/ajf/login/login.xhtml</form-login-page>
@@ -57,23 +73,40 @@
 		<role-name>poweruser</role-name>
 	</security-role>
 
-	<!-- <security-constraint> <display-name>Protect administration part</display-name> 
+
+	<security-constraint>
+		<display-name>Protect
+			administration part
+		</display-name>
+		<web-resource-collection>
+			<web-resource-name>ProtectEverything</web-resource-name>
+			<url-pattern>/employeemanagement/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<security-constraint> <display-name>Protect administration part </display-name> 
 		<web-resource-collection> <web-resource-name>ProtectEverything</web-resource-name> 
-		<url-pattern>/views/administration/*.*</url-pattern> <url-pattern>/views/administration/*</url-pattern> 
-		</web-resource-collection> <auth-constraint> <role-name>admin</role-name> 
-		</auth-constraint> </security-constraint> <security-constraint> <display-name>Protect 
-		administration part</display-name> <web-resource-collection> <web-resource-name>ProtectEverything</web-resource-name> 
-		<url-pattern>/views/*.*</url-pattern> <url-pattern>/views/*</url-pattern> 
-		</web-resource-collection> <auth-constraint> <role-name>poweruser</role-name> 
-		<role-name>admin</role-name> </auth-constraint> </security-constraint> <security-constraint> 
-		<web-resource-collection> <web-resource-name>AllAccessResources</web-resource-name> 
-		<url-pattern>/views/login.xhtml</url-pattern> <url-pattern>/views/loginError.xhtml</url-pattern> 
-		<url-pattern>/views/logout.xhtml</url-pattern> <url-pattern>/views/shared/*</url-pattern> 
-		<url-pattern>/sections/shared/*</url-pattern> <url-pattern>/sections/login/*</url-pattern> 
-		<url-pattern>/templates/*</url-pattern> <url-pattern>/resources/*</url-pattern> 
-		<url-pattern>/javax.faces.resource/*</url-pattern> </web-resource-collection> 
-		<user-data-constraint> <transport-guarantee>NONE</transport-guarantee> </user-data-constraint> 
-		</security-constraint> -->
+		<url-pattern>/employeemanagement/listEmployees.*</url-pattern> </web-resource-collection> 
+		<auth-constraint> <role-name>poweruser</role-name> <role-name>admin</role-name> 
+		</auth-constraint> </security-constraint>
+
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>AllAccessResources</web-resource-name>
+			<url-pattern>/ajf/*</url-pattern>
+			<url-pattern>/ajf/*</url-pattern>
+			<url-pattern>/showcase/*</url-pattern>
+			<url-pattern>/javax.faces.resource/*</url-pattern>
+		</web-resource-collection>
+		<user-data-constraint>
+			<transport-guarantee>NONE</transport-guarantee>
+		</user-data-constraint>
+	</security-constraint>
+ -->
+
+
 	<error-page>
 		<error-code>403</error-code>
 		<location>/ajf/errors/accessDenied.xhtml</location>

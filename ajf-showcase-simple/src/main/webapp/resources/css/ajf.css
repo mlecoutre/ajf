@@ -38,6 +38,11 @@ body {
 	overflow: visible !important;
 }
 
+.ui-widget, .ui-widget .ui-widget {
+    font-size: 10pt !important;
+ }
+
+
 .centerPanel {
 	margin: 1em 25%;
 }

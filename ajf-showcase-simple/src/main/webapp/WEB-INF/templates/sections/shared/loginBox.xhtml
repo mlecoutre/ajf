@@ -6,23 +6,24 @@
 	xmlns:p="http://primefaces.org/ui">
 
 
-	<p:dialog id="loginDialog" header="#{m['title.logInBox']}"
-		widgetVar="loginDialog" showEffect="explode" hideEffect="explode"
-		fixedCenter="true" width="400" modal="true" appendToBody="true">
+	<p:dialog id="loginDialog" header="Log in" widgetVar="loginDialog"
+		showEffect="explode" hideEffect="explode" fixedCenter="true"
+		width="400" modal="true" appendToBody="true">
 
-		<form action="j_security_check">
+		<h:form id="loginForm">
+			<p:focus for="username"/>
 			<h:panelGrid columns="2">
-				<h:outputLabel value="#{m['loginBox.label.userName']}:" />
-				<input type="text" name="j_username" tabindex="1" />
+				<h:outputLabel value="User ID:" />
+				
+				<p:inputText id="username" value="#{shiroBean.username}" />
 
-				<h:outputLabel value="#{m['loginBox.label.password']}:" />
-				<input type="password" name="j_password" />
+				<h:outputLabel value="Password:" />
+				<p:password value="#{shiroBean.password}" />
 
-				<h:outputLabel value="" />
-				<p:focus for="login" />
-				<h:commandButton id="login" value="#{m['button.login']}" />
+				<p:commandButton id="login" action="#{shiroBean.doLogin}"
+					value="Login" oncomplete="loginDialog.hide()" update="headerForm" />
 			</h:panelGrid>
-		</form>
+		</h:form> 
 
 	</p:dialog>
 

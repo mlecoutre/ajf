@@ -12,20 +12,17 @@
 			<h:outputText value="Please Login" />
 		</h2>
 		<p:panel header="Login page" style="width:400px">
-			<form action="j_security_check" method="post">
+			<h:form id="loginFormPage">
 				<h:panelGrid columns="2">
-					<p:focus />
 					<h:outputLabel value="User ID:" />
-					<input type="text" name="j_username" tabindex="1" />
+					<p:inputText value="#{shiroBean.username}" />
 
 					<h:outputLabel value="Password:" />
-					<input type="password" name="j_password" />
+					<p:password value="#{shiroBean.password}" />
 
-					<h:outputLabel value="" />
-
-					<button type="submit" value="log on"></button>
+					<p:commandButton action="#{shiroBean.doLogin}" value="login" />
 				</h:panelGrid>
-			</form>
+			</h:form>
 		</p:panel>
 	</center>
 </ui:composition>

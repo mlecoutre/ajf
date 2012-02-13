@@ -7,23 +7,22 @@
 	xmlns:p="http://primefaces.org/ui">
 
 	<p:menubar
-		style="border:0;width:60%;margin-left:auto;margin-right:auto"
-		rendered="#{habilitationMBean.isLogIn}">
+		style="border:0;width:60%;margin-left:auto;margin-right:auto">
 
 		<!--  ADD YOUR CONTENT HERE  -->
-		<p:submenu label="#{m['menu.employee.management.title']}">
+		<p:submenu label="#{m['menu.employee.management.title']}"
+			rendered="#{shiroBean.isAllowed('poweruser')}">
 			<p:menuitem value="#{m['menu.employee.list.title']}"
-				url="/employeemanagement/listEmployees.jsf" style="font-size:85%" />
+				url="/employeemanagement/listEmployees.jsf" />
 			<p:menuitem value="#{m['menu.employee.create.title']}"
-				url="/employeemanagement/createEmployee.jsf" style="font-size:85%" />
+				url="/employeemanagement/createEmployee.jsf"
+				rendered="#{shiroBean.isAllowed('admin')}" />
 		</p:submenu>
 		<p:submenu label="#{m['menu.showcase.title']}">
 			<p:menuitem value="#{m['menu.showcase.uimessages']}"
-				url="/showcase/uimessages.jsf" style="font-size:85%" />
+				url="/showcase/uimessages.jsf" />
 			<p:menuitem value="#{m['menu.showcase.layout']}"
-				url="/showcase/layout.jsf" style="font-size:85%" />
-			<p:menuitem value="logger" url="/shared/ajf/logger.jsf"
-				style="font-size:85%" />
+				url="/showcase/layout.jsf" />
 		</p:submenu>
 	</p:menubar>
 
