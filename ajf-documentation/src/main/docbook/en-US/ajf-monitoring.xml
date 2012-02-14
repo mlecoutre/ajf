@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
+<chapter id="monitoring">
+	<title>AJF - Monitoring Reference</title>
+	<para>
+		The AJF Monitoring library provide object model for create send and receive applications events
+		on J2EE server and other Servlet containers. 		
+	</para>
+	<section>
+		<title>Introduction</title>
+		<para>
+			The AJF Monitoring library offers the application to send application events in an asycnhronous way.
+			In this way, you have the lowest impact in terms of response time of your application.
+			<parameter>Events</parameter> can be instanciated using the <parameter>EventFactory</parameter>
+			and sended with the <parameter>EventManager</parameter>  
+		</para>
+	</section>
+	<section>
+		<title>Get EventManager</title>
+		<para>
+			The <parameter>EventManager</parameter> is the entry point for sending events and declaring events handlers.
+			You can get an <parameter>EventManager</parameter> instance by addressing the <parameter>EventManagerFactory</parameter>
+		</para>
+		<important>
+			<para>
+				The default EventManager is the AJF internal EventManager. 				
+			</para> 
+		</important>
+		<example>
+			<title>Get EventManager</title>
+			<programlisting language="Java" role="Java"><![CDATA[
+	// get default AJF EventManager
+	EventManager ajfEventManager = EventManagerFactory.getEventManager();
+	// get specific EventManager
+	EventManager appEventManager = EventManagerFactory.getEventManager("myAppli");	
+				]]></programlisting>
+		</example>
+	</section>
+	<section>
+		<title>Manage Events</title>
+		<para>
+			An <parameter>Event</parameter> is a simple POJO Object which extend the <parameter>AbstractEvent</parameter> Class.
+			Your <parameter>Event</parameter> can declare injected attributes (with <parameter>@Inject</parameter>). In this case, you have to register your <parameter>Event</parameter>
+			in the <parameter>EventFactory</parameter> and invoke <parameter>EventFactory.newEvent(...)</parameter> for the event instanciation.
+		</para>
+		<example>
+			<title>Register/Instanciate Event</title>
+			<programlisting language="Java" role="Java"><![CDATA[
+	// register the event
+	EventFactory.registerEvent("myAppEvent", MyEvent.class);
+	// instanciate a new Event
+	MyEvent event = EventFactory.newEvent("myAppEvent");	
+				]]></programlisting>
+		</example>
+	</section>
+	<section>
+		<title>Sending Events</title>
+		<para>
+			For sending <parameter>Events</parameter> you only have to invoke the <parameter>sendEvent</parameter> method in the <parameter>EventManager</parameter>.
+		</para>
+	<example>
+			<title>Sending Event</title>
+			<programlisting language="Java" role="Java"><![CDATA[
+	// instanciate a new Event
+	MyEvent event = EventFactory.newEvent("myAppEvent");
+	// set Event attributes
+	// event.setXXX
+	
+	// get specific EventManager
+	EventManager appEventManager = EventManagerFactory.getEventManager("myAppli");
+	// send the event
+	appEventManager.sendEvent("myAppEvent", event);	
+				]]></programlisting>
+		</example>
+	</section>
+	<section>
+		<title>Managing Events Handlers</title>
+		<figure id="monitoring-classdiagram.fig">
+      	<title>Monitoring Class Diagram</title>
+	      <mediaobject>
+	        <imageobject>
+	          <imagedata align="center" fileref="images/monitoring-classdiagram.png"/>
+	        </imageobject>
+	      </mediaobject>
+	    </figure>
+		<para>
+			<parameter>EventHandler</parameter> is responsible of the <parameter>Events</parameter> handling. It work with <parameter>EventFilter</parameter> in order to know if
+			the <parameter>Event</parameter> can be handled, format the <parameter>Event</parameter> with a <parameter>EventFormatter</parameter> and handle the formatted <parameter>Event</parameter>
+			with the <parameter>EventEmitter</parameter>. <parameter>EventHandlers</parameter> are managed (registered) with the <parameter>EventManager</parameter>.
+		</para>
+	<example>
+			<title>Registering and Using Event Handler</title>
+			<programlisting language="Java" role="Java"><![CDATA[
+		// create the EventFilter
+		EventFilter filter = null;
+		// create the EventFormatter
+		EventFormatter formatter = new XmlJAXBFormatter(
+				MyEvent.class);
+		// create the EventEmitter
+		EventEmitter emitter = new ConsoleEmitter(System.out);
+		
+		// create the EventHandler
+		EventHandler handler = new EventHandler(filter, formatter, emitter);
+		
+		// get specific EventManager
+		EventManager appEventManager = EventManagerFactory.getEventManager("myAppli");
+		// install the EventHandler as default
+		appEventManager.setDefaultEventHandler(handler)
+		// or install it for specifics Events types
+		// appEventManager.installEventHandler(new String[] {"myAppEvent"}, handler);
+		
+		// instanciate a new Event
+		MyEvent event = EventFactory.newEvent("myAppEvent");
+		// set Event attributes
+		// event.setXXX
+		
+		// send the event
+		appEventManager.sendEvent("myAppEvent", event);	
+				]]></programlisting>
+		</example>
+	</section>
+	<section>
+		<title>Available Events Formatters</title>
+		<para>
+		</para>
+	</section>
+	<section>
+		<title>Available Events Emitters</title>
+		<para>
+		</para>
+	</section>
+</chapter>

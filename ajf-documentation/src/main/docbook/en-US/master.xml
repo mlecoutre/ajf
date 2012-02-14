@@ -7,7 +7,16 @@
 
     <toc/>
     <xi:include href="ajf-norms.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <!--
+    <xi:include href="ajf-core.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include href="ajf-injection.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    -->
+    <xi:include href="ajf-monitoring.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    
     <xi:include href="ajf-web.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+	<!--
+    <xi:include href="ajf-notifier.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    -->
     <xi:include href="ajf-persistence.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
     <xi:include href="ajf-transaction.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
     <xi:include href="ajf-remoting.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>

@@ -14,7 +14,18 @@
  <section>
     <title>The different modules &quot;maven&quot;: simple application</title>
     <para>
-		The simple case is demonstrated using the ajf-showcase-simple application
+		The simple case is demonstrated using the ajf-showcase-simple application. If you only need a "web" module, you can just create the follownig projects
+		<itemizedlist>
+			<listitem>
+			  <para>[Project Name]-parent :  it&apos;s the project parent of the application and it&apos;ll inherit the &quot;am.parent&quot; project.</para>
+			</listitem>
+			<listitem>
+			  <para>[Project Name]-ear      :  if your target application server type is JEE.</para>
+			</listitem>
+			<listitem>
+				<para>[Project Name]-ui        : </para>
+			</listitem>
+		</itemizedlist>
     </para>
  </section>
 
@@ -56,7 +67,7 @@
         </imageobject>
       </mediaobject>
     </figure>
-    <para>Le projet am.parent (ArcelorMittal) est le projet principal de tout développement de projet java, c?est la devFactory. Et il contient les différents « plugin » pour l&apos;ensemble d&apos;un projet par exemple « maven-compiler-plugin »</para>
+    <para>Le projet am.parent (ArcelorMittal) est le projet principal de tout développement de projet java, c est la devFactory. Et il contient les différents « plugin » pour l&apos;ensemble d&apos;un projet par exemple « maven-compiler-plugin »</para>
     <para>
 The project descriptor for a Maven project is:
 </para>
@@ -179,7 +190,7 @@ The project descriptor for a Maven project is:
               </row>
               <row>
                 <entry/>
-                <entry>src / main / resources / META-INF / persistence.xml</entry>
+                <entry>src/main/resources/META-INF/persistence.xml</entry>
                 <entry/>
               </row>
               <row>
@@ -225,7 +236,7 @@ The project descriptor for a Maven project is:
               </row>
               <row>
                 <entry/>
-                <entry>src/ main / resources </entry>
+                <entry>src/main/resources</entry>
                 <entry/>
               </row>
               <row>
@@ -262,7 +273,7 @@ The project descriptor for a Maven project is:
               <row>
                 <entry/>
                 <entry>
-                  <emphasis role="bold">src / main / java</emphasis>
+                  <emphasis role="bold">src/main/java</emphasis>
                 </entry>
                 <entry>
                   <emphasis role="bold">below the Java Package Naming</emphasis>
@@ -312,13 +323,13 @@ The project descriptor for a Maven project is:
               </row>
               <row>
                 <entry/>
-                <entry>src / main / resources</entry>
+                <entry>src/main/resources</entry>
                 <entry>should be empty</entry>
               </row>
               <row>
                 <entry/>
                 <entry>
-                  <emphasis role="bold">src / test / java </emphasis>
+                  <emphasis role="bold">src/test/java </emphasis>
                 </entry>
                 <entry>
                   <emphasis role="bold">below the Java Package Naming for test</emphasis>
@@ -334,7 +345,7 @@ The project descriptor for a Maven project is:
               <row>
                 <entry/>
                 <entry>
-                  <emphasis role="bold">src / test / resources</emphasis>
+                  <emphasis role="bold">src/test/resources</emphasis>
                 </entry>
                 <entry>Test resources directories naming: </entry>
               </row>
@@ -396,7 +407,7 @@ The project descriptor for a Maven project is:
               <row>
                 <entry/>
                 <entry>
-                  <emphasis role="bold">src / main / java</emphasis>
+                  <emphasis role="bold">src/main/java</emphasis>
                 </entry>
                 <entry>
                   <emphasis role="bold">below the Java Package Naming</emphasis>
@@ -419,23 +430,23 @@ The project descriptor for a Maven project is:
               </row>
               <row>
                 <entry/>
-                <entry>[Project Name].lib.business.[function name] .[Function Name]BD.java</entry>
+                <entry>[Project Name].lib.business.[function name].[Function Name]BD.java</entry>
                 <entry/>
               </row>
               <row>
                 <entry/>
-                <entry>[Project Name].lib.business.[function name] .dto.[UT]PB.java</entry>
+                <entry>[Project Name].lib.business.[function name].dto.[UT]PB.java</entry>
                 <entry/>
               </row>
               <row>
                 <entry/>
-                <entry>[Project Name].lib.business.[function name] .dto.[UT]RB.java</entry>
+                <entry>[Project Name].lib.business.[function name].dto.[UT]RB.java</entry>
                 <entry/>
               </row>
               <row>
                 <entry/>
                 <entry>
-                  <emphasis role="bold">src / test / resources</emphasis>
+                  <emphasis role="bold">src/test/resources</emphasis>
                 </entry>
                 <entry>Test resources directories naming: </entry>
               </row>
@@ -488,7 +499,7 @@ The project descriptor for a Maven project is:
               <row>
                 <entry/>
                 <entry>
-                  <emphasis role="bold">src / main / java</emphasis>
+                  <emphasis role="bold">src/main/java</emphasis>
                 </entry>
                 <entry>
                   <emphasis role="bold">below the Java Package Naming</emphasis>
@@ -502,7 +513,7 @@ The project descriptor for a Maven project is:
               <row>
                 <entry/>
                 <entry>
-                  <emphasis role="bold">src / test / resources</emphasis>
+                  <emphasis role="bold">src/test/resources</emphasis>
                 </entry>
                 <entry>Test resources directories naming: </entry>
               </row>
@@ -555,7 +566,7 @@ The project descriptor for a Maven project is:
               <row>
                 <entry/>
                 <entry>
-                  <emphasis role="bold">src / main / java</emphasis>
+                  <emphasis role="bold">src/main/java</emphasis>
                 </entry>
                 <entry>
                   <emphasis role="bold">below the Java Package Naming</emphasis>
@@ -563,24 +574,24 @@ The project descriptor for a Maven project is:
               </row>
               <row>
                 <entry/>
-                <entry> src / main / resources </entry>
+                <entry>src/main/resources </entry>
                 <entry> below the Java Package Naming </entry>
               </row>
               <row>
                 <entry/>
                 <entry>
-                   <emphasis role="bold"> src / main / webapp</emphasis>
+                   <emphasis role="bold">src/main/webapp</emphasis>
                  </entry>
                 <entry> web resources </entry>
               </row>
               <row>
                 <entry/>
-                <entry> src / test / java </entry>
+                <entry>src/test/java</entry>
                 <entry> below the Java Package Naming </entry>
               </row>
               <row>
                 <entry/>
-                <entry> src / test / resources </entry>
+                <entry>src/test/resources </entry>
                 <entry>Test resources directories naming: </entry>
               </row>
               <row>
