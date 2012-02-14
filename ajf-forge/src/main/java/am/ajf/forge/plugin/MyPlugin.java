@@ -19,6 +19,7 @@ import org.jboss.forge.shell.plugins.Option;
 import org.jboss.forge.shell.plugins.PipeOut;
 
 import am.ajf.forge.core.CreateProject;
+import am.ajf.forge.util.EclipseUtils;
 import am.ajf.forge.util.ProjectUtils;
 
 //import org.jboss.forge.shell.plugins.builtin.NewProjectPackagingTypeCompleter;
@@ -140,13 +141,28 @@ public class MyPlugin implements org.jboss.forge.shell.plugins.Plugin {
 					ProjectUtils.PROJECT_TYPE_CONFIG, out);
 
 			/*
+			 * project WS
+			 */
+			generateAjfProject(name, folderName, ProjectUtils.PROJECT_TYPE_WS,
+					out);
+
+			/*
+			 * project lib
+			 */
+			generateAjfProject(name, folderName, ProjectUtils.PROJECT_TYPE_LIB,
+					out);
+
+			/*
 			 * FINAL LOG
 			 */
 			ShellMessages.info(out, "AJF solution done.[" + folderName + "]");
 
 		} catch (Exception e) {
 
-			ShellMessages.error(out, e.getMessage());
+			// print on the shell the exception thrown
+			ShellMessages.error(out,
+					"AJF project generation process has thrown an Exception : "
+							+ e.toString());
 
 		}
 

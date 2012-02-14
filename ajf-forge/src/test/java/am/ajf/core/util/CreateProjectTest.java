@@ -8,7 +8,7 @@ import javax.xml.stream.FactoryConfigurationError;
 import org.junit.After;
 import org.junit.Test;
 
-import am.ajf.forge.util.ProjectUtils;
+import am.ajf.forge.util.EclipseUtils;
 
 public class CreateProjectTest {
 
@@ -27,7 +27,7 @@ public class CreateProjectTest {
 
 		File returnedFile = null;
 		try {
-			returnedFile = ProjectUtils.generateEclipseProjectFile(
+			returnedFile = EclipseUtils.generateEclipseProjectFile(
 					"myprojectName", MY_TEST_REPO);
 		} catch (FactoryConfigurationError e) {
 			System.out
@@ -69,7 +69,7 @@ public class CreateProjectTest {
 
 		File returnedFile = null;
 		try {
-			returnedFile = ProjectUtils
+			returnedFile = EclipseUtils
 					.generateEclipseMavenPrefFile(MY_TEST_REPO);
 		} catch (Exception e) {
 			System.out

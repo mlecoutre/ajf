@@ -26,6 +26,7 @@ import org.jboss.forge.resources.DirectoryResource;
 import org.jboss.forge.resources.FileResource;
 import org.jboss.forge.resources.Resource;
 
+import am.ajf.forge.util.EclipseUtils;
 import am.ajf.forge.util.ProjectUtils;
 
 public class CreateProject {
@@ -57,7 +58,7 @@ public class CreateProject {
 		DirectoryResource dir = initializeProjectDirectory(projectFolder);
 
 		/*
-		 * Creation of the prject
+		 * Creation of the project depending on the project type
 		 */
 		Project project = null;
 
@@ -86,6 +87,21 @@ public class CreateProject {
 			project = generateProjectUI(globalProjectName, projectFinalName,
 					javaPackage, projectFactory, projectType, dir);
 
+		} else if (ProjectUtils.PROJECT_TYPE_LIB.equals(projectType)) {
+
+			project = generateProjectLib(globalProjectName, projectFinalName,
+					javaPackage, projectFactory, projectType, dir);
+
+		} else if (ProjectUtils.PROJECT_TYPE_WS.equals(projectType)) {
+
+			project = generateProjectWS(globalProjectName, projectFinalName,
+					javaPackage, projectFactory, projectType, dir);
+		} else {
+
+			String errorMessage = "Unknown project type : ".concat(projectType);
+			System.out.println(errorMessage);
+			throw new Exception(errorMessage);
+
 		}
 
 		// Get the root directory of the current project
@@ -106,7 +122,7 @@ public class CreateProject {
 		/*
 		 * generate classPath file
 		 */
-		ProjectUtils.generateClassPathFile(projectRootDirectory);
+		EclipseUtils.generateClassPathFile(projectRootDirectory, projectType);
 
 		/*
 		 * End log
@@ -127,7 +143,7 @@ public class CreateProject {
 	private void generateMavenPrefsFile(String projectRootDirectory)
 			throws Exception {
 		try {
-			ProjectUtils.generateEclipseMavenPrefFile(projectRootDirectory);
+			EclipseUtils.generateEclipseMavenPrefFile(projectRootDirectory);
 		} catch (Exception e) {
 			throw new Exception(
 					"Error occured during the generation of the MAVEN preferences file, containing the preferences dealing with maven such as the profile.");
@@ -148,7 +164,7 @@ public class CreateProject {
 			Exception {
 
 		try {
-			ProjectUtils.generateEclipseProjectFile(projectFinalName,
+			EclipseUtils.generateEclipseProjectFile(projectFinalName,
 					projectRootDirectory);
 
 		} catch (Exception e) {
@@ -423,7 +439,7 @@ public class CreateProject {
 	}
 
 	/**
-	 * Construction of an AJF core type project
+	 * Construction of an AJF UI type project
 	 * 
 	 * @param globalProjectName
 	 * @param projectFinalName
@@ -464,6 +480,87 @@ public class CreateProject {
 				ProjectUtils.PROJECT_TYPE_CORE);
 
 		return project;
+	}
+
+	/**
+	 * 
+	 * Construction of an AJF LIB type project
+	 * 
+	 * @param globalProjectName
+	 * @param projectFinalName
+	 * @param javaPackage
+	 * @param projectFactory
+	 * @param projectType
+	 * @param dir
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private Project generateProjectLib(String globalProjectName,
+			String projectFinalName, String javaPackage,
+			ProjectFactory projectFactory, String projectType,
+			DirectoryResource dir) {
+
+		Project project;
+		project = projectFactory
+				.createProject(dir, DependencyFacet.class, MetadataFacet.class,
+						JavaSourceFacet.class, ResourceFacet.class);
+
+		setBasicProjectData(globalProjectName, projectFinalName, project);
+
+		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
+		packaging.setPackagingType(PackagingType.JAR);
+
+		// Set name of the project
+		packaging.setFinalName(projectFinalName);
+
+		// Set the pom parent
+		setPomParent(globalProjectName, project);
+
+		return project;
+
+	}
+
+	/**
+	 * 
+	 * Construction of an AJF LIB type project
+	 * 
+	 * @param globalProjectName
+	 * @param projectFinalName
+	 * @param javaPackage
+	 * @param projectFactory
+	 * @param projectType
+	 * @param dir
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	private Project generateProjectWS(String globalProjectName,
+			String projectFinalName, String javaPackage,
+			ProjectFactory projectFactory, String projectType,
+			DirectoryResource dir) {
+
+		Project project;
+		project = projectFactory
+				.createProject(dir, DependencyFacet.class, MetadataFacet.class,
+						JavaSourceFacet.class, ResourceFacet.class);
+
+		setBasicProjectData(globalProjectName, projectFinalName, project);
+
+		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
+		packaging.setPackagingType(PackagingType.WAR);
+
+		// Set name of the project
+		packaging.setFinalName(projectFinalName);
+
+		// Set the pom parent
+		setPomParent(globalProjectName, project);
+
+		/*
+		 * Create an src/main/webapp package
+		 */
+		ProjectUtils.generateWebAppDirectory(project);
+
+		return project;
+
 	}
 
 	/**
@@ -509,24 +606,22 @@ public class CreateProject {
 	 * @param project
 	 */
 	private void setPomParent(String globalProjectName, Project project) {
-		// SET POM Parent
+
+		// Get the Pom
 		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
 		Model pom = mavenCoreFacet.getPOM();
 
+		// Create the parent
 		Parent parent = new Parent();
 		parent.setGroupId(groupId);
 		parent.setArtifactId(globalProjectName + "-"
 				+ ProjectUtils.PROJECT_TYPE_PARENT);
+
 		parent.setVersion("1.0.0-SNAPSHOT");
 		parent.setRelativePath("../" + globalProjectName + "-"
 				+ ProjectUtils.PROJECT_TYPE_PARENT + "/pom.xml");
 
-		// Profile projectProfile = new Profile();
-		// projectProfile.setId("JEE5_PROFILE");
-		// List<Profile> profiles;
-		// profiles.add(projectProfile);
-		// myPom.setProfiles(profiles);
-
+		// Set the parent to the pom of the project
 		pom.setParent(parent);
 		mavenCoreFacet.setPOM(pom);
 	}
@@ -564,9 +659,10 @@ public class CreateProject {
 	 * 
 	 * @param projectFolder
 	 * @return
+	 * @throws Exception
 	 */
 	private DirectoryResource initializeProjectDirectory(
-			Resource<?> projectFolder) {
+			Resource<?> projectFolder) throws Exception {
 		// Check Project Directory
 		DirectoryResource dir = null;
 		if (projectFolder instanceof FileResource<?>) {
@@ -581,8 +677,9 @@ public class CreateProject {
 				dir = (DirectoryResource) projectFolder;
 
 			} else {
-				// TODO manage error
-				System.out.println("incorrect Project folder");
+				String errorMessage = "The root directory of the project beeing generated is incorrect";
+				System.out.println(errorMessage);
+				throw new Exception(errorMessage);
 			}
 		}
 
