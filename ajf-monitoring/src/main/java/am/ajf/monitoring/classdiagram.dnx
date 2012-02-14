@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--xtools2_universal_type_manager-->
+<?com.ibm.xtools.emf.core.signature <signature id="com.ibm.xtools.mmi.ui.signatures.diagram" version="7.0.0"><feature description="" name="Rational Modeling Platform (com.ibm.xtools.rmp)" url="" version="7.0.0"/></signature>?>
+<notation:Diagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.1/notation" xmlns:uml="http://www.eclipse.org/uml2/2.1.0/UML" xmlns:umlnotation="http://www.ibm.com/xtools/1.5.2/Umlnotation" xmi:id="_2zOq0FcdEeGa2c2LVYPbkA" type="Class" name="classdiagram.dnx">
+  <eAnnotations xmi:id="_2zOq0lcdEeGa2c2LVYPbkA" source="com.ibm.xtools.common.ui.reduction.editingCapabilities">
+    <details xmi:id="_2zOq01cdEeGa2c2LVYPbkA" key="com.ibm.xtools.activities.javaVisualizerActivity" value="1"/>
+  </eAnnotations>
+  <children xmi:id="_3hI5sFcdEeGa2c2LVYPbkA">
+    <children xmi:id="_3hJgwFcdEeGa2c2LVYPbkA" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_3hJgwVcdEeGa2c2LVYPbkA" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_3hJgwlcdEeGa2c2LVYPbkA" type="Stereotype"/>
+    <children xmi:id="_3hJgw1cdEeGa2c2LVYPbkA" type="Name"/>
+    <children xmi:id="_3hJgxFcdEeGa2c2LVYPbkA" type="Parent"/>
+    <children xmi:id="_3hKH0FcdEeGa2c2LVYPbkA" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_3hKH0VcdEeGa2c2LVYPbkA"/>
+    </children>
+    <children xmi:id="_3hNLIFcdEeGa2c2LVYPbkA" visible="false" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_3hNLIVcdEeGa2c2LVYPbkA"/>
+    </children>
+    <children xmi:id="_3hNLIlcdEeGa2c2LVYPbkA" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_3hNLI1cdEeGa2c2LVYPbkA" filtering="Manual">
+        <filteredObjects xmi:type="uml:Operation" href="mmi:///#jmethod%5Ename=checkClosed%5Esign=()V%5Bjsrctype%5Ename=EventManager%5Bjcu%5Ename=EventManager.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D$uml.Operation"/>
+        <filteredObjects xmi:type="uml:Operation" href="mmi:///#jmethod%5Ename=subscribe%5Esign=(%255bQString;QEventHandler;)V%5Bjsrctype%5Ename=EventManager%5Bjcu%5Ename=EventManager.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D$uml.Operation"/>
+        <filteredObjects xmi:type="uml:Operation" href="mmi:///#jmethod%5Ename=unsubscribe%5Esign=(QEventHandler;)V%5Bjsrctype%5Ename=EventManager%5Bjcu%5Ename=EventManager.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D$uml.Operation"/>
+      </styles>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_3hI5sVcdEeGa2c2LVYPbkA" fontName="Segoe UI" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=EventManager%5Bjcu%5Ename=EventManager.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_3hI5slcdEeGa2c2LVYPbkA" x="2376" y="2112"/>
+  </children>
+  <children xmi:id="_Je7U8FceEeGa2c2LVYPbkA">
+    <children xmi:id="_Je78AFceEeGa2c2LVYPbkA" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_Je78AVceEeGa2c2LVYPbkA" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_Je8jEFceEeGa2c2LVYPbkA" type="Stereotype"/>
+    <children xmi:id="_Je8jEVceEeGa2c2LVYPbkA" type="Name"/>
+    <children xmi:id="_Je8jElceEeGa2c2LVYPbkA" type="Parent"/>
+    <children xmi:id="_Je8jE1ceEeGa2c2LVYPbkA" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_Je8jFFceEeGa2c2LVYPbkA"/>
+    </children>
+    <children xmi:id="_JfANcFceEeGa2c2LVYPbkA" visible="false" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_JfANcVceEeGa2c2LVYPbkA"/>
+    </children>
+    <children xmi:id="_JfANclceEeGa2c2LVYPbkA" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_JfANc1ceEeGa2c2LVYPbkA" filtering="Manual">
+        <filteredObjects xmi:type="uml:Operation" href="mmi:///#jmethod%5Ename=publish%5Esign=(QObject;)V%5Bjsrctype%5Ename=EventHandler%5Bjcu%5Ename=EventHandler.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D$uml.Operation"/>
+      </styles>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_Je7U8VceEeGa2c2LVYPbkA" fontName="Segoe UI" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=EventHandler%5Bjcu%5Ename=EventHandler.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_Je7U8lceEeGa2c2LVYPbkA" x="10956" y="2244"/>
+  </children>
+  <children xmi:id="_OewE8FceEeGa2c2LVYPbkA">
+    <children xmi:id="_OewE81ceEeGa2c2LVYPbkA" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_OewE9FceEeGa2c2LVYPbkA" width="530" height="530"/>
+    </children>
+    <children xmi:id="_OewsAFceEeGa2c2LVYPbkA" type="Stereotype"/>
+    <children xmi:id="_OewsAVceEeGa2c2LVYPbkA" type="Kind"/>
+    <children xmi:id="_OewsAlceEeGa2c2LVYPbkA" type="Name"/>
+    <children xmi:id="_OewsA1ceEeGa2c2LVYPbkA" type="Parent"/>
+    <children xmi:id="_OewsBFceEeGa2c2LVYPbkA" visible="false" type="AttributeCompartment">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_OewsBVceEeGa2c2LVYPbkA"/>
+    </children>
+    <children xmi:id="_OewsBlceEeGa2c2LVYPbkA" type="OperationCompartment">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_OewsB1ceEeGa2c2LVYPbkA"/>
+    </children>
+    <children xmi:id="_OexTEFceEeGa2c2LVYPbkA" visible="false" type="SignalCompartment">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_OexTEVceEeGa2c2LVYPbkA"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLClassifierStyle" xmi:id="_OewE8VceEeGa2c2LVYPbkA" fontName="Segoe UI" showStereotype="Label" useClassifierShape="true"/>
+    <element xmi:type="uml:Interface" href="mmi:///#jsrctype%5Ename=EventFormatter%5Bjcu%5Ename=EventFormatter.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D$uml.Interface"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_OewE8lceEeGa2c2LVYPbkA" x="17688" y="1452"/>
+  </children>
+  <children xmi:id="_QHaE0FceEeGa2c2LVYPbkA">
+    <children xmi:id="_QHar4FceEeGa2c2LVYPbkA" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_QHar4VceEeGa2c2LVYPbkA" width="530" height="530"/>
+    </children>
+    <children xmi:id="_QHbS8FceEeGa2c2LVYPbkA" type="Stereotype"/>
+    <children xmi:id="_QHbS8VceEeGa2c2LVYPbkA" type="Kind"/>
+    <children xmi:id="_QHbS8lceEeGa2c2LVYPbkA" type="Name"/>
+    <children xmi:id="_QHbS81ceEeGa2c2LVYPbkA" type="Parent"/>
+    <children xmi:id="_QHb6AFceEeGa2c2LVYPbkA" visible="false" type="AttributeCompartment">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_QHb6AVceEeGa2c2LVYPbkA"/>
+    </children>
+    <children xmi:id="_QHchEFceEeGa2c2LVYPbkA" type="OperationCompartment">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_QHchEVceEeGa2c2LVYPbkA"/>
+    </children>
+    <children xmi:id="_QHchElceEeGa2c2LVYPbkA" visible="false" type="SignalCompartment">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_QHchE1ceEeGa2c2LVYPbkA"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLClassifierStyle" xmi:id="_QHaE0VceEeGa2c2LVYPbkA" fontName="Segoe UI" showStereotype="Label" useClassifierShape="true"/>
+    <element xmi:type="uml:Interface" href="mmi:///#jsrctype%5Ename=EventFilter%5Bjcu%5Ename=EventFilter.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D$uml.Interface"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_QHaE0lceEeGa2c2LVYPbkA" x="17820" y="3960"/>
+  </children>
+  <children xmi:id="_R7M9sFceEeGa2c2LVYPbkA">
+    <children xmi:id="_R7NkwFceEeGa2c2LVYPbkA" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_R7NkwVceEeGa2c2LVYPbkA" width="530" height="530"/>
+    </children>
+    <children xmi:id="_R7NkwlceEeGa2c2LVYPbkA" type="Stereotype"/>
+    <children xmi:id="_R7Nkw1ceEeGa2c2LVYPbkA" type="Kind"/>
+    <children xmi:id="_R7NkxFceEeGa2c2LVYPbkA" type="Name"/>
+    <children xmi:id="_R7NkxVceEeGa2c2LVYPbkA" type="Parent"/>
+    <children xmi:id="_R7OL0FceEeGa2c2LVYPbkA" visible="false" type="AttributeCompartment">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_R7OL0VceEeGa2c2LVYPbkA"/>
+    </children>
+    <children xmi:id="_R7OL0lceEeGa2c2LVYPbkA" type="OperationCompartment">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_R7OL01ceEeGa2c2LVYPbkA"/>
+    </children>
+    <children xmi:id="_R7OL1FceEeGa2c2LVYPbkA" visible="false" type="SignalCompartment">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_R7OL1VceEeGa2c2LVYPbkA"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLClassifierStyle" xmi:id="_R7M9sVceEeGa2c2LVYPbkA" fontName="Segoe UI" showStereotype="Label" useClassifierShape="true"/>
+    <element xmi:type="uml:Interface" href="mmi:///#jsrctype%5Ename=EventEmitter%5Bjcu%5Ename=EventEmitter.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D$uml.Interface"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_R7M9slceEeGa2c2LVYPbkA" x="17952" y="6468"/>
+  </children>
+  <children xmi:id="_WwuiMFceEeGa2c2LVYPbkA">
+    <children xmi:id="_WwvJQFceEeGa2c2LVYPbkA" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_WwvJQVceEeGa2c2LVYPbkA" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_WwvJQlceEeGa2c2LVYPbkA" type="Stereotype"/>
+    <children xmi:id="_WwvwUFceEeGa2c2LVYPbkA" type="Name"/>
+    <children xmi:id="_WwvwUVceEeGa2c2LVYPbkA" type="Parent"/>
+    <children xmi:id="_WwvwUlceEeGa2c2LVYPbkA" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_WwvwU1ceEeGa2c2LVYPbkA"/>
+    </children>
+    <children xmi:id="_WwxlgFceEeGa2c2LVYPbkA" visible="false" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_WwxlgVceEeGa2c2LVYPbkA"/>
+    </children>
+    <children xmi:id="_WwxlglceEeGa2c2LVYPbkA" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_Wwxlg1ceEeGa2c2LVYPbkA"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_WwuiMVceEeGa2c2LVYPbkA" fontName="Segoe UI" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=AbstractEvent%5Bjcu%5Ename=AbstractEvent.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WwuiMlceEeGa2c2LVYPbkA" x="10956" y="7788"/>
+  </children>
+  <children xmi:id="_fWBkEFceEeGa2c2LVYPbkA">
+    <children xmi:id="_fWCLIFceEeGa2c2LVYPbkA" type="ImageCompartment">
+      <layoutConstraint xmi:type="notation:Size" xmi:id="_fWCLIVceEeGa2c2LVYPbkA" width="1320" height="1320"/>
+    </children>
+    <children xmi:id="_fWCLIlceEeGa2c2LVYPbkA" type="Stereotype"/>
+    <children xmi:id="_fWCyMFceEeGa2c2LVYPbkA" type="Name"/>
+    <children xmi:id="_fWCyMVceEeGa2c2LVYPbkA" type="Parent"/>
+    <children xmi:id="_fWCyMlceEeGa2c2LVYPbkA" visible="false" type="ANNOTATION_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_fWCyM1ceEeGa2c2LVYPbkA"/>
+    </children>
+    <children xmi:id="_fWEnYFceEeGa2c2LVYPbkA" visible="false" type="ANNOTATED_ATTRIBUTE_COMPARTMENT">
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_fWEnYVceEeGa2c2LVYPbkA"/>
+    </children>
+    <children xmi:id="_fWFOcFceEeGa2c2LVYPbkA" type="ANNOTATED_OPERATION_COMPARTMENT">
+      <children xmi:id="_fW_NYFceEeGa2c2LVYPbkA" type="OPERATION_ITEM">
+        <styles xmi:type="notation:DrawerStyle" xmi:id="_fW_NYVceEeGa2c2LVYPbkA" collapsed="true"/>
+        <element xmi:type="uml:Operation" href="mmi:///#jmethod%5Ename=EventFactory%5Esign=()V%5Bjsrctype%5Ename=EventFactory%5Bjcu%5Ename=EventFactory.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D$uml.Operation"/>
+      </children>
+      <children xmi:id="_fW_0clceEeGa2c2LVYPbkA" type="OPERATION_ITEM">
+        <styles xmi:type="notation:DrawerStyle" xmi:id="_fW_0c1ceEeGa2c2LVYPbkA" collapsed="true"/>
+        <element xmi:type="uml:Operation" href="mmi:///#jmethod%5Ename=registerEvent%5Esign=(QClass%3C*%3E;)V%5Bjsrctype%5Ename=EventFactory%5Bjcu%5Ename=EventFactory.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D$uml.Operation"/>
+      </children>
+      <children xmi:id="_fXAbgFceEeGa2c2LVYPbkA" type="OPERATION_ITEM">
+        <styles xmi:type="notation:DrawerStyle" xmi:id="_fXAbgVceEeGa2c2LVYPbkA" collapsed="true"/>
+        <element xmi:type="uml:Operation" href="mmi:///#jmethod%5Ename=registerEvent%5Esign=(QString;QClass%3C*%3E;)V%5Bjsrctype%5Ename=EventFactory%5Bjcu%5Ename=EventFactory.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D$uml.Operation"/>
+      </children>
+      <children xmi:id="_fXAbhFceEeGa2c2LVYPbkA" type="OPERATION_ITEM">
+        <styles xmi:type="notation:DrawerStyle" xmi:id="_fXAbhVceEeGa2c2LVYPbkA" collapsed="true"/>
+        <element xmi:type="uml:Operation" href="mmi:///#jmethod%5Ename=newEvent%5Esign=(QString;)QE;%5Bjsrctype%5Ename=EventFactory%5Bjcu%5Ename=EventFactory.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D$uml.Operation"/>
+      </children>
+      <children xmi:id="_fXBpoFceEeGa2c2LVYPbkA" type="OPERATION_ITEM">
+        <styles xmi:type="notation:DrawerStyle" xmi:id="_fXBpoVceEeGa2c2LVYPbkA" collapsed="true"/>
+        <element xmi:type="uml:Operation" href="mmi:///#jmethod%5Ename=newEvent%5Esign=(QClass%3C*%3E;)QE;%5Bjsrctype%5Ename=EventFactory%5Bjcu%5Ename=EventFactory.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D$uml.Operation"/>
+      </children>
+      <styles xmi:type="umlnotation:UMLListCompartmentStyle" xmi:id="_fWFOcVceEeGa2c2LVYPbkA" filtering="Manual">
+        <filteredObjects xmi:type="uml:Operation" href="mmi:///#jmethod%5Ename=EventFactory%5Esign=()V%5Bjsrctype%5Ename=EventFactory%5Bjcu%5Ename=EventFactory.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D$uml.Operation"/>
+      </styles>
+    </children>
+    <styles xmi:type="umlnotation:UMLShapeStyle" xmi:id="_fWBkEVceEeGa2c2LVYPbkA" fontName="Segoe UI" showListSignature="true" showStereotype="Label"/>
+    <element xmi:type="uml:Class" href="mmi:///#jsrctype%5Ename=EventFactory%5Bjcu%5Ename=EventFactory.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D$uml.Class"/>
+    <layoutConstraint xmi:type="notation:Bounds" xmi:id="_fWBkElceEeGa2c2LVYPbkA" x="2772" y="9636"/>
+  </children>
+  <styles xmi:type="umlnotation:UMLDiagramStyle" xmi:id="_2zOq0VcdEeGa2c2LVYPbkA"/>
+  <element xsi:nil="true"/>
+  <edges xmi:id="_JjV64FceEeGa2c2LVYPbkA" source="_3hI5sFcdEeGa2c2LVYPbkA" target="_Je7U8FceEeGa2c2LVYPbkA">
+    <children xmi:id="_JjYXIFceEeGa2c2LVYPbkA" type="KindLabel">
+      <children xmi:id="_JjY-MFceEeGa2c2LVYPbkA" type="Stereotype"/>
+      <children xmi:id="_JjZlQFceEeGa2c2LVYPbkA" type="Kind"/>
+      <children xmi:id="_JjY-MVceEeGa2c2LVYPbkA" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_JjYXIVceEeGa2c2LVYPbkA" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_JjV64VceEeGa2c2LVYPbkA" fontName="Segoe UI" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=EventManager%5Bjcu%5Ename=EventManager.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=EventHandler%5Bjcu%5Ename=EventHandler.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_JjV64lceEeGa2c2LVYPbkA" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+  </edges>
+  <edges xmi:id="_OgqJcFceEeGa2c2LVYPbkA" source="_Je7U8FceEeGa2c2LVYPbkA" target="_OewE8FceEeGa2c2LVYPbkA">
+    <children xmi:id="_OgqwgFceEeGa2c2LVYPbkA" type="KindLabel">
+      <children xmi:id="_OgqwglceEeGa2c2LVYPbkA" type="Stereotype"/>
+      <children xmi:id="_OgqwhFceEeGa2c2LVYPbkA" type="Kind"/>
+      <children xmi:id="_Ogqwg1ceEeGa2c2LVYPbkA" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_OgqwgVceEeGa2c2LVYPbkA" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_OgqJcVceEeGa2c2LVYPbkA" fontName="Segoe UI" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=EventHandler%5Bjcu%5Ename=EventHandler.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=EventFormatter%5Bjcu%5Ename=EventFormatter.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_OgqJclceEeGa2c2LVYPbkA" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+  </edges>
+  <edges xmi:id="_QH0UgFceEeGa2c2LVYPbkA" source="_Je7U8FceEeGa2c2LVYPbkA" target="_QHaE0FceEeGa2c2LVYPbkA">
+    <children xmi:id="_QH07kFceEeGa2c2LVYPbkA" type="KindLabel">
+      <children xmi:id="_QH07klceEeGa2c2LVYPbkA" type="Stereotype"/>
+      <children xmi:id="_QH07lFceEeGa2c2LVYPbkA" type="Kind"/>
+      <children xmi:id="_QH07k1ceEeGa2c2LVYPbkA" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_QH07kVceEeGa2c2LVYPbkA" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_QH0UgVceEeGa2c2LVYPbkA" fontName="Segoe UI" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=EventHandler%5Bjcu%5Ename=EventHandler.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=EventFilter%5Bjcu%5Ename=EventFilter.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_QH0UglceEeGa2c2LVYPbkA" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+  </edges>
+  <edges xmi:id="_R76vYFceEeGa2c2LVYPbkA" source="_Je7U8FceEeGa2c2LVYPbkA" target="_R7M9sFceEeGa2c2LVYPbkA">
+    <children xmi:id="_R76vY1ceEeGa2c2LVYPbkA" type="KindLabel">
+      <children xmi:id="_R77WcFceEeGa2c2LVYPbkA" type="Stereotype"/>
+      <children xmi:id="_R77WclceEeGa2c2LVYPbkA" type="Kind"/>
+      <children xmi:id="_R77WcVceEeGa2c2LVYPbkA" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_R76vZFceEeGa2c2LVYPbkA" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_R76vYVceEeGa2c2LVYPbkA" fontName="Segoe UI" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=EventHandler%5Bjcu%5Ename=EventHandler.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=EventEmitter%5Bjcu%5Ename=EventEmitter.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_R76vYlceEeGa2c2LVYPbkA" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+  </edges>
+  <edges xmi:id="_W29tEVceEeGa2c2LVYPbkA" source="_Je7U8FceEeGa2c2LVYPbkA" target="_WwuiMFceEeGa2c2LVYPbkA">
+    <children xmi:id="_W2-UIFceEeGa2c2LVYPbkA" type="KindLabel">
+      <children xmi:id="_W2-UIlceEeGa2c2LVYPbkA" type="Stereotype"/>
+      <children xmi:id="_W2-UJFceEeGa2c2LVYPbkA" type="Kind"/>
+      <children xmi:id="_W2-UI1ceEeGa2c2LVYPbkA" type="Name"/>
+      <layoutConstraint xmi:type="notation:Bounds" xmi:id="_W2-UIVceEeGa2c2LVYPbkA" y="-186"/>
+    </children>
+    <styles xmi:type="umlnotation:UMLConnectorStyle" xmi:id="_W29tElceEeGa2c2LVYPbkA" fontName="Segoe UI" lineWidth="1" showStereotype="Text"/>
+    <element xmi:type="uml:Usage" href="mmi:///#jdep%5Bjsrctype%5Ename=EventHandler%5Bjcu%5Ename=EventHandler.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D%5Bjsrctype%5Ename=AbstractEvent%5Bjcu%5Ename=AbstractEvent.java%5Bjpack%5Ename=am.ajf.monitoring%5Bjsrcroot%5Esrcfolder=src/main/java%5Bproject%5Eid=ajf-monitoring%5D%5D%5D%5D%5D$uml.Usage"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_W29tE1ceEeGa2c2LVYPbkA" points="[0, 0, 0, 0]$[0, 0, 0, 0]"/>
+  </edges>
+</notation:Diagram>
