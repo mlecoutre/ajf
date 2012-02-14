@@ -19,7 +19,6 @@ import org.jboss.forge.shell.plugins.Option;
 import org.jboss.forge.shell.plugins.PipeOut;
 
 import am.ajf.forge.core.CreateProject;
-import am.ajf.forge.util.EclipseUtils;
 import am.ajf.forge.util.ProjectUtils;
 
 //import org.jboss.forge.shell.plugins.builtin.NewProjectPackagingTypeCompleter;
@@ -31,7 +30,7 @@ import am.ajf.forge.util.ProjectUtils;
  */
 @Alias("ajf-solution")
 @Help("Create a new AJF solution in selected directory.")
-public class MyPlugin implements org.jboss.forge.shell.plugins.Plugin {
+public class CreateSolutionPlugin implements org.jboss.forge.shell.plugins.Plugin {
 
 	@Inject
 	private Shell shell;
