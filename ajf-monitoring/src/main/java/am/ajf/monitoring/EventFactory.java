@@ -1,6 +1,6 @@
 package am.ajf.monitoring;
 
-import static am.ajf.monitoring.EventUtils.getEventType;
+import static am.ajf.monitoring.EventsUtils.getEventType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,13 +63,14 @@ public class EventFactory {
 	 * @throws Exception 
 	 */
 	@SuppressWarnings("unchecked")
-	public static <E> E newEvent(String eventType) {
+	public static <E extends AbstractEvent> E newEvent(String eventType) {
 		
-		Object evt = null;
+		AbstractEvent evt = null;
 		if (eventsTypesMap.containsKey(eventType)) {
 			Class<?> eventClass = eventsTypesMap
 					.get(eventType);
-			evt = BeanUtils.newInstance(eventClass);
+			evt = (AbstractEvent) BeanUtils.newInstance(eventClass);
+			evt.setEventType(eventType);
 		}
 
 		return (E)evt;
