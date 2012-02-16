@@ -12,17 +12,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 
 import am.ajf.core.logger.LoggerFactory;
-import am.ajf.monitoring.EventEmitter;
-import am.ajf.monitoring.EventFactory;
-import am.ajf.monitoring.EventHandler;
-import am.ajf.monitoring.EventManager;
 import am.ajf.monitoring.impl.ConsoleEmitter;
 import am.ajf.monitoring.impl.XmlJAXBFormatter;
 
-public class EventManagerTest {
+public class EventsDomainTest {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = LoggerFactory.getLogger(EventManagerTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(EventsDomainTest.class);
 	
 	@Test
 	public void testSendSimpleEvent() throws JAXBException, IOException,
@@ -30,7 +26,7 @@ public class EventManagerTest {
 
 		// Given
 		
-		EventManager manager = new EventManager();
+		EventsDomain evtsDomain = new EventsDomain();
 		
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		PrintStream printStream = new PrintStream(outputStream, true);
@@ -38,20 +34,20 @@ public class EventManagerTest {
 		
 		EventHandler handler = new EventHandler(new XmlJAXBFormatter(
 				MyEvent.class), emitter);
-		manager.setDefaultEventHandler(handler);
+		evtsDomain.setDefaultEventHandler(handler);
 
 		MyEvent event = new MyEvent("Albert", "Dupont");
 		
 		// When
 		
-		manager.sendEvent(event);
+		evtsDomain.sendEvent(event);
 		
 		// Then
 
 		// wait some time
 		Thread.sleep(100);
 		
-		manager.close();
+		evtsDomain.close();
 		
 		printStream.flush();
 
@@ -69,7 +65,7 @@ public class EventManagerTest {
 	@Test
 	public void testSendRegisteredEvent() throws JAXBException, IOException, InterruptedException {
 		
-		EventManager manager = new EventManager();
+		EventsDomain evtsDomain = new EventsDomain();
 
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		PrintStream printStream = new PrintStream(outputStream, true);
@@ -77,7 +73,7 @@ public class EventManagerTest {
 
 		EventHandler handler = new EventHandler(new XmlJAXBFormatter(
 				MyEvent.class), emitter);
-		manager.setDefaultEventHandler(handler);
+		evtsDomain.setDefaultEventHandler(handler);
 
 		String eventType = "event/test";
 		EventFactory.registerEvent(eventType, MyEvent.class);
@@ -86,12 +82,12 @@ public class EventManagerTest {
 		event.setFirstName("Bob");
 		event.setLastName("Durand");
 
-		manager.sendEvent(event);
+		evtsDomain.sendEvent(event);
 
 		// wait some time
 		Thread.sleep(100);
 		
-		manager.close();
+		evtsDomain.close();
 		
 		printStream.flush();
 
