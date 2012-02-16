@@ -11,16 +11,16 @@ import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.utils.BeanUtils;
 import am.ajf.monitoring.exceptions.DuplicateEventTypeException;
 
-public class EventFactory {
+public class EventsFactory {
 	
 	private final static Map<String, Class<?>> eventsTypesMap = new HashMap<String, Class<?>>();
 	
-	private final static Logger logger = LoggerFactory.getLogger(EventFactory.class);
+	private final static Logger logger = LoggerFactory.getLogger(EventsFactory.class);
 
 	/**
 	 * default constructor
 	 */
-	private EventFactory() {
+	private EventsFactory() {
 		super();
 	}
 		
@@ -30,7 +30,7 @@ public class EventFactory {
 	 * @throws DuplicateEventTypeException
 	 */
 	public static void registerEvent(
-			Class<?> eventClass)
+			Class<? extends AbstractEvent> eventClass)
 			throws DuplicateEventTypeException {
 		String eventType = getEventType(eventClass);
 		registerEvent(eventType, eventClass);
@@ -44,7 +44,7 @@ public class EventFactory {
 	 */
 	public static synchronized void registerEvent(
 			String eventType,
-			Class<?> eventClass)
+			Class<? extends AbstractEvent> eventClass)
 			throws DuplicateEventTypeException {
 		
 		if (eventsTypesMap.containsKey(eventType)) {
@@ -84,7 +84,7 @@ public class EventFactory {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <E> E newEvent(Class<?> eventClass) {
+	public static <E extends AbstractEvent> E newEvent(Class<?> eventClass) {
 		String eventType = getEventType(eventClass);
 		Object evt = newEvent(eventType);
 		return (E)evt;
