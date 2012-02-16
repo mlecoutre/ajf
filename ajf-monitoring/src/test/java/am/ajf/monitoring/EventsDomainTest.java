@@ -17,7 +17,6 @@ import am.ajf.monitoring.impl.XmlJAXBFormatter;
 
 public class EventsDomainTest {
 
-	@SuppressWarnings("unused")
 	private static final Logger logger = LoggerFactory.getLogger(EventsDomainTest.class);
 	
 	@Test
@@ -53,6 +52,7 @@ public class EventsDomainTest {
 
 		String utf8 = Charset.forName("UTF-8").displayName();
 		String res = outputStream.toString(utf8);
+		logger.debug("Send: ".concat(res));
 
 		printStream.close();
 		outputStream.close();
@@ -76,9 +76,9 @@ public class EventsDomainTest {
 		evtsDomain.setDefaultEventHandler(handler);
 
 		String eventType = "event/test";
-		EventFactory.registerEvent(eventType, MyEvent.class);
+		EventsFactory.registerEvent(eventType, MyEvent.class);
 
-		MyEvent event = EventFactory.newEvent(eventType);
+		MyEvent event = EventsFactory.newEvent(eventType);
 		event.setFirstName("Bob");
 		event.setLastName("Durand");
 
@@ -93,6 +93,7 @@ public class EventsDomainTest {
 
 		String utf8 = Charset.forName("UTF-8").displayName();
 		String res = outputStream.toString(utf8);
+		logger.debug("Send: ".concat(res));
 
 		printStream.close();
 		outputStream.close();
