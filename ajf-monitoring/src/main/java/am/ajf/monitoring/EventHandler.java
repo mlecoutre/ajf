@@ -45,7 +45,7 @@ public final class EventHandler implements Subscriber<AbstractEvent> {
 	 * @param eventSource
 	 * @throws EventException
 	 */
-	private void publish(Object eventSource) throws EventException {
+	private void publish(AbstractEvent eventSource) throws EventException {
 		
 		if (null != eventFilter) {
 			boolean acceptedEvent = eventFilter.accept(eventSource);

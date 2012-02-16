@@ -4,6 +4,6 @@ import am.ajf.monitoring.exceptions.EventFormatterException;
 
 public interface EventFormatter {
 
-	String format(Object eventSource) throws EventFormatterException;
+	String format(AbstractEvent eventSource) throws EventFormatterException;
 
 }

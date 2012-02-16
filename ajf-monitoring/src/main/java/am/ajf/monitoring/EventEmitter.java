@@ -4,7 +4,7 @@ import am.ajf.monitoring.exceptions.EventEmitterException;
 
 public interface EventEmitter {
 
-	void send(Object eventSource, String formattedEvent)
+	void send(AbstractEvent eventSource, String formattedEvent)
 			throws EventEmitterException;
 
 }
