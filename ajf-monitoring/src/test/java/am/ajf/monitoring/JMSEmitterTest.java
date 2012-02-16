@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.monitoring.EventHandler;
-import am.ajf.monitoring.EventManager;
+import am.ajf.monitoring.EventsDomain;
 import am.ajf.monitoring.impl.JMSEmitter;
 import am.ajf.monitoring.impl.XmlJAXBFormatter;
 
@@ -37,7 +37,7 @@ public class JMSEmitterTest {
 	@Test
 	public void testSendJMSEvent() throws JAXBException, IOException, Exception {
 		
-		EventManager manager = new EventManager();
+		EventsDomain manager = new EventsDomain();
 		JMSEmitter jmsEmitter = new JMSEmitter();
 		EventHandler handler = new EventHandler(new XmlJAXBFormatter(
 				MyEvent.class), jmsEmitter);
