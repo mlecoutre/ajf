@@ -24,8 +24,8 @@ import am.ajf.monitoring.exceptions.EventEmitterException;
  */
 public class JMSEmitter implements EventEmitter {
 
-	public static final String JNDI_DEFAULT_EVENT_DEST = "AJFEventQueue";
-	public static final String JNDI_DEFAULT_CONNECTION_FACTORY = "queueConnectionFactory";
+	public static final String JNDI_DEFAULT_EVENT_DEST = "AJFEventTarget";
+	public static final String JNDI_DEFAULT_CONNECTION_FACTORY = "MonitoringConnectionFactory";
 
 	private String connectionFactoryName = JNDI_DEFAULT_CONNECTION_FACTORY;
 	private String destinationName = JNDI_DEFAULT_EVENT_DEST;

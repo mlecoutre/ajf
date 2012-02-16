@@ -19,7 +19,7 @@ public class XmlJAXBFormatter implements  EventFormatter {
 	 * 
 	 */
 	public XmlJAXBFormatter(Class<?>... eventClasses) throws JAXBException {
-		super();
+		
 		JAXBContext ctx = JAXBContext.newInstance(eventClasses);
 		marshaller = ctx.createMarshaller();
 		
@@ -36,11 +36,9 @@ public class XmlJAXBFormatter implements  EventFormatter {
 		} catch (IOException e) {
 			throw new EventFormatterException("Unable to close xml writer.", e);
 		} catch (JAXBException e) {
-			throw new EventFormatterException("Unable to format event of type '" + eventSource.getClass().getName() + "'.", e);
+			throw new EventFormatterException("Unable to format event '" + eventSource.getClass().getName() + "'.", e);
 		}				
 		
 	}
 	
-	
-
 }
