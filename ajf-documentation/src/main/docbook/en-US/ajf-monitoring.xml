@@ -3,36 +3,46 @@
 <chapter id="monitoring">
 	<title>AJF - Monitoring Reference</title>
 	<para>
-		The AJF Monitoring library provide object model for create send and receive applications events
+		The AJF Monitoring library provide object model and components for creating and sending application events
 		on J2EE server and other Servlet containers. 		
 	</para>
+	<figure id="monitoring.fig">
+      	<title>Monitoring Principle</title>
+	      <mediaobject>
+	        <imageobject>
+	          <imagedata align="center" fileref="images/monitoring.png"/>
+	        </imageobject>
+	      </mediaobject>
+	</figure>
 	<section>
-		<title>Introduction</title>
-		<para>
-			The AJF Monitoring library offers the application to send application events in an asycnhronous way.
-			In this way, you have the lowest impact in terms of response time of your application.
-			<parameter>Events</parameter> can be instanciated using the <parameter>EventFactory</parameter>
-			and sended with the <parameter>EventManager</parameter>  
-		</para>
+		<title>Monitoring Class Diagram</title>
+		<figure id="monitoring-classdiagram.fig">
+      	  <title>Monitoring Class Diagram</title>
+	      <mediaobject>
+	        <imageobject>
+	          <imagedata align="center" fileref="images/monitoring-classdiagram.png" scalefit="1" />
+	        </imageobject>
+	      </mediaobject>
+	    </figure>
 	</section>
 	<section>
-		<title>Get EventManager</title>
+		<title>Get EventsDomain</title>
 		<para>
-			The <parameter>EventManager</parameter> is the entry point for sending events and declaring events handlers.
-			You can get an <parameter>EventManager</parameter> instance by addressing the <parameter>EventManagerFactory</parameter>
+			The <parameter>EventsDomain</parameter> is the entry point for sending events and declaring events handlers.
+			You can get an <parameter>EventsDomain</parameter> instance by addressing the <parameter>EventManagerFactory</parameter>
 		</para>
 		<important>
 			<para>
-				The default EventManager is the AJF internal EventManager. 				
+				The default EventsDomain is the AJF internal EventsDomain. 				
 			</para> 
 		</important>
 		<example>
-			<title>Get EventManager</title>
+			<title>Get EventsDomain</title>
 			<programlisting language="Java" role="Java"><![CDATA[
-	// get default AJF EventManager
-	EventManager ajfEventManager = EventManagerFactory.getEventManager();
-	// get specific EventManager
-	EventManager appEventManager = EventManagerFactory.getEventManager("myAppli");	
+	// get default AJF EventsDomain
+	EventsDomain ajfEventsDomain = EventsDomainManager.getEventsDomain();
+	// get specific EventsDomain
+	EventsDomain appEventsDomain = EventsDomainManager.getEventsDomain("myAppli");	
 				]]></programlisting>
 		</example>
 	</section>
@@ -66,27 +76,19 @@
 	// set Event attributes
 	// event.setXXX
 	
-	// get specific EventManager
-	EventManager appEventManager = EventManagerFactory.getEventManager("myAppli");
+	// get specific EventsDomain
+	EventsDomain appEventsDomain = EventsDomainManager.getEventsDomain("myAppli");
 	// send the event
-	appEventManager.sendEvent("myAppEvent", event);	
+	appEventsDomain.sendEvent("myAppEvent", event);	
 				]]></programlisting>
 		</example>
 	</section>
 	<section>
 		<title>Managing Events Handlers</title>
-		<figure id="monitoring-classdiagram.fig">
-      	<title>Monitoring Class Diagram</title>
-	      <mediaobject>
-	        <imageobject>
-	          <imagedata align="center" fileref="images/monitoring-classdiagram.png"/>
-	        </imageobject>
-	      </mediaobject>
-	    </figure>
 		<para>
 			<parameter>EventHandler</parameter> is responsible of the <parameter>Events</parameter> handling. It work with <parameter>EventFilter</parameter> in order to know if
 			the <parameter>Event</parameter> can be handled, format the <parameter>Event</parameter> with a <parameter>EventFormatter</parameter> and handle the formatted <parameter>Event</parameter>
-			with the <parameter>EventEmitter</parameter>. <parameter>EventHandlers</parameter> are managed (registered) with the <parameter>EventManager</parameter>.
+			with the <parameter>EventEmitter</parameter>. <parameter>EventHandlers</parameter> are managed (registered) with the <parameter>EventsDomain</parameter>.
 		</para>
 	<example>
 			<title>Registering and Using Event Handler</title>
@@ -102,12 +104,12 @@
 		// create the EventHandler
 		EventHandler handler = new EventHandler(filter, formatter, emitter);
 		
-		// get specific EventManager
-		EventManager appEventManager = EventManagerFactory.getEventManager("myAppli");
+		// get specific EventsDomain
+		EventsDomain appEventsDomain = EventsDomainManager.getEventsDomain("myAppli");
 		// install the EventHandler as default
-		appEventManager.setDefaultEventHandler(handler)
+		appEventsDomain.setDefaultEventHandler(handler)
 		// or install it for specifics Events types
-		// appEventManager.installEventHandler(new String[] {"myAppEvent"}, handler);
+		// appEventsDomain.installEventHandler(new String[] {"myAppEvent"}, handler);
 		
 		// instanciate a new Event
 		MyEvent event = EventFactory.newEvent("myAppEvent");
@@ -115,18 +117,135 @@
 		// event.setXXX
 		
 		// send the event
-		appEventManager.sendEvent("myAppEvent", event);	
+		appEventsDomain.sendEvent("myAppEvent", event);	
 				]]></programlisting>
 		</example>
 	</section>
 	<section>
 		<title>Available Events Formatters</title>
 		<para>
+		Events formatters are responsible of the <parameter>Events</parameter> content formatting. 
 		</para>
+		<section>
+			<title>am.ajf.monitoring.impl.XmlJAXBFormatter</title>
+			<para>
+			Format <parameter>Events</parameter> as XML content.
+			You have to invoke the constructor with the array of <parameter>Events</parameter> class you want to format.
+			</para>
+			<table frame="all">
+   			  <title>API</title>
+   			  <tgroup cols="2">
+		        <colspec colname="c1"/>
+		        <colspec colname="c2"/>
+		        <tbody>
+		        	<row>
+		        		<entry>constructor(Class[])</entry>
+		        		<entry>create formatter for a list of <parameter>Event</parameter> classes.</entry>
+		        	</row>
+		        </tbody>
+		      </tgroup>
+		    </table>
+		    <example>
+				<title>Usage</title>
+				<programlisting language="Java" role="Java"><![CDATA[
+	// fomatter for MyEvent class
+	EventFormatter formatter = new XmlJAXBFormatter(MyEvent.class);				
+				]]></programlisting>
+			</example>
+		</section>
 	</section>
 	<section>
 		<title>Available Events Emitters</title>
 		<para>
+		Events emitters are responsible of sending serialized <parameter>Events.</parameter>
 		</para>
+		<section>
+			<title>am.ajf.monitoring.impl.ConsoleEmitter</title>
+			<para>
+			Send the formatted <parameter>Events</parameter> in a specific <parameter>PrintStream</parameter>.
+			</para>
+			<table frame="all">
+   			  <title>API</title>
+   			  <tgroup cols="2">
+		        <colspec colname="c1"/>
+		        <colspec colname="c2"/>
+		        <tbody>
+		        	<row>
+		        		<entry>constructor()</entry>
+		        		<entry>create emitter on <parameter>System.out</parameter></entry>
+		        	</row>
+		        	<row>
+		        		<entry>constructor(PrintStream)</entry>
+		        		<entry>create emitter on a specific <parameter>PrintStream</parameter></entry>
+		        	</row>
+		        </tbody>
+		      </tgroup>
+		    </table>
+		    <example>
+				<title>Usage</title>
+				<programlisting language="Java" role="Java"><![CDATA[
+		// send formatted Events in a PrintSream
+		EventEmitter emitter = new ConsoleEmitter();
+		// or 
+		// EventEmitter emitter = new ConsoleEmitter(System.out);
+				]]></programlisting>
+			</example>
+		</section>
+		<section>
+			<title>am.ajf.monitoring.impl.LoggerAdapterEmitter</title>
+			<para>
+			Send the formatted <parameter>Events</parameter> in a specific <parameter>Logger</parameter>.
+			</para>
+			<table frame="all">
+   			  <title>API</title>
+   			  <tgroup cols="2">
+		        <colspec colname="c1"/>
+		        <colspec colname="c2"/>
+		        <tbody>
+		        	<row>
+		        		<entry>constructor(Logger)</entry>
+		        		<entry>create emitter on a specific <parameter>Logger</parameter>.</entry>
+		        	</row>
+		        </tbody>
+		      </tgroup>
+		    </table>
+		    <example>
+				<title>Usage</title>
+				<programlisting language="Java" role="Java"><![CDATA[
+		Logger myLogger = LoggerFactory.getLogger("myLoggingCategory");
+		// send formatted Events in a specific logger
+		EventEmitter emitter = new LoggerAdapterEmitter(myLogger);
+				]]></programlisting>
+			</example>
+		</section>
+		<section>
+			<title>am.ajf.monitoring.impl.JMSEmitter</title>
+			<para>
+			Send the formatted <parameter>Events</parameter> in a specific JMS Queue or Topic.
+			</para>
+			<table frame="all">
+   			  <title>API</title>
+   			  <tgroup cols="2">
+		        <colspec colname="c1"/>
+		        <colspec colname="c2"/>
+		        <tbody>
+		        	<row>
+		        		<entry>
+		        		constructor(String connectionFactoryJndiName,
+		        		String destinationJndiName)</entry>
+		        		<entry>create emitter on a specific JMS Queue or Topic.</entry>
+		        	</row>
+		        </tbody>
+		      </tgroup>
+		    </table>
+		    <example>
+				<title>Usage</title>
+				<programlisting language="Java" role="Java" ><![CDATA[
+		// send formatted Events in a specific JMS Queue or Topic
+		EventEmitter emitter = new JMSEmitter("jms/MyQueueConnectionFactory", 
+			"jms/MyMonitoringQueue");
+				]]></programlisting>
+			</example>
+		</section>
 	</section>
 </chapter>
