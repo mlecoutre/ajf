@@ -1,8 +1,8 @@
 package am.ajf.monitoring;
 
-public class EventUtils {
+public class EventsUtils {
 
-	private EventUtils() {
+	private EventsUtils() {
 		super();
 	}
 	
