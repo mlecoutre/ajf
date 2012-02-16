@@ -171,7 +171,7 @@ public class EventsDomain implements ErrorHandler, Closeable {
 	public <E> void onError(Subscription<E> subscription, Event<E> event,
 			Exception exc) {
 
-		logger.error("Receive exception '" + exc.getMessage() + "' for event '"
+		logger.warn("Receive exception '" + exc.getMessage() + "' for event '"
 				+ event.getSource().toString() + "' of type '" + event.getTopic().getName()
 				+ "' at " + event.nanoTime(), exc);
 
