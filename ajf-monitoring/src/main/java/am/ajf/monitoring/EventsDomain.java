@@ -1,7 +1,5 @@
 package am.ajf.monitoring;
 
-import static am.ajf.monitoring.EventUtils.getEventType;
-
 import java.io.Closeable;
 import java.io.IOException;
 
@@ -18,7 +16,7 @@ import com.mycila.event.Subscription;
 import com.mycila.event.Topic;
 import com.mycila.event.Topics;
 
-public class EventManager implements ErrorHandler, Closeable {
+public class EventsDomain implements ErrorHandler, Closeable {
 	
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
@@ -29,7 +27,7 @@ public class EventManager implements ErrorHandler, Closeable {
 	/**
 	 * default constructor
 	 */
-	public EventManager() {
+	public EventsDomain() {
 		super();
 		/* init section */
 		eventDispatcher = Dispatchers.asynchronousSafe(this);
@@ -51,8 +49,8 @@ public class EventManager implements ErrorHandler, Closeable {
 	 * send event
 	 * @param event
 	 */
-	public void sendEvent(Object event) {
-		String eventType = getEventType(event.getClass());
+	public void sendEvent(AbstractEvent event) {
+		String eventType = event.getEventType();
 		sendEvent(eventType, event);		
 	}
 	
@@ -61,7 +59,7 @@ public class EventManager implements ErrorHandler, Closeable {
 	 * @param eventType
 	 * @param event
 	 */
-	public void sendEvent(String eventType, Object event) {
+	private void sendEvent(String eventType, Object event) {
 		try {
 			checkClosed();
 			eventDispatcher.publish(Topic.topic(eventType), event);
