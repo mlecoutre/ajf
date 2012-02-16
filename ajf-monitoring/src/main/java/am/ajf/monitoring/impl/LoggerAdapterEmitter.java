@@ -2,6 +2,7 @@ package am.ajf.monitoring.impl;
 
 import org.slf4j.Logger;
 
+import am.ajf.monitoring.AbstractEvent;
 import am.ajf.monitoring.EventEmitter;
 import am.ajf.monitoring.exceptions.EventEmitterException;
 
@@ -15,7 +16,7 @@ public class LoggerAdapterEmitter implements EventEmitter {
 	}
 
 	@Override
-	public void send(Object eventSource, String formattedEvent)
+	public void send(AbstractEvent eventSource, String formattedEvent)
 			throws EventEmitterException {
 		
 		logger.info(formattedEvent);

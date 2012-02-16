@@ -12,6 +12,7 @@ import javax.naming.InitialContext;
 import org.slf4j.Logger;
 
 import am.ajf.core.logger.LoggerFactory;
+import am.ajf.monitoring.AbstractEvent;
 import am.ajf.monitoring.EventEmitter;
 import am.ajf.monitoring.exceptions.EventEmitterException;
 
@@ -60,7 +61,7 @@ public class JMSEmitter implements EventEmitter {
 	}
 
 	@Override
-	public void send(Object eventSource, String formattedEvent)
+	public void send(AbstractEvent eventSource, String formattedEvent)
 			throws EventEmitterException {
 		
 		Connection queue_conn = null;
