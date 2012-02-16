@@ -1,150 +1,63 @@
 <?xml version='1.0' encoding='ISO-8859-1'?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
 <chapter id="injection">
-	<title>AJF - Transaction Reference</title>
+	<title>AJF - Injection Reference</title>
 	<para>
-		The AJF Transaction extension provide a common transaction model for use
+		The AJF Core library provide a set of commons reusable components for use
 		on J2EE server and other Servlet containers. 		
 	</para>
 	<section>
 		<title>Introduction</title>
 		<para>
-			The AJF Transaction extension use the JTA API to provide CDI functionalities
-			to your application. At his core, the extension use the JTA <classname>UserTransaction</classname>
-			to manage for you the transaction behavior of your methods. It also provides
-			access to the <classname>UserTransaction</classname> if you want to manage it
-			yourself. 
+			
 		</para>
 	</section>
+	
+	<!--  
 	<section>
-		<title>Using @Transactional and @NonTransactional</title>
+		<title></title>
 		<para>
-			To manage transactions, the extension define a CDI Interceptor <parameter>@Transaction</parameter>
-			and an exit annotation <parameter>@NonTransactional</parameter>. To enable transaction behavior for your
-			method(s) just add the following annotation on the class or method and thats it :
+			
 		</para>
 		<important>
 			<para>
-				To use CDI interceptors, you need to enable them in the file <emphasis>beans.xml</emphasis>
-				for <emphasis>each project</emphasis> you use the interceptor annotation in.
-				The name of the interceptor for @Transactional is : 				
+			 				
 			</para> 
-			<para><emphasis>am.ajf.transaction.TransactionInterceptor</emphasis></para>
+			<para><emphasis></emphasis></para>
 			<programlisting language="Xml" role="Xml"><![CDATA[
-<beans>
-	<interceptors>
-      <class>am.ajf.transaction.TransactionInterceptor</class>
-    </interceptors>
-</beans>				
+
 			]]></programlisting>
 		</important>
+
 		<example>
-			<title>@Transactional usage</title>
+			<title></title>
 			<programlisting language="Java" role="Java"><![CDATA[
-public class SamplePolicy {
 
-	@Transactional
-	List<Model1> doBusinessAction(String name) {
-		//do things
-	}
-
-}
 				]]></programlisting>
-				<para><emphasis>or</emphasis></para>
+			<para><emphasis>or</emphasis></para>
 			<programlisting language="Java" role="Java"><![CDATA[
-@Transactional
-public class SamplePolicy {
-	
-	List<Model1> doBusinessAction(String name) {
-		//do things
-	}
 
-}
-				]]></programlisting>				
+			]]></programlisting>				
 		</example>
-		<para>
-			If the annotation is placed on the class level, all methods of the class will
-			be transactionnals.
-		</para>				
-		<para>
-			The @NonTransactional is here to remove the transaction behavior on a particular
-			method or even an entire class. The following example remove the transactional
-			behavior of the method <methodname>doSomethingLessImportant</methodname>.
-		</para>
-		<example>
-			<title>@NoTransaction usage</title>
-			<programlisting language="Java" role="Java"><![CDATA[
 			
-@Transactional
-public class SamplePolicy {
-	
-	List<Model1> doBusinessAction(String name) {
-		//do things
-	}
-
-	@NonTransactional
-	List<Model1> doSomethingLessImportant() {
-		//do things
-	}
-}
-			]]></programlisting>		
-		</example>
 		<important>
 			<para>
-				If you want to use JTA managed transaction, i.e. either the @Transactional 
-				annotation or the UserTransaction object, you need to met the following rules :
+				
 			</para>
 			<itemizedlist>
 				<listitem>
 					<para>
-					Your JPA persistence unit need to have : 
-						<emphasis>persistence-type="JTA"</emphasis>
+						<emphasis>dlsm:ldmlsmdl</emphasis>
 					</para>
 				</listitem>
-				<listitem>
-					<para>Your resources (datasources, jms, ...) need to use a XA driver</para>
-				</listitem>				
-				<listitem>
-					<para>
-						You cant use the transaction manager of your resource (ex : datasource)
-						to commit or rollback. You need to use the UserTransaction.
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						You cant nest JTA transactions.
-					</para>
-				</listitem>				
 			</itemizedlist> 
 		</important>
-	</section>
-	<section>
-		<title>Injection of UserTransaction</title>
-		<para>
-			If you want to manually managed your transaction you can managed them by injecting
-			the UserTransaction object as follow :
-		</para>
-		<example>
-			<title>UserTransaction injection</title>
-			<programlisting language="Java" role="Java"><![CDATA[
-public class SamplePolicy {
-	
-	private @Inject UserTransaction utx;
-	
-	List<Model1> doBusinessAction(String name) {
-		utx.begin();
-		//do things		
-		utx.commit();
-	}	
-}
-			]]></programlisting>
-		</example>
 		<warning>
 			<para>
-				If you choose to manually managed your transaction you need to be careful
-				to handle every possible outcomes for the commit/rollback. The default
-				transaction model should be able to handle nearly all your use cases.
+				
 			</para>
 		</warning>	
+		
 	</section>
+	-->
 </chapter>
