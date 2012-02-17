@@ -7,11 +7,10 @@
 	xmlns:p="http://primefaces.org/ui">
 
 
-	<p:menubar style="padding:0;border:0;float:right;">
+	<p:menubar>
 
 		<!-- When not logged in : Log in button -->
 		<p:menuitem value="Log in" onclick="loginDialog.show();"
-			
 			icon="ui-icon ui-icon-key" rendered="#{!habilitationMBean.isLogIn}" />
 
 		<!-- When already logged in : user Name button with logout submenu -->

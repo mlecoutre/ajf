@@ -6,17 +6,16 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 
-	<p:menubar
-		style="border:0;width:60%;margin-left:auto;margin-right:auto">
+	<p:menubar>
 
 		<!--  ADD YOUR CONTENT HERE  -->
 		<p:submenu label="#{m['menu.employee.management.title']}"
-			rendered="#{shiroBean.isAllowed('poweruser')}">
+			rendered="#{securityBean.isAllowed('poweruser')}">
 			<p:menuitem value="#{m['menu.employee.list.title']}"
 				url="/employeemanagement/listEmployees.jsf" />
 			<p:menuitem value="#{m['menu.employee.create.title']}"
 				url="/employeemanagement/createEmployee.jsf"
-				rendered="#{shiroBean.isAllowed('admin')}" />
+				rendered="#{securityBean.isAllowed('admin')}" />
 		</p:submenu>
 		<p:submenu label="#{m['menu.showcase.title']}">
 			<p:menuitem value="#{m['menu.showcase.uimessages']}"
@@ -24,8 +23,15 @@
 			<p:menuitem value="#{m['menu.showcase.layout']}"
 				url="/showcase/layout.jsf" />
 		</p:submenu>
+
+		<!-- When already logged in : user Name button with logout submenu -->
+		<p:submenu label="#{securityBean.username}"
+			rendered="#{securityBean.isLogIn}" icon="ui-icon ui-icon-key">
+			<p:menuitem value="Log Out"
+				actionListener="#{securityBean.doLogout}"
+				action="/index.xhtml?faces-redirect=true"
+				icon="ui-icon ui-icon-close" />
+		</p:submenu>
 	</p:menubar>
-
-
 
 </ui:composition>

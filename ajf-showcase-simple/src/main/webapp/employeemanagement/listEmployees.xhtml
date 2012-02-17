@@ -4,27 +4,27 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
-	template="../WEB-INF/templates/simpleLayout.xhtml">
+	template="../WEB-INF/templates/brand/brandClassicLayout.xhtml">
 
 	<ui:define name="content">
 		<h:form id="form">
 
 			<center>
-				<H1>
+				<h1>
 					<h:outputText value="#{m['employee.management.title']}" />
-				</H1>
+				</h1>
 			</center>
 
 
-			<p:panel styleClass="rightPanel">
-				
+			<p:panel styleClass="col_right">
+
 				<ul>
 					<li><h:link outcome="createEmployee"
 							value="#{m['menu.employee.create.title']}" /></li>
 				</ul>
 			</p:panel>
 
-			<div class="centerPanel">
+			<div class="col_left">
 				<p:panel id="searchPanel" header="Search" style="width:600px"
 					toggleable="true">
 					<p:focus context="searchPanel" />
@@ -47,7 +47,7 @@
 
 					</h:panelGrid>
 				</p:panel>
-
+				<br />
 				<p:panel header="Result" id="iPnl" style="width:600px">
 					<p:dataTable var="person" value="#{employeeMBean.employees}"
 						paginator="true" rows="5" selectionMode="single"

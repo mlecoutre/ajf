@@ -1,10 +1,13 @@
 package am.ajf.web.controllers;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.config.IniSecurityManagerFactory;
@@ -15,10 +18,10 @@ import org.slf4j.LoggerFactory;
 
 @ManagedBean
 @SessionScoped
-public class ShiroBean implements Serializable {
+public class SecurityBean implements Serializable {
 
 	private static final transient Logger log = LoggerFactory
-			.getLogger(ShiroBean.class);
+			.getLogger(SecurityBean.class);
 	/**
 	 * 
 	 */
@@ -27,11 +30,14 @@ public class ShiroBean implements Serializable {
 	private String username;
 	private String password;
 
-	public ShiroBean() {
+	public SecurityBean() {
 		super();
 	}
 
-	public void doLogin() {
+	/**
+	 * Enable authentication
+	 */
+	public String doLogin() {
 
 		log.debug("doLogin " + username);
 		Factory<org.apache.shiro.mgt.SecurityManager> factory = new IniSecurityManagerFactory();
@@ -43,9 +49,27 @@ public class ShiroBean implements Serializable {
 		Subject user = SecurityUtils.getSubject();
 		user.login(token);
 		log.debug("is Authenticated: " + user.isAuthenticated());
+		return "/index.xhtml";
 
 	}
-	
+
+	/**
+	 * Return true if the user is logged in (what ever the role)
+	 * 
+	 * 
+	 * @return
+	 */
+	public boolean getIsLogIn() {
+
+		Subject currentSubject = SecurityUtils.getSubject();
+		return currentSubject.isAuthenticated();
+	}
+
+	/**
+	 * user logout and redirect to index.jsf
+	 * 
+	 * @return index destination
+	 */
 	public String doLogout() {
 		Subject currentSubject = SecurityUtils.getSubject();
 		log.debug("logout");
@@ -53,12 +77,27 @@ public class ShiroBean implements Serializable {
 		return "/index.jsf";
 	}
 
-	public boolean isAllowed(String role) {
-		Subject currentSubject = SecurityUtils.getSubject();
-		boolean isAllowed = currentSubject.hasRole("admin");
+	/**
+	 * Use <i>EL 2.1+</i> to know if user is allowed to access to the resource.
+	 * 
+	 * @param roles
+	 *            user roles comma-separated
+	 * @return isAllowed
+	 */
+	public boolean isAllowed(String roles) {
 
-		log.debug(currentSubject.getPrincipal() + " for role " + role + " : "
-				+ isAllowed);
+		boolean isAllowed = false;
+		Subject currentSubject = SecurityUtils.getSubject();
+		if (roles.contains(",")) {
+			String[] rolesArray = StringUtils.split(roles, ',');
+			List<String> listRoles = Arrays.asList(rolesArray);
+			isAllowed = currentSubject.hasAllRoles(listRoles);
+		} else {
+			isAllowed = currentSubject.hasRole(roles);
+		}
+
+		log.debug(String.format("%s for role %s : %s",
+				currentSubject.getPrincipal(), roles, isAllowed));
 		return isAllowed;
 	}
 

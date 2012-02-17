@@ -67,12 +67,7 @@ public class HabilitationMBean {
 		// if the current user belongs to the role set in input, a 'true' value
 		// is returned
 		String userName = getUserName();
-		if (null == userName || UNREFERENCED_USER.equals(userName)) {
-			return false;
-		} else {
-			return true;
-		}
-
+		return ! (null == userName || UNREFERENCED_USER.equals(userName));
 	}
 
 	/**

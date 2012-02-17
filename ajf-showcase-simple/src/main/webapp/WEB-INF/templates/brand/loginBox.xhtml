@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:form id="InloginForm">
+		<h:panelGrid columns="5" styleClass="login">
+			<h:outputText value="username:" />
+			<h:inputText value="#{securityBean.username}" tabindex="1"
+				styleClass="jq_watermark" />
+
+			<h:outputText value="password:" />
+
+			<h:inputSecret tabindex="2" value="#{securityBean.password}"
+				styleClass="jq_watermark" />
+
+			<h:commandButton tabindex="3" action="#{securityBean.doLogin}"
+				styleClass="access" value="login">
+			</h:commandButton>
+		</h:panelGrid>
+	</h:form>
+	<!-- input tabindex="1" value="" type="text" class="jq_watermark" placeholder="Nom d'utilisateur" name="username" -->
+	<!-- input tabindex="4" value="" type="password" class="jq_watermark"
+				placeholder="Mot de passe" name="password"/ -->
+</ui:composition>

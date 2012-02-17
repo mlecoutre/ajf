@@ -11,19 +11,19 @@
 		width="400" modal="true" appendToBody="true">
 
 		<h:form id="loginForm">
-			<p:focus for="username"/>
+			<p:focus for="username" />
 			<h:panelGrid columns="2">
 				<h:outputLabel value="User ID:" />
-				
+
 				<p:inputText id="username" value="#{shiroBean.username}" />
 
 				<h:outputLabel value="Password:" />
 				<p:password value="#{shiroBean.password}" />
 
 				<p:commandButton id="login" action="#{shiroBean.doLogin}"
-					value="Login" oncomplete="loginDialog.hide()" update="headerForm" />
+					value="Login" oncomplete="loginDialog.hide()" />
 			</h:panelGrid>
-		</h:form> 
+		</h:form>
 
 	</p:dialog>
 

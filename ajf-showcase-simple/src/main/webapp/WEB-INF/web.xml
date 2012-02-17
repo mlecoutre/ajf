@@ -45,7 +45,7 @@
 	</context-param>
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>cupertino</param-value>
+		<param-value>aristo</param-value>
 	</context-param>
 
 	<welcome-file-list>
@@ -54,57 +54,7 @@
 		<welcome-file>index.jsf</welcome-file>
 		<welcome-file>main.xhtml</welcome-file>
 	</welcome-file-list>
-<!-- 
-	<login-config>
-		<auth-method>BASIC</auth-method>
-		<realm-name>MyRealm</realm-name>
-		<form-login-config>
-			<form-login-page>/ajf/login/login.xhtml</form-login-page>
-			<form-error-page>/ajf/login/loginError.xhtml</form-error-page>
-		</form-login-config>
-	</login-config>
-	<security-role>
-		<role-name>admin</role-name>
-	</security-role>
-	<security-role>
-		<role-name>user</role-name>
-	</security-role>
-	<security-role>
-		<role-name>poweruser</role-name>
-	</security-role>
 
-
-	<security-constraint>
-		<display-name>Protect
-			administration part
-		</display-name>
-		<web-resource-collection>
-			<web-resource-name>ProtectEverything</web-resource-name>
-			<url-pattern>/employeemanagement/*</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>admin</role-name>
-		</auth-constraint>
-	</security-constraint>
-	<security-constraint> <display-name>Protect administration part </display-name> 
-		<web-resource-collection> <web-resource-name>ProtectEverything</web-resource-name> 
-		<url-pattern>/employeemanagement/listEmployees.*</url-pattern> </web-resource-collection> 
-		<auth-constraint> <role-name>poweruser</role-name> <role-name>admin</role-name> 
-		</auth-constraint> </security-constraint>
-
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>AllAccessResources</web-resource-name>
-			<url-pattern>/ajf/*</url-pattern>
-			<url-pattern>/ajf/*</url-pattern>
-			<url-pattern>/showcase/*</url-pattern>
-			<url-pattern>/javax.faces.resource/*</url-pattern>
-		</web-resource-collection>
-		<user-data-constraint>
-			<transport-guarantee>NONE</transport-guarantee>
-		</user-data-constraint>
-	</security-constraint>
- -->
 
 
 	<error-page>

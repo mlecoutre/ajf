@@ -4,25 +4,27 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:f="http://java.sun.com/jsf/core">
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="../../WEB-INF/templates/blankLayout.xhtml">
 
+	<ui:define name="content">
+		<center>
+			<h2>
+				<h:outputText value="Please Login" />
+			</h2>
+			<p:panel header="Login page" style="width:400px">
+				<h:form id="loginFormPage">
+					<h:panelGrid columns="2">
+						<h:outputLabel value="User ID:" />
+						<p:inputText value="#{shiroBean.username}" />
 
-	<center>
-		<h2>
-			<h:outputText value="Please Login" />
-		</h2>
-		<p:panel header="Login page" style="width:400px">
-			<h:form id="loginFormPage">
-				<h:panelGrid columns="2">
-					<h:outputLabel value="User ID:" />
-					<p:inputText value="#{shiroBean.username}" />
+						<h:outputLabel value="Password:" />
+						<p:password value="#{shiroBean.password}" />
 
-					<h:outputLabel value="Password:" />
-					<p:password value="#{shiroBean.password}" />
-
-					<p:commandButton action="#{shiroBean.doLogin}" value="login" />
-				</h:panelGrid>
-			</h:form>
-		</p:panel>
-	</center>
+						<p:commandButton action="#{shiroBean.doLogin}" value="login" />
+					</h:panelGrid>
+				</h:form>
+			</p:panel>
+		</center>
+	</ui:define>
 </ui:composition>

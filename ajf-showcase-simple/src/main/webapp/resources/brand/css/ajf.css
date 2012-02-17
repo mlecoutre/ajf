@@ -1,0 +1,90 @@
+.ajftitle {
+	vertical-align: middle;
+	color: white;
+	text-decoration: none;
+	font-family: "VAGRoundedLight", arial;
+	font-size: 16pt;
+	padding-top: 10px;
+	display: inline-block;
+	padding-left: 12px;
+}
+
+.ui-layout-north {
+	z-index: 20 !important;
+	overflow: visible !important;;
+}
+
+.ui-layout-south {
+	z-index: 20 !important;
+	overflow: visible !important;;
+}
+
+.ui-layout-north .ui-layout-unit-content {
+	overflow: visible !important;
+}
+
+.ui-layout-south .ui-layout-unit-content {
+	overflow: visible !important;
+}
+
+.ui-widget,.ui-widget .ui-widget {
+	font-size: 10pt !important;
+}
+
+.centerPanel {
+	margin: 1em 25%;
+}
+
+.leftPanel {
+	position: relative;
+	top: left 1em;
+	left: 1%;
+	width: 18%;
+}
+
+.rightPanel {
+	position: relative;
+	top: right 1em;
+	right: 1%;
+	width: 18%;
+}
+
+.menu-right {
+	padding: 0;
+	border: 0;
+	float: right;
+	background: transparent;
+	font: bold;
+}
+
+.classicTitle {
+	top: 160px;
+	width: 200px;
+	float: left;
+	padding-top: 42px;
+	padding-left: 150px;
+}
+
+.rightPartHeader {
+	position: relative;
+	float: right;
+}
+
+.welcomeNavMenu {
+	
+}
+
+.welcomeMenuHeader {
+	float: right;
+	margin-right: 25px;
+	position: relative;
+	top: 40px;
+	right: -300px;
+}
+
+.classicMenuHeader {
+	float: right;
+	margin-right: 35px;
+	top: 0px;
+	right: 35px;
+}

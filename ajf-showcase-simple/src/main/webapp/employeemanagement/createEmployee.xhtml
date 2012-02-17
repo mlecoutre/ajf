@@ -4,7 +4,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
-	template="../WEB-INF/templates/simpleLayout.xhtml">
+	template="../WEB-INF/templates/brand/brandClassicLayout.xhtml">
 
 	<ui:define name="content">
 		<h:form id="form">
@@ -15,7 +15,7 @@
 				</H1>
 			</center>
 
-			<p:panel styleClass="rightPanel">
+			<p:panel styleClass="col_left">
 				
 				<ul>
 					<li><h:link outcome="listEmployees"
@@ -23,7 +23,7 @@
 				</ul>
 			</p:panel>
 
-			<p:panel header="Create" styleClass="centerPanel" style="width:600px"
+			<p:panel header="Create" styleClass="col_right" style="width:600px"
 				toggleable="true">
 				<h:panelGrid columns="3" style="margin-bottom:5px" cellpadding="2"
 					columnClasses="label, column">
