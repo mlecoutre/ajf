@@ -6,9 +6,12 @@ import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.config.IniSecurityManagerFactory;
 import org.apache.shiro.subject.Subject;
@@ -26,7 +29,8 @@ public class SecurityBean implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
+	
 	private String username;
 	private String password;
 
@@ -47,9 +51,17 @@ public class SecurityBean implements Serializable {
 		UsernamePasswordToken token = new UsernamePasswordToken(username,
 				password);
 		Subject user = SecurityUtils.getSubject();
-		user.login(token);
-		log.debug("is Authenticated: " + user.isAuthenticated());
-		return "/index.xhtml";
+		// FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
+		try {
+			user.login(token);
+			log.debug("is Authenticated: " + user.isAuthenticated());
+			return "/index.xhtml";
+		} catch (AuthenticationException ae) {
+			log.error(String.format(
+					"Impossible to authenticate username %s: %s", username,
+					ae.getMessage()));
+			return "/ajf/errors/accessDenied.xhtml";
+		}
 
 	}
 
@@ -57,7 +69,7 @@ public class SecurityBean implements Serializable {
 	 * Return true if the user is logged in (what ever the role)
 	 * 
 	 * 
-	 * @return
+	 * @return boolean value that say that user is authentified ornot.
 	 */
 	public boolean getIsLogIn() {
 
@@ -82,7 +94,7 @@ public class SecurityBean implements Serializable {
 	 * 
 	 * @param roles
 	 *            user roles comma-separated
-	 * @return isAllowed
+	 * @return isAllowed boolean
 	 */
 	public boolean isAllowed(String roles) {
 
@@ -99,6 +111,14 @@ public class SecurityBean implements Serializable {
 		log.debug(String.format("%s for role %s : %s",
 				currentSubject.getPrincipal(), roles, isAllowed));
 		return isAllowed;
+	}
+	
+	public String getViewId(){
+		FacesContext ctx = FacesContext.getCurrentInstance();
+		HttpServletRequest servletRequest = (HttpServletRequest) ctx.getExternalContext().getRequest();
+		// returns something like "/myapplication/home.faces"
+		String fullURI = servletRequest.getRequestURI();
+		return fullURI;
 	}
 
 	public String getUsername() {

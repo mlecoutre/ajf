@@ -58,8 +58,7 @@ input[type=text],input[type=password] {
 
 ul {
 	list-style-position: outside;
-	list-style-image:
-		url('../resources/brand/images/arrow_orange.png');
+	list-style-image: url('../resources/brand/images/arrow_orange.png');
 	padding: 0;
 	line-height: 1.8em;
 	margin-left: 17px;
@@ -100,12 +99,48 @@ a:active,a:focus {
 	color: white;
 }
 
+.classicHeader2 {
+	margin: auto;
+	width: 1000px;
+	height: 30px;
+	font-family: arial;
+	font-size: 10pt;
+	color: white;
+}
+
+.classicBandeau_login {
+	width: 1000px;
+	background-color: rgb(167, 156, 132);
+	font-family: arial;
+	font-size: 10pt;
+	color: white;
+	float: left;
+	border-radius: 0 0 44px 0;
+	-moz-border-radius: 0 0 44px 0;
+}
+
+.classicLogoAppli {
+	background: rgb(167, 156, 132);
+	width: 159px;
+	float: left;
+	margin-left: 50px;
+}
+
 .middle {
 	margin: auto;
 	width: 1000px;
 	font-family: arial;
 	font-size: 10pt;
 	color: white;
+}
+
+.middle h1 {
+	font-family: "VAGRoundedLight", arial;
+	font-size: 26pt;
+	font-weight: normal;
+	line-height: 1.1em;
+	margin-top: 15px;
+	color: #545454;
 }
 
 .col_left,.col_right {
@@ -141,8 +176,7 @@ a:active,a:focus {
 	font-family: arial;
 	font-size: 10pt;
 	color: #545454;
-	background: white
-		url('../resources/brand/images/fond.png') no-repeat
+	background: white url('../resources/brand/images/fond.png') no-repeat
 		left top;
 	z-index: 1;
 	display: block;
@@ -151,9 +185,8 @@ a:active,a:focus {
 }
 
 .news_corner_old {
-	background:
-		url("../resources/brand/images/fond_corner.png")
-		no-repeat scroll left bottom transparent;
+	background: url("../resources/brand/images/fond_corner.png") no-repeat
+		scroll left bottom transparent;
 	position: relative;
 	top: 130px;
 	width: 40px;
@@ -190,9 +223,8 @@ a:active,a:focus {
 }
 
 .middle_corner {
-	background:
-		url('../resources/brand/images/middle_corner.png')
-		no-repeat scroll right bottom white;
+	background: url('../resources/brand/images/middle_corner.png') no-repeat
+		scroll right bottom white;
 	height: 40px;
 	width: 40px;
 	position: absolute;
@@ -202,8 +234,7 @@ a:active,a:focus {
 
 .header2_corner_bottom {
 	float: left;
-	background: white
-		url('../resources/brand/images/login_corner.png')
+	background: white url('../resources/brand/images/login_corner.png')
 		no-repeat right bottom;
 	width: 37px;
 	height: 41px;
@@ -228,8 +259,8 @@ a:active,a:focus {
 .pwd_lost_corner_bottom {
 	float: right;
 	background: transparent
-		url('../resources/brand/images/pwd_lost_corner.png')
-		no-repeat right bottom;
+		url('../resources/brand/images/pwd_lost_corner.png') no-repeat right
+		bottom;
 	width: 35px;
 	height: 35px;
 }
@@ -242,8 +273,7 @@ a:active,a:focus {
 }
 
 .logo {
-	background: #F15A22
-		url('../resources/brand/images/logo.png') no-repeat
+	background: #F15A22 url('../resources/brand/images/logo.png') no-repeat
 		left center;
 	height: 89px;
 	width: 240px;
@@ -334,8 +364,6 @@ a:active,a:focus {
 	position: relative;
 	top: 22px;
 }
-
-
 
 .access {
 	float: left;
@@ -880,8 +908,8 @@ ul.list_faq {
 	line-height: 1.4em;
 	text-align: left;
 	padding-left: 15px;
-	background: #8b9096 url('../resources/brand/images/triangle.png') no-repeat 95%
-		bottom;
+	background: #8b9096 url('../resources/brand/images/triangle.png')
+		no-repeat 95% bottom;
 }
 
 .contentContact {
@@ -1034,13 +1062,10 @@ input.radio {
 
 @font-face {
 	font-family: 'VAGRoundedLight';
-	src:
-		url('../resources/brand/font/vagroundedstd-light.eot');
-	src:
-		url('../resources/brand/font/vagroundedstd-light.eot?#iefix')
+	src: url('../resources/brand/font/vagroundedstd-light.eot');
+	src: url('../resources/brand/font/vagroundedstd-light.eot?#iefix')
 		format('embedded-opentype'),
-		url('../resources/brand/font/vagroundedstd-light.woff')
-		format('woff'),
+		url('../resources/brand/font/vagroundedstd-light.woff') format('woff'),
 		url('../resources/brand/font/vagroundedstd-light.ttf')
 		format('truetype'),
 		url('../resources/brand/font/vagroundedstd-light.svg#VAGRoundedStdLight')
@@ -1048,127 +1073,269 @@ input.radio {
 	font-weight: normal;
 	font-style: normal;
 }
+
 #slideshow {
-  position: relative;
-  width: 1000px;
-  height: 100px;
-  overflow: hidden;
+	position: relative;
+	width: 1000px;
+	height: 100px;
+	overflow: hidden;
 }
 
-#sContent{
-  position: absolute;
-  width: 3000px;
-  top: 0;
-  left: 0;
-  margin: 0;
-  padding: 0;
-  
-  animation-name: AutoSlide;
-  animation-duration: 18s;
-  animation-iteration-count: infinite;
-  animation-timing-function: ease-in-out;
-  
-  -webkit-animation-name: AutoSlide;
-  -webkit-animation-duration: 18s;
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-timing-function: ease-in-out;
-  
-  -moz-animation: AutoSlide 18s;
-  -moz-animation-iteration-count: infinite;
-  -moz-animation-timing-function: ease-in-out;
+#sContent {
+	position: absolute;
+	width: 3000px;
+	top: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	animation-name: AutoSlide;
+	animation-duration: 18s;
+	animation-iteration-count: infinite;
+	animation-timing-function: ease-in-out;
+	-webkit-animation-name: AutoSlide;
+	-webkit-animation-duration: 18s;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: ease-in-out;
+	-moz-animation: AutoSlide 18s;
+	-moz-animation-iteration-count: infinite;
+	-moz-animation-timing-function: ease-in-out;
 }
 
-#sContent:hover{
-  animation-play-state: paused;
-  -webkit-animation-play-state: paused;
-  -moz-animation-play-state: paused;
+#sContent:hover {
+	animation-play-state: paused;
+	-webkit-animation-play-state: paused;
+	-moz-animation-play-state: paused;
 }
 
-#sContent li{
-  display: inline;
-  width: 1000px;
-  padding: 0;
-  margin: 0;
-  float: left;
-  font-weight: bold;
-  font-size: 13pt;
-  color: #545454;
+#sContent li {
+	display: inline;
+	width: 1000px;
+	padding: 0;
+	margin: 0;
+	float: left;
+	font-weight: bold;
+	font-size: 13pt;
+	color: #545454;
 }
 
 #sContent li div {
-  width: 500px;
-  text-align: right;
-  margin-left: 95px;
+	width: 500px;
+	text-align: right;
+	margin-left: 95px;
 }
 
-@-webkit-keyframes AutoSlide {
-  0% {
-    left: 0px;
-  }
-  28% {
-    left: 0px;
-  }
-  33% {
-    left: -1000px;
-  }
-  61% {
-    left: -1000px;
-  }
-  67% {
-    left: -2000px;
-  }
-  94% {
-    left: -2000px;
-  }
-  100% {
-    left: 0px;
-  }
+@
+-webkit-keyframes AutoSlide { 0% {
+	left: 0px;
 }
 
-@-moz-keyframes AutoSlide {
-  0% {
-    left: 0px;
-  }
-  28% {
-    left: 0px;
-  }
-  33% {
-    left: -1000px;
-  }
-  61% {
-    left: -1000px;
-  }
-  67% {
-    left: -2000px;
-  }
-  94% {
-    left: -2000px;
-  }
-  100% {
-    left: 0px;
-  }
+28%
+{
+left
+:
+ 
+0
+px
+;
+
+  
+}
+33%
+{
+left
+:
+ 
+-1000
+px
+;
+
+  
+}
+61%
+{
+left
+:
+ 
+-1000
+px
+;
+
+  
+}
+67%
+{
+left
+:
+ 
+-2000
+px
+;
+
+  
+}
+94%
+{
+left
+:
+ 
+-2000
+px
+;
+
+  
+}
+100%
+{
+left
+:
+ 
+0
+px
+;
+
+  
+}
+}
+@
+-moz-keyframes AutoSlide { 0% {
+	left: 0px;
 }
 
-@keyframes AutoSlide {
-  0% {
-    left: 0px;
-  }
-  28% {
-    left: 0px;
-  }
-  33% {
-    left: -1000px;
-  }
-  61% {
-    left: -1000px;
-  }
-  67% {
-    left: -2000px;
-  }
-  94% {
-    left: -2000px;
-  }
-  100% {
-    left: 0px;
-  }
+28%
+{
+left
+:
+ 
+0
+px
+;
+
+  
+}
+33%
+{
+left
+:
+ 
+-1000
+px
+;
+
+  
+}
+61%
+{
+left
+:
+ 
+-1000
+px
+;
+
+  
+}
+67%
+{
+left
+:
+ 
+-2000
+px
+;
+
+  
+}
+94%
+{
+left
+:
+ 
+-2000
+px
+;
+
+  
+}
+100%
+{
+left
+:
+ 
+0
+px
+;
+
+  
+}
+}
+@
+keyframes AutoSlide { 0% {
+	left: 0px;
+}
+28%
+{
+left
+:
+ 
+0
+px
+;
+
+  
+}
+33%
+{
+left
+:
+ 
+-1000
+px
+;
+
+  
+}
+61%
+{
+left
+:
+ 
+-1000
+px
+;
+
+  
+}
+67%
+{
+left
+:
+ 
+-2000
+px
+;
+
+  
+}
+94%
+{
+left
+:
+ 
+-2000
+px
+;
+
+  
+}
+100%
+{
+left
+:
+ 
+0
+px
+;
+
+  
+}
 }

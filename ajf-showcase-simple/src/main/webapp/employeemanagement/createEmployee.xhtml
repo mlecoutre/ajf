@@ -16,7 +16,7 @@
 			</center>
 
 			<p:panel styleClass="col_left">
-				
+
 				<ul>
 					<li><h:link outcome="listEmployees"
 							value="#{m['menu.employee.list.title']}" /></li>
@@ -52,19 +52,19 @@
 
 					</h:panelGroup>
 					<h:outputText value="Birthday " />
-					<p:calendar value="#{employeeMBean.birthday}" id="popupCal" navigator="true" yearRange="c-60:c-16" />
+					<p:calendar value="#{employeeMBean.birthday}" id="popupCal"
+						navigator="true" yearRange="-60:-16" pattern="mm-dd-yy" />
 					<h:panelGroup>
 
 					</h:panelGroup>
-					
+
 					<p:commandButton id="Create" action="#{employeeMBean.hireEmployee}"
 						value="#{m['button.create']}">
 					</p:commandButton>
 
 				</h:panelGrid>
+
 			</p:panel>
-
-
 
 		</h:form>
 	</ui:define>

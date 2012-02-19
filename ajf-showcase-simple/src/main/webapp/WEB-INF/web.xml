@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<display-name>AJF SHOWCASE SIMPLE</display-name>
 
-	<!--  SHIRO SECURITY -->
+	<!-- SHIRO SECURITY -->
 	<listener>
 		<listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
 	</listener>
@@ -55,15 +55,17 @@
 		<welcome-file>main.xhtml</welcome-file>
 	</welcome-file-list>
 
-
-
 	<error-page>
 		<error-code>403</error-code>
-		<location>/ajf/errors/accessDenied.xhtml</location>
+		<location>/ajf/errors/accessDenied.jsf</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/ajf/errors/accessDenied.jsf</location>
 	</error-page>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/ajf/errors/notFound.xhtml</location>
+		<location>/ajf/errors/notFound.jsf</location>
 	</error-page>
 	<resource-ref>
 		<res-ref-name>jdbc/ETNA_ETNAFLOW_DS</res-ref-name>

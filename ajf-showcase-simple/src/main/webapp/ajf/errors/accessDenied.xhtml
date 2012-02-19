@@ -6,20 +6,21 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://java.sun.com/jsf/core"
 	template="../../WEB-INF/templates/blankLayout.xhtml">
-	
-	<br />
-	<center>
-		<p:panel header="Access Denied">
-			<h1>
-				<h:outputText
-					value="Sorry, you do not have permission to perform this task!" />
-			</h1>
-			<br />
-			<br />
-			<h:outputLink value="javascript:history.back()">
+	<ui:define name="content">
+		<br />
+		<center>
+			<p:panel header="Access Denied">
+				<h1>
+					<h:outputText
+						value="Sorry, you do not have permission to perform this task!" />
+				</h1>
+				<br />
+				<br />
+				<h:outputLink value="javascript:history.back()">
 	
 		Back
 	</h:outputLink>
-		</p:panel>
-	</center>
+			</p:panel>
+		</center>
+	</ui:define>
 </ui:composition>
