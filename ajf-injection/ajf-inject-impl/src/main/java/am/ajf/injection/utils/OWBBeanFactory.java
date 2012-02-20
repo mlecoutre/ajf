@@ -17,7 +17,7 @@ import com.google.common.base.Throwables;
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.utils.BeanFactory;
 
-public class CDIBeanFactory 
+public class OWBBeanFactory 
 	implements BeanFactory {
 	
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -28,7 +28,7 @@ public class CDIBeanFactory
 	/**
 	 * Default constructor 
 	 */
-	public CDIBeanFactory() {
+	public OWBBeanFactory() {
 		super();
 		init();
 	}
