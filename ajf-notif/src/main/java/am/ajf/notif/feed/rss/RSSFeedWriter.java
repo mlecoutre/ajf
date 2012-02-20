@@ -33,6 +33,11 @@ import am.ajf.notif.feed.rss.model.RSS;
 import am.ajf.notif.feed.rss.model.Source;
 import am.ajf.notif.feed.rss.model.TextInput;
 
+/**
+ * Class for writting RSS 2 feeds syndication.
+ * 
+ * @author Vincent Claeysen (U002617) *
+ */
 public class RSSFeedWriter {
 
 	private final Logger logger = LoggerFactory.getLogger(RSSFeedWriter.class);
@@ -41,11 +46,20 @@ public class RSSFeedWriter {
 			"EEE, d MMM yyyy HH:mm:ss z");
 	private final RSS rss;
 
+	/**
+	 * Default constructor, receive the RSS object to write
+	 * @param rss
+	 */
 	public RSSFeedWriter(RSS rss) {
 		super();
 		this.rss = rss;
 	}
 
+	/**
+	 * Write the RSS object in the opened outputStream
+	 * @param outputStream
+	 * @throws IOException
+	 */
 	public void write(OutputStream outputStream) throws IOException {
 
 		Document doc = buildDocument();
