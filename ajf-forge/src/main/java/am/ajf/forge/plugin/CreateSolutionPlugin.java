@@ -17,6 +17,7 @@ import org.jboss.forge.shell.plugins.DefaultCommand;
 import org.jboss.forge.shell.plugins.Help;
 import org.jboss.forge.shell.plugins.Option;
 import org.jboss.forge.shell.plugins.PipeOut;
+import org.jboss.solder.config.xml.model.ReplacesXmlItem;
 
 import am.ajf.forge.core.CreateProject;
 import am.ajf.forge.util.ProjectUtils;
@@ -30,7 +31,8 @@ import am.ajf.forge.util.ProjectUtils;
  */
 @Alias("ajf-solution")
 @Help("Create a new AJF solution in selected directory.")
-public class CreateSolutionPlugin implements org.jboss.forge.shell.plugins.Plugin {
+public class CreateSolutionPlugin implements
+		org.jboss.forge.shell.plugins.Plugin {
 
 	@Inject
 	private Shell shell;
@@ -191,8 +193,8 @@ public class CreateSolutionPlugin implements org.jboss.forge.shell.plugins.Plugi
 		File file = new File(projectCompletePath);
 		Resource<?> projectFolder = factory.getResourceFrom(file);
 
-		// Name of the java package
-		String javaPackage = "ajf." + projectType;
+		// Begining of the Name of all the java packages of the project
+		String javaPackage = "am." + globalProjectName.replace("-", "");
 
 		// Call the CreateProject class (out of the Plugin)
 		CreateProject createProject = new CreateProject();

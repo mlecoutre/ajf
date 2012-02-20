@@ -1,7 +1,6 @@
 package am.ajf.forge.core;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.xml.stream.FactoryConfigurationError;
@@ -15,7 +14,6 @@ import org.jboss.forge.parser.JavaParser;
 import org.jboss.forge.parser.java.JavaClass;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.DependencyFacet;
-import org.jboss.forge.project.facets.FacetNotFoundException;
 import org.jboss.forge.project.facets.JavaSourceFacet;
 import org.jboss.forge.project.facets.MetadataFacet;
 import org.jboss.forge.project.facets.PackagingFacet;
@@ -413,14 +411,6 @@ public class CreateProject {
 
 			System.out.println("--> End generating java source");
 
-		} catch (FacetNotFoundException e) {
-
-			System.out.println("Error occured FacetNotFoundException : "
-					+ e.getMessage());
-
-		} catch (FileNotFoundException e) {
-			System.out.println("Error occured FileNotFoundException : "
-					+ e.getMessage());
 		} catch (Exception e) {
 
 			System.out.println("Error occured Exception : " + e.toString());
@@ -478,6 +468,40 @@ public class CreateProject {
 				ProjectUtils.PROJECT_TYPE_CONFIG);
 		addDependency(globalProjectName, project,
 				ProjectUtils.PROJECT_TYPE_CORE);
+
+		/*
+		 * Create a java class with a method
+		 */
+		try {
+
+			System.out.println("Start generating java class for UI");
+
+			JavaSourceFacet javaSourcefacet = project
+					.getFacet(JavaSourceFacet.class);
+
+			// Create a java class
+			JavaClass javaclass = JavaParser
+					.create(JavaClass.class)
+					.setPackage(javaPackage + ".web.controllers")
+					.setName("ExempleMBean")
+					.addMethod(
+							"public static void exempleMBeanMethod(String[] args) {}")
+					.setBody(
+							"System.out.println(\"Hi there! This is an AJF Project UI method ")
+					.getOrigin();
+
+			// Add the annotation for JSF2 managed bean
+			javaclass.addAnnotation("ManagedBean");
+
+			// Save the java class in the project
+			javaSourcefacet.saveJavaSource(javaclass);
+
+			System.out.println("--> End generating java source");
+
+		} catch (Exception e) {
+
+			System.out.println("Error occured Exception : " + e.toString());
+		}
 
 		return project;
 	}
