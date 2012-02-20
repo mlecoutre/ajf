@@ -43,7 +43,7 @@ public class InjectionTest {
 	@BeforeClass
 	public static void setUpClass() throws Exception {
 		/* turn OFF throwing exception when a configuration key is missing */
-		ApplicationContext.getConfiguration().setThrowExceptionOnMissing(false);
+		ApplicationContext.setThrowExceptionOnMissingEntries(false);
 	}
 	
 	@Deployment
