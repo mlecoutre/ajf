@@ -38,7 +38,7 @@ public class OWBBeanFactory
 	}
 
 	public static void setContainer(ContainerLifecycle container) {
-		CDIBeanFactory.container = container;
+		OWBBeanFactory.container = container;
 	}
 
 	public static BeanManager getBeanManager() {
@@ -46,7 +46,7 @@ public class OWBBeanFactory
 	}
 
 	public static void setBeanManager(BeanManager beanManager) {
-		CDIBeanFactory.beanManager = beanManager;
+		OWBBeanFactory.beanManager = beanManager;
 	}
 
 	/*

@@ -27,7 +27,7 @@ import am.ajf.core.utils.ClassUtils;
 import am.ajf.injection.ImplementationsRepository.MalformedServiceException;
 import am.ajf.injection.ImplementationsRepository.NotInitializedException;
 import am.ajf.injection.internal.EnrichableAnnotatedTypeWrapper;
-import am.ajf.injection.utils.CDIBeanFactory;
+import am.ajf.injection.utils.OWBBeanFactory;
 
 public class ServicesExtension implements Extension {
 
@@ -47,7 +47,7 @@ public class ServicesExtension implements Extension {
 		logger
 				.info("Loading AJF CDI extension 'ServicesExtension' : beginning the scanning process.");
 
-		CDIBeanFactory.setBeanManager(beanManager);
+		OWBBeanFactory.setBeanManager(beanManager);
 
 		issues = new ArrayList<Throwable>();
 		serviceRepository = new ImplementationsRepository();
