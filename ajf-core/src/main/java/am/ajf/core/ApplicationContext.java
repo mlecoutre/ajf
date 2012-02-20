@@ -3,6 +3,7 @@ package am.ajf.core;
 import java.io.File;
 
 import org.apache.commons.configuration.AbstractConfiguration;
+import org.apache.commons.configuration.Configuration;
 
 import am.ajf.core.configuration.ConfigurationHelper;
 import am.ajf.core.utils.ClassPathUtils;
@@ -29,7 +30,8 @@ public class ApplicationContext {
 	private static final Object logDirToken = new Object();
 	static File logDir = null;
 
-	static AbstractConfiguration configuration = null;
+	static Configuration configuration = null;
+	private static boolean throwExceptionOnMissingEntries;
 
 	static {
 		init();
@@ -47,7 +49,7 @@ public class ApplicationContext {
 		return applicationName;
 	}
 
-	public static AbstractConfiguration getConfiguration() {
+	public static Configuration getConfiguration() {
 		return configuration;
 	}
 
@@ -198,7 +200,9 @@ public class ApplicationContext {
 
 			configuration = ConfigurationHelper
 					.newConfigurationFromPropertiesResource(APPLICATION_SETTINGS_PROPERTIES);
-			configuration.setThrowExceptionOnMissing(false);
+			if (configuration instanceof AbstractConfiguration) {
+				((AbstractConfiguration)configuration).setThrowExceptionOnMissing(false);
+			}
 
 			System.out.println("Load application settings file: DONE.");
 
@@ -224,4 +228,17 @@ public class ApplicationContext {
 
 	}
 
+	public static void setThrowExceptionOnMissingEntries(boolean b) {
+		throwExceptionOnMissingEntries = b;	
+		if (null != configuration) {
+			if (configuration instanceof AbstractConfiguration) {
+				((AbstractConfiguration)configuration).setThrowExceptionOnMissing(b);
+			}
+		}
+	}
+
+	public static boolean isThrowExceptionOnMissingEntries() {
+		return throwExceptionOnMissingEntries;
+	}
+	
 }

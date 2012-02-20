@@ -34,7 +34,7 @@ public class ConfigurationHelper {
 	 * @throws FileNotFoundException
 	 * @throws ConfigurationException
 	 */
-	public static AbstractConfiguration newConfigurationFromPropertiesResource(
+	public static Configuration newConfigurationFromPropertiesResource(
 			String resourceName) throws FileNotFoundException,
 			ConfigurationException {
 
@@ -68,7 +68,7 @@ public class ConfigurationHelper {
 	 * @throws FileNotFoundException
 	 * @throws ConfigurationException
 	 */
-	public static AbstractConfiguration newConfigurationFromIniResource(
+	public static Configuration newConfigurationFromIniResource(
 			String resourceName) throws FileNotFoundException,
 			ConfigurationException {
 
@@ -102,7 +102,7 @@ public class ConfigurationHelper {
 	 * @throws FileNotFoundException
 	 * @throws ConfigurationException
 	 */
-	public static AbstractConfiguration newConfigurationFromXMLResource(
+	public static Configuration newConfigurationFromXMLResource(
 			String resourceName) throws FileNotFoundException,
 			ConfigurationException {
 
@@ -136,7 +136,7 @@ public class ConfigurationHelper {
 	 * @throws FileNotFoundException
 	 * @throws ConfigurationException
 	 */
-	public static AbstractConfiguration newConfigurationFromPropertiesFile(
+	public static Configuration newConfigurationFromPropertiesFile(
 			String filePath) throws FileNotFoundException,
 			ConfigurationException {
 
@@ -158,7 +158,7 @@ public class ConfigurationHelper {
 	 * @throws FileNotFoundException
 	 * @throws ConfigurationException
 	 */
-	public static AbstractConfiguration newSystemConfiguration()
+	public static Configuration newSystemConfiguration()
 			throws FileNotFoundException, ConfigurationException {
 
 		AbstractConfiguration pConfig = new SystemConfiguration();
@@ -174,7 +174,7 @@ public class ConfigurationHelper {
 	 * @throws FileNotFoundException
 	 * @throws ConfigurationException
 	 */
-	public static AbstractConfiguration newConfigurationFromIniFile(
+	public static Configuration newConfigurationFromIniFile(
 			String filePath) throws FileNotFoundException,
 			ConfigurationException {
 
@@ -198,7 +198,7 @@ public class ConfigurationHelper {
 	 * @throws FileNotFoundException
 	 * @throws ConfigurationException
 	 */
-	public static AbstractConfiguration newConfigurationFromXMLFile(
+	public static Configuration newConfigurationFromXMLFile(
 			String filePath) throws FileNotFoundException,
 			ConfigurationException {
 
@@ -219,7 +219,7 @@ public class ConfigurationHelper {
 	 * @param configurations
 	 * @return
 	 */
-	public static AbstractConfiguration mergeConfigurations(
+	public static Configuration mergeConfigurations(
 			Configuration... configurations) {
 
 		if ((null == configurations) || (0 == configurations.length))

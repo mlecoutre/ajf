@@ -14,7 +14,7 @@ public class ApplicationContextTest {
 	@Test
 	public void testConfigKey() {
 		
-		ApplicationContext.getConfiguration().setThrowExceptionOnMissing(false);
+		ApplicationContext.setThrowExceptionOnMissingEntries(false);
 		String value = ApplicationContext.getConfiguration().getString("myKey");
 		Assert.assertNotNull("'myKey' is not initialized.", value);
 		
