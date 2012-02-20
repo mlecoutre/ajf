@@ -33,11 +33,13 @@
 				<artifactId>ajf-persistence-tests</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<!-- 
 			<dependency>
 				<groupId>am.ajf</groupId>
 				<artifactId>ajf-persistence-dao</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			-->
 			<dependency>
 				<groupId>am.ajf</groupId>
 				<artifactId>ajf-core</artifactId>

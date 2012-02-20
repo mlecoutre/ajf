@@ -35,12 +35,6 @@
 			</dependency>
 			<dependency>
 				<groupId>am.ajf</groupId>
-				<artifactId>ajf-transaction-docs</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			
-			<dependency>
-				<groupId>am.ajf</groupId>
 				<artifactId>ajf-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>

@@ -54,7 +54,6 @@
 	<modules>
 		<module>../ajf-remoting-api</module>
 		<module>../ajf-remoting-impl</module>
-		<!--  module>../ajf-persist-docs</module-->
 		<module>../ajf-remoting-tests</module>
 	</modules>
 
