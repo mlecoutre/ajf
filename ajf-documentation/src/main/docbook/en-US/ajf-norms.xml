@@ -213,7 +213,7 @@ The project descriptor for a Maven project is:
         </table>
       </section>
       <section>
-        <title>ear module</title>
+        <title>EAR module</title>
         <para/>
         <table frame="all">
           <title>[Project Name]-ear content</title>
@@ -249,7 +249,7 @@ The project descriptor for a Maven project is:
         </table>
       </section>
       <section>
-        <title>[Project Name]-core </title>
+        <title>Core module</title>
         <para/>
         <table frame="all">
           <title>[Project Name]-core content</title>
@@ -383,7 +383,7 @@ The project descriptor for a Maven project is:
         </table>
       </section>
       <section>
-        <title>[Project Name]-lib</title>
+        <title>Lib module</title>
         <para/>
         <table frame="all">
           <title>[Project Name]-lib content</title>
@@ -475,7 +475,7 @@ The project descriptor for a Maven project is:
         </table>
       </section>
       <section>
-        <title>[Project Name]-ui module</title>
+        <title>UI module</title>
         <para/>
         <table frame="all">
           <title>[Project Name]-ui content</title>
@@ -542,7 +542,7 @@ The project descriptor for a Maven project is:
         </table>
       </section>
       <section>
-        <title>[Project Name]-ws module</title>
+        <title>WS module</title>
         <para/>
         <table frame="all">
           <title>[Project Name]-ws content</title>

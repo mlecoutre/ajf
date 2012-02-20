@@ -10,8 +10,7 @@
 		core,
 		the extension add java Annotations, Interfaces and CDI beans to reduce to
 		a minimum
-		the complexity of simple CRUD functionality and common stored procedures
-		call.
+		the complexity of simple CRUD functionality.
 	</para>
 	<section>
 		<title>Introduction</title>
@@ -34,7 +33,7 @@
 		<para>
 			While the J2EE specification provides a lot of functionalities out of box,
 			there
-			is still work to be done and there is a number a number of needs more
+			is still work to be done and there is a number of needs more
 			specific to
 			Arcelor Mittal that can be added. This is where the CDI programming model is
 			used.
