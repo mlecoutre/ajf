@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.configuration.AbstractConfiguration;
+import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration.SystemConfiguration;
 import org.junit.Test;
 import org.slf4j.Logger;
 
@@ -22,6 +24,8 @@ import am.ajf.core.logger.LoggerFactory;
 public class ConfigurationTest implements PropertyListener {
 
 	private static final Logger logger = LoggerFactory.getLogger(ConfigurationTest.class);
+	
+	public final static String NAME = "name";
 
 	public ConfigurationTest() {
 	}
@@ -89,6 +93,32 @@ public class ConfigurationTest implements PropertyListener {
 	public void configurationClear(EnumEventType enum1, Configuration source) {
 
 		System.out.println("Configuration cleaned");
+		
+	}
+	
+	@Test
+	public void testSystemConfig() {
+		
+		Configuration configuration = new SystemConfiguration();
+		String value = configuration.getString("java.home");
+		System.out.println(value);
+		
+	}
+	
+	@Test
+	public void testPrefixedVarsInterpolation() {
+		
+		Configuration configuration = new BaseConfiguration();
+				
+		String res = (String) ConfigurationUtils.evaluate("${sys:java.home}", configuration);
+		System.out.println(res);
+
+		res = (String) ConfigurationUtils.evaluate("${env:JAVA_HOME}", configuration);
+		System.out.println(res);
+				
+		res = (String) ConfigurationUtils.evaluate("${const:am.ajf.core.configuration.ConfigurationTest.NAME}", configuration);
+		System.out.println(res);
+		
 		
 	}
 

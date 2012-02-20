@@ -197,7 +197,7 @@ public class ApplicationContext {
 					APPLICATION_SETTINGS_PROPERTIES).concat("'."));
 
 			configuration = ConfigurationHelper
-					.newConfigurationFromResource(APPLICATION_SETTINGS_PROPERTIES);
+					.newConfigurationFromPropertiesResource(APPLICATION_SETTINGS_PROPERTIES);
 			configuration.setThrowExceptionOnMissing(false);
 
 			System.out.println("Load application settings file: DONE.");
