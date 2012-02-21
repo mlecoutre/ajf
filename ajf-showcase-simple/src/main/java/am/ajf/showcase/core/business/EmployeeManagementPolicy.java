@@ -32,7 +32,7 @@ public class EmployeeManagementPolicy implements EmployeeManagementBD {
 	PersonServiceBD personServiceBD;
 
 	@Inject
-	private Logger logger;
+	Logger logger;
 
 	/**
 	 * DEFAULT CONSTRUCTOR
@@ -87,8 +87,8 @@ public class EmployeeManagementPolicy implements EmployeeManagementBD {
 	}
 
 	/**
-	 * Manage Errors coming from other layers 
-	 * TODO put this method in the framework
+	 * Manage Errors coming from other layers TODO put this method in the
+	 * framework
 	 * 
 	 * @param msg
 	 *            custom message

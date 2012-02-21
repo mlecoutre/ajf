@@ -14,7 +14,7 @@
 		<properties>
 
 
-			<property name="hibernate.connection.url" value="jdbc:derby:showcase;create=true" />
+			<property name="hibernate.connection.url" value="jdbc:derby:memory:showcase;create=true" />
 
 			<!-- Hibernate custom config -->
 			<property name="hibernate.connection.driver_class" value="org.apache.derby.jdbc.EmbeddedDriver" />

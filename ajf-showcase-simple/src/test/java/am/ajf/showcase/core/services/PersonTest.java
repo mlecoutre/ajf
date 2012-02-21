@@ -1,79 +1,105 @@
 package am.ajf.showcase.core.services;
 
+import static org.junit.Assert.assertTrue;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceUnit;
 
-import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ArchivePaths;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
 import am.ajf.showcase.lib.model.Person;
-import am.ajf.testing.junit.DITestRunnner;
 
-@RunWith(DITestRunnner.class)
+@RunWith(Arquillian.class)
 public class PersonTest {
 
 	@Inject
 	Logger log;
 
-	@PersistenceUnit(name = "default")
-	private EntityManagerFactory emf;
+	@Inject
+	private EntityManager em;
 
-	private static IDatabaseConnection connection;
-	private static IDataSet dataset;
+	private static IDatabaseConnection dbUnitConn;
+	// private static IDataSet dataset;
 
 	private static String _dbFile = "dataset.xml";
-	// private static String _driverClass =
-	// "org.apache.derby.jdbc.EmbeddedDriver";
-	private static String _jdbcConnection = "jdbc:derby:showcase";
 
-	@BeforeClass
-	public static void initEntityManager() throws Exception {
+	@Deployment
+	public static JavaArchive createTestArchive() {
+		return ShrinkWrap
+				.create(JavaArchive.class, "test.jar")
+				.addPackages(true, "am.ajf.showcase")
+				.addPackages(true, "am.ajf.injection")
+				.addPackages(true, "am.ajf.core.logger")
+				.addPackages(true, "am.ajf.core.helper")
+				.addPackages(true, "am.ajf.core.utils")
+				.addPackages(true, "am.ajf.persistence")
+				.addAsManifestResource(EmptyAsset.INSTANCE,
+						ArchivePaths.create("beans.xml"))
+				.addAsManifestResource("META-INF/persistence.xml",
+						ArchivePaths.create("persistence.xml"));
+	}
+
+	@Before
+	public void initTable() throws Exception {
 
 		try {
+			Session session = ((Session) em.getDelegate());
+			session.doWork(new Work() {
 
-			connection = getConnection();
-			// connection = new DatabaseConnection(((EntityManagerImpl)
-			//
-			// (em.getDelegate())).getServerSession().getAccessor().getConnection());
-			dataset = new FlatXmlDataSet(Thread.currentThread()
-					.getContextClassLoader().getResourceAsStream(_dbFile));
+				@Override
+				public void execute(Connection connection) throws SQLException {
 
-			DatabaseOperation.INSERT.execute(connection, dataset);
-			connection.close();
+					try {
+
+						dbUnitConn = new DatabaseConnection(connection);
+
+						FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
+						builder.setColumnSensing(true);
+						IDataSet dataSet = builder.build(PersonTest.class
+								.getResourceAsStream(_dbFile));
+
+						DatabaseOperation.CLEAN_INSERT.execute(dbUnitConn,
+								dataSet);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+
+			});
+
+			// dbUnitConn.close();
 		} catch (Throwable th) {
 
 			th.printStackTrace();
 		}
 	}
 
-	@AfterClass
-	public static void closeEntityManager() throws Exception {
-
-		connection.close();
-	}
-
 	@Test
 	public void testAddPerson() {
 		log.debug("testAddPerson");
-		EntityManager em = emf.createEntityManager();
+
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 
@@ -86,27 +112,20 @@ public class PersonTest {
 		log.debug("PersonId " + person.getPersonid() + " inserted");
 
 		tx.commit();
+		assertTrue("PersonId should not be null", null != person.getPersonid());
 	}
 
 	@Test
 	public void testFindall() {
 		log.debug("testFindall");
-		EntityManager em = emf.createEntityManager();
+
 		@SuppressWarnings("unchecked")
 		List<Person> persons = em.createNamedQuery(Person.FIND_ALL)
 				.getResultList();
 		for (Person p : persons) {
 			log.debug("> " + p);
 		}
-
+		assertTrue("We should have 5 peoples in the DB", persons.size() == 5);
 	}
 
-	public static IDatabaseConnection getConnection()
-			throws ClassNotFoundException, DatabaseUnitException, SQLException {
-		// database connection
-		// Class driverClass = Class.forName(_driverClass);
-		Connection jdbcConnection = DriverManager
-				.getConnection(_jdbcConnection);
-		return new DatabaseConnection(jdbcConnection);
-	}
 }

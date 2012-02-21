@@ -5,13 +5,13 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
+import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 
+import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.services.exceptions.BusinessLayerException;
 import am.ajf.showcase.core.services.PersonService;
 import am.ajf.showcase.lib.business.EmployeeManagementBD;
@@ -19,7 +19,6 @@ import am.ajf.showcase.lib.business.dto.ListEmployeesPB;
 import am.ajf.showcase.lib.business.dto.ListEmployeesRB;
 import am.ajf.showcase.lib.model.Person;
 import am.ajf.showcase.lib.services.PersonServiceBD;
-import am.ajf.testing.junit.DITestRunnner;
 
 /**
  * Singleton
@@ -27,14 +26,12 @@ import am.ajf.testing.junit.DITestRunnner;
  * @author E010925
  * 
  */
-@RunWith(DITestRunnner.class)
 public class EmployeeManagementTest {
 
-	@Inject
-	private Logger logger;
+	private Logger logger = LoggerFactory
+			.getLogger(EmployeeManagementTest.class);
 
-	@Inject
-	EmployeeManagementBD employeeManagement;
+	EmployeeManagementPolicy employeeManagement = new EmployeeManagementPolicy();
 
 	PersonServiceBD personService;
 
@@ -65,7 +62,8 @@ public class EmployeeManagementTest {
 		Mockito.when(personService.findByLastname("%")).thenReturn(persons);
 		Mockito.when(personService.findByLastname("Exception")).thenThrow(
 				new BusinessLayerException("errorMsg"));
-		((EmployeeManagementPolicy) employeeManagement).personServiceBD = personService;
+		employeeManagement.personServiceBD = personService;
+		employeeManagement.logger = logger;
 
 		ListEmployeesRB rb = employeeManagement.listEmployees(employeesPB);
 		assertTrue("We should have one person in the list", rb.getEmployees()
