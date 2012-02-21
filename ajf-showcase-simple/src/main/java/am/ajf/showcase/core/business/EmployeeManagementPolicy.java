@@ -2,13 +2,13 @@ package am.ajf.showcase.core.business;
 
 import java.util.List;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 
-import ajf.logger.injection.InjectLogger;
-import ajf.services.exceptions.BusinessLayerException;
-import ajf.services.injection.InjectService;
+import am.ajf.core.services.exceptions.BusinessLayerException;
 import am.ajf.showcase.lib.business.EmployeeManagementBD;
 import am.ajf.showcase.lib.business.dto.FireEmployeePB;
 import am.ajf.showcase.lib.business.dto.FireEmployeeRB;
@@ -25,13 +25,13 @@ import am.ajf.showcase.lib.services.PersonServiceBD;
  * @author E010925
  * 
  */
-@Singleton
+@ApplicationScoped
 public class EmployeeManagementPolicy implements EmployeeManagementBD {
 
-	@InjectService
+	@Inject
 	PersonServiceBD personServiceBD;
 
-	@InjectLogger
+	@Inject
 	private Logger logger;
 
 	/**

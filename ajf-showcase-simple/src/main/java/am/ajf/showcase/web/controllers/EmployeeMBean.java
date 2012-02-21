@@ -1,25 +1,22 @@
 package am.ajf.showcase.web.controllers;
 
-import static ajf.web.WebUtils.handleError;
+import static am.ajf.web.WebUtils.handleError;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.slf4j.Logger;
 
-import ajf.injection.InjectionContext;
-import ajf.logger.injection.InjectLogger;
-import ajf.services.injection.InjectService; 
 import am.ajf.showcase.lib.business.EmployeeManagementBD;
 import am.ajf.showcase.lib.business.dto.FireEmployeePB;
 import am.ajf.showcase.lib.business.dto.FireEmployeeRB;
@@ -36,16 +33,13 @@ import am.ajf.showcase.lib.model.Person;
  * @author E010925
  * 
  */
-@ManagedBean
-@ViewScoped
+@Named
+@RequestScoped
 public class EmployeeMBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	/*
-	 * TODO will be replaced by @Inject in AJF 2.0.2
-	 */
-	@InjectLogger
+	@Inject
 	private Logger logger;
 
 	/* ATTRIBUTES */
@@ -66,10 +60,8 @@ public class EmployeeMBean implements Serializable {
 	private String searchLastname;
 
 	/* POLICIES BUSINESS DELEGATE */
-	/*
-	 * TODO will be replaced by @Inject in AJF 2.0.2
-	 */
-	@InjectService
+	
+	@Inject
 	EmployeeManagementBD employeeManagement;
 
 	/* CONSTANTS */
@@ -80,14 +72,6 @@ public class EmployeeMBean implements Serializable {
 	 */
 	public EmployeeMBean() {
 		super();
-	}
-
-	@PostConstruct
-	public void init() {
-		/*
-		 * TODO will be removed in @Inject in AJF 2.0.2
-		 */
-		InjectionContext.getInstance().getInjector().injectMembers(this);
 	}
 
 	/**
@@ -115,7 +99,7 @@ public class EmployeeMBean implements Serializable {
 						.addMessage(null, facesMessage);
 			}
 		} catch (Exception e) {
-			// import static ajf.web.WebUtils.*;
+			// import static am.ajf.web.WebUtils.*;
 			handleError(e, logger, "Error when try to list employees");
 		}
 

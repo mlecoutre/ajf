@@ -1,12 +1,11 @@
 package am.ajf.showcase.web.controllers;
 
-import static ajf.web.WebUtils.getFieldLabel;
-
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import static am.ajf.web.WebUtils.*;
 
 @ManagedBean
 public class ShowcaseMBean {

@@ -23,7 +23,7 @@ import javax.faces.bean.ManagedBean;
 import org.primefaces.event.RowEditEvent;
 import org.slf4j.Logger;
 
-import ajf.logger.LoggerFactory;
+import am.ajf.core.logger.LoggerFactory;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 
@@ -36,22 +36,18 @@ public class LoggerMBean implements Serializable {
 
 	/** Looger */
 	@SuppressWarnings("unused")
-	private static transient final Logger logger = LoggerFactory.getLogger();
+	private static transient final Logger logger = LoggerFactory
+			.getLogger(LoggerMBean.class);
 
-	private static transient LoggerContext loggerContext = LoggerFactory.getDelegate();
+	private static transient LoggerContext loggerContext = LoggerFactory
+			.getDelegate();
 	private static transient String[] loggerLevelValues = new String[] {
-		Level.ALL.toString(),
-		Level.TRACE.toString(),
-		Level.DEBUG.toString(),
-		Level.INFO.toString(),
-		Level.WARN.toString(),
-		Level.ERROR.toString(),
-		Level.OFF.toString()
-	};
-	
+			Level.ALL.toString(), Level.TRACE.toString(),
+			Level.DEBUG.toString(), Level.INFO.toString(),
+			Level.WARN.toString(), Level.ERROR.toString(), Level.OFF.toString() };
+
 	private List<LoggerVO> loggersList = null;
-	
-	
+
 	public LoggerMBean() {
 		super();
 	}
@@ -63,11 +59,11 @@ public class LoggerMBean implements Serializable {
 		populateLoggers();
 
 	}
-	
+
 	@PreDestroy
 	public void destroy() {
 
-		if (null != loggersList) 
+		if (null != loggersList)
 			loggersList.clear();
 
 	}
@@ -78,39 +74,43 @@ public class LoggerMBean implements Serializable {
 		} else {
 			loggersList.clear();
 		}
-		List<ch.qos.logback.classic.Logger> nativeLoggers = loggerContext.getLoggerList();
+		List<ch.qos.logback.classic.Logger> nativeLoggers = loggerContext
+				.getLoggerList();
 		for (ch.qos.logback.classic.Logger nativeLogger : nativeLoggers) {
 			if (null == nativeLogger.getLevel())
 				continue;
-			LoggerVO vo = new LoggerVO(nativeLogger.getName(), nativeLogger.getLevel().toString(), nativeLogger.isAdditive());
+			LoggerVO vo = new LoggerVO(nativeLogger.getName(), nativeLogger
+					.getLevel().toString(), nativeLogger.isAdditive());
 			loggersList.add(vo);
 		}
-		
+
 	}
-	
-	public void editListener(RowEditEvent rev){
-		LoggerVO  bean = (LoggerVO)rev.getObject();
-        if (null != bean) {
-        	if ((null != bean.getName()) && (bean.getName().trim().length()>0)) {
-        		String loggerName = bean.getName();
-        		String newLoggerLevel = bean.getLevel();
-        		boolean newAdditiveValue = bean.isAdditive();
-        		ch.qos.logback.classic.Logger editedLogger = loggerContext.getLogger(loggerName);
-        		if (null != editedLogger) {
-        			editedLogger.setLevel(Level.toLevel(newLoggerLevel));
-        			editedLogger.setAdditive(newAdditiveValue);
-        		}
-        	}
-            // reload properties
-            populateLoggers();
-        }            
-             
-    }
+
+	public void editListener(RowEditEvent rev) {
+		LoggerVO bean = (LoggerVO) rev.getObject();
+		if (null != bean) {
+			if ((null != bean.getName())
+					&& (bean.getName().trim().length() > 0)) {
+				String loggerName = bean.getName();
+				String newLoggerLevel = bean.getLevel();
+				boolean newAdditiveValue = bean.isAdditive();
+				ch.qos.logback.classic.Logger editedLogger = loggerContext
+						.getLogger(loggerName);
+				if (null != editedLogger) {
+					editedLogger.setLevel(Level.toLevel(newLoggerLevel));
+					editedLogger.setAdditive(newAdditiveValue);
+				}
+			}
+			// reload properties
+			populateLoggers();
+		}
+
+	}
 
 	public void refresh() {
 		populateLoggers();
 	}
-		
+
 	public List<LoggerVO> getLoggers() {
 		return loggersList;
 	}
@@ -118,6 +118,5 @@ public class LoggerMBean implements Serializable {
 	public String[] getLoggerLevelValues() {
 		return loggerLevelValues;
 	}
-	
 
 }

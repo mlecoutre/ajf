@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -23,14 +24,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
-import ajf.logger.injection.InjectLogger;
-import ajf.testing.junit.DITestRunnner;
 import am.ajf.showcase.lib.model.Person;
+import am.ajf.testing.junit.DITestRunnner;
 
 @RunWith(DITestRunnner.class)
 public class PersonTest {
- 
-	@InjectLogger
+
+	@Inject
 	Logger log;
 
 	@PersistenceUnit(name = "default")
@@ -83,7 +83,7 @@ public class PersonTest {
 		person.setBirthday(new Date());
 		person.setSex('M');
 		em.persist(person);
-		log.debug("PersonId "+person.getPersonid()+ " inserted");
+		log.debug("PersonId " + person.getPersonid() + " inserted");
 
 		tx.commit();
 	}

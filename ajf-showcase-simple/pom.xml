@@ -23,7 +23,7 @@
 
 
 	<properties>
-		<ajfversion>2.0.2-SNAPSHOT</ajfversion>
+		<ajfversion>2.1.0-SNAPSHOT</ajfversion>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -33,17 +33,17 @@
 		</dependency>
 		<dependency>
 			<groupId>am.ajf</groupId>
-			<artifactId>ajf-commons</artifactId>
-			<version>${ajfversion}</version>
-		</dependency>
-		<dependency>
-			<groupId>am.ajf</groupId>
 			<artifactId>ajf-core</artifactId>
 			<version>${ajfversion}</version>
 		</dependency>
 		<dependency>
 			<groupId>am.ajf</groupId>
-			<artifactId>ajf-injection</artifactId>
+			<artifactId>ajf-injection-impl</artifactId>
+			<version>${ajfversion}</version>
+		</dependency>
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-persistence-impl</artifactId>
 			<version>${ajfversion}</version>
 		</dependency>
 		<dependency>
@@ -78,6 +78,42 @@
 			<version>1.6.1</version>
 		</dependency>
 		<!-- end LOGGING -->
+
+		<!-- open web beans -->
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-jcdi_1.0_spec</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-atinject_1.0_spec</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-interceptor_1.1_spec</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.openwebbeans</groupId>
+			<artifactId>openwebbeans-resource</artifactId>
+			<version>1.1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.openwebbeans</groupId>
+			<artifactId>openwebbeans-jsf</artifactId>
+			<version>1.1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.openwebbeans</groupId>
+			<artifactId>openwebbeans-web</artifactId>
+			<version>1.1.3</version>
+		</dependency>
+		<!-- END OPEN WEB BEANS -->
 
 		<!-- Servlet API is sufficient -->
 		<!-- validation with JSR 303 -->

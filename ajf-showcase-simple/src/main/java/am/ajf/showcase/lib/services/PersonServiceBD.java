@@ -2,7 +2,7 @@ package am.ajf.showcase.lib.services;
 
 import java.util.List;
 
-import ajf.services.exceptions.BusinessLayerException;
+import am.ajf.core.services.exceptions.BusinessLayerException;
 import am.ajf.showcase.lib.model.Person;
 
 /**
