@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import javax.xml.stream.FactoryConfigurationError;
 
-import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
 import org.apache.maven.model.Scm;
@@ -28,8 +27,6 @@ import am.ajf.forge.util.EclipseUtils;
 import am.ajf.forge.util.ProjectUtils;
 
 public class CreateProject {
-
-	private String groupId;
 
 	/**
 	 * Creation of an AJF project. This method generate a project in accordance
@@ -82,8 +79,9 @@ public class CreateProject {
 
 		} else if (ProjectUtils.PROJECT_TYPE_UI.equals(projectType)) {
 
-			project = generateProjectUI(globalProjectName, projectFinalName,
-					javaPackage, projectFactory, projectType, dir);
+			project = UIProjectGeneration.generateProjectUI(globalProjectName,
+					projectFinalName, javaPackage, projectFactory, projectType,
+					dir);
 
 		} else if (ProjectUtils.PROJECT_TYPE_LIB.equals(projectType)) {
 
@@ -194,7 +192,8 @@ public class CreateProject {
 		project = projectFactory.createProject(dir, DependencyFacet.class,
 				MetadataFacet.class);
 
-		setBasicProjectData(globalProjectName, projectFinalName, project);
+		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
+				project);
 
 		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
 		packaging.setPackagingType(PackagingType.BASIC);
@@ -258,7 +257,8 @@ public class CreateProject {
 		project = projectFactory.createProject(dir, DependencyFacet.class,
 				MetadataFacet.class, ResourceFacet.class);
 
-		setBasicProjectData(globalProjectName, projectFinalName, project);
+		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
+				project);
 		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
 		packaging.setPackagingType(PackagingType.JAR);
 
@@ -275,17 +275,19 @@ public class CreateProject {
 		/*
 		 * Set the Pom parent
 		 */
-		setPomParent(globalProjectName, project);
+		ProjectUtils.setPomParent(globalProjectName, project);
 
 		/*
 		 * Set dependencies
 		 */
-		addDependency(globalProjectName, project, ProjectUtils.PROJECT_TYPE_UI);
-		addDependency(globalProjectName, project,
+		ProjectUtils.addInternalDependency(globalProjectName, project,
+				ProjectUtils.PROJECT_TYPE_UI);
+		ProjectUtils.addInternalDependency(globalProjectName, project,
 				ProjectUtils.PROJECT_TYPE_CORE);
-		addDependency(globalProjectName, project,
+		ProjectUtils.addInternalDependency(globalProjectName, project,
 				ProjectUtils.PROJECT_TYPE_CONFIG);
-		addDependency(globalProjectName, project, ProjectUtils.PROJECT_TYPE_UI);
+		ProjectUtils.addInternalDependency(globalProjectName, project,
+				ProjectUtils.PROJECT_TYPE_UI);
 
 		return project;
 	}
@@ -311,7 +313,8 @@ public class CreateProject {
 		project = projectFactory.createProject(dir, DependencyFacet.class,
 				MetadataFacet.class, ResourceFacet.class);
 
-		setBasicProjectData(globalProjectName, projectFinalName, project);
+		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
+				project);
 
 		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
 		packaging.setPackagingType(PackagingType.JAR);
@@ -355,7 +358,7 @@ public class CreateProject {
 		 * Set the Pom parent
 		 */
 
-		setPomParent(globalProjectName, project);
+		ProjectUtils.setPomParent(globalProjectName, project);
 		return project;
 	}
 
@@ -381,7 +384,8 @@ public class CreateProject {
 				.createProject(dir, DependencyFacet.class, MetadataFacet.class,
 						JavaSourceFacet.class, ResourceFacet.class);
 
-		setBasicProjectData(globalProjectName, projectFinalName, project);
+		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
+				project);
 
 		// Packaging
 		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
@@ -417,91 +421,13 @@ public class CreateProject {
 		}
 
 		// Set the pom parent
-		setPomParent(globalProjectName, project);
+		ProjectUtils.setPomParent(globalProjectName, project);
 
 		/*
 		 * Set dependencies
 		 */
-		addDependency(globalProjectName, project,
+		ProjectUtils.addInternalDependency(globalProjectName, project,
 				ProjectUtils.PROJECT_TYPE_CONFIG);
-
-		return project;
-	}
-
-	/**
-	 * Construction of an AJF UI type project
-	 * 
-	 * @param globalProjectName
-	 * @param projectFinalName
-	 * @param javaPackage
-	 * @param projectFactory
-	 * @param projectType
-	 * @param dir
-	 * @return project object corresponding to the generated project
-	 */
-	@SuppressWarnings("unchecked")
-	private Project generateProjectUI(String globalProjectName,
-			String projectFinalName, String javaPackage,
-			ProjectFactory projectFactory, String projectType,
-			DirectoryResource dir) {
-
-		Project project;
-		project = projectFactory
-				.createProject(dir, DependencyFacet.class, MetadataFacet.class,
-						JavaSourceFacet.class, ResourceFacet.class);
-
-		setBasicProjectData(globalProjectName, projectFinalName, project);
-
-		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
-		packaging.setPackagingType(PackagingType.WAR);
-
-		// Set name of the project
-		packaging.setFinalName(projectFinalName);
-
-		// Set the pom parent
-		setPomParent(globalProjectName, project);
-
-		/*
-		 * Set dependencies
-		 */
-		addDependency(globalProjectName, project,
-				ProjectUtils.PROJECT_TYPE_CONFIG);
-		addDependency(globalProjectName, project,
-				ProjectUtils.PROJECT_TYPE_CORE);
-
-		/*
-		 * Create a java class with a method
-		 */
-		try {
-
-			System.out.println("Start generating java class for UI");
-
-			JavaSourceFacet javaSourcefacet = project
-					.getFacet(JavaSourceFacet.class);
-
-			// Create a java class
-			JavaClass javaclass = JavaParser
-					.create(JavaClass.class)
-					.setPackage(javaPackage + ".web.controllers")
-					.setName("ExempleMBean")
-					.addMethod(
-							"public static void exempleMBeanMethod(String[] args) {}")
-					.setBody(
-							"System.out.println(\"Hi there! This is an AJF Project UI method ")
-					.getOrigin();
-
-			// Add the annotation for JSF2 managed bean
-			javaclass.addAnnotation("ManagedBean");
-
-			// Save the java class in the project
-			javaSourcefacet.saveJavaSource(javaclass);
-
-			System.out.println("--> End generating java source");
-
-		} catch (Exception e) {
-
-			System.out.println("Error occured Exception : " + e.toString());
-		}
 
 		return project;
 	}
@@ -529,7 +455,8 @@ public class CreateProject {
 				.createProject(dir, DependencyFacet.class, MetadataFacet.class,
 						JavaSourceFacet.class, ResourceFacet.class);
 
-		setBasicProjectData(globalProjectName, projectFinalName, project);
+		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
+				project);
 
 		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
 		packaging.setPackagingType(PackagingType.JAR);
@@ -538,7 +465,7 @@ public class CreateProject {
 		packaging.setFinalName(projectFinalName);
 
 		// Set the pom parent
-		setPomParent(globalProjectName, project);
+		ProjectUtils.setPomParent(globalProjectName, project);
 
 		return project;
 
@@ -567,7 +494,8 @@ public class CreateProject {
 				.createProject(dir, DependencyFacet.class, MetadataFacet.class,
 						JavaSourceFacet.class, ResourceFacet.class);
 
-		setBasicProjectData(globalProjectName, projectFinalName, project);
+		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
+				project);
 
 		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
 		packaging.setPackagingType(PackagingType.WAR);
@@ -576,7 +504,7 @@ public class CreateProject {
 		packaging.setFinalName(projectFinalName);
 
 		// Set the pom parent
-		setPomParent(globalProjectName, project);
+		ProjectUtils.setPomParent(globalProjectName, project);
 
 		/*
 		 * Create an src/main/webapp package
@@ -585,97 +513,6 @@ public class CreateProject {
 
 		return project;
 
-	}
-
-	/**
-	 * Add a dependency in the pom.xml of the input project to the project (of
-	 * the same global project) corresponding to the input dependencyProjectType
-	 * 
-	 * For example : Global project ajf-project
-	 * 
-	 * if input Project=ajf-project-core and dependencyProjectType="lib" then a
-	 * dependency on ajf-project-lib will be added to the ajf-project-core's
-	 * pom.xml
-	 * 
-	 * @param globalProjectName
-	 * @param project
-	 *            object of the current project beeing generated
-	 * @param dependencyProjectType
-	 */
-	private void addDependency(String globalProjectName, Project project,
-			String dependencyProjectType) {
-
-		// Get the MavenFacet in order to grab the pom
-		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
-		Model pom = mavenCoreFacet.getPOM();
-
-		// Create the dependecy
-		Dependency dependency = new Dependency();
-		dependency.setGroupId(groupId);
-		dependency.setVersion("1.0.0-SNAPSHOT");
-		dependency.setArtifactId(globalProjectName + "-"
-				+ dependencyProjectType);
-
-		// Add the dependency to the pom
-		pom.addDependency(dependency);
-		mavenCoreFacet.setPOM(pom);
-
-	}
-
-	/**
-	 * Insert in the pom.xml of the input project, the parent corresponding to
-	 * the globalProjectname-parent according to the ajf convention
-	 * 
-	 * @param globalProjectName
-	 * @param project
-	 */
-	private void setPomParent(String globalProjectName, Project project) {
-
-		// Get the Pom
-		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
-		Model pom = mavenCoreFacet.getPOM();
-
-		// Create the parent
-		Parent parent = new Parent();
-		parent.setGroupId(groupId);
-		parent.setArtifactId(globalProjectName + "-"
-				+ ProjectUtils.PROJECT_TYPE_PARENT);
-
-		parent.setVersion("1.0.0-SNAPSHOT");
-		parent.setRelativePath("../" + globalProjectName + "-"
-				+ ProjectUtils.PROJECT_TYPE_PARENT + "/pom.xml");
-
-		// Set the parent to the pom of the project
-		pom.setParent(parent);
-		mavenCoreFacet.setPOM(pom);
-	}
-
-	/**
-	 * Set basic project meta data : project name and repository dependency
-	 * 
-	 * @param finalProjectName
-	 * @param javaPackage
-	 * @param project
-	 * @return
-	 */
-	private DependencyFacet setBasicProjectData(String globalProjectName,
-			String finalProjectName, Project project) {
-
-		// Set metadata
-		MetadataFacet meta = project.getFacet(MetadataFacet.class);
-
-		// group-ID
-		groupId = "am.projects." + globalProjectName;
-		meta.setTopLevelPackage(groupId);
-
-		// Artifact ID
-		meta.setProjectName(finalProjectName);
-
-		// Dependencies
-		DependencyFacet deps = project.getFacet(DependencyFacet.class);
-		// deps.addRepository(KnownRepository.JBOSS_NEXUS);
-
-		return deps;
 	}
 
 	/**
@@ -713,4 +550,5 @@ public class CreateProject {
 		}
 		return dir;
 	}
+
 }

@@ -17,7 +17,6 @@ import org.jboss.forge.shell.plugins.DefaultCommand;
 import org.jboss.forge.shell.plugins.Help;
 import org.jboss.forge.shell.plugins.Option;
 import org.jboss.forge.shell.plugins.PipeOut;
-import org.jboss.solder.config.xml.model.ReplacesXmlItem;
 
 import am.ajf.forge.core.CreateProject;
 import am.ajf.forge.util.ProjectUtils;
@@ -43,8 +42,8 @@ public class CreateSolutionPlugin implements
 	@Inject
 	private ResourceFactory factory;
 
-	private static final String AJF_PROJECT_TYPE_SIMPLE = "S";
-	private static final String AJF_PROJECT_TYPE_COMPLEX = "C";
+	private static final String AJF_PROJECT_TYPE_SIMPLE = "Simple ajf solution";
+	private static final String AJF_PROJECT_TYPE_COMPLEX = "Complex ajf solution";
 
 	/**
 	 * Default command of the plug-in which will prompt the user in order to let
