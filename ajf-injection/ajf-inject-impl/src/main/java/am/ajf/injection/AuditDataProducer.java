@@ -2,7 +2,6 @@ package am.ajf.injection;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
 
 import am.ajf.core.datas.AuditData;
 import am.ajf.core.datas.AuditDataContext;
@@ -17,7 +16,7 @@ public class AuditDataProducer {
 	}
 	
 	@Produces
-	public AuditData produceAuditData(InjectionPoint ip) {
+	public AuditData produceAuditData() {
 		AuditData auditData = AuditDataContext.getAuditData();
 		return auditData;
 	}
