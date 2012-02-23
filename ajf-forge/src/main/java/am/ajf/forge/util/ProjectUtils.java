@@ -73,6 +73,7 @@ public class ProjectUtils {
 
 		// Dependencies
 		DependencyFacet deps = project.getFacet(DependencyFacet.class);
+		// TODO add repository
 		// deps.addRepository(KnownRepository.JBOSS_NEXUS);
 
 		return deps;
@@ -113,6 +114,15 @@ public class ProjectUtils {
 
 	}
 
+	/**
+	 * Add a custom dependency to a project. This method will add to the input
+	 * project's pom.xml the given maven dependency
+	 * 
+	 * @param project
+	 * @param groupId
+	 * @param artifactId
+	 * @param version
+	 */
 	public static void addDependency(Project project, String groupId,
 			String artifactId, String version) {
 

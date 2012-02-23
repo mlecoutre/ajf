@@ -1,9 +1,7 @@
 package am.ajf.forge.core;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 
-import org.apache.commons.io.FileUtils;
 import org.jboss.forge.parser.JavaParser;
 import org.jboss.forge.parser.java.JavaClass;
 import org.jboss.forge.project.Project;

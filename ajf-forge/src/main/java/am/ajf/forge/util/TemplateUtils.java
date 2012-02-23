@@ -155,7 +155,7 @@ public class TemplateUtils {
 			String errorMessage = "Error occured while locating the template "
 					.concat(templateName + ". ");
 			System.out.println(errorMessage.concat(e.toString()));
-			throw new Exception(errorMessage, e);
+			throw e;
 
 		}
 
