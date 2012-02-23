@@ -44,7 +44,7 @@ public class JMSEmitterTest {
 		manager.setDefaultEventHandler(handler);
 
 		MyEvent event = new MyEvent("Albert", "Dupont");
-		manager.sendEvent(event);
+		manager.fireEvent(event);
 
 		Thread.sleep(500);
 		

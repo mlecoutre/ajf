@@ -46,10 +46,10 @@ public class EventsDomain implements ErrorHandler, Closeable {
 	}
 		
 	/**
-	 * send event
+	 * fire event
 	 * @param event
 	 */
-	public void sendEvent(AbstractEvent event) {
+	public void fireEvent(AbstractEvent event) {
 		String eventType = event.getEventType();
 		sendEvent(eventType, event);		
 	}

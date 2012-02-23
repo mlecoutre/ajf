@@ -19,7 +19,7 @@ public class LoggerAdapterEmitter implements EventEmitter {
 	public void send(AbstractEvent eventSource, String formattedEvent)
 			throws EventEmitterException {
 		
-		logger.info(formattedEvent);
+		logger.trace(formattedEvent);
 		
 	}
 

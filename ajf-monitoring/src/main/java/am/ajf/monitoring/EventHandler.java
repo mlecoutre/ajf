@@ -45,7 +45,7 @@ public final class EventHandler implements Subscriber<AbstractEvent> {
 	 * @param eventSource
 	 * @throws EventException
 	 */
-	private void publish(AbstractEvent eventSource) throws EventException {
+	private void send(AbstractEvent eventSource) throws EventException {
 		
 		if (null != eventFilter) {
 			boolean acceptedEvent = eventFilter.accept(eventSource);
@@ -69,7 +69,7 @@ public final class EventHandler implements Subscriber<AbstractEvent> {
 	@Override
 	public void onEvent(Event<AbstractEvent> event) throws Exception {
 			
-		publish(event.getSource());
+		send(event.getSource());
 		
 	}
 

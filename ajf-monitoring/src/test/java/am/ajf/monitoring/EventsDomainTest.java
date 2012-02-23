@@ -39,7 +39,7 @@ public class EventsDomainTest {
 		
 		// When
 		
-		evtsDomain.sendEvent(event);
+		evtsDomain.fireEvent(event);
 		
 		// Then
 
@@ -82,7 +82,7 @@ public class EventsDomainTest {
 		event.setFirstName("Bob");
 		event.setLastName("Durand");
 
-		evtsDomain.sendEvent(event);
+		evtsDomain.fireEvent(event);
 
 		// wait some time
 		Thread.sleep(100);
