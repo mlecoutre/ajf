@@ -110,7 +110,7 @@ public class OWBBeanFactory
 			
 			/* only inject dependencies */
 			it.inject(beanInstance, cCtx);
-			it.postConstruct(beanInstance);
+			// it.postConstruct(beanInstance);
 			
 		}
 		catch (RuntimeException e) {
