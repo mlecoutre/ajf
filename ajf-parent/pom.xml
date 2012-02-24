@@ -82,10 +82,10 @@
 		<module>../ajf-injection</module>
 		<module>../ajf-monitoring</module>
 		<module>../ajf-notif</module>
-		<module>../ajf-remoting/ajf-remoting-dist</module>
 		<module>../ajf-security</module>
 		<module>../ajf-web</module>
 		<module>../ajf-persistence/ajf-persist-dist</module>
+		<module>../ajf-remoting/ajf-remoting-dist</module>
 	</modules>
 	
 </project>
