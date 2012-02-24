@@ -1,0 +1,163 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-parent</artifactId>
+		<version>2.1.0-SNAPSHOT</version>
+		<relativePath>../../ajf-parent</relativePath>
+	</parent>
+
+	<artifactId>ajf-injection</artifactId>
+
+	<scm>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-injection</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-injection</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf-injection/]]></url>
+	</scm>
+	
+	<properties>
+		<arquillian.version>1.0.0.CR7</arquillian.version>
+	</properties>
+	
+	<dependencies>
+	
+		<!-- AJF testing dependency -->
+		
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-testing</artifactId>
+			<version>2.0.2-SNAPSHOT</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- JPA2 impl for tests -->
+		
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>3.6.7.Final</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-validator</artifactId>
+		    <version>4.2.0.Final</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.2.6</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.3.163</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- JTA impl for tests : Bitronix -->
+		
+		<dependency>
+		  <groupId>org.codehaus.btm</groupId>
+		  <artifactId>btm</artifactId>
+		  <version>2.1.2</version>
+		  <scope>test</scope>
+		</dependency>	
+			
+		<!-- AJF -->
+		
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-core</artifactId>
+			<version>2.1.0-SNAPSHOT</version>
+		</dependency>
+		
+		<!-- JTA -->
+		
+		<dependency>
+    		<groupId>javax.transaction</groupId>
+    		<artifactId>jta</artifactId>
+    		<version>1.1</version>
+		</dependency>
+
+		<!-- CDI Dependency -->
+		
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-jcdi_1.0_spec</artifactId>
+			<version>1.0</version>		
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-atinject_1.0_spec</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.geronimo.specs</groupId>
+		    <artifactId>geronimo-interceptor_1.1_spec</artifactId>
+		    <version>1.0</version>
+		</dependency>
+		
+		<!-- OpenWebBeans Dependency -->
+		
+		<dependency>
+		  <groupId>org.apache.openwebbeans</groupId>
+		  <artifactId>openwebbeans-impl</artifactId>
+		  <version>1.1.3</version>
+		  <scope>provided</scope>
+		</dependency>
+		<dependency>
+		  <groupId>org.apache.openwebbeans</groupId>
+		  <artifactId>openwebbeans-spi</artifactId>
+		  <version>1.1.3</version>
+		  <scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.openwebbeans</groupId>
+			<artifactId>openwebbeans-resource</artifactId>
+			<version>1.1.3</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- Test container (openwebbeans) -->
+		
+		<dependency>
+			<groupId>org.jboss.arquillian.junit</groupId>
+			<artifactId>arquillian-junit-container</artifactId>
+			<version>${arquillian.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.container</groupId>
+			<artifactId>arquillian-openwebbeans-embedded-1</artifactId>
+			<version>1.0.0.CR2</version>
+			<scope>test</scope>
+		</dependency>
+		
+	</dependencies>
+
+	<build>
+
+		<resources>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.java</include>
+				</includes>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
+
+	</build>
+
+</project>

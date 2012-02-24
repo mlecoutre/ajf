@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<document>
+ <properties>
+  <title>Welcome to the AJF Injection Developer Website</title>
+ </properties>
+ <body>
+  <section name="Welcome">
+   This module contain the AJF code to handle injection. It is implemented as a
+   <a href="http://docs.jboss.org/weld/reference/latest/en-US/html/extend.html">CDI Extension</a>.
+   In this module you will find Producers (@Produce), Interceptors (@InterceptorBinding) and injectable
+   beans for the core functionalities of AJF.
+   This include :
+   <ul>
+   	<li>Logger producer</li>
+   	<li>AuditData producer</li>
+   	<li>Cache producer</li>
+   	<li>Configuration properties producer</li>
+   	<li>Mail producer</li>
+   	<li>Cache interceptor</li>   	
+   	<li>Monitoring interceptor</li>
+   	<li>UserTransaction producer</li>
+   	<li>Transactional and NonTransactional interceptor</li>
+   	<li><a href="handlers.html" >Handler management</a></li>
+   </ul>
+   
+   <subsection name="Reporting">
+    	The following aggregated reports are availables : <a href="apidocs/index.html">javadocs</a>,
+    	 <a href="xref/index.html">sources</a> 
+   </subsection>
+   
+  </section>
+ </body>
+</document>
