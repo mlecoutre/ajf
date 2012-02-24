@@ -2,7 +2,6 @@ package am.ajf.core.utils;
 
 import java.io.File;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -194,26 +193,43 @@ public class ClassUtils {
 		
 	}
 	
-	public static boolean isServiceImpl(Class<?> serviceClass) {
+	public static boolean isPolicyOrServiceImpl(Class<?> serviceClass) {
 		if (serviceClass.isInterface()) 
 			return false;
+		/*
 		if (Modifier.isAbstract(serviceClass.getModifiers()))
 			return false;
+		*/
 		
-		String serviceName = serviceClass.getName();
+		boolean res = false;
 		
-		if (serviceName.contains(CORE_SERVICES)) {
-			// end with ~BD
-			return serviceName.endsWith(SERVICE);
-		}
+		res = isServiceImpl(serviceClass);
+		if (res)
+			return true;
 
+		res = isPolicyImpl(serviceClass);
+		return res;
+		
+	}
+
+	public static boolean isPolicyImpl(Class<?> serviceClass) {
+		boolean res = false;
+		String serviceName = serviceClass.getName();
 		if (serviceName.contains(CORE_BUSINESS)) {
-			// end with ~BD
-			return serviceName.endsWith(POLICY);
+			// end with ~Policy
+			res = serviceName.endsWith(POLICY);
 		}
-		
-		return false;
-		
+		return res;
+	}
+
+	public static boolean isServiceImpl(Class<?> serviceClass) {
+		boolean res = false;
+		String serviceName = serviceClass.getName();
+		if (serviceName.contains(CORE_SERVICES)) {
+			// end with ~Service
+			res = serviceName.endsWith(SERVICE);
+		}
+		return res;
 	}
 
 	/**
