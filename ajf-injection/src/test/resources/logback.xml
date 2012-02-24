@@ -12,9 +12,9 @@
 		<appender-ref ref="STDOUT" />
 	</root>
 	
-	<root level="TRACE">
+	<logger name="am.ajf" level="TRACE" additivity="false">
 		<appender-ref ref="STDOUT" />
-	</root>
+	</logger>
 	
 	<logger name="org.apache.webbeans" level="DEBUG" additivity="false">
 		<appender-ref ref="STDOUT" />
