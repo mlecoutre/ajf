@@ -16,12 +16,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import am.ajf.injection.UserTransactionProducer;
 import am.ajf.persistence.jpa.EntityManagerProvider;
 import am.ajf.persistence.jpa.impl.CrudImplHandler;
 import am.ajf.persistence.jpa.test.harness.ModelCrud;
 import am.ajf.persistence.jpa.test.harness.SimpleCrudServiceBD;
 import am.ajf.persistence.jpa.test.helper.DBHelper;
-import am.ajf.transaction.UserTransactionProducer;
 
 @RunWith(Arquillian.class)
 public class CrudTest {
