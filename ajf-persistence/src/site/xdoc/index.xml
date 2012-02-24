@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<document>
+ <properties>
+  <title>Welcome to the AJF Persistence Developer Website</title>
+ </properties>
+ <body>
+  <section name="Welcome">
+   <p>
+    This project contain the documentation of the Persistence CDI extension for AJF.<br/>
+    The goal of the persistence extension is to provide helper classes and automatic
+    implementation for use with JPA in a J2EE and Web environment.<br/>
+    It provide the following functionalities :
+    <ul>
+     <li>Automatic implementation of Interface with method annotated with @NamedQuery</li>     
+     <li>Automatic implementation of Interface with method annotated with @StoredProcedure</li>
+     <li>Audit data listener</li>
+     <li>CDI Provider for EntityManager and EntityManagerFactory</li>
+    </ul>
+    <br/>
+    The persistence extension is split into four part :    
+    <ul>
+     <li>
+     	ajf-persist-api : Contain the public class, annotations and interfaces users of
+     	the ajf framework can use in there persistence implementation. 
+     </li>
+     <li>ajf-persist-impl : Contain the implementation use by the framework. This where you
+     will find the meat of how the persistence framework is working.</li>
+     <li>ajf-persist-tests : Contain the integration tests for different scenarios</li>
+     <li>ajf-persist-docs : The user guide.</li>
+     <li>ajf-persist-dist : Contain the distribution assembly.</li>
+    </ul>
+   </p>
+  </section>
+ </body>
+</document>
