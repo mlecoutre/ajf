@@ -40,7 +40,7 @@ public class JavassistUtils {
 	 * @throws NotFoundException
 	 * @throws CannotCompileException
 	 */
-	public static CtClass initClass(Class<?> superClass, Class<?> interfaceClass, ClassPool pool)
+	public static CtClass initClass(Class<?> superClass, Class<?> interfaceClass, ClassPool pool, String classSuffix)
 			throws NotFoundException, CannotCompileException {
 				//init the classloader this might need to be optimized
 				pool.insertClassPath(new ClassClassPath(interfaceClass));
@@ -51,18 +51,18 @@ public class JavassistUtils {
 				CtClass cc;
 				CtClass cin = pool.get(interfaceClass.getName());
 				if (superClass == null) {// no impl, so impl the interface
-					cc = pool.makeClass(interfaceClass.getName() + generateClassSuffix());		
+					cc = pool.makeClass(interfaceClass.getName() + generateClassSuffix(classSuffix));		
 					cc.setInterfaces(new CtClass[] {cin});
 				} else { //extend the provided client impl
-					cc = pool.makeClass(superClass.getName() + generateClassSuffix());		
+					cc = pool.makeClass(superClass.getName() + generateClassSuffix(classSuffix));		
 					CtClass cim = pool.get(superClass.getName());
 					cc.setSuperclass(cim);
 				}
 				return cc;
 			}
 
-	private static String generateClassSuffix() {
-		return "_$ajf$javaassist$proxy$Service";
+	private static String generateClassSuffix(String classSuffix) {
+		return "_$ajf$javaassist$proxy$Service".concat(classSuffix);
 	}
 
 }
