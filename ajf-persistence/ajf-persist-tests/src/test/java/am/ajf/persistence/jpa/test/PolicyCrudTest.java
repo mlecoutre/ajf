@@ -17,6 +17,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import am.ajf.injection.UserTransactionProducer;
 import am.ajf.persistence.jpa.CrudBD;
 import am.ajf.persistence.jpa.CrudServiceBD;
 import am.ajf.persistence.jpa.EntityManagerProvider;
@@ -24,7 +25,6 @@ import am.ajf.persistence.jpa.impl.CrudImplHandler;
 import am.ajf.persistence.jpa.impl.CrudProvider;
 import am.ajf.persistence.jpa.test.harness.ModelCrud;
 import am.ajf.persistence.jpa.test.helper.DBHelper;
-import am.ajf.transaction.UserTransactionProducer;
 
 /**
  * TODO The ignore can be removed when :
