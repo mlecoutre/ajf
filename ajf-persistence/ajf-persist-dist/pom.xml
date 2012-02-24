@@ -47,22 +47,7 @@
 			</dependency>
 			<dependency>
 				<groupId>am.ajf</groupId>
-				<artifactId>ajf-injection-api</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>am.ajf</groupId>
-				<artifactId>ajf-injection-impl</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>am.ajf</groupId>
-				<artifactId>ajf-transaction-api</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>am.ajf</groupId>
-				<artifactId>ajf-transaction-impl</artifactId>
+				<artifactId>ajf-injection</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		</dependencies>
