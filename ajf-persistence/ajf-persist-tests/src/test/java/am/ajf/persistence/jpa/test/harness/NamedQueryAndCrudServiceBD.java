@@ -2,9 +2,9 @@ package am.ajf.persistence.jpa.test.harness;
 
 import java.util.List;
 
-import am.ajf.persistence.jpa.CrudServiceBD;
 import am.ajf.persistence.jpa.annotation.NamedQuery;
 import am.ajf.persistence.jpa.annotation.QueryParam;
+import am.ajf.persistence.jpa.api.CrudServiceBD;
 
 public interface NamedQueryAndCrudServiceBD extends CrudServiceBD<Model1, Long>{
 

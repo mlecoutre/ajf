@@ -21,9 +21,6 @@ import am.ajf.persistence.jpa.impl.CrudImplHandler;
 import am.ajf.persistence.jpa.impl.NamedQueryImplHandler;
 import am.ajf.persistence.jpa.test.harness.Model1;
 import am.ajf.persistence.jpa.test.harness.NamedQueryAndCrudServiceBD;
-import am.ajf.persistence.jpa.test.harness.NamedQueryNoImplServiceBD;
-import am.ajf.persistence.jpa.test.harness.NamedQueryWithImplService;
-import am.ajf.persistence.jpa.test.harness.NamedQueryWithImplServiceBD;
 import am.ajf.persistence.jpa.test.helper.DBHelper;
 
 @RunWith(Arquillian.class)
