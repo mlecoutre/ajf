@@ -20,11 +20,7 @@
 		</dependency>
 		<dependency>
 			<groupId>am.ajf</groupId>
-			<artifactId>ajf-injection-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>am.ajf</groupId>
-			<artifactId>ajf-injection-impl</artifactId>
+			<artifactId>ajf-injection</artifactId>
 		</dependency>
 
 		<dependency>

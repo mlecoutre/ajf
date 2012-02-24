@@ -24,7 +24,7 @@
 		</dependency>
 		<dependency>
 			<groupId>am.ajf</groupId>
-			<artifactId>ajf-injection-api</artifactId>
+			<artifactId>ajf-injection</artifactId>
 		</dependency>
 
 		<!-- JPA2 impl for tests -->
