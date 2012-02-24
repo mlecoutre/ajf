@@ -18,8 +18,8 @@ import javax.transaction.UserTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import am.ajf.persistence.jpa.CrudServiceBD;
-import am.ajf.transaction.Transactional;
+import am.ajf.injection.Transactional;
+import am.ajf.persistence.jpa.api.CrudServiceBD;
 
 import commonj.work.Work;
 import commonj.work.WorkManager;

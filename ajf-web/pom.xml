@@ -8,9 +8,7 @@
 		<relativePath>../ajf-parent/pom.xml</relativePath>
 	</parent>
 
-	<groupId>am.ajf</groupId>
 	<artifactId>ajf-web</artifactId>
-	<version>2.0.2-SNAPSHOT</version>
 	<description>specific utility classes for ajf web application</description>
 
 	<scm>
@@ -57,14 +55,14 @@
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-core</artifactId>
-			<version>2.1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- testing dependency -->
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-testing</artifactId>
-			<version>2.1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 

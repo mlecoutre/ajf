@@ -70,7 +70,7 @@ public class ImplementationHandlersRepository {
 	
 	public void addHandler(Class<? extends ImplementationHandler> handler) throws InstantiationException, IllegalAccessException {	
 		//add only if it implement 'ServiceHandler'
-		if (ImplementationHandler.class.isAssignableFrom(handler)) {
+		if (ImplementationHandler.class.isAssignableFrom(handler) && !handler.isInterface()) {
 			ImplementationHandler instance = BeanUtils.newInstance(handler);
 			repository.add(instance);		
 		}

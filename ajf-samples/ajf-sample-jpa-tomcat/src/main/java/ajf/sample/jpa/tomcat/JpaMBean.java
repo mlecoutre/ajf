@@ -17,7 +17,7 @@ import javax.transaction.SystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import am.ajf.persistence.jpa.CrudBD;
+import am.ajf.persistence.jpa.api.CrudBD;
 
 @Named("jpaBean")
 @RequestScoped

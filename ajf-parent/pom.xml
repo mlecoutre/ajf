@@ -84,8 +84,8 @@
 		<module>../ajf-notif</module>
 		<module>../ajf-security</module>
 		<module>../ajf-web</module>
-		<module>../ajf-persistence/ajf-persist-dist</module>
+		<module>../ajf-persistence</module>
 		<module>../ajf-remoting/ajf-remoting-dist</module>
-	</modules>
+	</modules>	 
 	
 </project>
