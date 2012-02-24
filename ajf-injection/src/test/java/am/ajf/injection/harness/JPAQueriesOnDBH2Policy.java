@@ -11,6 +11,7 @@ import am.ajf.injection.helper.EntityManagerProvider;
 @Transactional
 public class JPAQueriesOnDBH2Policy {
 	
+	@SuppressWarnings("unchecked")
 	public ModelRB findAllModels() throws IllegalArgumentException, IllegalAccessException {
 		EntityManagerFactory emf1 = EntityManagerProvider.getEntityManagerFactoryH21();
 		EntityManager em1 = emf1.createEntityManager();

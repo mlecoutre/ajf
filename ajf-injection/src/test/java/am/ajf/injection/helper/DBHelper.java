@@ -28,7 +28,7 @@ public class DBHelper {
 		}		
 		ut.commit();        		
 	}
-	
+	@SuppressWarnings("unchecked")
 	public static void cleanDB12() throws Exception {
 		InitialContext ic = new InitialContext();
 		UserTransaction ut = (UserTransaction)ic.lookup("java:comp/UserTransaction");
@@ -51,6 +51,7 @@ public class DBHelper {
         ut.commit();                
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static void cleanDB34() throws Exception {
 		InitialContext ic = new InitialContext();
 		UserTransaction ut = (UserTransaction)ic.lookup("java:comp/UserTransaction");
