@@ -42,11 +42,16 @@ public class ServicesExtension implements Extension {
 		super();
 	}
 
+	public List<Throwable> getIssues() {
+		return issues;
+	}
+
 	public void beforeBeanDiscovery(@Observes BeforeBeanDiscovery bbd,
 			BeanManager beanManager) {
 		logger
-				.info("Loading AJF CDI extension 'ServicesExtension' : beginning the scanning process.");
+				.trace("Loading AJF CDI extension 'ServicesExtension' : beginning the scanning process.");
 
+		// attache the beanManager to OWBBeanFactory
 		OWBBeanFactory.setBeanManager(beanManager);
 
 		issues = new ArrayList<Throwable>();
@@ -56,7 +61,8 @@ public class ServicesExtension implements Extension {
 
 	public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd,
 			BeanManager beanManager) {
-		logger.info("Finished the scanning process.");
+		
+		logger.trace("Finished the scanning process.");
 		serviceHandlerRepository.completeScan();
 		serviceRepository.completeScan();
 
@@ -140,7 +146,7 @@ public class ServicesExtension implements Extension {
 		for (Throwable t : issues) {
 			abd.addDefinitionError(t);
 		}
-		logger.info("Loaded AJF CDI extension 'ServicesExtension'.");
+		logger.trace("Loaded AJF CDI extension 'ServicesExtension'.");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -148,7 +154,7 @@ public class ServicesExtension implements Extension {
 			BeanManager beanManager) {
 
 		Class<T> javaClass = pat.getAnnotatedType().getJavaClass();
-		logger.info("Scanning type: " + javaClass.getName());
+		logger.debug("Scanning type: " + javaClass.getName());
 		
 		try {
 			
