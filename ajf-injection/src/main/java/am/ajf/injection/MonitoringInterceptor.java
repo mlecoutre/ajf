@@ -26,7 +26,7 @@ public class MonitoringInterceptor {
 		String serviceName = ClassUtils.processServiceInterfaceName(targetClass);
 		String operation = ctx.getMethod().getName();
 		
-		logger.info(">> ".concat(serviceName).concat("#").concat(operation).concat("(...)"));
+		logger.trace(">> ".concat(serviceName).concat("#").concat(operation).concat("(...)"));
 		long start = System.currentTimeMillis();
 		
 		try {
@@ -36,7 +36,7 @@ public class MonitoringInterceptor {
 		finally {
 			long end = System.currentTimeMillis();
 			long ellapsed = end - start;
-			logger.info("<< ".concat(serviceName).concat("#").concat(operation).concat("(...) in {} ms."), ellapsed);			
+			logger.trace("<< ".concat(serviceName).concat("#").concat(operation).concat("(...) in {} ms."), ellapsed);			
 		}
 	}
 	
