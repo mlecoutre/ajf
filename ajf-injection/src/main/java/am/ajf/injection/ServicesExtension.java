@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -48,8 +49,8 @@ public class ServicesExtension implements Extension {
 
 	public void beforeBeanDiscovery(@Observes BeforeBeanDiscovery bbd,
 			BeanManager beanManager) {
-		logger
-				.trace("Loading AJF CDI extension 'ServicesExtension' : beginning the scanning process.");
+		
+		logger.trace("AJF CDI extension 'ServicesExtension' : beginning the scanning process.");
 
 		// attache the beanManager to OWBBeanFactory
 		OWBBeanFactory.setBeanManager(beanManager);
@@ -62,7 +63,8 @@ public class ServicesExtension implements Extension {
 	public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd,
 			BeanManager beanManager) {
 		
-		logger.trace("Finished the scanning process.");
+		logger.trace("AJF CDI extension 'ServicesExtension' : finished the scanning process.");
+		
 		serviceHandlerRepository.completeScan();
 		serviceRepository.completeScan();
 
@@ -146,7 +148,7 @@ public class ServicesExtension implements Extension {
 		for (Throwable t : issues) {
 			abd.addDefinitionError(t);
 		}
-		logger.trace("Loaded AJF CDI extension 'ServicesExtension'.");
+		logger.trace("AJF CDI extension 'ServicesExtension'.");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -177,30 +179,117 @@ public class ServicesExtension implements Extension {
 				Set<AnnotatedMethod<? super T>> serviceMethods = interfaceAnnotatedType
 						.getMethods();
 
-				if (null == wrapped) {
-					// get the annotated service implementation
-					AnnotatedType<T> annotatedType = pat.getAnnotatedType();
-					// wrapp the service implementation
-					wrapped = new EnrichableAnnotatedTypeWrapper<T>(
-						annotatedType);
-				}
-
-				// add monitored annotation for each overrided method
-				Class<? extends Annotation> annotationType = Monitored.class;
-				Monitored annotation = new Monitored() {
-					@Override
-					public Class<? extends Annotation> annotationType() {
-						return Monitored.class;
+				// enrich the methods annotations
+				if ((null != serviceMethods) && !serviceMethods.isEmpty()) {
+					
+					// create the annotated type wrapper if not exist
+					if (null == wrapped) {
+						// get the annotated service implementation
+						AnnotatedType<T> annotatedType = pat.getAnnotatedType();
+						// wrapp the service implementation
+						wrapped = new EnrichableAnnotatedTypeWrapper<T>(
+							annotatedType);
 					}
-				};
-				
-				for (AnnotatedMethod<? super T> svcMethod : serviceMethods) {
-					wrapped.addMethodAnnotation(svcMethod.getJavaMember(), annotationType, annotation);					
+
+					// add monitored annotation for each overrided method
+					Class<? extends Annotation> annotationType = Monitored.class;
+					Monitored annotation = new Monitored() {
+						@Override
+						public Class<? extends Annotation> annotationType() {
+							return Monitored.class;
+						}
+					};
+					
+					// add the new annotation
+					for (AnnotatedMethod<? super T> svcMethod : serviceMethods) {
+						wrapped.addMethodAnnotation(svcMethod.getJavaMember(), annotationType, annotation);					
+					}
 				}
 
 			}
 			
-			// add your class annotations enrichment here
+			// add @ErrorHandled annotation
+			boolean isPolicyImpl = ClassUtils.isPolicyImpl(javaClass);
+			boolean isServiceImpl = ClassUtils.isServiceImpl(javaClass);
+			boolean isWebController = ClassUtils.isWebController(javaClass);
+			
+			if (isPolicyImpl || isServiceImpl || isWebController) {
+				
+				Set<AnnotatedMethod<? super T>> componentMethods = null;
+				if (isWebController) {
+					
+					// get the annotated service implementation
+					AnnotatedType<T> annotatedType = pat.getAnnotatedType();
+					
+					// get the service operations
+					componentMethods = new HashSet<AnnotatedMethod<? super T>>();
+					
+					// iterate on annotated methods
+					for (AnnotatedMethod<? super T> annotatedMethod : annotatedType.getMethods()) {
+						// all public methods
+						if (Modifier.isPublic(annotatedMethod.getJavaMember().getModifiers())) {
+							
+							String methodName = annotatedMethod.getJavaMember().getName();
+							if ((!methodName.startsWith("set")) 
+								|| (!methodName.startsWith("get"))
+								|| (!methodName.startsWith("is"))
+								|| (!methodName.equals("hashCode"))
+								|| (!methodName.equals("equals"))
+								|| (!methodName.equals("toString"))
+								) {
+								
+								componentMethods.add(annotatedMethod);
+								
+							}
+								
+						}
+					}
+					
+				}
+				else {
+				
+					// get the corresponding service interface
+					String serviceInterfaceName = ClassUtils
+							.processServiceInterfaceName(javaClass);
+					Class<?> serviceInterface = ClassUtils
+							.loadClass(serviceInterfaceName);
+	
+					// get the annotated service interface
+					AnnotatedType<T> interfaceAnnotatedType = (AnnotatedType<T>) beanManager
+							.createAnnotatedType(serviceInterface);
+					// get the service operations
+					componentMethods = interfaceAnnotatedType
+							.getMethods();
+				}
+					
+				// enrich the methods annotations
+				if ((null != componentMethods) && !componentMethods.isEmpty()) {
+					
+					// create the annotated type wrapper if not exist
+					if (null == wrapped) {
+						// get the annotated service implementation
+						AnnotatedType<T> annotatedType = pat.getAnnotatedType();
+						// wrapp the service implementation
+						wrapped = new EnrichableAnnotatedTypeWrapper<T>(
+							annotatedType);
+					}
+					
+					// add errorHandled annotation for each overrided method
+					Class<? extends Annotation> annotationType = ErrorHandled.class;
+					ErrorHandled annotation = new ErrorHandled() {
+						@Override
+						public Class<? extends Annotation> annotationType() {
+							return ErrorHandled.class;
+						}
+					};
+					
+					// add the new annotation
+					for (AnnotatedMethod<? super T> svcMethod : componentMethods) {
+						wrapped.addMethodAnnotation(svcMethod.getJavaMember(), annotationType, annotation);					
+					}
+				}
+			}
+			
 			
 			if (null != wrapped) {
 				
