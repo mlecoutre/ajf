@@ -38,7 +38,7 @@
 		</dependency>
 		<dependency>
 			<groupId>am.ajf</groupId>
-			<artifactId>ajf-injection-impl</artifactId>
+			<artifactId>ajf-injection</artifactId>
 			<version>${ajfversion}</version>
 		</dependency>
 		<dependency>
