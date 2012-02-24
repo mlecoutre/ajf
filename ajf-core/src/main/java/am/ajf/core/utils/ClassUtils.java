@@ -24,6 +24,12 @@ public class ClassUtils {
 	private static final String LIB_BUSINESS = ".lib.business.";
 	private static final String CORE_BUSINESS = ".core.business.";
 
+	private static final String UI_CONTROLLER = ".web.controllers.";
+	private static final String MBean = "MBean";
+	
+	/**
+	 * Default constructor
+	 */
 	private ClassUtils() {
 		super();
 	}
@@ -160,7 +166,7 @@ public class ClassUtils {
 	 * test is the specified interface is DAO
 	 * 
 	 * @param serviceClass
-	 * @return true
+	 * @return boolean value if class is a DAO
 	 */
 	public static boolean isDAO(Class<?> serviceClass) {
 		if (!serviceClass.isInterface()) return false;
@@ -246,9 +252,25 @@ public class ClassUtils {
 	}
 
 	/**
-	 * 
-	 * @param className
-	 * @return
+	 * Check if class is a web controller, means, in the .web.controllers package
+	 * and if is terminated by MBean
+	 * @param serviceClass class to test
+	 * @return boolean value
+	 */
+	public static boolean isWebController(Class<?> serviceClass) {
+		boolean res = false;
+		String serviceName = serviceClass.getName();
+		if (serviceName.contains(UI_CONTROLLER)) {
+			
+			res = serviceName.endsWith(MBean);
+		}
+		return res;
+	}
+	
+	/**
+	 * add class in the class loader
+	 * @param className full class name to load
+	 * @return loaded class
 	 * @throws ClassNotFoundException
 	 */
 	public static Class<?> loadClass(String className)
