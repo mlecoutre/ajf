@@ -173,24 +173,37 @@ public class ClassUtils {
 	 * @param serviceClass
 	 * @return
 	 */
-	public static boolean isServiceInterface(Class<?> serviceClass) {
+	public static boolean isPolicyOrServiceInterface(Class<?> serviceClass) {
 		if (!serviceClass.isInterface()) 
 			return false;
 		
-		String serviceName = serviceClass.getName();
+		boolean res = false;
 		
+		res = isServiceInterface(serviceClass);
+		if (res)
+			return true;
+
+		res = isPolicyInterface(serviceClass);
+		return res;
+		
+	}
+
+	public static boolean isServiceInterface(Class<?> serviceClass) {
+		String serviceName = serviceClass.getName();
 		if (serviceName.contains(LIB_SERVICES)) {
-			// end with ~BD
+			// end with ~ServiceBD
 			return serviceName.endsWith(SERVICE_BD);
 		}
-
+		return false;
+	}
+	
+	public static boolean isPolicyInterface(Class<?> serviceClass) {
+		String serviceName = serviceClass.getName();
 		if (serviceName.contains(LIB_BUSINESS)) {
-			// end with ~BD
+			// end with ~ServiceBD
 			return serviceName.endsWith(BD);
 		}
-		
 		return false;
-		
 	}
 	
 	public static boolean isPolicyOrServiceImpl(Class<?> serviceClass) {
