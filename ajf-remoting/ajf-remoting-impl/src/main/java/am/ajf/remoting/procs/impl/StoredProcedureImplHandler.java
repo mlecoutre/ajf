@@ -49,7 +49,7 @@ public class StoredProcedureImplHandler implements ImplementationHandler {
 			CtClass cc = null;
 			
 			// Manage the cases where superClass is null and co
-			cc = JavassistUtils.initClass(superClass, interfaceClass, pool);
+			cc = JavassistUtils.initClass(superClass, interfaceClass, pool, "StoredProcedures");
 			
 			//Add the class attributes (logger, Datasource, ...)			
 			cc.addField(JavassistUtils.createLogger(cc));

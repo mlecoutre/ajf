@@ -2,41 +2,79 @@ package am.ajf.persistence.jpa.impl;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
-import org.hibernate.cfg.NotYetImplementedException;
+import javax.enterprise.inject.Alternative;
+import javax.persistence.EntityManager;
+import javax.transaction.UserTransaction;
 
 import am.ajf.persistence.jpa.CrudBD;
-import am.ajf.persistence.jpa.CrudServiceBD;
-import am.ajf.transaction.Transactional;
+import am.ajf.persistence.jpa.EntityManagerProvider;
 
-@Transactional
+@Alternative
 public class TransactionalCrudPolicy<E, P> implements CrudBD<E, P> {
 
-	private @Inject CrudServiceBD<E,P> crudService ; 
-		
-	@Override
+	private transient EntityManager em;
+	private transient Class<E> entityClass;
+	private UserTransaction utx;
+	boolean manageTransaction;
+
+	public TransactionalCrudPolicy(Class<E> entityClass, EntityManager em, UserTransaction utx) {
+		this.entityClass = entityClass;
+		this.em = em;
+		this.utx = utx;
+		manageTransaction = EntityManagerProvider.getTransactionType(EntityManagerProvider.getDefaultPersistenceUnitName()) == EntityManagerProvider.TransactionType.LOCAL;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override	
 	public List<E> find(String queryName, Object... params) {		
-		return crudService.find(queryName, params);
-	}
-	
-	@Override
-	public E save(E entity) {		
-		return crudService.save(entity);
-	}
-	
-	@Override
-	public boolean remove(E entity) {		
-		return crudService.remove(entity);
-	}
-	
-	@Override
-	public boolean delete(P pk) {
-		return crudService.delete(pk);
+		return (List<E>) BasicImplCrudDbService.find(em, queryName, params);
 	}
 
-	@Override
+	@SuppressWarnings("unchecked")
+	@Override	
+	public E save(E entity) throws Throwable {
+		E res = null;
+		utx.begin();
+		try {
+			res = (E) BasicImplCrudDbService.save(manageTransaction, em, entity);
+			utx.commit();
+		} catch (Throwable t) {
+			utx.rollback();
+			throw t;
+		}
+		return res;
+	}
+
+	@Override	
+	public boolean remove(E entity) throws Throwable { 
+		boolean res;
+		utx.begin();
+		try {
+			res = BasicImplCrudDbService.remove(manageTransaction, em, entity);
+			utx.commit();
+		} catch (Throwable t) {
+			utx.rollback();
+			throw t;
+		}
+		return res;
+	}
+
+	@Override	
+	public boolean delete(P pk) throws Throwable {
+		boolean res;
+		utx.begin();
+		try {
+			res = BasicImplCrudDbService.delete(manageTransaction, em, entityClass, pk);
+			utx.commit();
+		} catch (Throwable t) {
+			utx.rollback();
+			throw t;
+		}
+		return res;
+	}
+
+	@Override	
 	public E fetch(P pk) {
-		return crudService.fetch(pk);
+		return BasicImplCrudDbService.fetch(em, entityClass, pk);
 	}
 }

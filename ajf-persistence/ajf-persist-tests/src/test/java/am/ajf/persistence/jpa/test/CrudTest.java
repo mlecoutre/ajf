@@ -21,6 +21,7 @@ import am.ajf.persistence.jpa.impl.CrudImplHandler;
 import am.ajf.persistence.jpa.test.harness.ModelCrud;
 import am.ajf.persistence.jpa.test.harness.SimpleCrudServiceBD;
 import am.ajf.persistence.jpa.test.helper.DBHelper;
+import am.ajf.transaction.UserTransactionProducer;
 
 @RunWith(Arquillian.class)
 public class CrudTest {
@@ -37,6 +38,7 @@ public class CrudTest {
 				.addClasses(EntityManagerProvider.class)
 				.addClasses(ModelCrud.class)
 				.addClasses(CrudImplHandler.class)
+				.addClasses(UserTransactionProducer.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,
 						ArchivePaths.create("beans.xml"))
 				.addAsManifestResource("META-INF/persistence.xml", 

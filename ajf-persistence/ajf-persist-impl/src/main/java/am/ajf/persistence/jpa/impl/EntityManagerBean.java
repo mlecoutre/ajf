@@ -53,8 +53,6 @@ public class EntityManagerBean implements Bean<EntityManager> {
 		logger.trace("Creation of EntityManager ("+persistenceUnit+")) : Thread ("+Thread.currentThread().getId()+")");
 		EntityManager em = EntityManagerProvider.createEntityManager(persistenceUnit);
 		ctx.push(em);
-        //it.inject(em, ctx);
-        //it.postConstruct(em);
         return em;
 	}
 
@@ -62,10 +60,11 @@ public class EntityManagerBean implements Bean<EntityManager> {
 	public void destroy(EntityManager em, CreationalContext<EntityManager> ctx) {
 		//This line is why this class exist on the first place
 		//The EntityManager will be close then disposed when the Request is finished
-		em.close();
-		
-		//it.preDestroy(em);
-        //it.dispose(em);
+		if (em != null) {
+			em.close();
+		} else {
+			logger.warn("Trying to close a null EntityManager.");
+		}
         ctx.release();        
         logger.trace("Disposed of EntityManager ("+persistenceUnit+")) : Thread ("+Thread.currentThread().getId()+")");
 	}

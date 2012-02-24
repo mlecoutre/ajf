@@ -18,10 +18,11 @@ import org.junit.runner.RunWith;
 
 import am.ajf.persistence.jpa.CrudServiceBD;
 import am.ajf.persistence.jpa.EntityManagerProvider;
-import am.ajf.persistence.jpa.impl.CrudServiceProvider;
+import am.ajf.persistence.jpa.impl.CrudProvider;
 import am.ajf.persistence.jpa.impl.DummyCrudService;
 import am.ajf.persistence.jpa.test.harness.ModelAudit;
 import am.ajf.persistence.jpa.test.helper.DBHelper;
+import am.ajf.transaction.UserTransactionProducer;
 
 @RunWith(Arquillian.class)
 public class AuditDataTest {
@@ -36,7 +37,8 @@ public class AuditDataTest {
 				.addClasses(EntityManagerProvider.class)	
 				.addClasses(CrudServiceBD.class)
 				.addClasses(DummyCrudService.class)
-				.addClasses(CrudServiceProvider.class)
+				.addClasses(CrudProvider.class)
+				.addClasses(UserTransactionProducer.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,
 						ArchivePaths.create("beans.xml"))
 				.addAsManifestResource("META-INF/persistence.xml", 

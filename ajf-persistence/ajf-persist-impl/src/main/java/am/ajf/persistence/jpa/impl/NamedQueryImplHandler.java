@@ -3,8 +3,12 @@ package am.ajf.persistence.jpa.impl;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javassist.CannotCompileException;
 import javassist.CtClass;
+import javassist.CtField;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 import am.ajf.core.utils.JavassistUtils;
@@ -15,6 +19,7 @@ import am.ajf.persistence.jpa.annotation.QueryParam;
 
 public class NamedQueryImplHandler extends AbstractPersistenceImplHandler implements ImplementationHandler {
 
+	private static final Logger logger = LoggerFactory.getLogger(NamedQueryImplHandler.class);
 	
 	public NamedQueryImplHandler() {
 		super();
@@ -28,17 +33,22 @@ public class NamedQueryImplHandler extends AbstractPersistenceImplHandler implem
 	@Override
 	public Class<?> implementMethodsFor(Class<?> superClass,
 			Class<?> interfaceClass, List<Method> methods) throws ClassGenerationException {
+		logger.trace("Generate Class for : "+interfaceClass.getSimpleName());
 		Class<?> clazz = null;
 		
 		try {
 			CtClass cc = null;
 			
 			// Manage the cases where superClass is null and co
-			cc = JavassistUtils.initClass(superClass, interfaceClass, pool);
+			cc = JavassistUtils.initClass(superClass, interfaceClass, pool, "NamedQuery");
 			
 			//Add the class attributes (logger, EntityManagerFactory, @PersitenceUnit...)
-			cc.addField(JavassistUtils.createLogger(cc));
-			cc.addField(createEntityManager(cc));
+			CtField f1 = JavassistUtils.createLogger(cc);
+			logger.trace(f1.toString());
+			cc.addField(f1);
+			CtField f2 = createEntityManager(cc);
+			logger.trace(f2.toString());
+			cc.addField(f2);
 			
 			//generate each method
 			for (Method method : methods) {
@@ -47,6 +57,7 @@ public class NamedQueryImplHandler extends AbstractPersistenceImplHandler implem
 				CtMethod ctmethod = declaringClass.getDeclaredMethod(method.getName());			
 				CtMethod newCtm = new CtMethod(ctmethod, cc, null);
 				StringBuffer methodBody = generateBodyFor(method);
+				logger.trace("Generate Method for "+method.getName()+"\n"+methodBody.toString());
 				newCtm.setBody(methodBody.toString());
 				cc.addMethod(newCtm);			
 			}

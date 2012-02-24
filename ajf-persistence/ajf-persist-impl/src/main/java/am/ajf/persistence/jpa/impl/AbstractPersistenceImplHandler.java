@@ -43,33 +43,5 @@ public class AbstractPersistenceImplHandler {
 		cEm.getFieldInfo().addAttribute(attribute);
 		return cEm;
 	}
-	
-/*
-	protected CtField createLogger(CtClass cc) throws CannotCompileException {
-		CtField cLogger = CtField.make("private final transient org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(this.getClass());", cc);				
-		return cLogger;
-	}
-	*/
-
-	/*
-	protected CtClass initClass(Class<?> superClass, Class<?> interfaceClass)
-			throws NotFoundException, CannotCompileException {
-				CtClass cc;
-				CtClass cin = pool.get(interfaceClass.getName());
-				if (superClass == null) {// no impl, so impl the interface
-					cc = pool.makeClass(interfaceClass.getName() + generateClassSuffix());		
-					cc.setInterfaces(new CtClass[] {cin});
-				} else { //extend the provided client impl
-					cc = pool.makeClass(superClass.getName() + generateClassSuffix());		
-					CtClass cim = pool.get(superClass.getName());
-					cc.setSuperclass(cim);
-				}
-				return cc;
-			}
-
-	private String generateClassSuffix() {
-		return "_$ajf$javaassist$proxy$";
-	}
-	*/
 
 }

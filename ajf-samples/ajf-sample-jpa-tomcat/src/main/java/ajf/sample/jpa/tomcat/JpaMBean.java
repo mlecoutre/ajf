@@ -1,14 +1,13 @@
 package ajf.sample.jpa.tomcat;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.naming.NamingException;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -18,14 +17,16 @@ import javax.transaction.SystemException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import am.ajf.persistence.jpa.CrudBD;
+
 @Named("jpaBean")
 @RequestScoped
-public class JpaMBean implements Serializable {
-
-	private static final long serialVersionUID = 1687667378623102828L;
+public class JpaMBean {
+	
 	private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	@Inject private SamplePolicyBD policy;	
+	@Inject private SamplePolicyBD policy;
+	@Inject private CrudBD<Model, Long> crudPolicy;
 	
 	private List<Model> models;
 	
@@ -38,27 +39,59 @@ public class JpaMBean implements Serializable {
 		models = new ArrayList<Model>();
 	}
 
-	public void computeModels(/*ActionEvent event*/) {
+	public void computeModelsCustom() {
 		logger.debug("JpaMBean : compute models");
-		models = policy.listAllModels().getModels();
+		models = policy.listAllModelsCustom().getModels();
 		logger.debug("models changed. found "+models.size()+" value(s)");
 	}
 	
-	public void createModelCrud(/*ActionEvent event*/)  {
-		logger.debug("JpaMBean : creates crud models");
-		
-		policy.createModelCrud();
-		
-		models = policy.listAllModels().getModels();
+	public void computeModelsServiceCrud() {
+		logger.debug("JpaMBean : compute models");
+		models = policy.listAllModelsCrud().getModels();
 		logger.debug("models changed. found "+models.size()+" value(s)");
 	}
 	
-	public void createModelManual(/*ActionEvent event*/) throws NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException {
+	public void computeModelsPolicyCrud() {
+		logger.debug("JpaMBean : compute models");
+		models = crudPolicy.find(Model.FIND_ALL);
+		logger.debug("models changed. found "+models.size()+" value(s)");
+	}
+	
+	//Create possible methods
+	
+	public void createModelCustomServiceCrud()  {
+		logger.debug("JpaMBean : creates custom service crud models");
+		
+		policy.createModelCustomCrud();
+		
+		models = policy.listAllModelsCustom().getModels();
+		logger.debug("models changed. found "+models.size()+" value(s)");
+	}
+	
+	public void createModelServiceCrud()  {
+		logger.debug("JpaMBean : creates service crud models");
+		
+		policy.createModelAutoCrud();
+		
+		models = policy.listAllModelsCustom().getModels();
+		logger.debug("models changed. found "+models.size()+" value(s)");
+	}
+	
+	public void createModelPolicyCrud() throws Throwable {
+		logger.debug("JpaMBean : creates policy crud models");
+		
+		crudPolicy.save(new Model("auto-policy created model"));
+		
+		models = policy.listAllModelsCustom().getModels();
+		logger.debug("models changed. found "+models.size()+" value(s)");
+	}
+	
+	public void createModelManual() throws NotSupportedException, SystemException, SecurityException, IllegalStateException, RollbackException, HeuristicMixedException, HeuristicRollbackException, NamingException {
 		logger.debug("JpaMBean : creates manual model");
 		
 		policy.createModelManual();
 		
-		models = policy.listAllModels().getModels();
+		models = policy.listAllModelsCustom().getModels();
 		logger.debug("models changed. found "+models.size()+" value(s)");
 	}
 

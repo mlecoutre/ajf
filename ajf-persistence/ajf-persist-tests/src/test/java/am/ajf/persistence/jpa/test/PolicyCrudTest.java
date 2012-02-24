@@ -13,9 +13,11 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import am.ajf.persistence.jpa.CrudBD;
 import am.ajf.persistence.jpa.CrudServiceBD;
 import am.ajf.persistence.jpa.EntityManagerProvider;
 import am.ajf.persistence.jpa.impl.CrudImplHandler;
@@ -24,22 +26,32 @@ import am.ajf.persistence.jpa.test.harness.ModelCrud;
 import am.ajf.persistence.jpa.test.helper.DBHelper;
 import am.ajf.transaction.UserTransactionProducer;
 
+/**
+ * TODO The ignore can be removed when :
+ * - the test plumbing is added for transactional tests (JTA)
+ * - PersistenceUnits are allowed for PolicyCrud and ServiceCrud
+ * 
+ * @author Nicolas Radde (E016696)
+ */
 @RunWith(Arquillian.class)
-public class DirectCrudTest {
+@Ignore
+public class PolicyCrudTest {
 
 	@Inject
-	private CrudServiceBD<ModelCrud, Long> crudService;
+	private CrudBD<ModelCrud, Long> crudPolicy;
 
 
 	@Deployment
 	public static JavaArchive createTestArchive() {
 		return ShrinkWrap
 				.create(JavaArchive.class, "test.jar")				
-				.addPackages(false, "am.ajf.persistence.jpa")
-				.addPackages(false, "am.ajf.persistence.jpa.annotation")
-				.addPackages(false, "am.ajf.persistence.jpa.impl")
-				.addPackages(true, "am.ajf.transaction")
-				.addClasses(ModelCrud.class)			
+				.addClasses(EntityManagerProvider.class)
+				.addClasses(ModelCrud.class)
+				.addClasses(CrudImplHandler.class)
+				.addClasses(CrudBD.class)
+				.addClasses(CrudProvider.class)
+				.addClasses(CrudServiceBD.class)	
+				.addClasses(UserTransactionProducer.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,
 						ArchivePaths.create("beans.xml"))
 				.addAsManifestResource("META-INF/persistence.xml", 
@@ -58,10 +70,11 @@ public class DirectCrudTest {
 	/**
 	 * Create a new Model and save it with the save method
 	 * The resulting object should have an ID, and the name should be the same.
+	 * @throws Throwable 
 	 */
 	@Test
-	public void testSaveNew() {
-		ModelCrud model = crudService.save(new ModelCrud("Nicolas"));
+	public void testSaveNew() throws Throwable {
+		ModelCrud model = crudPolicy.save(new ModelCrud("Nicolas"));
 		Assert.assertNotNull(model);
 		Assert.assertNotNull(model.getId());
 		Assert.assertEquals("Nicolas", model.getName());
@@ -70,16 +83,17 @@ public class DirectCrudTest {
 	/**
 	 * Create a simple object then modify it with the save method. 
 	 * Id should be the same, and the name should change.
+	 * @throws Throwable 
 	 */
 	@Test
-	public void testSaveExisting() {
-		ModelCrud model = crudService.save(new ModelCrud("Nicolas"));
+	public void testSaveExisting() throws Throwable {
+		ModelCrud model = crudPolicy.save(new ModelCrud("Nicolas"));
 		Long id = model.getId();
 		
 		Assert.assertNotNull(model);
 		
 		model.setName("Vincent");
-		ModelCrud model1 = crudService.save(model);
+		ModelCrud model1 = crudPolicy.save(model);
 		
 		Assert.assertNotNull(model1);
 		Assert.assertEquals(id, model1.getId());
@@ -87,45 +101,45 @@ public class DirectCrudTest {
 	}
 	
 	@Test
-	public void testNamedQueryNoArgs() {
-		ModelCrud model1 = crudService.save(new ModelCrud("Matthieu"));
-		ModelCrud model2 = crudService.save(new ModelCrud("Nicolas"));
-		ModelCrud model3 = crudService.save(new ModelCrud("Vincent"));					
+	public void testNamedQueryNoArgs() throws Throwable {
+		ModelCrud model1 = crudPolicy.save(new ModelCrud("Matthieu"));
+		ModelCrud model2 = crudPolicy.save(new ModelCrud("Nicolas"));
+		ModelCrud model3 = crudPolicy.save(new ModelCrud("Vincent"));					
 		
 		Assert.assertNotNull(model1);
 		Assert.assertNotNull(model2);
 		Assert.assertNotNull(model3);				
 		
-		List<ModelCrud> models = crudService.find(ModelCrud.FIND_ALL);
+		List<ModelCrud> models = crudPolicy.find(ModelCrud.FIND_ALL);
 		
 		Assert.assertNotNull(models);
 		Assert.assertEquals(3, models.size());				
 	}
 	
 	@Test
-	public void testNamedQueryWithArgs() {
-		ModelCrud model1 = crudService.save(new ModelCrud("Matthieu"));
-		ModelCrud model2 = crudService.save(new ModelCrud("Nicolas"));
-		ModelCrud model3 = crudService.save(new ModelCrud("Vincent"));					
+	public void testNamedQueryWithArgs() throws Throwable {
+		ModelCrud model1 = crudPolicy.save(new ModelCrud("Matthieu"));
+		ModelCrud model2 = crudPolicy.save(new ModelCrud("Nicolas"));
+		ModelCrud model3 = crudPolicy.save(new ModelCrud("Vincent"));					
 		
 		Assert.assertNotNull(model1);
 		Assert.assertNotNull(model2);
 		Assert.assertNotNull(model3);				
 		
-		List<ModelCrud> models = crudService.find(ModelCrud.FIND_BY_NAME, "Vincent");
+		List<ModelCrud> models = crudPolicy.find(ModelCrud.FIND_BY_NAME, "Vincent");
 		
 		Assert.assertNotNull(models);
 		Assert.assertEquals(1, models.size());				
 	}
 	
 	@Test
-	public void testFetch() {
-		ModelCrud model1 = crudService.save(new ModelCrud("Matthieu"));
+	public void testFetch() throws Throwable {
+		ModelCrud model1 = crudPolicy.save(new ModelCrud("Matthieu"));
 		Long id = model1.getId();
 		
 		Assert.assertNotNull(model1);			
 		
-		ModelCrud model = crudService.fetch(id);
+		ModelCrud model = crudPolicy.fetch(id);
 		
 		Assert.assertNotNull(model);
 		Assert.assertEquals("Matthieu", model.getName());				
@@ -133,18 +147,18 @@ public class DirectCrudTest {
 	
 	
 	@Test
-	public void testRemove() {
-		ModelCrud model1 = crudService.save(new ModelCrud("Matthieu"));
-		crudService.save(new ModelCrud("Vincent"));
+	public void testRemove() throws Throwable {
+		ModelCrud model1 = crudPolicy.save(new ModelCrud("Matthieu"));
+		crudPolicy.save(new ModelCrud("Vincent"));
 		
 		Assert.assertNotNull(model1);			
 		
-		boolean isRemoveOk = crudService.remove(model1);
+		boolean isRemoveOk = crudPolicy.remove(model1);
 		
 		Assert.assertTrue(isRemoveOk);
 		Assert.assertNotNull(model1.getId()); //This is normal as the object was not refreshed !
 		
-		List<ModelCrud> models = crudService.find(ModelCrud.FIND_ALL);		
+		List<ModelCrud> models = crudPolicy.find(ModelCrud.FIND_ALL);		
 		
 		Assert.assertNotNull(models);
 		Assert.assertEquals(1, models.size());
@@ -152,20 +166,20 @@ public class DirectCrudTest {
 	}
 		
 	@Test
-	public void testDelete() {
-		ModelCrud model1 = crudService.save(new ModelCrud("Matthieu"));
-		ModelCrud model2 = crudService.save(new ModelCrud("Vincent"));
+	public void testDelete() throws Throwable {
+		ModelCrud model1 = crudPolicy.save(new ModelCrud("Matthieu"));
+		ModelCrud model2 = crudPolicy.save(new ModelCrud("Vincent"));
 		Long id = model1.getId();
 		
 		Assert.assertNotNull(model1);
 		Assert.assertNotNull(model2);
 		
-		boolean isRemoveOk = crudService.delete(id);
+		boolean isRemoveOk = crudPolicy.delete(id);
 		
 		Assert.assertTrue(isRemoveOk);
 		Assert.assertNotNull(model1.getId()); //This is normal as the object was not refreshed !
 		
-		ModelCrud model = crudService.fetch(id);
+		ModelCrud model = crudPolicy.fetch(id);
 		
 		Assert.assertNull(model);
 	}

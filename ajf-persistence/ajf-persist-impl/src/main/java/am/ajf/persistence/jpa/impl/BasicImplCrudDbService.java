@@ -1,16 +1,19 @@
 package am.ajf.persistence.jpa.impl;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import am.ajf.persistence.jpa.CrudServiceBD;
 
 public class BasicImplCrudDbService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(BasicImplCrudDbService.class);
 
 	public static List<?> find(EntityManager em, String queryName, Object... params) {
 		//EntityManager em = emf.createEntityManager();
@@ -93,13 +96,15 @@ public class BasicImplCrudDbService {
 	
 
 	
-	public static <E> E fetch(EntityManager em, Class<E> entityClass, Object pk) {		
-		return em.find(entityClass, pk);
+	public static <E> E fetch(EntityManager em, Class<E> entityClass, Object pk) {	
+		E obj = em.find(entityClass, pk) ;
+		return obj;
 	}
 	
 	/**
 	 * Return the actual CrudServiceBD Generic instance used by the base service class
 	 * This is used to resolve the Generics at runtime.
+	 * 
 	 * @param baseClass the Service class
 	 * @return a CrudServiceDB interface
 	 */
@@ -113,6 +118,7 @@ public class BasicImplCrudDbService {
 				}
 			}			
 		}
+		logger.warn("WARNING : No Crud interface found for class : "+baseClass.getName());
 		return null;		
 	}
 	

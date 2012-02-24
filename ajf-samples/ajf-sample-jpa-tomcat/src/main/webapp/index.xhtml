@@ -23,14 +23,28 @@ HTML 1.0 Transitional//EN"
 	    #{model.name} (#{model.id})  
 	</p:dataList>  
 	
-	<p:commandButton value="Display"   
-		             actionListener="#{jpaBean.computeModels()}"
+	<p:commandButton value="Display - Custom service"   
+		             actionListener="#{jpaBean.computeModelsCustom()}"
 		             update="main" />
+	<p:commandButton value="Display - Crud Service"   
+		             actionListener="#{jpaBean.computeModelsServiceCrud()}"
+		             update="main" />
+	<p:commandButton value="Display - Crud Policy"   
+		             actionListener="#{jpaBean.computeModelsPolicyCrud()}"
+		             update="main" />
+		             
+	<br/>
 	<p:commandButton value="New - Manual"   
 		             actionListener="#{jpaBean.createModelManual()}"
 		             update="main" />
-	<p:commandButton value="New - CrudService"   
-		             actionListener="#{jpaBean.createModelCrud()}"
+	<p:commandButton value="New - Service Crud"   
+		             actionListener="#{jpaBean.createModelServiceCrud()}"
+		             update="main" />
+	<p:commandButton value="New - Policy Crud"   
+		             actionListener="#{jpaBean.createModelPolicyCrud()}"
+		             update="main" />		             
+	<p:commandButton value="New - Custom Crud Service"   
+		             actionListener="#{jpaBean.createModelCustomServiceCrud()}"
 		             update="main" />	             
 	</p:panel>
 </h:form>
