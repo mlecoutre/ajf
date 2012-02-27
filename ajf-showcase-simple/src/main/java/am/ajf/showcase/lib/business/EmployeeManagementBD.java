@@ -1,6 +1,5 @@
 package am.ajf.showcase.lib.business;
 
-import am.ajf.core.services.exceptions.BusinessLayerException;
 import am.ajf.showcase.lib.business.dto.FireEmployeePB;
 import am.ajf.showcase.lib.business.dto.FireEmployeeRB;
 import am.ajf.showcase.lib.business.dto.HireEmployeePB;
@@ -17,12 +16,12 @@ import am.ajf.showcase.lib.business.dto.ListEmployeesRB;
 public interface EmployeeManagementBD {
 
 	public ListEmployeesRB listEmployees(ListEmployeesPB employeesPB)
-			throws BusinessLayerException;
+			throws Exception;
 
 	public HireEmployeeRB hireEmployee(HireEmployeePB employeeePB)
-			throws BusinessLayerException;
+			throws Exception;
 
 	public FireEmployeeRB fireEmployee(FireEmployeePB employeePB)
-			throws BusinessLayerException;
+			throws Exception;
 
 }

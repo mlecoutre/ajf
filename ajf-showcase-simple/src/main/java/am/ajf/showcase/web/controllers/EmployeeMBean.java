@@ -1,7 +1,5 @@
 package am.ajf.showcase.web.controllers;
 
-import static am.ajf.web.WebUtils.handleError;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -60,7 +58,7 @@ public class EmployeeMBean implements Serializable {
 	private String searchLastname;
 
 	/* POLICIES BUSINESS DELEGATE */
-	
+
 	@Inject
 	EmployeeManagementBD employeeManagement;
 
@@ -77,30 +75,24 @@ public class EmployeeMBean implements Serializable {
 	/**
 	 * Create an employee in the database
 	 */
-	public void hireEmployee() {
+	public void hireEmployee() throws Exception {
 		logger.debug("createEmployee MBean");
 
-		try {
-			Person p = new Person();
-			p.setFirstname(firstname);
-			p.setLastname(lastname);
-			p.setBirthday(birthday);
-			p.setSex(sex);
+		Person p = new Person();
+		p.setFirstname(firstname);
+		p.setLastname(lastname);
+		p.setBirthday(birthday);
+		p.setSex(sex);
 
-			HireEmployeePB pb = new HireEmployeePB(p);
+		HireEmployeePB pb = new HireEmployeePB(p);
 
-			// Call business layer
-			HireEmployeeRB rb = employeeManagement.hireEmployee(pb);
+		// Call business layer
+		HireEmployeeRB rb = employeeManagement.hireEmployee(pb);
 
-			if (rb.isHired()) {
-				FacesMessage facesMessage = new FacesMessage(
-						FacesMessage.SEVERITY_INFO, "Employee created", "");
-				FacesContext.getCurrentInstance()
-						.addMessage(null, facesMessage);
-			}
-		} catch (Exception e) {
-			// import static am.ajf.web.WebUtils.*;
-			handleError(e, logger, "Error when try to list employees");
+		if (rb.isHired()) {
+			FacesMessage facesMessage = new FacesMessage(
+					FacesMessage.SEVERITY_INFO, "Employee created", "");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
 
 	}
@@ -108,50 +100,39 @@ public class EmployeeMBean implements Serializable {
 	/**
 	 * Remove an employee in the database
 	 */
-	public void fireEmployee() {
+	public void fireEmployee() throws Exception {
 		logger.debug("fireEmployee MBean");
 
-		try {
+		FireEmployeePB pb = new FireEmployeePB(selectedEmployee);
 
-			FireEmployeePB pb = new FireEmployeePB(selectedEmployee);
+		// Call business layer
+		FireEmployeeRB rb = employeeManagement.fireEmployee(pb);
 
-			// Call business layer
-			FireEmployeeRB rb = employeeManagement.fireEmployee(pb);
-
-			if (rb.isRemoved()) {
-				//remove in the local list;another choice could be to request the DB
-				this.employees.remove(selectedEmployee);
-				FacesMessage facesMessage = new FacesMessage(
-						FacesMessage.SEVERITY_INFO, "Employee fired!", "");
-				FacesContext.getCurrentInstance()
-						.addMessage(null, facesMessage);
-			}
-		} catch (Exception e) {
-			// import static ajf.web.WebUtils.*;
-			handleError(e, logger, "Error when try to list employees");
+		if (rb.isRemoved()) {
+			// remove in the local list;another choice could be to request
+			// the DB
+			this.employees.remove(selectedEmployee);
+			FacesMessage facesMessage = new FacesMessage(
+					FacesMessage.SEVERITY_INFO, "Employee fired!", "");
+			FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		}
+
 	}
 
 	/**
 	 * list employee
 	 */
-	public void listEmployees() {
+	public void listEmployees() throws Exception {
 
 		logger.debug("listEmployees MBean");
-		try {
 
-			ListEmployeesPB pb = new ListEmployeesPB(searchLastname);
+		ListEmployeesPB pb = new ListEmployeesPB(searchLastname);
 
-			// Call business layer
-			ListEmployeesRB rb = employeeManagement.listEmployees(pb);
+		// Call business layer
+		ListEmployeesRB rb = employeeManagement.listEmployees(pb);
 
-			// Get Result
-			employees = rb.getEmployees();
-
-		} catch (Exception e) {
-			// import static ajf.web.WebUtils.*;
-			handleError(e, logger, "Error when try to list employees");
-		}
+		// Get Result
+		employees = rb.getEmployees();
 	}
 
 	public char getSex() {

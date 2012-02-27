@@ -82,7 +82,7 @@ try{
   throw new MyException (e, msg);
 }
    ]]></programlisting>
-    <para>An other problem appear 
+    <para>An other problem appears 
 when you thrown  and exception to the caller method,  you sometimes log several times the same error (for each layer that you pass through).</para>
     <section>
       <title>Pre define AJF Exceptions</title>

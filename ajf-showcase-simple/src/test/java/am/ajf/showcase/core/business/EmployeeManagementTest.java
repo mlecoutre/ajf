@@ -5,16 +5,13 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.services.exceptions.BusinessLayerException;
 import am.ajf.showcase.core.services.PersonService;
-import am.ajf.showcase.lib.business.EmployeeManagementBD;
 import am.ajf.showcase.lib.business.dto.ListEmployeesPB;
 import am.ajf.showcase.lib.business.dto.ListEmployeesRB;
 import am.ajf.showcase.lib.model.Person;
@@ -49,7 +46,7 @@ public class EmployeeManagementTest {
 	}
 
 	@Test
-	public void testListEmployees() throws BusinessLayerException {
+	public void testListEmployees() throws Exception {
 		logger.debug("testListEmployees");
 
 		List<Person> persons = new ArrayList<Person>();

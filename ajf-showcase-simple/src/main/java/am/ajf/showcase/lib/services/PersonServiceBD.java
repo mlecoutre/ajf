@@ -2,7 +2,7 @@ package am.ajf.showcase.lib.services;
 
 import java.util.List;
 
-import am.ajf.core.services.exceptions.BusinessLayerException;
+import am.ajf.core.services.exceptions.ServiceLayerException;
 import am.ajf.showcase.lib.model.Person;
 
 /**
@@ -13,14 +13,14 @@ import am.ajf.showcase.lib.model.Person;
  */
 public interface PersonServiceBD {
 
-	boolean create(Person person) throws BusinessLayerException;
+	boolean create(Person person) throws ServiceLayerException;
 
-	boolean update(Person person) throws BusinessLayerException;
+	boolean update(Person person) throws ServiceLayerException;
 
-	boolean removeByPrimaryKey(Long personId) throws BusinessLayerException;
+	boolean removeByPrimaryKey(Long personId) throws ServiceLayerException;
 
-	Person findByPersonid(Long personid) throws BusinessLayerException;
+	Person findByPersonid(Long personid) throws ServiceLayerException;
 
-	List<Person> findByLastname(String lastname) throws BusinessLayerException;
+	List<Person> findByLastname(String lastname) throws ServiceLayerException;
 
 }

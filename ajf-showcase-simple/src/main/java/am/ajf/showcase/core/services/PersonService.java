@@ -9,7 +9,7 @@ import javax.persistence.EntityTransaction;
 
 import org.slf4j.Logger;
 
-import am.ajf.core.services.exceptions.BusinessLayerException;
+import am.ajf.core.services.exceptions.ServiceLayerException;
 import am.ajf.showcase.lib.model.Person;
 import am.ajf.showcase.lib.services.PersonServiceBD;
 
@@ -33,71 +33,50 @@ public class PersonService implements PersonServiceBD {
 	}
 
 	@Override
-	public boolean update(Person person) throws BusinessLayerException {
+	public boolean update(Person person) throws ServiceLayerException {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean removeByPrimaryKey(Long personId)
-			throws BusinessLayerException {
+			throws ServiceLayerException {
 
-		try {
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		Person p = em.find(Person.class, personId);
+		em.remove(p);
+		tx.commit();
 
-			EntityTransaction tx = em.getTransaction();
-			tx.begin();
-			Person p = em.find(Person.class, personId);
-			em.remove(p);
-			tx.commit();
-		} catch (Exception ple) {
-			logger.error("create method: " + ple.getMessage(), ple);
-			throw new BusinessLayerException(ple);
-		}
 		return true;
 	}
 
 	@Override
-	public Person findByPersonid(Long personid) throws BusinessLayerException {
+	public Person findByPersonid(Long personid) throws ServiceLayerException {
 
-		try {
+		return (Person) em.createNamedQuery(Person.FIND_BY_PERSONID);
 
-			return (Person) em.createNamedQuery(Person.FIND_BY_PERSONID)
-					.setParameter("personid", personid).getSingleResult();
-		} catch (Exception ple) {
-			logger.error("findByPersonid method: " + ple.getMessage(), ple);
-			throw new BusinessLayerException(ple);
-		}
 	}
 
 	@Override
-	public boolean create(Person person) throws BusinessLayerException {
+	public boolean create(Person person) throws ServiceLayerException {
 
-		try {
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		em.persist(person);
+		tx.commit();
 
-			EntityTransaction tx = em.getTransaction();
-			tx.begin();
-			em.persist(person);
-			tx.commit();
-		} catch (Exception ple) {
-			logger.error("create method: " + ple.getMessage(), ple);
-			throw new BusinessLayerException(ple);
-		}
 		return true;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Person> findByLastname(String lastname)
-			throws BusinessLayerException {
+			throws ServiceLayerException {
 		logger.debug("findByLastname: " + lastname);
 
-		try {
+		return em.createNamedQuery(Person.FIND_BY_LASTNAME)
+				.setParameter("lastname", lastname).getResultList();
 
-			return em.createNamedQuery(Person.FIND_BY_LASTNAME)
-					.setParameter("lastname", lastname).getResultList();
-		} catch (Exception ple) {
-			logger.error("findByPersonid method: " + ple.getMessage(), ple);
-			throw new BusinessLayerException(ple);
-		}
 	}
 }
