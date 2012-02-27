@@ -76,16 +76,26 @@
 	</dependencyManagement>
 
 	<modules>
-		<module>../ajf-core</module>		
-		<module>../ajf-documentation</module>
-		<module>../ajf-testing</module>
-		<module>../ajf-injection</module>
+		<!--  mandatory modules -->
+		<module>../ajf-core</module>	
+		<module>../ajf-injection</module>	
+		<module>../ajf-documentation</module>		
+				
+		<!-- optionnal modules -->
 		<module>../ajf-monitoring</module>
 		<module>../ajf-notif</module>
 		<module>../ajf-security</module>
 		<module>../ajf-web</module>
 		<module>../ajf-persistence</module>
-		<module>../ajf-remoting/ajf-remoting-dist</module>
+		<module>../ajf-remoting</module>
+		
+		<!-- Utilities modules -->
+		<module>../ajf-testing</module>
+		<module>../ajf-forge</module>
+		
+		<!-- demo and samples -->
+		<module>../ajf-showcase-simple</module>
+		
 	</modules>	 
 	
 </project>
