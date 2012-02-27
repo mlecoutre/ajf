@@ -143,50 +143,58 @@ public interface PersonServiceBD {
 }
 ]]></programlisting>
       </example>
+      <para>This ErrorHandling behaviour is automatically execute on all methods of *.web.controllers.xxxMBean, *.core.business.xxxPolicy and *.core.services.xxxServices except getter/setter, equals, hashcode and toString methods.</para>
     </section>
     <section>
       <title>Custom Error Handling</title>
-      <para>In the 20 other percent, you need to define the exception handling more precisely.
+      <para>In the 20 other percents, you need to define the exception handling more precisely.
       You can use the traditional try{}catch(){}finally{} blocks. 
       </para>
- <itemizedlist>
-      <listitem>
-        <para> If you have created your own Exception taht inherit ServiceLayerException or BusinessLayerException, you can use it directly in the catch block.
-	</para>
-	</listitem>
-
-<listitem>
-        <para> If you don't define your own exception, regarding the layer where you are, you catch BusinessLayerException or ServiceException and you can analyse the cause.
+      <itemizedlist>
+        <listitem>
+          <para> If you have created your own Exception that inherit <classname>BusinessLayerException</classname> or <classname>ServiceException</classname>, you can use it directly in the catch block.
+ </para>
+        </listitem>
+        <listitem>
+          <para> If you don&apos;t define your own exception, regarding the layer where you are, you catch <classname>BusinessLayerException</classname> or <classname>ServiceException</classname> and you can analyse the cause.
 </para>
-</listitem>
-</itemizedlist>
-
-<example>
-	    <para>Custom Exception handling</para>
+        </listitem>
+      </itemizedlist>
+      <example>
+        <para>Custom Exception handling</para>
         <programlisting language="Java" role="Java"><![CDATA[
         
-		try {
-			myService.doSthg();
-		} catch (ServiceLayerException sle) {
-			logger.error(
-					"error when calling myService.doSthg() " + sle.getMessage(),
-					sle);
-			if (sle instanceof IOException) {
-				// call retry code
-			} else {
-				throw new BusinessLayerException(sle, true);
-			}
-		}
+  try {
+   myService.doSthg();
+  } catch (ServiceLayerException sle) {
+   //Do your custom error handling
+   logger.error(
+     "error when calling myService.doSthg() " + sle.getMessage(),
+     sle);
+   if (sle instanceof IOException) {
+    // call retry code
+   } else {
+    throw new BusinessLayerException(sle, true);
+   }
+  }
 ]]></programlisting>
-</example>
-
-
+      </example>
     </section>
     <section>
       <title>Error Handling Configuration</title>
       <para>
-     blabla
+     The minimal configuration is AJF 2.1.0. Each one of your modules has to declare the <classname>am.ajf.injection.ErrorHandlingInterceptor</classname> in the file /src/main/resources/META-INF/beans.xml 
   </para>
+      <programlisting language="XML" role="XML"><![CDATA[
+<?xml version="1.0"?>
+<beans xmlns="http://java.sun.com/xml/ns/javaee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="       http://java.sun.com/xml/ns/javaee       http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+ <interceptors>
+   <!-- other interceptors, then -->
+  <class>am.ajf.injection.ErrorHandlingInterceptor</class>
+ </interceptors>
+</beans>
+]]></programlisting>
     </section>
   </section>
 <!-- END ADDED value --></chapter>

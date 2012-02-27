@@ -109,12 +109,13 @@ button.submit=Soumettre
     <title>Backing Bean</title>
     <para> The Backing bean allow to make the link between JAVA , the business Logic, and the facelet exposed to the end users. The goal of the backing bean is to get data from the user, validate these data, call the business logic and process the result to initialize the result page or fragment.</para>
     <programlisting language="Java" role="java">
-<![CDATA[@ManagedBean
-@ViewScoped
+<![CDATA[
+@Named
+@RequestScope
 public class EmployeeMBean implements Serializable {
 
 private static final long serialVersionUID = 1L;
-  @InjectLogger
+  @Inject
   private Logger logger;
 
   /* ATTRIBUTES */
@@ -122,7 +123,7 @@ private static final long serialVersionUID = 1L;
   @NotNull
   private String searhLastname; //+getter/setter
 
-  @InjectService
+  @Inject
   EmployeeManagementBD employeeManagement;
 
   /* CONSTANTS */
@@ -132,14 +133,8 @@ private static final long serialVersionUID = 1L;
     super();
   }
 
-  @PostConstruct
-  public void init() {
-    InjectionContext.getInstance().getInjector().injectMembers(this);
-  }
-
   public void listEmployees() {
 
-    try {
       // Initialize ParamBean
       ListEmployeesPB pb = new ListEmployeesPB(searhLastname);
 
@@ -148,11 +143,8 @@ private static final long serialVersionUID = 1L;
 
       //get result and initialize properties for result page
       List<Person> persons = rb.getEmployees();
-    }
-  } catch (Exception e) {
-    // manage error import static ajf.web.WebUtils.*;
-    handleError(e, logger, "Error when try to list employees");
   }
+ 
 }
 ]]></programlisting>
     <note><para>Note that each ManageBean that use SessionScope or ViewScope has to implement Serializable interface.</para></note>
