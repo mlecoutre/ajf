@@ -11,8 +11,6 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 
-import javax.persistence.Entity;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -168,12 +166,15 @@ public class StoredProcedureImplHandler implements ImplementationHandler {
 	 * @return
 	 */
 	private Class<?> findMapperFor(Class<?> resultType) {
+		/*
 		if (resultType.isAnnotationPresent(Entity.class)) {
 			return SimpleFieldNamesMapper.class;
 			//return HibernateMapper.class;
 		} else {
 			return SimpleFieldNamesMapper.class;
-		}		
+		}*/
+		return SimpleFieldNamesMapper.class;
+				
 	}
 
 }
