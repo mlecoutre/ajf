@@ -105,7 +105,7 @@ To avoid this kind of duplicate code and problems, AJF2 provide a standard mecha
       <para>  So, your classes and method should be like this:
 
   </para>
-      <exemple>
+      <example>
         <para>At the <emphasis role="bold">web layer</emphasis>, your unit task should throw <emphasis role="italic">Exception</emphasis></para>
         <programlisting language="Java" role="Java"><![CDATA[
 public class EmployeeMBean implements Serializable {
@@ -142,7 +142,7 @@ public interface PersonServiceBD {
   boolean create(Person person) throws ServiceLayerException;
 }
 ]]></programlisting>
-      </exemple>
+      </example>
     </section>
     <section>
       <title>Custom Error Handling</title>
