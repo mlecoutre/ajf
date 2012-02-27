@@ -1,9 +1,10 @@
 package am.ajf.injection;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.testng.Assert;
+
 
 /**
  * Test the repository management and especially the addService method.
