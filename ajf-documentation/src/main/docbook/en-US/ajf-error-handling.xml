@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!-- This document was created with Syntext Serna Free. --><!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
+<chapter id="ErrorHandling">
+  <title>AJF - Error Handling</title>
+  <para>
+  The ajf-core and ajf-injection module provide and advanced mechanism to manage exceptions. However, we do not sum up the error handling management only to the exception handling. Exception Handling is costly and <emphasis role="underline">should not be used</emphasis> when the execution of the application process has to continue. We will see in this chapter standards norms to deal  with errors and what is the added value of the AJF framework for that.
+
+ </para>
+  <section>
+    <title>Presentation</title>
+    <para>
+    The JAVA language propose a simple mechanism to manage errors. The root object is the <emphasis>java.lang.Throwable</emphasis> with two children. </para>
+    <para>On the first hand, we have the <emphasis>java.lang.Exception</emphasis> which should be used in business applications to break the execution of a method and stop the process. The JVM can thrown IOException and RuntimeException, but each application can also create it&apos;s own business exceptions. Depending the different cases, developer has to choose to handle exception or propagate to the sub layers and caller methods.Then, you have to adapt the error handling to the layer. On a web application, the exception will maybe be displayed in a pop-up. On a web service, you should populate a Fault message described in the WSDL</para>
+    <para>On the other hand, we have <emphasis>java.lang.Error</emphasis>.
+Error and its subclasses are related to errors thrown by the Java Virtual Machine and should never be handled by a user program (e.g. OutOfMemoryError, StackOverflowError). In any case, you can do something in your application to mange this kind of error.</para>
+    <para>Sometimes, <emphasis role="bold">you want to continue the process even if something goes wrong</emphasis> using another piece of code, maybe delay the execution or retry later. In this case,  you have to  use the <emphasis role="bold">output parameter</emphasis> (the return) to indicate that you cannot follow the standard way, but you should avoid to use the Exceptions.</para>
+    <para>Using Exception Mechanism is costly because the JVM will create a stacktrace with all the path follow by the code linked to the Thread. Exceptions are there to stop the execution of a method. They can be handled in the method or thrown to be handle in the caller or not handled at all in some cases.
+</para>
+  </section>
+  <section>
+    <title>Global rules</title>
+    <itemizedlist>
+      <listitem>
+        <para>
+      First rule of Error Handling is to 
+                <emphasis role="bold">log every exceptions at the error (or warn) level first before managing the exception or throwing it to the caller method.</emphasis>:      </para>
+      </listitem>
+      <listitem>
+        <para>
+      The second rule of Error Handling is to <emphasis role="bold">log every exceptions</emphasis>:  When something goes wrong at runtime, it&apos;s really important to know what&apos;s happen in the logs</para>
+      </listitem>
+      <listitem>
+        <para>
+      <emphasis role="bold">Don&apos;t use catch(Throwable ){ ... }</emphasis>. Just catch Exception. By definition, Errors cannot be managed.
+     </para>
+      </listitem>
+      <listitem>
+        <para>
+        <emphasis role="bold">Don&apos;t use Exception mechanism when the application process has to continue.</emphasis>: Use  return object (such as the <emphasis role="italic">ResultBean</emphasis> for policies) and create specific attribute to manage application  values that explain the type of errors.     </para>
+      </listitem>
+      <listitem>
+        <para>
+        <emphasis role="bold">Log the Exception the closest of the error.</emphasis>: Don&apos;t log a Persistence Exception in the web layer.
+     </para>
+      </listitem>
+      <listitem>
+        <para>
+  <emphasis role="bold"> Take care when you implement a retry mechanism</emphasis>. Keep in mind to log in warn or error level a message in the logs for every try. We saw sometimes no trace between hours and hours during retries and no trace in the logs.
+
+</para>
+      </listitem>
+    </itemizedlist>
+    <important>Keep in mind, that it is mandatory to log every exception! </important>
+  </section>
+  <section>
+    <title>Added value of AJF Exception Handling</title>
+    <para>
+Even if we can&apos;t define a a global way to handle exceptions,  we can considere that 80 percent of time, Exception Handling  consist to:
+</para>
+    <itemizedlist>
+      <listitem>
+        <para>
+    <emphasis>Log the exception</emphasis>
+  </para>
+      </listitem>
+      <listitem>
+        <para>
+    <emphasis>Throw to the caller method</emphasis>
+  </para>
+      </listitem>
+    </itemizedlist>
+    <para>
+the code is often the same for each method.
+</para>
+    <programlisting language="Java" role="Java"><![CDATA[
+try{
+  // business code
+
+}catch(Exception e){
+  String msg = String.format("Error in %s", this.getClass);
+  logger.error(msg,e);
+  throw new MyException (e, msg);
+}
+   ]]></programlisting>
+    <para>An other problem appear 
+when you thrown  and exception to the caller method,  you sometimes log several times the same error (for each layer that you pass through).</para>
+    <section>
+      <title>Pre define AJF Exceptions</title>
+      <para>AJF provides two Exceptions that  should be used directly or extended  to manage application exceptions. You will find a <emphasis role="italic">alreadyHandled</emphasis> attribute that  is used to tell to the system that the exception has already been logged avoiding to be logged several times. The<emphasis role="italic"> errorType</emphasis> attribute
+is a free zone for the developer  to give an additional information to the caller methods. all <emphasis role="italic">ErrorType</emphasis>  values should be define in a <emphasis role="italic">ApplicationConstants</emphasis>.  class in the lib/ folder or module. </para>
+      <figure id="AJF2Exception.fig">
+        <title>Standard AJF Exceptions</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" fileref="images/AJF_Exceptions.png"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+    <section>
+      <title>Standard use case</title>
+      <para>
+   
+To avoid this kind of duplicate code and problems, AJF2 provide a standard mechanism based on CDI, completly transparent for the developer. it means <emphasis role="bold">No Need to code a &quot;try{} catch{}&quot;</emphasis> for this kind of use cases. The AJF framework intercept the Exception thrown by your method and  do the HandlingError job automatically. Depending of the layer, it throw a ServiceLayerException, a BusinessLayerException or display an error message in the UI on the web layer.</para>
+      <para>  So, your classes and method should be like this:
+
+  </para>
+      <exemple>
+        <para>At the <emphasis role="bold">web layer</emphasis>, your unit task should throw <emphasis role="italic">Exception</emphasis></para>
+        <programlisting language="Java" role="Java"><![CDATA[
+public class EmployeeMBean implements Serializable {
+
+  /**
+   * Create an employee in the application
+   */
+  public void hireEmployee() throws Exception {
+       
+     //1- Create  and Populate your paramBean        
+     HireEmployeePB pb = new HireEmployeePB();
+
+     //2- Call business layer
+HireEmployeeRB rb = employeeManagement.hireEmployee(pb);
+
+    //3- Manage result 
+    if (rb.isHired()) {
+   
+   }
+
+}
+   ]]></programlisting>
+        <para>At the<emphasis role="bold"> Policy layer</emphasis>, your unit task should throw <emphasis role="italic">BusinessLayerException</emphasis></para>
+        <programlisting language="Java" role="Java"><![CDATA[
+public interface EmployeeManagementBD {
+
+  public ListEmployeesRB listEmployees(ListEmployeesPB employeesPB) throws BusinessLayerException;
+}
+]]></programlisting>
+        <para>At the <emphasis role="bold">Service layer</emphasis>, your unit task should throw <emphasis role="italic">ServiceLayerException</emphasis></para>
+        <programlisting language="Java" role="Java"><![CDATA[
+public interface PersonServiceBD {
+
+  boolean create(Person person) throws ServiceLayerException;
+}
+]]></programlisting>
+      </exemple>
+    </section>
+    <section>
+      <title>Custom Error Handling</title>
+      <para>In the 20 other percent, you need to define the exception handling more precisely.
+
+  </para>
+    </section>
+    <section>
+      <title>Error Handling Configuration</title>
+      <para>
+     blabla
+  </para>
+    </section>
+  </section>
+<!-- END ADDED value --></chapter>
