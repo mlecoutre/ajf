@@ -33,9 +33,8 @@
 		<!-- AJF testing dependency -->
 		
 		<dependency>
-			<groupId>am.ajf</groupId>
-			<artifactId>ajf-testing</artifactId>
-			<version>${project.version}</version>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
 		
