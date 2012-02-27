@@ -13,7 +13,7 @@
     <para>On the first hand, we have the <emphasis>java.lang.Exception</emphasis> which should be used in business applications to break the execution of a method and stop the process. The JVM can thrown IOException and RuntimeException, but each application can also create it&apos;s own business exceptions. Depending the different cases, developer has to choose to handle exception or propagate to the sub layers and caller methods.Then, you have to adapt the error handling to the layer. On a web application, the exception will maybe be displayed in a pop-up. On a web service, you should populate a Fault message described in the WSDL</para>
     <para>On the other hand, we have <emphasis>java.lang.Error</emphasis>.
 Error and its subclasses are related to errors thrown by the Java Virtual Machine and should never be handled by a user program (e.g. OutOfMemoryError, StackOverflowError). In any case, you can do something in your application to mange this kind of error.</para>
-    <para>Sometimes, <emphasis role="bold">you want to continue the process even if something goes wrong</emphasis> using another piece of code, maybe delay the execution or retry later. In this case,  you have to  use the <emphasis role="bold">output parameter</emphasis> (the return) to indicate that you cannot follow the standard way, but you should avoid to use the Exceptions.</para>
+    <para>Sometimes, <emphasis role="bold">you want to continue the process even if something goes wrong</emphasis> using another piece of code, maybe delay the execution or retry later. In this case,  you have to  use the <emphasis role="bold">output parameter</emphasis> (the return) to indicate that you cannot follow the standard way, but you should avoid to use the Exceptions.</para>
     <para>Using Exception Mechanism is costly because the JVM will create a stacktrace with all the path follow by the code linked to the Thread. Exceptions are there to stop the execution of a method. They can be handled in the method or thrown to be handle in the caller or not handled at all in some cases.
 </para>
   </section>
@@ -119,10 +119,10 @@ public class EmployeeMBean implements Serializable {
      HireEmployeePB pb = new HireEmployeePB();
 
      //2- Call business layer
-HireEmployeeRB rb = employeeManagement.hireEmployee(pb);
+     HireEmployeeRB rb = employeeManagement.hireEmployee(pb);
 
-    //3- Manage result 
-    if (rb.isHired()) {
+     //3- Manage result 
+     if (rb.isHired()) {
    
    }
 
@@ -147,8 +147,40 @@ public interface PersonServiceBD {
     <section>
       <title>Custom Error Handling</title>
       <para>In the 20 other percent, you need to define the exception handling more precisely.
+      You can use the traditional try{}catch(){}finally{} blocks. 
+      </para>
+ <itemizedlist>
+      <listitem>
+        <para> If you have created your own Exception taht inherit ServiceLayerException or BusinessLayerException, you can use it directly in the catch block.
+	</para>
+	</listitem>
 
-  </para>
+<listitem>
+        <para> If you don't define your own exception, regarding the layer where you are, you catch BusinessLayerException or ServiceException and you can analyse the cause.
+</para>
+</listitem>
+</itemizedlist>
+
+<example>
+	    <para>Custom Exception handling</para>
+        <programlisting language="Java" role="Java"><![CDATA[
+        
+		try {
+			myService.doSthg();
+		} catch (ServiceLayerException sle) {
+			logger.error(
+					"error when calling myService.doSthg() " + sle.getMessage(),
+					sle);
+			if (sle instanceof IOException) {
+				// call retry code
+			} else {
+				throw new BusinessLayerException(sle, true);
+			}
+		}
+]]></programlisting>
+</example>
+
+
     </section>
     <section>
       <title>Error Handling Configuration</title>

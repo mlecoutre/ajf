@@ -84,19 +84,26 @@
 				        </tbody>
 				      </tgroup>
 				    </table>
+				    </para>
 				    <example>
 						<title>Usage</title>
-						<programlisting language="Java" role="Java"><![CDATA[
-		
+						<programlisting language="Java" role="Java"><![CDATA[				
+		try{
+		     //TODO Add code
+		}catch(Exception e){
+			//TODO manage error
+		}
 						]]></programlisting>
 					</example>
-				</para>
+				
 		</section>
 		<section>
 			<title>Merge Configuration objects</title>
+			<para></para>
 		</section>
 		<section>
 			<title>Variables interpolation</title>
+			<para></para>
 		</section>
 	</section>
 	<section>
@@ -124,51 +131,4 @@
 			
 		</para>
 	</section>
-	<!--  
-	<section>
-		<title></title>
-		<para>
-			
-		</para>
-		<important>
-			<para>
-			 				
-			</para> 
-			<para><emphasis></emphasis></para>
-			<programlisting language="Xml" role="Xml"><![CDATA[
-
-			]]></programlisting>
-		</important>
-
-		<example>
-			<title></title>
-			<programlisting language="Java" role="Java"><![CDATA[
-
-				]]></programlisting>
-			<para><emphasis>or</emphasis></para>
-			<programlisting language="Java" role="Java"><![CDATA[
-
-			]]></programlisting>				
-		</example>
-			
-		<important>
-			<para>
-				
-			</para>
-			<itemizedlist>
-				<listitem>
-					<para>
-						<emphasis>dlsm:ldmlsmdl</emphasis>
-					</para>
-				</listitem>
-			</itemizedlist> 
-		</important>
-		<warning>
-			<para>
-				
-			</para>
-		</warning>	
-		
-	</section>
-	-->
 </chapter>
