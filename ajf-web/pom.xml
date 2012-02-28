@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -8,8 +9,13 @@
 		<relativePath>../ajf-parent/pom.xml</relativePath>
 	</parent>
 
+
 	<artifactId>ajf-web</artifactId>
 	<description>specific utility classes for ajf web application</description>
+
+	<properties>
+		<ajfVersion>2.1.0-SNAPSHOT</ajfVersion>
+	</properties>
 
 	<scm>
 		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-web</connection>
@@ -24,20 +30,21 @@
 			<artifactId>commons-lang</artifactId>
 			<version>2.6</version>
 		</dependency>
-		
+
 		<dependency>
-			<groupId>javax.faces</groupId>
-			<artifactId>jsf-api</artifactId>
-			<version>2.0.3</version>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>3.1.1</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
-			<groupId>javax.faces</groupId>
-			<artifactId>jsf-impl</artifactId>
-			<version>2.0.3</version>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.faces</artifactId>
+			<version>2.1.6</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
@@ -50,77 +57,34 @@
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
-		
+
 		<!-- AJF 2 -->
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-core</artifactId>
-			<version>${project.version}</version>
+			<version>${ajfVersion}</version>
 		</dependency>
-
-		<!-- testing dependency -->
+		<!-- <dependency> <groupId>am.ajf</groupId> <artifactId>ajf-injection</artifactId> 
+			<version>${ajfVersion}</version> </dependency> -->
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-security</artifactId>
+			<version>${ajfVersion}</version>
+		</dependency>
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-testing</artifactId>
-			<version>${project.version}</version>
+			<version>${ajfVersion}</version>
 			<scope>test</scope>
 		</dependency>
-
-		<!-- logger -->
-
-		<!-- 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.1</version>
-		</dependency>
-
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>0.9.28</version>
-			<scope>test</scope>
-		</dependency>
-		-->
 
 	</dependencies>
-
-	<repositories>
-		<repository>
-			<id>powermock-repo</id>
-			<url>http://powermock.googlecode.com/svn/repo/</url>
-		</repository>
-	</repositories>
-
-	<build>
-
-		<resources>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**/*.java</include>
-				</includes>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**/*.*</include>
-				</includes>
-			</resource>
-		</resources>
-
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<!-- http://maven.apache.org/plugins/maven-compiler-plugin/ -->
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+	<!-- <repositories> <repository> <id>powermock-repo</id> <url>http://powermock.googlecode.com/svn/repo/</url> 
+		</repository> </repositories> <build> <resources> <resource> <filtering>false</filtering> 
+		<directory>src/main/java</directory> <includes> <include>**/*.java</include> 
+		</includes> </resource> <resource> <filtering>false</filtering> <directory>src/main/resources</directory> 
+		<includes> <include>**/*.*</include> </includes> </resource> </resources> 
+		<plugins> <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-compiler-plugin</artifactId> 
+		<configuration> http://maven.apache.org/plugins/maven-compiler-plugin/ <source>1.6</source> 
+		<target>1.6</target> </configuration> </plugin> </plugins> </build> -->
 </project>
