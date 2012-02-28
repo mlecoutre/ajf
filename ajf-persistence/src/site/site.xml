@@ -23,7 +23,7 @@
 
 
   <menu name="Documentation">
-  	  <item name="AJF" href="../../ajf-parent/index.html" />
+  	  <item name="AJF" href="../ajf-parent/index.html" />
   	  <item name="AJF - Persistence" href="../ajf-persistence-dist/index.html" />
       <item name="Home" href="index.html" />
   </menu>
