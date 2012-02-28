@@ -1,63 +1,96 @@
 <?xml version='1.0' encoding='ISO-8859-1'?>
+<!-- This document was created with Syntext Serna Free. -->
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
 <chapter id="testing">
-	<title>AJF - Testing Reference</title>
-	<para>
-		The AJF Core library provide a set of commons reusable components for use
-		on J2EE server and other Servlet containers. 		
-	</para>
-	<section>
-		<title>Introduction</title>
-		<para>
-			
-		</para>
-	</section>
-	
-	<!--  
-	<section>
-		<title></title>
-		<para>
-			
-		</para>
-		<important>
-			<para>
-			 				
-			</para> 
-			<para><emphasis></emphasis></para>
-			<programlisting language="Xml" role="Xml"><![CDATA[
-
-			]]></programlisting>
-		</important>
-
-		<example>
-			<title></title>
-			<programlisting language="Java" role="Java"><![CDATA[
-
-				]]></programlisting>
-			<para><emphasis>or</emphasis></para>
-			<programlisting language="Java" role="Java"><![CDATA[
-
-			]]></programlisting>				
-		</example>
-			
-		<important>
-			<para>
-				
-			</para>
-			<itemizedlist>
-				<listitem>
-					<para>
-						<emphasis>dlsm:ldmlsmdl</emphasis>
-					</para>
-				</listitem>
-			</itemizedlist> 
-		</important>
-		<warning>
-			<para>
-				
-			</para>
-		</warning>	
-		
-	</section>
-	-->
+  <title>AJF - Testing Reference</title>
+  <para>
+  Design code with testing in mind
+ </para>
+  <section>
+    <title>Introduction</title>
+    <para>
+   
+  </para>
+  </section>
+  <section>
+    <title>Testing rules</title>
+    <para>
+  
+   <itemizedlist>
+        <listitem>
+          <para>
+      Unit tests should be fully automated and non-interactive
+     </para>
+        </listitem>
+        <listitem>
+          <para>
+      Unit tests has to be infinitely repeatable without human intervention; use <classname>@before</classname>, <classname>@beforeClass</classname>,<classname>@after</classname>,<classname>@afterClass</classname> to prepare or clean your test environment
+     </para>
+        </listitem>
+        <listitem>
+          <para>
+      Fix failing tests immediately := ALL HAS TO BE GREEN when commited on the source repository
+Each developer should be responsible for making sure a new test runs successfully upon check in, and that all existing tests runs successfully upon code check in. If a test fails as part of a regular test execution the entire team should drop what they are currently doing and make sure the problem gets fixed.
+     </para>
+        </listitem>
+        <listitem>
+          <para>
+Design code with testing in mind
+define your interface (inputs and outputs) to be easily testable
+     </para>
+        </listitem>
+        <listitem>
+          <para>
+Keep tests independent
+To ensure testing robustness and simplify maintenance, tests should never rely on other tests nor should they depend on the ordering in which tests are executed.
+Test per layer, Use mock object  (e.g. mockito API)
+     </para>
+        </listitem>
+        <listitem>
+          <para>
+Write test to reproduce bugs
+When a bug is reported, write a test to reproduce the bug (i.e. a failing test) and use this test as a success criteria when fixing the code.
+     </para>
+        </listitem>
+        <listitem>
+          <para>
+Test Exception part and Error Handling also
+     </para>
+        </listitem>
+        <listitem>
+          <para>
+Know the cost of testing
+Not writing unit tests is costly, but writing unit tests is costly too. There is a trade-off between the two, and in terms of execution coverage the typical industry standard is at about 70%.
+     </para>
+        </listitem>
+      </itemizedlist> 
+  </para>
+    <para>More rules at http://geosoft.no/development/unittesting.html</para>
+  </section>
+  <section>
+    <title>Unit testing naming conventions</title>
+    <para>
+  
+  
+   <itemizedlist>
+        <listitem>
+          <para>
+      Tests classes has to be in a specific source folder. for maven project, folder &quot;src/test/java&quot;
+     </para>
+        </listitem>
+        <listitem>
+          <para>Test class  has to be in the same package  name that the tested class
+     </para>
+        </listitem>
+        <listitem>
+          <para>Test class has to be named <classname>MyClassXXXTest</classname> for the tested class <classname>MyClassXXX</classname>
+     </para>
+        </listitem>
+        <listitem>
+          <para>Naming convention for methods  <classname>test[what]</classname> such as  <classname>testSaveAs()</classname>
+ or testSaveAsOnError()     </para>
+        </listitem>
+      </itemizedlist> 
+  </para>
+  </section>
 </chapter>
