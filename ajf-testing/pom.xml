@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -10,13 +11,22 @@
 
 	<artifactId>ajf-testing</artifactId>
 
+	<properties>
+		<powermockVersion>1.4.11</powermockVersion>
+	</properties>
 	<scm>
 		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-testing</connection>
 		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-testing</developerConnection>
 		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-testing/]]></url>
 	</scm>
 
+	<dependencyManagement>
+
+	</dependencyManagement>
+
 	<dependencies>
+
+
 
 		<!-- AJF 2 -->
 		<dependency>
@@ -40,6 +50,30 @@
 			<version>2.2.4</version>
 		</dependency>
 
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.0</version>
+
+		</dependency>
+		<!-- PowerMock -->
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>${powermockVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-support</artifactId>
+			<version>${powermockVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
+			<version>${powermockVersion}</version>
+		</dependency>
+
 		<!-- dbunit -->
 		<dependency>
 			<groupId>org.dbunit</groupId>
@@ -53,35 +87,27 @@
 			</exclusions>
 		</dependency>
 
-		<!-- include mocking framework - mockito -->
+		<dependency>
+			<groupId>org.jboss.arquillian.junit</groupId>
+			<artifactId>arquillian-junit-container</artifactId>
+			<version>1.0.0.CR7</version>
 
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.9.0</version>
 		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.container</groupId>
+			<artifactId>arquillian-openwebbeans-embedded-1</artifactId>
+			<version>1.0.0.CR2</version>
 
-		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-module-junit4</artifactId>
-			<version>1.4.11</version>
 		</dependency>
 		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-api-support</artifactId>
-			<version>1.4.11</version>
+			<groupId>org.apache.openwebbeans.test</groupId>
+			<artifactId>cditest</artifactId>
+			<version>1.1.3</version>
 		</dependency>
 		<dependency>
-			<groupId>org.powermock</groupId>
-			<artifactId>powermock-api-mockito</artifactId>
-			<version>1.4.11</version>
-		</dependency>
-
-		<!-- TestNG -->
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>6.3.1</version>
+			<groupId>org.apache.openwebbeans.test</groupId>
+			<artifactId>cditest-owb</artifactId>
+			<version>1.1.3</version>
 		</dependency>
 
 		<!-- XMLUnit -->
@@ -104,7 +130,7 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-		</plugins>	
+		</plugins>
 
 		<resources>
 			<resource>
