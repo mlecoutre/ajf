@@ -22,7 +22,7 @@ public class LocalSubjectTest extends AbstractShiroTest {
 	@Before
 	public void setUp() {
 		
-		Factory<org.apache.shiro.mgt.SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro-test.ini");
+		Factory<org.apache.shiro.mgt.SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
 		org.apache.shiro.mgt.SecurityManager securityManager = factory.getInstance();
         
 		setSecurityManager(securityManager);
