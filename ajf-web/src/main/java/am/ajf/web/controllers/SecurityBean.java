@@ -3,11 +3,10 @@ package am.ajf.web.controllers;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
-
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -19,19 +18,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * SecurityBean that enable authentification and allow to display user
- * information on the web interface
+ * SecurityBean that enable authentication and allow to display user information
+ * on the web interface
  * 
  * @author E010925
  * 
  */
 @Named
+@SessionScoped
 public class SecurityBean implements Serializable {
 
-	private static final String OUTCOME_OK = "/index.xhtml";
+	private static final String OUTCOME_OK = "/index";
 
 	private static final long serialVersionUID = 1L;
-	private static final String OUTCOME_ACCESS_DENIED = "/ajf/errors/accessDenied.xhtml";
+	private static final String OUTCOME_ACCESS_DENIED = "/ajf/errors/accessDenied";
 	private transient Logger log = LoggerFactory.getLogger(SecurityBean.class);
 
 	private String username;
@@ -94,9 +94,9 @@ public class SecurityBean implements Serializable {
 	 */
 	public String doLogout() {
 		Subject currentSubject = SecurityUtils.getSubject();
-		log.debug("logout");
+		log.debug(String.format("Logout %s", username));
 		currentSubject.logout();
-		return "/index.jsf";
+		return OUTCOME_OK;
 	}
 
 	/**
@@ -160,6 +160,14 @@ public class SecurityBean implements Serializable {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	/**
+	 * 
+	 * @return password
+	 */
+	public String getPassword() {
+		return password;
 	}
 
 }
