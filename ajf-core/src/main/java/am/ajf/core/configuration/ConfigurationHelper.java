@@ -1,7 +1,5 @@
 package am.ajf.core.configuration;
 
-import am.ajf.core.logger.LoggerFactory;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,24 +14,14 @@ import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.SystemConfiguration;
 import org.apache.commons.configuration.XMLConfiguration;
-import org.slf4j.Logger;
-
-
 
 /**
- * ConfigurationHelper
  * 
- * @author U002617
+ * @author vincent
  * 
  */
 public class ConfigurationHelper {
 
-	private static Logger logger = LoggerFactory
-			.getLogger(ConfigurationHelper.class);
-
-	/**
-	 * Default constructor
-	 */
 	private ConfigurationHelper() {
 		super();
 	}
@@ -42,12 +30,9 @@ public class ConfigurationHelper {
 	 * create Configuration object from a properties resource
 	 * 
 	 * @param resourceName
-	 *            resourceName
-	 * @return Configuration
+	 * @return
 	 * @throws FileNotFoundException
-	 *             resource not found
 	 * @throws ConfigurationException
-	 *             problem during configuration
 	 */
 	public static Configuration newConfigurationFromPropertiesResource(
 			String resourceName) throws FileNotFoundException,
@@ -57,16 +42,9 @@ public class ConfigurationHelper {
 				.getContextClassLoader();
 		InputStream is = classLoader.getResourceAsStream(resourceName);
 
-		if (null == is) {
-			// 19455: get Value from settings.properties should not throw
-			// exception
-			// http://bugtracking.arcelor.net/show_bug.cgi?id=19455
-			// throw new FileNotFoundException("Unable to find resource '"
-			// + resourceName + "'.");
-
-			logger.warn(String.format("Unable to find resource '%s'",
-					resourceName));
-		}
+		if (null == is)
+			throw new FileNotFoundException("Unable to find resource '"
+					+ resourceName + "'.");
 
 		PropertiesConfiguration pConfig = new PropertiesConfiguration();
 		pConfig.load(is);
@@ -75,8 +53,6 @@ public class ConfigurationHelper {
 			is.close();
 		} catch (IOException e) {
 			// Nothing to do
-			logger.warn(String.format(
-					"Does not succeed to close correcly IS %s", resourceName));
 		}
 		is = null;
 
@@ -84,16 +60,13 @@ public class ConfigurationHelper {
 
 	}
 
-	/**
+	/***
 	 * create Configuration object from a ini resource
 	 * 
 	 * @param resourceName
-	 *            name of the resource
-	 * @return Configuration
+	 * @return
 	 * @throws FileNotFoundException
-	 *             resource not found
 	 * @throws ConfigurationException
-	 *             problem during configuration
 	 */
 	public static Configuration newConfigurationFromIniResource(
 			String resourceName) throws FileNotFoundException,
@@ -103,10 +76,10 @@ public class ConfigurationHelper {
 				.getContextClassLoader();
 		InputStream is = classLoader.getResourceAsStream(resourceName);
 
-		if (null == is) {
+		if (null == is)
 			throw new FileNotFoundException("Unable to find resource '"
 					+ resourceName + "'.");
-		}
+
 		HierarchicalINIConfiguration pConfig = new HierarchicalINIConfiguration();
 		pConfig.load(is);
 
@@ -114,8 +87,6 @@ public class ConfigurationHelper {
 			is.close();
 		} catch (IOException e) {
 			// Nothing to do
-			logger.warn(String.format(
-					"Does not succeed to close correcly IS %s", resourceName));
 		}
 		is = null;
 
@@ -124,15 +95,12 @@ public class ConfigurationHelper {
 	}
 
 	/**
-	 * create Configuration object from a XML resource
+	 * create Configuration object from XML resource
 	 * 
 	 * @param resourceName
-	 *            name of the resource
-	 * @return Configuration
+	 * @return
 	 * @throws FileNotFoundException
-	 *             resource not found
 	 * @throws ConfigurationException
-	 *             problem during configuration
 	 */
 	public static Configuration newConfigurationFromXMLResource(
 			String resourceName) throws FileNotFoundException,
@@ -142,16 +110,10 @@ public class ConfigurationHelper {
 				.getContextClassLoader();
 		InputStream is = classLoader.getResourceAsStream(resourceName);
 
-		if (null == is) {
-			// 19455: get Value from settings.properties should not throw
-			// exception
-			// http://bugtracking.arcelor.net/show_bug.cgi?id=19455
-			// throw new FileNotFoundException("Unable to find resource '"
-			// + resourceName + "'.");
+		if (null == is)
+			throw new FileNotFoundException("Unable to find resource '"
+					+ resourceName + "'.");
 
-			logger.warn(String.format("Unable to find resource '%s'",
-					resourceName));
-		}
 		XMLConfiguration xConfig = new XMLConfiguration();
 		xConfig.load(is);
 
@@ -159,8 +121,6 @@ public class ConfigurationHelper {
 			is.close();
 		} catch (IOException e) {
 			// Nothing to do
-			logger.warn(String.format(
-					"Does not succeed to close correcly IS %s", resourceName));
 		}
 		is = null;
 
@@ -172,12 +132,9 @@ public class ConfigurationHelper {
 	 * create Configuration object form file
 	 * 
 	 * @param filePath
-	 *            filePath
-	 * @return Configuration
+	 * @return
 	 * @throws FileNotFoundException
-	 *             resource not found
 	 * @throws ConfigurationException
-	 *             problem during configuration
 	 */
 	public static Configuration newConfigurationFromPropertiesFile(
 			String filePath) throws FileNotFoundException,
@@ -197,11 +154,9 @@ public class ConfigurationHelper {
 	/**
 	 * create an new System Configurationobject
 	 * 
-	 * @return Configuration
+	 * @return
 	 * @throws FileNotFoundException
-	 *             resource not found
 	 * @throws ConfigurationException
-	 *             problem during configuration
 	 */
 	public static Configuration newSystemConfiguration()
 			throws FileNotFoundException, ConfigurationException {
@@ -215,15 +170,13 @@ public class ConfigurationHelper {
 	 * create Configuration object form ini file
 	 * 
 	 * @param filePath
-	 *            filePath
-	 * @return Configuration
+	 * @return
 	 * @throws FileNotFoundException
-	 *             resource not found
 	 * @throws ConfigurationException
-	 *             problem during configuration
 	 */
-	public static Configuration newConfigurationFromIniFile(String filePath)
-			throws FileNotFoundException, ConfigurationException {
+	public static Configuration newConfigurationFromIniFile(
+			String filePath) throws FileNotFoundException,
+			ConfigurationException {
 
 		File file = new File(filePath);
 		if (!file.exists()) {
@@ -241,15 +194,13 @@ public class ConfigurationHelper {
 	 * create Configuration object form file
 	 * 
 	 * @param filePath
-	 *            filePath
-	 * @return Configuration
+	 * @return
 	 * @throws FileNotFoundException
-	 *             resource not found
 	 * @throws ConfigurationException
-	 *             problem during configuration
 	 */
-	public static Configuration newConfigurationFromXMLFile(String filePath)
-			throws FileNotFoundException, ConfigurationException {
+	public static Configuration newConfigurationFromXMLFile(
+			String filePath) throws FileNotFoundException,
+			ConfigurationException {
 
 		File file = new File(filePath);
 		if (!file.exists()) {
@@ -266,15 +217,13 @@ public class ConfigurationHelper {
 	 * create a merged configuration - CompositeConfiguration
 	 * 
 	 * @param configurations
-	 *            list of configuration to merge
-	 * @return the merge Configuration
+	 * @return
 	 */
 	public static Configuration mergeConfigurations(
 			Configuration... configurations) {
 
-		if ((null == configurations) || (0 == configurations.length)) {
+		if ((null == configurations) || (0 == configurations.length))
 			return null;
-		}
 		CompositeConfiguration composite = new CompositeConfiguration(
 				Arrays.asList(configurations));
 		return composite;

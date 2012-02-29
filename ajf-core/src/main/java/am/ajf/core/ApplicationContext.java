@@ -4,10 +4,17 @@ import java.io.File;
 
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.configuration.Configuration;
+import org.slf4j.Logger;
 
 import am.ajf.core.configuration.ConfigurationHelper;
+import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.utils.ClassPathUtils;
 
+/**
+ * Application context 
+ * @author U002617
+ *
+ */
 public class ApplicationContext {
 
 	private static final String LOG_CONFIG_TEST = "logback-test.xml";
@@ -18,6 +25,8 @@ public class ApplicationContext {
 	private static final String APPLICATION_NAME_KEY = "application.name";
 	private static final String WORKING_DIR_KEY = "working.dir";
 	private static final String LOG_DIR_KEY = "log.dir";
+	private static Logger logger = LoggerFactory
+			.getLogger(ApplicationContext.class);
 
 	// for invoke init method
 	private static boolean initialized = false;
@@ -41,14 +50,26 @@ public class ApplicationContext {
 		super();
 	}
 
+	/**
+	 * 
+	 * @return initialization of the application context
+	 */
 	public static boolean isInitialized() {
 		return initialized;
 	}
 
+	/**
+	 * 
+	 * @return ApplicationName
+	 */
 	public static String getApplicationName() {
 		return applicationName;
 	}
 
+	/**
+	 * 
+	 * @return configuration
+	 */
 	public static Configuration getConfiguration() {
 		return configuration;
 	}
@@ -59,12 +80,14 @@ public class ApplicationContext {
 	 */
 	public static File getWorkingDir() {
 
-		if (null != workingDir) return workingDir;
-
+		if (null != workingDir) {
+			return workingDir;
+		}
 		synchronized (workingDirToken) {
 
-			if (null != workingDir) return workingDir;
-
+			if (null != workingDir) {
+				return workingDir;
+			}
 			workingDir = readWorkingDir();
 		}
 		return workingDir;
@@ -77,12 +100,14 @@ public class ApplicationContext {
 	 */
 	public static File getLogDir() {
 
-		if (null != logDir) return logDir;
-
+		if (null != logDir) {
+			return logDir;
+		}
 		synchronized (logDirToken) {
 
-			if (null != logDir) return logDir;
-
+			if (null != logDir) {
+				return logDir;
+			}
 			logDir = readLogDir();
 		}
 		return logDir;
@@ -92,7 +117,7 @@ public class ApplicationContext {
 	/**
 	 * read the workingDir
 	 * 
-	 * @return
+	 * @return worlding dir
 	 */
 	protected static File readWorkingDir() {
 
@@ -107,20 +132,20 @@ public class ApplicationContext {
 			if (null != tempDir) {
 				tempDir = new File(tempDir, "business");
 			}
-		}
-		else {
+		} else {
 			tempDir = new File(workingPath);
 		}
 
-		if (null != tempDir) setWorkingDir(tempDir);
-
+		if (null != tempDir) {
+			setWorkingDir(tempDir);
+		}
 		return workingDir;
 	}
 
 	/**
 	 * read the logDir
 	 * 
-	 * @return
+	 * @return log dir
 	 */
 	protected static File readLogDir() {
 
@@ -135,21 +160,24 @@ public class ApplicationContext {
 			if (null != tempDir) {
 				tempDir = new File(tempDir, "log");
 			}
-		}
-		else {
+		} else {
 			tempDir = new File(logPath);
 		}
 
-		if (null != tempDir) setLogDir(tempDir);
-
+		if (null != tempDir) {
+			setLogDir(tempDir);
+		}
 		return logDir;
 	}
 
 	private static File resolveBaseDir() {
 		File tempDir = ClassPathUtils.getResourceDir(LOG_CONFIG_TEST);
-		if (null == tempDir)
+		if (null == tempDir) {
 			tempDir = ClassPathUtils.getResourceDir(LOG_CONFIG);
-		if (null != tempDir) tempDir = tempDir.getParentFile();
+		}
+		if (null != tempDir) {
+			tempDir = tempDir.getParentFile();
+		}
 		return tempDir;
 	}
 
@@ -157,18 +185,20 @@ public class ApplicationContext {
 	 * set the new workingDir
 	 * 
 	 * @param newWorkingDir
+	 *            set working dir
 	 */
 	public static synchronized void setWorkingDir(File newWorkingDir) {
 
 		workingDir = newWorkingDir;
 
-		if (!workingDir.exists()) workingDir.mkdirs();
-
+		if (!workingDir.exists()) {
+			workingDir.mkdirs();
+		}
 		String path = workingDir.getPath();
 		configuration.setProperty(WORKING_DIR_KEY, path);
 		System.setProperty(WORKING_DIR_KEY, path);
 
-		System.out.println("Set application working.dir = ".concat(path));
+		logger.info("Set application working.dir = ".concat(path));
 	}
 
 	/**
@@ -180,19 +210,26 @@ public class ApplicationContext {
 
 		logDir = newLogDir;
 
-		if (!logDir.exists()) logDir.mkdirs();
-
+		if (!logDir.exists()) {
+			logDir.mkdirs();
+		}
 		String path = logDir.getPath();
 		configuration.setProperty(LOG_DIR_KEY, path);
 		System.setProperty(LOG_DIR_KEY, path);
 
-		System.out.println("Set application log.dir = ".concat(path));
+		logger.info("Set application log.dir = ".concat(path));
 	}
 
-	public synchronized static boolean init() {
+	/**
+	 * Initialize application contest
+	 * 
+	 * @return ok or not
+	 */
+	public static synchronized boolean init() {
 
-		if (initialized) return true;
-
+		if (initialized) {
+			return true;
+		}
 		try {
 
 			System.out.println("Load application settings file '".concat(
@@ -201,38 +238,47 @@ public class ApplicationContext {
 			configuration = ConfigurationHelper
 					.newConfigurationFromPropertiesResource(APPLICATION_SETTINGS_PROPERTIES);
 			if (configuration instanceof AbstractConfiguration) {
-				((AbstractConfiguration)configuration).setThrowExceptionOnMissing(false);
+				((AbstractConfiguration) configuration)
+						.setThrowExceptionOnMissing(false);
 			}
 
 			System.out.println("Load application settings file: DONE.");
 
-			applicationName = configuration.getString(
-					APPLICATION_NAME_KEY, "UndefinedApplicationName");
+			applicationName = configuration.getString(APPLICATION_NAME_KEY,
+					"UndefinedApplicationName");
 
 			readWorkingDir();
-			readLogDir();
+			readLogDir();// configuration.setThrowExceptionOnMissing(true);
+			// allow to throw the exception 'java.util.NoSuchElementException'
+			// when
+			// a required property is missing
+
+			initialized = true;
+			return true;
+
+		} catch (Throwable e) {
+			// 19455: get Value from settings.properties should not throw
+			// exception
+			// http://bugtracking.arcelor.net/show_bug.cgi?id=19455
+			// throw new FileNotFoundException("Unable to find resource '"
+			// + resourceName + "'.");
+
+			logger.warn(String
+					.format("Loading application settings file receive exception.  '%s'",
+							e.getMessage()));
+			initialized = false;
+			return false;
 
 		}
-		catch (Throwable e) {
-			System.out
-					.println("Loading application settings file receive exception.");
-			e.printStackTrace(System.out);
-		}
-
-		//configuration.setThrowExceptionOnMissing(true);
-		// allow to throw the exception 'java.util.NoSuchElementException' when
-		// a required property is missing
-
-		initialized = true;
-		return true;
 
 	}
 
 	public static void setThrowExceptionOnMissingEntries(boolean b) {
-		throwExceptionOnMissingEntries = b;	
+		throwExceptionOnMissingEntries = b;
 		if (null != configuration) {
 			if (configuration instanceof AbstractConfiguration) {
-				((AbstractConfiguration)configuration).setThrowExceptionOnMissing(b);
+				((AbstractConfiguration) configuration)
+						.setThrowExceptionOnMissing(b);
 			}
 		}
 	}
@@ -240,5 +286,5 @@ public class ApplicationContext {
 	public static boolean isThrowExceptionOnMissingEntries() {
 		return throwExceptionOnMissingEntries;
 	}
-	
+
 }
