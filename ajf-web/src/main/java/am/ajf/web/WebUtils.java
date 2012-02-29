@@ -223,8 +223,12 @@ public class WebUtils {
 			String value = prop.getProperty(key);
 			if (value == null) {
 				log.warn(String
-						.format(" Null value in the configuration file %s or key does not exist. Default configuration return the key value %s",
-								configFilename, key));
+						.format("Null value in the config file %s or key does not exist.",
+								configFilename));
+
+				log.warn(String.format(
+						"Default configuration return the key value %s", key));
+
 				return key;
 			} else {
 				return value;

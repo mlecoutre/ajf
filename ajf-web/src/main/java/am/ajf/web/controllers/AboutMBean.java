@@ -9,7 +9,7 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  * 
  */
 @Named
-@SessionScoped
+@RequestScoped
 public class AboutMBean implements Serializable {
 
 	private static final String IMPL_TITLE = "Implementation-Title";

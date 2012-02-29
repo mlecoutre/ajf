@@ -105,10 +105,10 @@ public class ManifestHelper {
 						value = attrs.getValue(attributeName);
 					} catch (Exception e) {
 						// Undefined attribute
-						logger.warn(String
-								.format("Can't get attribute %s for the entry %s of the manifest %s",
-										attributeName, entryName,
-										e.getMessage()));
+						String msg = String.format("Can't get attribute %s for"
+								+ " the entry %s of the manifest, %s",
+								attributeName, entryName, e.getMessage());
+						logger.warn(String.format(msg));
 					}
 					return value;
 				} else {
