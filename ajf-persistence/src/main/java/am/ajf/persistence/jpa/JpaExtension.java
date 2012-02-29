@@ -40,7 +40,7 @@ public class JpaExtension implements Extension {
 		for (String puName : puNames) {
 			EntityManagerBean emBean = new EntityManagerBean(puName);
 			abd.addBean(emBean);
-			logger.info("Added injectable EntityManager for : "+puName);
+			logger.info("Added injectable EntityManager for: "+puName);
 		}		
 	}
 	
