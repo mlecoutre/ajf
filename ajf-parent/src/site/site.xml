@@ -24,6 +24,8 @@
   <menu name="Documentation">
       <item name="Home" href="index.html" />
       <item name="ajf-documentation" href="../ajf-documentation/index.html" />
+      <item name="ajf-forge" href="../ajf-forge/index.html" />
+      <item name="ajf-showcase-simple" href="../ajf-showcase-simple/index.html" />
   </menu>
 
   <menu name="Core Modules">
@@ -37,8 +39,8 @@
    <item name="ajf-security" href="../ajf-security/index.html" />
    <item name="ajf-persistence" href="../ajf-persistence/index.html" />
    <item name="ajf-remoting" href="../ajf-remoting/index.html" />
-   <!--item name="ajf-testing" href="../ajf-testing/index.html" /-->
-   <item name="ajf-transaction" href="../ajf-transaction/index.html" />   
+   <item name="ajf-web" href="../ajf-web/index.html" />
+   <!--item name="ajf-testing" href="../ajf-testing/index.html" /-->      
   </menu>
 
   <menu ref="reports"/>
