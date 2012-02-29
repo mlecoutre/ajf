@@ -11,6 +11,10 @@
 
 package am.ajf.web.controllers;
 
+import am.ajf.core.logger.LoggerFactory;
+import am.ajf.web.dto.LoggerVO;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.LoggerContext;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,22 +27,18 @@ import javax.inject.Named;
 import org.primefaces.event.RowEditEvent;
 import org.slf4j.Logger;
 
-import am.ajf.core.logger.LoggerFactory;
-import am.ajf.web.dto.LoggerVO;
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.LoggerContext;
-
+/**
+ * LoggerMBean
+ * 
+ * @author U002617
+ * 
+ */
 @Named
 @RequestScoped
 public class LoggerMBean implements Serializable {
 
 	/** UID */
 	private static final long serialVersionUID = 1L;
-
-	/** Looger */
-	@SuppressWarnings("unused")
-	private static transient final Logger logger = LoggerFactory
-			.getLogger(LoggerMBean.class);
 
 	private static transient LoggerContext loggerContext = LoggerFactory
 			.getDelegate();
@@ -49,10 +49,20 @@ public class LoggerMBean implements Serializable {
 
 	private List<LoggerVO> loggersList = null;
 
+	/** Logger */
+	private transient Logger logger = LoggerFactory
+			.getLogger(LoggerMBean.class);
+
+	/**
+	 * Default constructor
+	 */
 	public LoggerMBean() {
 		super();
 	}
 
+	/**
+	 * populate Loggers
+	 */
 	@PostConstruct
 	public void init() {
 
@@ -61,12 +71,15 @@ public class LoggerMBean implements Serializable {
 
 	}
 
+	/**
+	 * Clean the logger list
+	 */
 	@PreDestroy
 	public void destroy() {
 
-		if (null != loggersList)
+		if (null != loggersList) {
 			loggersList.clear();
-
+		}
 	}
 
 	private void populateLoggers() {
@@ -78,15 +91,24 @@ public class LoggerMBean implements Serializable {
 		List<ch.qos.logback.classic.Logger> nativeLoggers = loggerContext
 				.getLoggerList();
 		for (ch.qos.logback.classic.Logger nativeLogger : nativeLoggers) {
-			if (null == nativeLogger.getLevel())
+
+			if (null == nativeLogger.getLevel()) {
 				continue;
+			}
 			LoggerVO vo = new LoggerVO(nativeLogger.getName(), nativeLogger
 					.getLevel().toString(), nativeLogger.isAdditive());
+			logger.trace(String.format("Add logger %s", vo.toString()));
 			loggersList.add(vo);
 		}
 
 	}
 
+	/**
+	 * Allow to edit level of each logger
+	 * 
+	 * @param rev
+	 *            RowEditEvent
+	 */
 	public void editListener(RowEditEvent rev) {
 		LoggerVO bean = (LoggerVO) rev.getObject();
 		if (null != bean) {
@@ -108,14 +130,24 @@ public class LoggerMBean implements Serializable {
 
 	}
 
+	/**
+	 * Allow to refresh the list of loggers
+	 */
 	public void refresh() {
 		populateLoggers();
 	}
 
+	/**
+	 * @return list of loggers
+	 */
 	public List<LoggerVO> getLoggers() {
 		return loggersList;
 	}
 
+	/**
+	 * 
+	 * @return LoggerLevelValues
+	 */
 	public String[] getLoggerLevelValues() {
 		return loggerLevelValues;
 	}

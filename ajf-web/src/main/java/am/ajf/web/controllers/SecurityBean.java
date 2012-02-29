@@ -18,29 +18,40 @@ import org.apache.shiro.util.Factory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * SecurityBean that enable authentification and allow to display user
+ * information on the web interface
+ * 
+ * @author E010925
+ * 
+ */
 @Named
 public class SecurityBean implements Serializable {
 
-	private static final transient Logger log = LoggerFactory
-			.getLogger(SecurityBean.class);
-	/**
-	 * 
-	 */
+	private static final String OUTCOME_OK = "/index.xhtml";
+
 	private static final long serialVersionUID = 1L;
+	private static final String OUTCOME_ACCESS_DENIED = "/ajf/errors/accessDenied.xhtml";
+	private transient Logger log = LoggerFactory.getLogger(SecurityBean.class);
 
 	private String username;
 	private String password;
 
+	/**
+	 * Default constructor
+	 */
 	public SecurityBean() {
 		super();
 	}
 
 	/**
 	 * Enable authentication
+	 * 
+	 * @return outcome value to be redirected
 	 */
 	public String doLogin() {
 
-		log.debug("doLogin " + username);
+		log.debug(String.format(" Try to authentify %s", username));
 		Factory<org.apache.shiro.mgt.SecurityManager> factory = new IniSecurityManagerFactory();
 		org.apache.shiro.mgt.SecurityManager securityManager = factory
 				.getInstance();
@@ -51,13 +62,15 @@ public class SecurityBean implements Serializable {
 		// FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
 		try {
 			user.login(token);
-			log.debug("is Authenticated: " + user.isAuthenticated());
-			return "/index.xhtml";
+			log.debug(String.format("%s is Authenticated: ", username,
+					user.isAuthenticated()));
+			return OUTCOME_OK;
 		} catch (AuthenticationException ae) {
 			log.error(String.format(
 					"Impossible to authenticate username %s: %s", username,
 					ae.getMessage()));
-			return "/ajf/errors/accessDenied.xhtml";
+
+			return OUTCOME_ACCESS_DENIED;
 		}
 
 	}
@@ -110,6 +123,10 @@ public class SecurityBean implements Serializable {
 		return isAllowed;
 	}
 
+	/**
+	 * 
+	 * @return viewId of the current page
+	 */
 	public String getViewId() {
 		FacesContext ctx = FacesContext.getCurrentInstance();
 		HttpServletRequest servletRequest = (HttpServletRequest) ctx
@@ -119,18 +136,28 @@ public class SecurityBean implements Serializable {
 		return fullURI;
 	}
 
+	/**
+	 * 
+	 * @return username
+	 */
 	public String getUsername() {
 		return username;
 	}
 
+	/**
+	 * 
+	 * @param username
+	 *            current username
+	 */
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
+	/**
+	 * 
+	 * @param password
+	 *            password
+	 */
 	public void setPassword(String password) {
 		this.password = password;
 	}

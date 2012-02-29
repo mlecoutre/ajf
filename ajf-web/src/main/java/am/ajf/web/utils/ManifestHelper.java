@@ -1,5 +1,6 @@
 package am.ajf.web.utils;
 
+import am.ajf.core.logger.LoggerFactory;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,14 +11,24 @@ import javax.servlet.ServletContext;
 
 import org.slf4j.Logger;
 
-import am.ajf.core.logger.LoggerFactory;
-
+/**
+ * ManifestHelper utility class. Allow to extract data from Manifest to exploit
+ * them on the web layer. (such as display the version).
+ * 
+ * @author E010925
+ * 
+ */
 public class ManifestHelper {
 
-	private final static Logger logger = LoggerFactory.getLogger(ManifestHelper.class);
+	private Logger logger = LoggerFactory.getLogger(ManifestHelper.class);
 
 	private Manifest manifest = null;
 
+	/**
+	 * 
+	 * @param sc
+	 *            ServletContext
+	 */
 	public ManifestHelper(ServletContext sc) {
 		super();
 		try {
@@ -41,9 +52,11 @@ public class ManifestHelper {
 	}
 
 	/**
+	 * Get Attribute from the manifest
 	 * 
 	 * @param attributeName
-	 * @return
+	 *            to extract
+	 * @return attribute value
 	 */
 	public String getAttribute(String attributeName) {
 
@@ -53,23 +66,33 @@ public class ManifestHelper {
 				String value = null;
 				try {
 					value = attrs.getValue(attributeName);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					// Undefined attribute
+					logger.warn(String
+							.format("Impossible to get attribute %s from the manifest: %s",
+									attributeName, e.getMessage()));
 				}
 				return value;
+			} else {
+				logger.warn(String.format(
+						"Attribute %s is not declared in the manifest: %s",
+						attributeName));
 			}
+		} else {
+			logger.warn("Impossible to get the Manifest");
 		}
 
-		logger.debug("Unknow manifest attribute '" + attributeName + "'.");
 		return null;
 	}
 
 	/**
+	 * Get Attribute which contains in an specified entryName
 	 * 
 	 * @param entryName
+	 *            the Entry
 	 * @param attributeName
-	 * @return
+	 *            the attribute
+	 * @return value of the attribute
 	 */
 	public String getAttribute(String entryName, String attributeName) {
 
@@ -80,17 +103,24 @@ public class ManifestHelper {
 					String value = null;
 					try {
 						value = attrs.getValue(attributeName);
-					}
-					catch (Exception e) {
+					} catch (Exception e) {
 						// Undefined attribute
+						logger.warn(String
+								.format("Can't get attribute %s for the entry %s of the manifest %s",
+										attributeName, entryName,
+										e.getMessage()));
 					}
 					return value;
+				} else {
+					logger.warn(String.format(
+							"Entry %s does not contain attribute %s.",
+							entryName, attributeName));
 				}
 			}
+		} else {
+			logger.warn("Impossible to read the Manifest");
 		}
 
-		logger.debug("Unknow manifest attribute '[" + entryName + "] "
-				+ attributeName + "'.");
 		return null;
 	}
 }

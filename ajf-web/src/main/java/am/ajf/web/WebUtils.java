@@ -1,5 +1,7 @@
 package am.ajf.web;
 
+import am.ajf.core.logger.LoggerFactory;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -13,8 +15,6 @@ import javax.faces.context.FacesContext;
 
 import org.slf4j.Logger;
 
-import am.ajf.core.logger.LoggerFactory;
-
 /**
  * AJF web util class Can be used as static import.
  * 
@@ -23,11 +23,10 @@ import am.ajf.core.logger.LoggerFactory;
  */
 public class WebUtils {
 
-	//private  FacesContext context;
+	// private FacesContext context;
 	private static String bundleName;
 
 	private static Logger log = LoggerFactory.getLogger(WebUtils.class);
-
 
 	/**
 	 * Stops creation of a new WebUtils object.
@@ -44,8 +43,10 @@ public class WebUtils {
 	 * @return i18n associated value regarding the user Locale
 	 */
 	public static String getFieldLabel(String fieldName) {
-		String bundleName = FacesContext.getCurrentInstance().getApplication().getMessageBundle();
-		return getFieldLabel(fieldName, bundleName, FacesContext.getCurrentInstance());
+		String bundleName = FacesContext.getCurrentInstance().getApplication()
+				.getMessageBundle();
+		return getFieldLabel(fieldName, bundleName,
+				FacesContext.getCurrentInstance());
 	}
 
 	/**
@@ -55,6 +56,8 @@ public class WebUtils {
 	 *            fieldName
 	 * @param bundleName
 	 *            resource bundle name
+	 * @param context
+	 *            FaceContext object
 	 * @return Message from the Message Source.
 	 */
 	public static String getFieldLabel(String fieldName, String bundleName,
@@ -69,7 +72,8 @@ public class WebUtils {
 			label = bundle.getString(fieldName);
 			return label;
 		} catch (MissingResourceException e) {
-			log.warn("Bundle missing: " + bundleName + ", " + e.getMessage());
+			log.warn(String.format("Bundle missing: %s, %s", bundleName,
+					e.getMessage()));
 		}
 
 		try {
@@ -162,7 +166,7 @@ public class WebUtils {
 	}
 
 	/**
-	 * TODO doc
+	 * Manage handle error for JSF web components
 	 * 
 	 * @param e
 	 *            exception
@@ -182,14 +186,22 @@ public class WebUtils {
 		FacesContext.getCurrentInstance().addMessage(clientId, facesMessage);
 	}
 
+	/**
+	 * 
+	 * @return bundleName property
+	 */
 	public static String getBundleName() {
 		return bundleName;
 	}
 
+	/**
+	 * 
+	 * @param bundleName
+	 *            bundleName to set
+	 */
 	public static void setBundleName(String bundleName) {
 		WebUtils.bundleName = bundleName;
 	}
-
 
 	/**
 	 * 
@@ -210,17 +222,17 @@ public class WebUtils {
 			prop.load(is);
 			String value = prop.getProperty(key);
 			if (value == null) {
-				log.warn(" Null value in the configuration file "
-						+ configFilename
-						+ " or key does not exist. Default configuration return the key value "
-						+ key);
+				log.warn(String
+						.format(" Null value in the configuration file %s or key does not exist. Default configuration return the key value %s",
+								configFilename, key));
 				return key;
 			} else {
 				return value;
 			}
 		} catch (Exception e) {
-			log.warn(" Problem to access to the key " + key
-					+ " in the config file " + configFilename, e);
+			log.warn(String.format(
+					" Problem to access to the key %s in the config file %s",
+					key, configFilename));
 			log.warn(" Default configuration return the key value " + key);
 			return key;
 		}

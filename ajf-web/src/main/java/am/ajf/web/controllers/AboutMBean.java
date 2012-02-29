@@ -8,7 +8,8 @@ import java.io.Serializable;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
-import javax.enterprise.context.RequestScoped;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
@@ -16,32 +17,42 @@ import javax.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implement AboutMBean popup
+ * 
+ * @author E010925
+ * 
+ */
 @Named
-@RequestScoped
+@SessionScoped
 public class AboutMBean implements Serializable {
 
+	private static final String IMPL_TITLE = "Implementation-Title";
+	private static final String IMPL_VENDOR = "Implementation-Vendor";
+	private static final String IMPL_VERSION = "Implementation-Version";
 	/**
+	 * 
 	 * UID
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private transient static Logger logger = LoggerFactory
-			.getLogger(AboutMBean.class);
-
-	private final static String IMPL_TITLE = "Implementation-Title";
-	private final static String IMPL_VENDOR = "Implementation-Vendor";
-	private final static String IMPL_VERSION = "Implementation-Version";
+	private transient Logger logger = LoggerFactory.getLogger(AboutMBean.class);
 
 	// private List<KeyValueVO> keyValueList = new ArrayList<KeyValueVO>();
 	private String implementationTitle, implementationVendor,
 			implementationVersion;
 
+	/**
+	 * Default constructor
+	 */
 	public AboutMBean() {
 		super();
-		init();
 	}
 
-	// @PostConstruct
+	/**
+	 * Initialize the AboutMBean info
+	 */
+	@PostConstruct
 	public void init() {
 
 		ServletContext ct = (ServletContext) FacesContext.getCurrentInstance()
@@ -55,9 +66,9 @@ public class AboutMBean implements Serializable {
 		manifestPath = manifestPath.replace("//", "/");
 
 		// Add a "/" if it's not
-		if (!manifestPath.endsWith("/"))
+		if (!manifestPath.endsWith("/")) {
 			manifestPath = manifestPath.concat("/");
-
+		}
 		// Use the manifest complet path
 		manifestPath = manifestPath.concat("META-INF/MANIFEST.MF");
 
@@ -89,26 +100,53 @@ public class AboutMBean implements Serializable {
 	// implementationVersion = null;
 	// }
 
+	/**
+	 * 
+	 * @return ImplementationTitle
+	 */
 	public String getImplementationTitle() {
 		return implementationTitle;
 	}
 
+	/**
+	 * 
+	 * @param implementationTitle
+	 *            implementationTitle
+	 */
 	public void setImplementationTitle(String implementationTitle) {
 		this.implementationTitle = implementationTitle;
 	}
 
+	/**
+	 * 
+	 * @return implementationVendor
+	 */
 	public String getImplementationVendor() {
 		return implementationVendor;
 	}
 
+	/**
+	 * 
+	 * @param implementationVendor
+	 *            implementationVendor
+	 */
 	public void setImplementationVendor(String implementationVendor) {
 		this.implementationVendor = implementationVendor;
 	}
 
+	/**
+	 * 
+	 * @return implementationVersion
+	 */
 	public String getImplementationVersion() {
 		return implementationVersion;
 	}
 
+	/**
+	 * 
+	 * @param implementationVersion
+	 *            implementationVersion
+	 */
 	public void setImplementationVersion(String implementationVersion) {
 		this.implementationVersion = implementationVersion;
 	}

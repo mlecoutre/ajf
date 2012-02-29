@@ -78,13 +78,38 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- CDI Dependency -->
+
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-jcdi_1.0_spec</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-atinject_1.0_spec</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-interceptor_1.1_spec</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
+		</dependency>
+
 	</dependencies>
-	<!-- <repositories> <repository> <id>powermock-repo</id> <url>http://powermock.googlecode.com/svn/repo/</url> 
-		</repository> </repositories> <build> <resources> <resource> <filtering>false</filtering> 
-		<directory>src/main/java</directory> <includes> <include>**/*.java</include> 
-		</includes> </resource> <resource> <filtering>false</filtering> <directory>src/main/resources</directory> 
-		<includes> <include>**/*.*</include> </includes> </resource> </resources> 
-		<plugins> <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-compiler-plugin</artifactId> 
-		<configuration> http://maven.apache.org/plugins/maven-compiler-plugin/ <source>1.6</source> 
-		<target>1.6</target> </configuration> </plugin> </plugins> </build> -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

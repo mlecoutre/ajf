@@ -15,21 +15,35 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * FileDownloader Helper
+ * 
+ * @author E010925
+ * 
+ */
 public abstract class FileDownloader {
-	
+
 	private static final int DEFAULT_BUFFER_SIZE = 10240; // 10KB.
 
 	/**
-	 * download resource on the http response
+	 * Download resource on the http response
+	 * 
 	 * @param baseFilesPath
+	 *            baseFilesPath
 	 * @param context
+	 *            ServletContext
 	 * @param request
+	 *            HttpServletRequest
 	 * @param response
+	 *            HttpServletResponse
 	 * @throws ServletException
+	 *             ServletException
 	 * @throws IOException
+	 *             IOException
 	 */
-	public static void doDownload(String baseFilesPath, ServletContext context, HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	public static void doDownload(String baseFilesPath, ServletContext context,
+			HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
 		// Get requested file by path info.
 		String requestedFile = request.getPathInfo();
@@ -38,14 +52,22 @@ public abstract class FileDownloader {
 	}
 
 	/**
+	 * Download resource on the http response
 	 * 
 	 * @param baseFilesPath
+	 *            baseFilesPath
 	 * @param requestedFile
+	 *            File to download
 	 * @param context
+	 *            ServletContext
 	 * @param response
+	 *            HttpServletResponse
 	 * @throws IOException
+	 *             IOException
 	 * @throws UnsupportedEncodingException
+	 *             UnsupportedEncodingException
 	 * @throws FileNotFoundException
+	 *             FileNotFoundException
 	 */
 	public static void doDownload(String baseFilesPath, String requestedFile,
 			ServletContext context, HttpServletResponse response)
@@ -53,11 +75,12 @@ public abstract class FileDownloader {
 			FileNotFoundException {
 
 		doDownload(baseFilesPath, requestedFile, false, null, context, response);
-		
+
 	}
 
 	/**
 	 * close a closeable resource
+	 * 
 	 * @param resource
 	 */
 	private static void close(Closeable resource) {
@@ -71,23 +94,27 @@ public abstract class FileDownloader {
 			}
 		}
 	}
-	
+
 	/**
+	 * Download a file
 	 * @param baseFilesPath
+	 *            baseFilesPath
 	 * @param requestedFile
+	 *            File to download
 	 * @param inLine
-	 * @param contentType
-	 * @param context
-	 * @param response
-	 * @throws IOException
-	 * @throws UnsupportedEncodingException
-	 * @throws FileNotFoundException
+	 *            true or false
+	 * @param contentType set the mime type. If null, use application/octet-stream
+	 * @param context ServletContext
+	 * @param response HttpServletResponse
+	 * @throws IOException IOException
+	 * @throws UnsupportedEncodingException UnsupportedEncodingException
+	 * @throws FileNotFoundException FileNotFoundException
 	 */
 	public static void doDownload(String baseFilesPath, String requestedFile,
-			boolean inLine, String contentType, ServletContext context, HttpServletResponse response)
-			throws IOException, UnsupportedEncodingException,
-			FileNotFoundException {
-		
+			boolean inLine, String contentType, ServletContext context,
+			HttpServletResponse response) throws IOException,
+			UnsupportedEncodingException, FileNotFoundException {
+
 		// Check if file is actually supplied to the request URI.
 		if (requestedFile == null) {
 			// Do your thing if the file is not supplied to the request URI.
@@ -99,8 +126,8 @@ public abstract class FileDownloader {
 
 		// Decode the file name (might contain spaces and on) and prepare file
 		// object.
-		File file = new File(baseFilesPath,
-				URLDecoder.decode(requestedFile, "UTF-8"));
+		File file = new File(baseFilesPath, URLDecoder.decode(requestedFile,
+				"UTF-8"));
 
 		// Check if file actually exists in filesystem.
 		if (!file.exists()) {
@@ -110,7 +137,7 @@ public abstract class FileDownloader {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404.
 			return;
 		}
-		
+
 		// If content type is unknown, then set the default value.
 		// For all content types, see:
 		// http://www.w3schools.com/media/media_mimeref.asp
@@ -124,10 +151,11 @@ public abstract class FileDownloader {
 		response.setBufferSize(DEFAULT_BUFFER_SIZE);
 		response.setContentType(contentType);
 		response.setHeader("Content-Length", String.valueOf(file.length()));
-		
+
 		String attachment = "attachment";
-		if (inLine)
+		if (inLine) {
 			attachment = "inline";
+		}
 		response.setHeader("Content-Disposition", attachment + "; filename=\""
 				+ file.getName() + "\"");
 
@@ -154,7 +182,7 @@ public abstract class FileDownloader {
 			close(output);
 			close(input);
 		}
-		
+
 	}
 
 }
