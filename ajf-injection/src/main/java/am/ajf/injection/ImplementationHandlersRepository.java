@@ -1,5 +1,6 @@
 package am.ajf.injection;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.enterprise.inject.spi.AnnotatedType;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.InjectionTarget;
 
@@ -15,6 +17,7 @@ import org.slf4j.Logger;
 
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.utils.BeanUtils;
+import am.ajf.injection.internal.EnrichableAnnotatedTypeWrapper;
 import am.ajf.injection.internal.ServiceBeanImpl;
 
 /**
@@ -134,5 +137,37 @@ public class ImplementationHandlersRepository {
 		return (Bean<?>) constructor.newInstance(it, implementation, pInterface);				 
 	}
 	
+	/**
+	 * Build the ajf annotated type for the selected cdi at.
+	 * Copy the annotations on the interface to the type
+	 * represented by the parameter annotated type
+	 * see bug 18898
+	 * 
+	 * @param at
+	 * @param in
+	 * @return wrapped annotated type
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public AnnotatedType<?> buildAnnotatedTypeFor(AnnotatedType<?> at, Class<?> in) {
+		EnrichableAnnotatedTypeWrapper<?> wat = new EnrichableAnnotatedTypeWrapper(at);
+		
+		//copy the class annotations
+		for(Annotation an : in.getAnnotations()) {
+			wat.addAnnotation(an.annotationType(), an);
+		}
+		
+		//copy the methods annotations
+		for (Method method : in.getMethods()) {
+			for(Annotation an : method.getAnnotations()) {
+				wat.addMethodAnnotation(method, an.annotationType(), an);
+			}
+		}
+		
+		//process
+		wat.processAnnotations();
+		wat.processAnnotatedMethods();
+		
+		return wat;
+	}
 	
 }

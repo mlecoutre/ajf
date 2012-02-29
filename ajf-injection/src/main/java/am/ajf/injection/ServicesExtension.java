@@ -111,9 +111,11 @@ public class ServicesExtension implements Extension {
 												+ ") failed. Is there a Handler for your methods ?");
 							}
 							serviceRepository.addService(generatedImpl);
+							
 							// generate the bean CDI
-							AnnotatedType<?> at = beanManager
-									.createAnnotatedType(generatedImpl);
+							AnnotatedType<?> at = serviceHandlerRepository.buildAnnotatedTypeFor( 
+									beanManager.createAnnotatedType(generatedImpl),
+									in);
 							final InjectionTarget<?> it = beanManager
 									.createInjectionTarget(at);
 							Bean<?> bean = serviceHandlerRepository
