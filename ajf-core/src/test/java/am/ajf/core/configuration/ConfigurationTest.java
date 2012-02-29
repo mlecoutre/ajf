@@ -14,22 +14,27 @@ import org.apache.commons.configuration.SystemConfiguration;
 import org.junit.Test;
 import org.slf4j.Logger;
 
-import am.ajf.core.configuration.ConfigurationUtils;
-import am.ajf.core.configuration.EnumEventType;
-import am.ajf.core.configuration.FilteredConfigurationListener;
-import am.ajf.core.configuration.PropertyListener;
 import am.ajf.core.configuration.impl.BeanConfiguration;
 import am.ajf.core.logger.LoggerFactory;
 
+/**
+ * Configuration test
+ * 
+ * @author E010925
+ * 
+ */
 public class ConfigurationTest implements PropertyListener {
 
-	private static final Logger logger = LoggerFactory.getLogger(ConfigurationTest.class);
+	public static final String NAME = "name";
+	private Logger logger = LoggerFactory.getLogger(ConfigurationTest.class);
+
 	
-	public final static String NAME = "name";
 
-	public ConfigurationTest() {
-	}
 
+	/**
+	 * Test configuration
+	 * @throws Exception on error
+	 */
 	@Test
 	public void testConfig() throws Exception {
 
@@ -56,18 +61,17 @@ public class ConfigurationTest implements PropertyListener {
 		configuration.addConfiguration(bConfig);
 
 		logger.info(configuration.getString("a"));
-		
+
 		List<String> keys = new ArrayList<String>();
 		keys.add("b");
-		pConfig
-				.addConfigurationListener(new FilteredConfigurationListener(
-						keys, this));
+		pConfig.addConfigurationListener(new FilteredConfigurationListener(
+				keys, this));
 
 		pConfig.setProperty("b", "${a} =? ${a}");
 		logger.info(pConfig.getString("b"));
 		pConfig.clearProperty("b");
 		pConfig.clear();
-		
+
 		logger.info(configuration.getString("a"));
 		logger.info(configuration.getString("b"));
 		logger.info(configuration.getString("aMap.[name]"));
@@ -81,8 +85,8 @@ public class ConfigurationTest implements PropertyListener {
 	}
 
 	@Override
-	public void configurationChanged(EnumEventType eventType, Configuration source,
-			String key, Object oldValue, Object newValue) {
+	public void configurationChanged(EnumEventType eventType,
+			Configuration source, String key, Object oldValue, Object newValue) {
 
 		System.out.println("[" + eventType.getReadableValue() + "] - " + key
 				+ " (" + oldValue + ") = " + newValue);
@@ -93,33 +97,36 @@ public class ConfigurationTest implements PropertyListener {
 	public void configurationClear(EnumEventType enum1, Configuration source) {
 
 		System.out.println("Configuration cleaned");
-		
+
 	}
-	
+
 	@Test
 	public void testSystemConfig() {
-		
+
 		Configuration configuration = new SystemConfiguration();
 		String value = configuration.getString("java.home");
 		System.out.println(value);
-		
+
 	}
-	
+
 	@Test
 	public void testPrefixedVarsInterpolation() {
-		
+
 		Configuration configuration = new BaseConfiguration();
-				
-		String res = (String) ConfigurationUtils.evaluate("${sys:java.home}", configuration);
+
+		String res = (String) ConfigurationUtils.evaluate("${sys:java.home}",
+				configuration);
 		System.out.println(res);
 
-		res = (String) ConfigurationUtils.evaluate("${env:JAVA_HOME}", configuration);
+		res = (String) ConfigurationUtils.evaluate("${env:JAVA_HOME}",
+				configuration);
 		System.out.println(res);
-				
-		res = (String) ConfigurationUtils.evaluate("${const:am.ajf.core.configuration.ConfigurationTest.NAME}", configuration);
+
+		res = (String) ConfigurationUtils.evaluate(
+				"${const:am.ajf.core.configuration.ConfigurationTest.NAME}",
+				configuration);
 		System.out.println(res);
-		
-		
+
 	}
 
 }
