@@ -5,15 +5,16 @@ import java.io.File;
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import am.ajf.core.configuration.ConfigurationHelper;
-import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.utils.ClassPathUtils;
 
 /**
- * Application context 
+ * Application context
+ * 
  * @author U002617
- *
+ * 
  */
 public class ApplicationContext {
 
@@ -204,7 +205,7 @@ public class ApplicationContext {
 	/**
 	 * set the new logDir
 	 * 
-	 * @param newLogDir
+	 * @param newLogDir newLogDir to use
 	 */
 	public static synchronized void setLogDir(File newLogDir) {
 
@@ -232,7 +233,7 @@ public class ApplicationContext {
 		}
 		try {
 
-			System.out.println("Load application settings file '".concat(
+			System.out.println("Try to load application settings file '".concat(
 					APPLICATION_SETTINGS_PROPERTIES).concat("'."));
 
 			configuration = ConfigurationHelper
@@ -263,11 +264,11 @@ public class ApplicationContext {
 			// throw new FileNotFoundException("Unable to find resource '"
 			// + resourceName + "'.");
 
-			logger.warn(String
-					.format("Loading application settings file receive exception.  '%s'",
-							e.getMessage()));
-			initialized = false;
-			return false;
+			System.out.println(String.format(
+					"WARN Loading application settings file. %s",
+					e.getMessage()));
+			initialized = true;
+			return true;
 
 		}
 
