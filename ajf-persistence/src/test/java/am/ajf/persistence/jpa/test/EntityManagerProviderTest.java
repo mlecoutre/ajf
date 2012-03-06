@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import am.ajf.persistence.jpa.EntityManagerProvider;
 import am.ajf.persistence.jpa.EntityManagerProvider.TransactionType;
+import am.ajf.persistence.jpa.PersistenceConnectionFactory;
 
 public class EntityManagerProviderTest {
 
@@ -32,6 +33,12 @@ public class EntityManagerProviderTest {
 		Set<String> pus = EntityManagerProvider.getPersistenceUnitNames();
 		Assert.assertNotNull(pus);
 		Assert.assertEquals(2, pus.size());
+	}
+	
+	@Test
+	public void testGetPersistenceConnectionFactory() {
+		PersistenceConnectionFactory pConnFactory = EntityManagerProvider.getPersistenceConnectionFactory("default");
+		Assert.assertNotNull(pConnFactory);
 	}
 
 }

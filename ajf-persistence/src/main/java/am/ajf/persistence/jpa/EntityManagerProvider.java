@@ -39,6 +39,7 @@ public class EntityManagerProvider {
 	
 	private static final Map<String, TransactionType> persistenceUnitsTransactions = new ConcurrentHashMap<String, EntityManagerProvider.TransactionType>();
 	private static final Map<String, EntityManagerFactory> emfs = new ConcurrentHashMap<String, EntityManagerFactory>();
+	private static final Map<String, PersistenceConnectionFactory> persistenceConnectionsFactories = new ConcurrentHashMap<String, PersistenceConnectionFactory>();
 	
 	public EntityManagerProvider() {
 		super();
@@ -124,11 +125,34 @@ public class EntityManagerProvider {
 	 * @return the peristenceUnit TransactionType
 	 */
 	public static TransactionType getTransactionType(String persistenceUnitName) {
+		checkLoadedPersistenceXml();
+		return persistenceUnitsTransactions.get(persistenceUnitName);
+		
+	}
+	
+	/**
+	 * 
+	 * @param persistenceUnitName
+	 * @return the peristenceUnit PersistenceConnectionFactory
+	 */
+	public static PersistenceConnectionFactory getPersistenceConnectionFactory(String persistenceUnitName) {
+		checkLoadedPersistenceXml();
+		
+		if (persistenceConnectionsFactories.containsKey(persistenceUnitName)) {
+			return persistenceConnectionsFactories.get(persistenceUnitName);
+		} else {
+			return null;
+		}
+		
+	}
+
+	/**
+	 * check if the persistence.xml file has been loaded
+	 */
+	private static void checkLoadedPersistenceXml() {
 		if (persistenceUnitsTransactions.isEmpty()) {
 			loadPersistenceXml();
 		}
-		return persistenceUnitsTransactions.get(persistenceUnitName);
-		
 	}
 	
 	/**
@@ -136,9 +160,7 @@ public class EntityManagerProvider {
 	 * @return the peristenceUnit Names
 	 */
 	public static Set<String> getPersistenceUnitNames() {
-		if (persistenceUnitsTransactions.isEmpty()) {
-			loadPersistenceXml();
-		}
+		checkLoadedPersistenceXml();
 		return persistenceUnitsTransactions.keySet();	
 	}
 	
@@ -179,7 +201,7 @@ public class EntityManagerProvider {
 		InputStream is = EntityManagerProvider.class.getClassLoader().getResourceAsStream("META-INF/persistence.xml");
 		try {
 			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
-			//BufferedReader br = new BufferedReader( new InputStreamReader( is ));
+
 			NodeList puNodes = doc.getElementsByTagName("persistence-unit");
 			for (int i = 0 ; i < puNodes.getLength() ; i++) {
 				Node puNode = puNodes.item(i);
@@ -194,6 +216,13 @@ public class EntityManagerProvider {
 				} else {
 					throw new IllegalArgumentException("A persistence-unit should have transaction of type JTA or RESOURCE_LOCAL. Check your persistence.xml file.");
 				}
+				
+				// add the persistenceConnectionFactory in the map
+				PersistenceConnectionFactory persistenceConnectionFactory = PersistenceConnectionFactoryBuilder.build(puNode);
+				if (null != persistenceConnectionFactory) {
+					persistenceConnectionsFactories.put(puName, persistenceConnectionFactory);
+				}
+				
 			}
 		} catch (IOException e) {
 			throw new IllegalStateException("Impossible to access the file META-INF/persistence.xml. Check it exist in your application.", e);				
