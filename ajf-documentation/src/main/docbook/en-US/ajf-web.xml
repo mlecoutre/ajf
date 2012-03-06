@@ -23,7 +23,6 @@ Business Layer. </para>
   <section>
     <title>Standard facelet</title>
     <para> the facelet aims to describe the view showed to the end user.</para>
-
     <programlisting language="XML" role="XML">
 <![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
@@ -44,7 +43,6 @@ template="WEB-INF/templates/simpleLayout.xhtml">
 </ui:define>
 </ui:composition>
 ]]></programlisting>
-
     <section>
       <title>Graphical components: primefaces</title>
       <para>The choice has been done to use an existing graphical components library that propose a lot of rich components. We will not describe here how use these components. A documentation and well explained samples are available on their website <ulink url="http://www.primefaces.org"/>
@@ -97,7 +95,9 @@ button.submit=Soumettre
 <p:commandButton value="#{m['button.submit']}" .../>
 ]]></programlisting>
         </example>
-      </section><note><para>For key without using &quot;.&quot;, we can use direct pointed notation #{m.toto} instead of using the array notation. It doesn&apos;t work with complex key. the key &apos;toto.txt&apos; doesn&apos;t allow to use #{m.toto} but we will use #{m[&apos;toto.txt&apos;] </para></note></section>
+      </section><note>
+        <para>For key without using &quot;.&quot;, we can use direct pointed notation #{m.toto} instead of using the array notation. It doesn&apos;t work with complex key. the key &apos;toto.txt&apos; doesn&apos;t allow to use #{m.toto} but we will use #{m[&apos;toto.txt&apos;] </para>
+      </note></section>
     <section>
       <title>Using key in a backing bean </title>
       <para>
@@ -147,7 +147,9 @@ private static final long serialVersionUID = 1L;
  
 }
 ]]></programlisting>
-    <note><para>Note that each ManageBean that use SessionScope or ViewScope has to implement Serializable interface.</para></note>
+    <note>
+      <para>Note that each ManageBean that use SessionScope or ViewScope has to implement Serializable interface.</para>
+    </note>
   </section>
   <section><title>User Input Validation</title><para>User Input validation mechanism is responsible of validate data before executing the business logic, avoiding to execute code if we know that inputs will not work.</para>In the managed bean, you can decorate the properties of the java bean using standard annotations defined in the JSF 303 <programlisting language="Java" role="java">
 <![CDATA[
@@ -164,77 +166,73 @@ public int getAge() {
 <f:ajax execute="age" event="blur" render="age-error" />
 </h:inputText>
 <p:messages id="age-error" for="age" />
-]]></programlisting>
-
-  <section>
-    <title>Main validators</title>
-    <para>
+]]></programlisting><section>
+      <title>Main validators</title>
+      <para>
     
     <table frame="all">
-        <title/>
-        <tgroup cols="2">
-          <colspec colname="c1"/>
-          <colspec colname="c2"/>
-          <tbody>
-            <row>
-              <entry>@Null</entry>
-              <entry>Element should be null</entry>
-            </row>
-            <row>
-              <entry>@NotNull</entry>
-              <entry>Element shouldn&apos;t be null</entry>
-            </row>
-            <row>
-              <entry>@AssertTrue</entry>
-              <entry>Element shouldn&apos;t be null</entry>
-            </row>
-            <row>
-              <entry>@AssertFalse</entry>
-              <entry>Element shouldn&apos;t be null</entry>
-            </row>
-            <row>
-              <entry>@Min</entry>
-              <entry>Element shouldn&apos;t be null</entry>
-            </row>
-            <row>
-              <entry>@Max</entry>
-              <entry>Element shouldn&apos;t be null</entry>
-            </row>
-            <row>
-              <entry>@DecimalMin</entry>
-              <entry>Element should be less than value specified for BigDecimal, BigInteger, String, byte, short, int,long</entry>
-            </row>
-            <row>
-              <entry>@DecimalMax</entry>
-              <entry>Element should be greater than value specified for BigDecimal, BigInteger, String, byte, short, int,long</entry>
-            </row>
-            <row>
-              <entry>@Size</entry>
-              <entry>Element should be set between two size specified. Format String, Collection, Map, Array</entry>
-            </row>
-            <row>
-              <entry>@Digits</entry>
-              <entry>Element should be a numeric set in a specified range.</entry>
-            </row>
-            <row>
-              <entry>@Past</entry>
-              <entry>Element should be a Date or a Calendar in the past</entry>
-            </row>
-            <row>
-              <entry>@Future</entry>
-              <entry>Element should be a Date or a Calendar in the future</entry>
-            </row>
-            <row>
-              <entry>@Pattern</entry>
-              <entry>Element should respect a pattern</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
+          <title/>
+          <tgroup cols="2">
+            <colspec colname="c1"/>
+            <colspec colname="c2"/>
+            <tbody>
+              <row>
+                <entry>@Null</entry>
+                <entry>Element should be null</entry>
+              </row>
+              <row>
+                <entry>@NotNull</entry>
+                <entry>Element shouldn&apos;t be null</entry>
+              </row>
+              <row>
+                <entry>@AssertTrue</entry>
+                <entry>Element shouldn&apos;t be null</entry>
+              </row>
+              <row>
+                <entry>@AssertFalse</entry>
+                <entry>Element shouldn&apos;t be null</entry>
+              </row>
+              <row>
+                <entry>@Min</entry>
+                <entry>Element shouldn&apos;t be null</entry>
+              </row>
+              <row>
+                <entry>@Max</entry>
+                <entry>Element shouldn&apos;t be null</entry>
+              </row>
+              <row>
+                <entry>@DecimalMin</entry>
+                <entry>Element should be less than value specified for BigDecimal, BigInteger, String, byte, short, int,long</entry>
+              </row>
+              <row>
+                <entry>@DecimalMax</entry>
+                <entry>Element should be greater than value specified for BigDecimal, BigInteger, String, byte, short, int,long</entry>
+              </row>
+              <row>
+                <entry>@Size</entry>
+                <entry>Element should be set between two size specified. Format String, Collection, Map, Array</entry>
+              </row>
+              <row>
+                <entry>@Digits</entry>
+                <entry>Element should be a numeric set in a specified range.</entry>
+              </row>
+              <row>
+                <entry>@Past</entry>
+                <entry>Element should be a Date or a Calendar in the past</entry>
+              </row>
+              <row>
+                <entry>@Future</entry>
+                <entry>Element should be a Date or a Calendar in the future</entry>
+              </row>
+              <row>
+                <entry>@Pattern</entry>
+                <entry>Element should respect a pattern</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
 Hibernate the choosed implementation add additional validators., @Email, @NotBlank, @NotEmpty,@Range, @ScriptAssert, @URL. @ScriptAssert use the  JSR-223 which define an  APIto introduce script languages.</para>
-  </section>
-</section>
-
+    </section></section>
   <section>
     <title>Templating</title>
     <para>AJF propose a standard layout named &quot;WEB-INF/templates/simpleLayout.xhtml&quot; that you can use in order to organize your page. This layout is divide in three parts:</para>
@@ -279,5 +277,19 @@ The &quot;<emphasis role="bold">footer</emphasis>&quot; part.
       <title>Template creation</title>
       <para>If needed, put your own templates in src/main/webapp/shared/templates folder. We will not explain in his document how to do it, but you can pick an eye on the SimpleLayout.xhtml in WEB-INF/template folder.</para>
     </section>
+  </section>
+  <section>
+    <title>Manage contextual Help</title>
+    <para>
+    AJF define a simple mechanism to add a contextual help based on the web page displayed to the end user. The user can click on the <emphasis>Help</emphasis> link in the header. A dialog window is shown. 
+    </para>
+    <para>
+    Developer has to write pages in the /src/main/webapp/<emphasis>shared/help</emphasis> folder. Folder hierarchy has to be  respected and reproduced in this folder. By default, the Help Mechanism will try to load a page that correspond strictly to the page consulted.
+    If the end user is on the web page /employeemanagement/hireEmployee.xhtml,  the help system will try to open the page shared/help/employeemanagement/hireEmployee.xhtml. If not found, it will try the /shared/help/employeemanagement/index.xhtml (It can be usefull if you only want to define one help page for all the function employeemanagement). Then, if not found, it will load the default help page, e.g. /shared/help/index.xhtml page.
+   
+    </para>
+    <para>
+    Each help page can use the default /WEB-INF/templates/brand/brandHelpLayout.xhtml and define the block <emphasis>helpContent</emphasis>.
+    </para>
   </section>
 </chapter>
