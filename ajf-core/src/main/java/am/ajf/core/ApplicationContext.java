@@ -23,9 +23,10 @@ public class ApplicationContext {
 
 	private static final String APPLICATION_SETTINGS_PROPERTIES = "settings.properties";
 
-	private static final String APPLICATION_NAME_KEY = "application.name";
-	private static final String WORKING_DIR_KEY = "working.dir";
-	private static final String LOG_DIR_KEY = "log.dir";
+	public static final String APPLICATION_NAME_KEY = "application.name";
+	public static final String WORKING_DIR_KEY = "working.dir";
+	public static final String LOG_DIR_KEY = "log.dir";
+	
 	private static Logger logger = LoggerFactory
 			.getLogger(ApplicationContext.class);
 
@@ -257,13 +258,12 @@ public class ApplicationContext {
 			initialized = true;
 			return true;
 
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			// 19455: get Value from settings.properties should not throw
 			// exception
 			// http://bugtracking.arcelor.net/show_bug.cgi?id=19455
 			// throw new FileNotFoundException("Unable to find resource '"
 			// + resourceName + "'.");
-
 			System.out.println(String.format(
 					"WARN Loading application settings file. %s",
 					e.getMessage()));

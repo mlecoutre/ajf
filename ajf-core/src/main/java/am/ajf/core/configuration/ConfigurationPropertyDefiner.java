@@ -5,14 +5,14 @@ import ch.qos.logback.core.PropertyDefinerBase;
 
 /**
  * ConfigurationPropertyDefiner
+ * SLF4J component which allow to resolve application config entries
+ * in the logging configuration file
  * @author U002617
  *
  */
 public class ConfigurationPropertyDefiner extends PropertyDefinerBase {
 
-	private static final String APPLICATION_LOG_DIR_KEY = "log.dir";
-
-	private String propertyKey = APPLICATION_LOG_DIR_KEY;
+	private String propertyKey = null;
 
 	public ConfigurationPropertyDefiner() {
 		super();
@@ -30,10 +30,16 @@ public class ConfigurationPropertyDefiner extends PropertyDefinerBase {
 	@Override
 	public String getPropertyValue() {
 		if (ApplicationContext.isInitialized()) {
-			String value = ApplicationContext.getConfiguration().getString(
+			String value = null;
+			if (null == propertyKey) {
+				value = ApplicationContext.getLogDir().getPath();
+			} else {
+				value = ApplicationContext.getConfiguration().getString(
 					propertyKey);
+			}
 			return value;
 		}
+		
 		return null;
 	}
 

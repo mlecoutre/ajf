@@ -2,10 +2,12 @@
 <included>
 
 	<!-- property definer -->
-
+	<!-- not yet required in test -->
+	<!--
 	<define name="appLogDir" class="am.ajf.core.configuration.ConfigurationPropertyDefiner">
     	<propertyKey>log.dir</propertyKey>
   	</define>
+  	-->
   	
 	<!-- appenders -->
 	
@@ -23,6 +25,8 @@
 		</encoder>
 	</appender>
 	
+	<!-- In test, only support STDOut and STDErr -->
+	<!-- 
 	<appender name="AUDIT_FILE" class="ch.qos.logback.core.FileAppender">
 		<target>${appLogDir}/audit.log</target>
 		<encoder>
@@ -45,5 +49,6 @@
 			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %X{uuid} %X{userid} %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
+	-->
 	  	
 </included>

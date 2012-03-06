@@ -9,7 +9,7 @@ public final class JulToSLF4jHandlerBridge {
 			SLF4JBridgeHandler.install();
 	}
 
-	private JulToSLF4jHandlerBridge() {
+	public JulToSLF4jHandlerBridge() {
 		super();
 	}
 	
