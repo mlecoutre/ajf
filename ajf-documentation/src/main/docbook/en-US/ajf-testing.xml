@@ -87,8 +87,8 @@ Not writing unit tests is costly, but writing unit tests is costly too. There is
      </para>
         </listitem>
         <listitem>
-          <para>Naming convention for methods  <classname>test[what]</classname> such as  <classname>testSaveAs()</classname>
- or testSaveAsOnError()     </para>
+          <para>Naming convention for test methods  <classname>test[what]</classname> such as  <classname>testSaveAs()</classname>
+ or <classname>testSaveAsOnError()</classname></para>
         </listitem>
       </itemizedlist> 
   </para>

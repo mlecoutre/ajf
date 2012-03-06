@@ -9,14 +9,25 @@
 	<section>
 		<title>ApplicationContext</title>
 		<para>
-			The <classname>ApplicationContext</classname> is responsible of the application configuration.
-			The configuration (properties/values) is stored in the file 'settings.properties'.
-			Some specifics properties are directly accessible as attributes from <classname>ApplicationContext</classname>. 
+			The <classname>ApplicationContext</classname> is a component which is responsible of the application configuration.
+			The application configuration is a set of 'properties/values' pair and is stored in the 'settings.properties' file.
+			Some specifics properties are directly accessible attributes from <classname>ApplicationContext</classname> : 
+			<itemizedlist>
+					<listitem>application.name</listitem>
+					<listitem>log.dir</listitem>
+					<listitem>working.dir</listitem>
+			</itemizedlist>
+		</para>
+		<para>
+		The others application attributes are available as <link linkend="configurationSection"><classname>Configuration</classname></link> object 
+		from <parameter>ApplicationContext.getConfiguration()</parameter>.
 		</para>
 		<example>
 			<title>Configuration file : 'settings.properties'</title>
 			<programlisting><![CDATA[	
 	application.name=TestApplication
+	log.dir=
+	working.dir=
 	myKey=myValue	
 			]]></programlisting>
 			<programlisting language="Java" role="Java"><![CDATA[
@@ -32,7 +43,7 @@
 			]]></programlisting>
 		</example>
 	</section>
-	<section>
+	<section id="configurationSection">
 		<title>Configuration</title>
 		<para>
 			The configuration component is provided by the project <ulink url="http://commons.apache.org/configuration">"commons-configuration" from the 
@@ -52,10 +63,16 @@
 				<para>				
 				The configuration objects could be obtained by the <classname>ConfigurationHelper</classname> class.
 					<table frame="all">
-		   			  <title>API</title>
+		   			  <title>ConfigurationHelper API</title>
 		   			  <tgroup cols="2">
 				        <colspec colname="c1"/>
 				        <colspec colname="c2"/>
+				         <thead>
+				              <row>
+				                <entry colname="1">Method</entry>
+				                <entry colname="2">Description</entry>
+				              </row>
+			            </thead>
 				        <tbody>
 				        	<row>
 				        		<entry>newConfigurationFromPropertiesFile(String filePath)</entry>
@@ -84,51 +101,304 @@
 				        </tbody>
 				      </tgroup>
 				    </table>
-				    </para>
-				    <example>
+			    </para>
+				<example>
 						<title>Usage</title>
-						<programlisting language="Java" role="Java"><![CDATA[				
-		try{
-		     //TODO Add code
-		}catch(Exception e){
-			//TODO manage error
-		}
+						<programlisting language="Java" role="Java"><![CDATA[
+		// create th new Configuration object from resource 'settings.properties'
+		Configuration config = ConfigurationHelper.newConfigurationFromPropertiesResource("settings.properties");
+		// get 'myFirstKey' property as String
+		config.getString("myFirstKey")
+						]]></programlisting>
+				</example>
+				<para>
+					Others methods than <parameter>getString(String key)</parameter> are available, see the javaDoc 
+					<ulink url="http://commons.apache.org/configuration/apidocs/org/apache/commons/configuration/Configuration.html">here</ulink>.
+				</para>
+		</section>
+		<section>
+			<title>Bean Configuration objects</title>
+			<para>
+			The <classname>BeanConfiguration</classname> object allow to work with <parameter>Bean</parameter> objects and resolve 'nested' like properties. 
+			</para>
+			<example>
+						<title>Usage</title>
+						<programlisting language="Java" role="Java"><![CDATA[
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("name", "value");
+
+		List<String> list = new ArrayList<String>();
+		list.add("x");
+		list.add("y");
+		list.add("z");
+		map.put("d", list);
+
+		BeanConfiguration bConfig = new BeanConfiguration();
+		bConfig.addProperty("aMap", map);
+
+		logger.info(bConfig.getString("aMap.[name]"));
+		logger.info(bConfig.getString("aMap.[c]"));
+		logger.info(bConfig.getString("aMap.[d](0)"));
 						]]></programlisting>
 					</example>
-				
 		</section>
 		<section>
 			<title>Merge Configuration objects</title>
-			<para></para>
+			<para>
+			Merging <classname>Configuration</classname> objects allow to chain them and resolve properties in a merged Configuration context. 
+			</para>
+			<example>
+						<title>Usage</title>
+						<programlisting language="Java" role="Java"><![CDATA[
+		// create th new Configuration object from resource 'settings.properties'
+		PropertiesConfiguration sConfig = new PropertiesConfiguration();
+		sConfig.addProperty("c", "${b}");
+		
+		PropertiesConfiguration pConfig = new PropertiesConfiguration();
+		pConfig.addProperty("b", "${a}_26");
+		pConfig.addProperty("a", "25");
+		
+		// merge (chain) the configurations objects
+		Configuration config = ConfigurationHelper.mergeConfigurations(sConfig, pConfig);
+		
+		// get 'c' property as String
+		config.getString("c");
+		// << must return 25_26
+						]]></programlisting>
+					</example>
 		</section>
 		<section>
-			<title>Variables interpolation</title>
-			<para></para>
+			<title>Prefixed Variables Interpolation</title>
+			<para>
+			You can reference differents kind of variables in your configuration : 
+				<itemizedlist>
+					<listitem>Java System variables as 'env:'</listitem>
+					<listitem>OS Envir variables as 'env:'</listitem>
+					<listitem>Java Constantes as 'const:'</listitem>
+				</itemizedlist>
+			</para>
+			<example>
+				<title>Usage</title>
+				<programlisting language="Java" role="Java"><![CDATA[
+			Configuration configuration = new PropertiesConfiguration();
+
+		// resolve a System java variable
+		String res = (String) ConfigurationUtils.evaluate("${sys:java.home}",
+				configuration);
+		logger.info(res);
+
+		// resolve an OS Envir variable
+		res = (String) ConfigurationUtils.evaluate("${env:JAVA_HOME}",
+				configuration);
+		logger.info(res);
+
+		// resolve a Java constante
+		res = (String) ConfigurationUtils.evaluate(
+				"${const:myPackage.MyClass.A_JAVA_CONSTANTE}", configuration);
+		logger.info(res);
+		]]></programlisting>
+			</example>
 		</section>
+		<section>
+			<title>Expressions Evaluation</title>
+			<para>
+			You can evaluate 'EL' like expressions in a <classname>Configuration</classname> context.
+			</para>
+			<example>
+				<title>Usage</title>
+				<programlisting language="Java" role="Java"><![CDATA[
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("name", "value");
+
+		List<String> list = new ArrayList<String>();
+		list.add("x");
+		list.add("y");
+		list.add("z");
+		map.put("d", list);
+
+		BeanConfiguration bConfig = new BeanConfiguration();
+		bConfig.addProperty("aMap", map);
+
+		logger.info(""
+				+ ConfigurationUtils.evaluate("the value is : ${aMap.[name]}",
+						bConfig));
+						]]></programlisting>
+			</example>
+		</section>
+	</section>
+	<section>
+		<title>Logging</title>
+		<para>			
+		</para>
 	</section>
 	<section>
 		<title>Mail</title>
 		<para>
-			
 		</para>
 	</section>
 	<section>
 		<title>Cache</title>
 		<para>
-			
 		</para>
 	</section>
-	
 	<section>
 		<title>AuditDatas</title>
-		<para>
-			
+		<para>The <classname>AuditData</classname> object contain user context informations like :		
+			<itemizedlist>
+				<listitem>the user identifier</listitem>
+				<listitem>the user transaction UUID</listitem>
+				<listitem>the user transaction Date</listitem>
+				<listitem>... </listitem>
+			</itemizedlist>	
+			<important>
+				<para>'user transaction' is not in the JTA meaning but in the user requets meaning.</para>
+			</important>
+			Normally the <classname>AuditData</classname> object is initialized automatically for the web modules 
+			with a specific <classname>ServletFilter</classname>, but you can initialize it by yourself.
 		</para>
+		<section>
+			<title>Initialize AuditDatas</title>
+			<para>		
+			</para>
+			<example>
+				<title>Usage</title>
+				<programlisting language="Java" role="Java"><![CDATA[
+		EditableAuditData data = (EditableAuditData) AuditDataContext.initContextData();
+		// set the user Id
+		data.put(AuditData.KEY_USERID, "u002617");
+		// user transaction UUID and Date are automatically initialized
+				]]></programlisting>
+			</example>
+			<para><classname>String</classname> typed audit datas are automatically propagated in the <classname>Logger</classname> user context
+				and available in the logging message pattern as eXtended variables
+			</para>
+			<example>
+				<title>Using AuditDatas in a logger message pattern - from file 'logback.xml'</title>
+				<programlisting language="Xml" role="Xml"><![CDATA[
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<target>System.out</target>
+		<encoder>
+			<pattern>
+				[%thread] %-5level %X{uuid} %X{userid} %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>	
+				]]></programlisting>
+			</example> 
+		</section>
+		<section>
+			<title>Access AuditDatas</title>
+			<para>		
+			</para>
+			<example>
+				<title>Usage</title>
+				<programlisting language="Java" role="Java"><![CDATA[
+		AuditData auditData = AuditDataContext.getAuditData();
+		// get the user transaction UUID	
+		String uuid = data.getString(AuditData.KEY_UUID);
+		// get the user transaction Date
+		Date date = (Date) data.get(AuditData.KEY_DATE);
+		// get the user identifier
+		String userId = data.getString(AuditData.KEY_USERID);
+				]]></programlisting>
+			</example>
+		</section>
+		<section>
+			<title>Auditor</title>
+			<para>		
+				The <classname>Auditor</classname> component allow to trace application audit informations like :
+				<itemizedlist>
+					<listitem>login</listitem>
+					<listitem>the invoked action as [Function].[UnitTask]</listitem>
+					<listitem>the requested [Resource]</listitem>
+					<listitem>logout</listitem>
+					<listitem>... </listitem>
+				</itemizedlist>
+				The audit informations are logged with the 'audit' logger as 'TRACE' level.  
+				<table frame="all">
+	   			  <title>Auditor API</title>
+	   			  <tgroup cols="2">
+			        <colspec colname="c1"/>
+			        <colspec colname="c2"/>
+			         <thead>
+			              <row>
+			                <entry colname="1">Method</entry>
+			                <entry colname="2">Description</entry>
+			              </row>
+		            </thead>
+			        <tbody>
+			        	<row>
+			        		<entry>audit(String message)</entry>
+			        		<entry>log the message in 'audit' logger as 'TRACE' level</entry>
+			        	</row>
+			        	<row>
+			        		<entry>audit(String messageFormat, Object.. args)</entry>
+			        		<entry>log the message (=<ulink url="http://docs.oracle.com/javase/1.5.0/docs/api/java/lang/String.html#format(java.lang.String, java.lang.Object...)">String.format(messageFormat, args)</ulink>) in 'audit' logger as 'TRACE' level</entry>
+			        	</row>
+			        </tbody>
+			      </tgroup>
+			    </table>
+			</para>
+			<example>
+				<title>Usage</title>
+				<programlisting language="Java" role="Java"><![CDATA[
+				import static am.ajf.core.datas.Auditor.audit;
+				import am.ajf.core.datas.Auditor;
+				
+				...
+				audit("try to get resource: %s", "mySecuriedResource");
+				// or
+				Auditor.audit("try to get resource: %s", "mySecurizedResource");
+				
+				]]></programlisting>
+			</example>
+		</section>
 	</section>
+	<!--  
 	<section>
-		<title>Utils</title>
+		<title></title>
 		<para>
 			
 		</para>
+		<important>
+			<para>
+			 				
+			</para> 
+			<para><emphasis></emphasis></para>
+			<programlisting language="Xml" role="Xml"><![CDATA[
+
+			]]></programlisting>
+		</important>
+
+		<example>
+			<title></title>
+			<programlisting language="Java" role="Java"><![CDATA[
+
+				]]></programlisting>
+			<para><emphasis>or</emphasis></para>
+			<programlisting language="Java" role="Java"><![CDATA[
+
+			]]></programlisting>				
+		</example>
+			
+		<important>
+			<para>
+				
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>
+						<emphasis>dlsm:ldmlsmdl</emphasis>
+					</para>
+				</listitem>
+			</itemizedlist> 
+		</important>
+		<warning>
+			<para>
+				
+			</para>
+		</warning>	
+		
 	</section>
+	-->
 </chapter>
