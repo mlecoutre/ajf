@@ -1,9 +1,9 @@
 package am.ajf.web.controllers;
 
+import am.ajf.core.logger.LoggerFactory;
 import java.io.File;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.slf4j.Logger;
 
@@ -22,8 +22,8 @@ public class HelpMBean {
 	private String context;
 
 	private String currentPage = DEFAULT_HELP_PATH + DEFAULT_HELP_VIEW;
-	@Inject
-	protected Logger logger;
+
+	private final Logger logger = LoggerFactory.getLogger(HelpMBean.class);
 
 	private String viewId;
 
@@ -52,8 +52,7 @@ public class HelpMBean {
 		String realPath = giveRealPath(currentPage);
 
 		if (new File(realPath).exists()) {
-			currentPage = String.format("%s%s", context, currentPage);
-			return currentPage;
+			currentPage = context + currentPage;
 		} else {
 			// One index.xhtml page for the global P+ function
 			String function = extractPalasFunction(viewId);
@@ -63,22 +62,21 @@ public class HelpMBean {
 
 			if (new File(realPath).exists()) {
 				// add context for the web access
-				currentPage = String.format("%s%s", context, currentPage);
-				return currentPage;
+				currentPage = context + currentPage;
 			} else {
 				// go to the global shared/help/index.xhtml
 				currentPage = String.format("%s%s", DEFAULT_HELP_PATH,
 						DEFAULT_HELP_VIEW);
 				realPath = giveRealPath(currentPage);
 				if (new File(realPath).exists()) {
-					currentPage = String.format("%s%s", context, currentPage);
-					return currentPage;
+					currentPage = context + currentPage;
 				} else {
 					logger.error("Default shared/help/index.xhtml page cannot be found.");
-					return null;
+					currentPage = "";
 				}
 			}
 		}
+		return currentPage;
 	}
 
 	/**
@@ -132,10 +130,11 @@ public class HelpMBean {
 	 */
 	@PostConstruct
 	public void init() {
-		logger.info("initi");
+
 		context = FacesContext.getCurrentInstance().getExternalContext()
 				.getRequestContextPath();
 		viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+		currentPage = displayContextualHelp();
 	}
 
 	public void setContext(String context) {

@@ -1,12 +1,5 @@
 package am.ajf.showcase.core.business;
 
-import java.util.List;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-
 import am.ajf.showcase.lib.business.EmployeeManagementBD;
 import am.ajf.showcase.lib.business.dto.FireEmployeePB;
 import am.ajf.showcase.lib.business.dto.FireEmployeeRB;
@@ -16,6 +9,10 @@ import am.ajf.showcase.lib.business.dto.ListEmployeesPB;
 import am.ajf.showcase.lib.business.dto.ListEmployeesRB;
 import am.ajf.showcase.lib.model.Person;
 import am.ajf.showcase.lib.services.PersonServiceBD;
+import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import org.slf4j.Logger;
 
 /**
  * Singleton implementation of EmployeeManagement Palas Function

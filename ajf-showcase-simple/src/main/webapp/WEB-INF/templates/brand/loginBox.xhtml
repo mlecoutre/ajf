@@ -8,22 +8,20 @@
 
 	<h:form id="InloginForm">
 		<p:focus for="username" />
-		<h:panelGrid columns="5" styleClass="login">
+		<h:panelGrid columns="7" styleClass="login">
 			<h:outputText value="#{m['loginBox.label.userName']}" />
-			<h:inputText id="username" value="#{securityBean.username}" tabindex="1"
-				styleClass="jq_watermark" />
-
+			<h:inputText id="username" value="#{securityBean.username}"
+				tabindex="1" styleClass="jq_watermark" />
+			<p:watermark for="username" value="#{m['loginBox.label.userName']}" />
 			<h:outputText value="#{m['loginBox.label.password']}" />
 
-			<h:inputSecret tabindex="2" value="#{securityBean.password}"
-				styleClass="jq_watermark" />
-
+			<h:inputSecret id="password" tabindex="2"
+				value="#{securityBean.password}" styleClass="jq_watermark" />
+			<p:watermark for="password" value="#{m['loginBox.label.password']}" />
 			<h:commandButton tabindex="3" action="#{securityBean.doLogin}"
 				styleClass="access" value="#{m['loginBox.label.login']}">
 			</h:commandButton>
 		</h:panelGrid>
 	</h:form>
-	<!-- input tabindex="1" value="" type="text" class="jq_watermark" placeholder="Nom d'utilisateur" name="username" -->
-	<!-- input tabindex="4" value="" type="password" class="jq_watermark"
-				placeholder="Mot de passe" name="password"/ -->
+
 </ui:composition>

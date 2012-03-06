@@ -46,7 +46,6 @@ public class HelpMBeanTest {
 	public void init() {
 		MockitoAnnotations.initMocks(this);
 		mockStatic(FacesContext.class);
-		helpMBean.logger = this.logger;
 
 		when(FacesContext.getCurrentInstance()).thenReturn(mockFacesContext);
 		// when(mockFacesContext.getViewRoot()).thenReturn(mockUIViewRoot);

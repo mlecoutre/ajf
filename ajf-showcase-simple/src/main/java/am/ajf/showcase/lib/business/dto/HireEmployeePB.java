@@ -4,10 +4,13 @@ import am.ajf.showcase.lib.model.Person;
 
 /**
  * HireEmployeePB parameter
+ * 
  * @author E010925
- *
+ * 
  */
 public class HireEmployeePB {
+
+	private Person person;
 
 	public HireEmployeePB() {
 		super();
@@ -17,8 +20,6 @@ public class HireEmployeePB {
 		super();
 		this.person = person;
 	}
-
-	private Person person;
 
 	public Person getPerson() {
 		return person;

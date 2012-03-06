@@ -9,7 +9,9 @@
 
 
 <h:head>
-	<base href="#{facesContext.externalContext.request.contextPath}" />
+	<base
+		href="http://${request.serverName}:${request.serverPort}${request.contextPath}/" />
+
 	<h:outputStylesheet library="css" name="custom.css" />
 	<h:outputStylesheet library="brand/css" name="style.css" />
 	<h:outputStylesheet library="brand/css" name="ajf.css" />
@@ -36,13 +38,13 @@
 						<ui:include src="navmenu.xhtml" />
 					</div>
 				</h:form>
-				<!--  h:form id="headerForm">
-				<ui:include src="brand/menuRight.xhtml" />
-			</h:form -->
-				<span class="search, classicMenuHeader"> <h:form id="menuBar">
+
+
+				<div class="classicMenuHeader">
+					<h:form id="menuBar">
 						<ui:include src="/shared/menu.xhtml" />
 					</h:form>
-				</span>
+				</div>
 			</div>
 		</div>
 		<div class="classicHeader2">

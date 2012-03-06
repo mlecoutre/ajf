@@ -12,16 +12,16 @@
 		<p:submenu label="#{m['menu.employee.management.title']}"
 			rendered="#{securityBean.isAllowed('poweruser')}">
 			<p:menuitem value="#{m['menu.employee.list.title']}"
-				url="/employeemanagement/listEmployees.jsf" />
+				url="employeemanagement/listEmployees.jsf" />
 			<p:menuitem value="#{m['menu.employee.create.title']}"
-				url="/employeemanagement/createEmployee.jsf"
+				url="employeemanagement/createEmployee.jsf"
 				rendered="#{securityBean.isAllowed('admin')}" />
 		</p:submenu>
 		<p:submenu label="#{m['menu.showcase.title']}">
 			<p:menuitem value="#{m['menu.showcase.uimessages']}"
-				url="/showcase/uimessages.jsf" />
+				url="showcase/uimessages.jsf" />
 			<p:menuitem value="#{m['menu.showcase.layout']}"
-				url="/showcase/layout.jsf" />
+				url="showcase/layout.jsf" />
 		</p:submenu>
 
 		<!-- When already logged in : user Name button with logout submenu -->
@@ -29,7 +29,7 @@
 			rendered="#{securityBean.isLogIn}" icon="ui-icon ui-icon-key">
 			<p:menuitem value="Log Out"
 				actionListener="#{securityBean.doLogout}"
-				action="/index.xhtml?faces-redirect=true"
+				action="index.xhtml?faces-redirect=true"
 				icon="ui-icon ui-icon-close" />
 		</p:submenu>
 	</p:menubar>

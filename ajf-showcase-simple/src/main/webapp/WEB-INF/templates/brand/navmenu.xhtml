@@ -13,8 +13,8 @@
 		<li><h:outputLink id="linkContact" value="contacts.html">
 				<h:outputText value="#{m['menu.contact']}" />
 			</h:outputLink></li>
-		<li><h:outputLink id="linkHelp" value="help.html">
-				<f:param name="currentPage" value="#{view.viewId}" />
+		<li><h:outputLink id="linkHelp" target="_blank"
+				onclick="window.open('#{helpMBean.currentPage}','helpWindow', 'top=30px left=50px width=800px height=600px dependent=yes menubar=0 toolbar=0 location=0 scrollbars=0 resizable=1 status=0'); return false;">
 				<h:outputText value="#{m['menu.help']}" />
 			</h:outputLink></li>
 		<li><p:commandLink oncomplete="loggerDialog.show()"
@@ -22,5 +22,4 @@
 		<li><p:commandLink oncomplete="aboutProjectDialog.show()"
 				value="#{m['menu.about']}" /></li>
 	</ul>
-
 </ui:composition>

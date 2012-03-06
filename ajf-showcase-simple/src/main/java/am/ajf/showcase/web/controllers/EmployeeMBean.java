@@ -1,20 +1,5 @@
 package am.ajf.showcase.web.controllers;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import org.slf4j.Logger;
-
 import am.ajf.showcase.lib.business.EmployeeManagementBD;
 import am.ajf.showcase.lib.business.dto.FireEmployeePB;
 import am.ajf.showcase.lib.business.dto.FireEmployeeRB;
@@ -23,6 +8,18 @@ import am.ajf.showcase.lib.business.dto.HireEmployeeRB;
 import am.ajf.showcase.lib.business.dto.ListEmployeesPB;
 import am.ajf.showcase.lib.business.dto.ListEmployeesRB;
 import am.ajf.showcase.lib.model.Person;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import org.slf4j.Logger;
 
 /**
  * Managed bean to get input of client. This class has to implement
@@ -74,6 +71,7 @@ public class EmployeeMBean implements Serializable {
 
 	/**
 	 * Create an employee in the database
+	 * @throws Exception raise all error
 	 */
 	public void hireEmployee() throws Exception {
 		logger.debug("createEmployee MBean");
@@ -99,6 +97,7 @@ public class EmployeeMBean implements Serializable {
 
 	/**
 	 * Remove an employee in the database
+	 * @throws Exception raise all error
 	 */
 	public void fireEmployee() throws Exception {
 		logger.debug("fireEmployee MBean");
@@ -121,6 +120,7 @@ public class EmployeeMBean implements Serializable {
 
 	/**
 	 * list employee
+	 * @throws Exception raise all error
 	 */
 	public void listEmployees() throws Exception {
 
@@ -135,18 +135,34 @@ public class EmployeeMBean implements Serializable {
 		employees = rb.getEmployees();
 	}
 
+	/**
+	 * 
+	 * @return sex
+	 */
 	public char getSex() {
 		return sex;
 	}
 
+	/**
+	 * 
+	 * @param sex person sec
+	 */
 	public void setSex(char sex) {
 		this.sex = sex;
 	}
 
+	/**
+	 * 
+	 * @return brithday date
+	 */
 	public Date getBirthday() {
 		return birthday;
 	}
 
+	/**
+	 * 
+	 * @param birthday birthday date
+	 */
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
