@@ -35,8 +35,7 @@ public class AboutMBean implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private transient Logger logger = LoggerFactory
-			.getLogger(AboutMBeanTest.class);
+	private transient Logger logger = LoggerFactory.getLogger(AboutMBean.class);
 
 	// private List<KeyValueVO> keyValueList = new ArrayList<KeyValueVO>();
 	private String implementationTitle, implementationVendor,
