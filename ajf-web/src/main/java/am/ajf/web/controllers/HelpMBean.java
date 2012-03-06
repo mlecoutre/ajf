@@ -1,6 +1,11 @@
 package am.ajf.web.controllers;
 
+import java.io.File;
+import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
+import org.slf4j.Logger;
 
 /**
  * Help MBean. Manage Contextual help for the application/
@@ -11,10 +16,16 @@ import javax.inject.Named;
 @Named
 @javax.enterprise.context.RequestScoped
 public class HelpMBean {
-
 	private static final String DEFAULT_HELP_PATH = "/shared/help";
 	private static final String DEFAULT_HELP_VIEW = "/index.xhtml";
+
+	private String context;
+
 	private String currentPage = DEFAULT_HELP_PATH + DEFAULT_HELP_VIEW;
+	@Inject
+	protected Logger logger;
+
+	private String viewId;
 
 	/**
 	 * Default constructor
@@ -31,28 +42,112 @@ public class HelpMBean {
 	 */
 	public String displayContextualHelp() {
 
-		// TODO Check if contextual page exist
-
 		// if not, just display index page
 
-		return DEFAULT_HELP_PATH + DEFAULT_HELP_VIEW;
+		currentPage = String.format("%s%s", DEFAULT_HELP_PATH, viewId);
+		logger.trace(String.format("generate help page view %s for view ",
+				currentPage, viewId));
+
+		// IF not exist, check if index exist
+		String realPath = giveRealPath(currentPage);
+
+		if (new File(realPath).exists()) {
+			currentPage = String.format("%s%s", context, currentPage);
+			return currentPage;
+		} else {
+			// One index.xhtml page for the global P+ function
+			String function = extractPalasFunction(viewId);
+			currentPage = String.format("%s%s%s", DEFAULT_HELP_PATH, function,
+					DEFAULT_HELP_VIEW);
+			realPath = giveRealPath(currentPage);
+
+			if (new File(realPath).exists()) {
+				// add context for the web access
+				currentPage = String.format("%s%s", context, currentPage);
+				return currentPage;
+			} else {
+				// go to the global shared/help/index.xhtml
+				currentPage = String.format("%s%s", DEFAULT_HELP_PATH,
+						DEFAULT_HELP_VIEW);
+				realPath = giveRealPath(currentPage);
+				if (new File(realPath).exists()) {
+					currentPage = String.format("%s%s", context, currentPage);
+					return currentPage;
+				} else {
+					logger.error("Default shared/help/index.xhtml page cannot be found.");
+					return null;
+				}
+			}
+		}
 	}
 
 	/**
+	 * return the function P+ and potentially its sub categories
 	 * 
-	 * @return currentPage
+	 * @param viewId
+	 *            global view returned by the face context
+	 * @return function P+ and potentially its sub categories
 	 */
+	protected String extractPalasFunction(String viewId) {
+		String[] parts = viewId.split("/");
+		StringBuffer buff = new StringBuffer();
+		// get all parts except the first and the last one.
+		for (int i = 1; i < (parts.length - 1); i++) {
+			buff.append("/").append(parts[i]);
+		}
+		return buff.toString();
+	}
+
+	public String getContext() {
+		return context;
+	}
+
 	public String getCurrentPage() {
 		return currentPage;
 	}
 
+	public String getViewId() {
+		return viewId;
+	}
+
 	/**
+	 * Check if page exist really on server
 	 * 
-	 * @param currentPage
-	 *            the currentPage
+	 * @param page
+	 *            web relative url
+	 * @return absolute path
 	 */
+	protected String giveRealPath(String page) {
+		String res = FacesContext.getCurrentInstance().getExternalContext()
+				.getRealPath(page);
+		if (res == null) {
+			return "";
+		} else {
+			return res;
+		}
+	}
+
+	/**
+	 * Init current page content
+	 */
+	@PostConstruct
+	public void init() {
+		logger.info("initi");
+		context = FacesContext.getCurrentInstance().getExternalContext()
+				.getRequestContextPath();
+		viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
+	}
+
+	public void setContext(String context) {
+		this.context = context;
+	}
+
 	public void setCurrentPage(String currentPage) {
 		this.currentPage = currentPage;
+	}
+
+	public void setViewId(String viewId) {
+		this.viewId = viewId;
 	}
 
 }

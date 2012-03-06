@@ -9,11 +9,10 @@ import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 import java.util.Locale;
-
 import javax.faces.application.Application;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,41 +23,43 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 
-import am.ajf.web.WebUtils;
-
 /**
  * WebUtilsTest
+ * 
  * @author E010925
- *
+ * 
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(FacesContext.class)
 public class WebUtilsTest {
 
-	private static final String I18N_MY_KEY = "my.key";
-	private static final String I18N_MY_KEY2 = "my.key2";
-
 	private static final String AJF_WEB_MESSAGES = "ajf.web.messages";
+	private static final String I18N_MY_KEY = "my.key";
+
+	private static final String I18N_MY_KEY2 = "my.key2";
 
 	// public static Logger log = LoggerFactory.getLogger(WebUtilsTest.class);
 
 	@Mock
-	private FacesContext mockFacesContext;
+	private Exception exception;
 
 	@Mock
 	private Logger logger;
 
 	@Mock
-	private Exception exception;
+	private Application mockApplication;
 
 	// @Mock
 	// private ELContext mockELContext;
 
 	@Mock
-	private UIViewRoot mockUIViewRoot;
+	private ExternalContext mockExternalContext;
 
 	@Mock
-	private Application mockApplication;
+	private FacesContext mockFacesContext;
+
+	@Mock
+	private UIViewRoot mockUIViewRoot;
 
 	// @Mock
 	// private ExpressionFactory expressionFactory;
@@ -75,6 +76,7 @@ public class WebUtilsTest {
 		// mockStatic(WebUtils.class);
 
 		when(FacesContext.getCurrentInstance()).thenReturn(mockFacesContext);
+
 		when(mockFacesContext.getViewRoot()).thenReturn(mockUIViewRoot);
 		when(mockUIViewRoot.getLocale()).thenReturn(Locale.ENGLISH);
 		// when(mockFacesContext.getELContext()).thenReturn(mockELContext);
@@ -90,6 +92,17 @@ public class WebUtilsTest {
 		// elExpression, Object.class)).thenReturn(
 		// mockValueExpression);
 		// when(mockValueExpression.getValue(mockELContext)).thenReturn(2l);
+	}
+
+	@Test
+	public void testGenerateLabelValue() {
+		System.out.println("> testGenerateLabelValue");
+		String result = WebUtils.generateLabelValue("first.name");
+		System.out.println(" * " + result);
+		assertTrue("First name".equals(result));
+		result = WebUtils.generateLabelValue("firstName");
+		System.out.println(" * " + result);
+		assertTrue("First name".equals(result));
 	}
 
 	@Test
@@ -112,29 +125,6 @@ public class WebUtilsTest {
 	}
 
 	@Test
-	public void testHandleError() {
-		System.out.println("> testHandleError");
-		Mockito.when(exception.getMessage()).thenReturn("exception message");
-
-		WebUtils.handleError(exception, logger, "error message");
-
-		// verify if we are passed in the error method once
-		verify(logger, times(1)).error(any(String.class), any(Exception.class));
-
-	}
-
-	@Test
-	public void testGenerateLabelValue() {
-		System.out.println("> testGenerateLabelValue");
-		String result = WebUtils.generateLabelValue("first.name");
-		System.out.println(" * " + result);
-		assertTrue("First name".equals(result));
-		result = WebUtils.generateLabelValue("firstName");
-		System.out.println(" * " + result);
-		assertTrue("First name".equals(result));
-	}
-
-	@Test
 	public void testGivePropertyValue() {
 
 		String notExistingKey = "not.existing.key";
@@ -149,11 +139,23 @@ public class WebUtilsTest {
 		value = WebUtils.givePropertyValue(notExistingKey,
 				"notexistingfile.properties");
 		assertTrue(notExistingKey.equals(value));
-		
+
 		// test not existing key
 		value = WebUtils.givePropertyValue(notExistingKey,
 				"configuration.properties");
 		assertTrue(notExistingKey.equals(value));
+
+	}
+
+	@Test
+	public void testHandleError() {
+		System.out.println("> testHandleError");
+		Mockito.when(exception.getMessage()).thenReturn("exception message");
+
+		WebUtils.handleError(exception, logger, "error message");
+
+		// verify if we are passed in the error method once
+		verify(logger, times(1)).error(any(String.class), any(Exception.class));
 
 	}
 }
