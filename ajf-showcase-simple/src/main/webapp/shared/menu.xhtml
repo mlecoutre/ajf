@@ -10,12 +10,12 @@
 
 		<!--  ADD YOUR CONTENT HERE  -->
 		<p:submenu label="#{m['menu.employee.management.title']}"
-			rendered="#{securityBean.isAllowed('poweruser')}">
+			rendered="#{securityMBean.isAllowed('poweruser')}">
 			<p:menuitem value="#{m['menu.employee.list.title']}"
 				url="employeemanagement/listEmployees.jsf" />
 			<p:menuitem value="#{m['menu.employee.create.title']}"
 				url="employeemanagement/createEmployee.jsf"
-				rendered="#{securityBean.isAllowed('admin')}" />
+				rendered="#{securityMBean.isAllowed('admin')}" />
 		</p:submenu>
 		<p:submenu label="#{m['menu.showcase.title']}">
 			<p:menuitem value="#{m['menu.showcase.uimessages']}"
@@ -25,10 +25,10 @@
 		</p:submenu>
 
 		<!-- When already logged in : user Name button with logout submenu -->
-		<p:submenu label="#{securityBean.username}"
-			rendered="#{securityBean.isLogIn}" icon="ui-icon ui-icon-key">
+		<p:submenu label="#{securityMBean.username}"
+			rendered="#{securityMBean.isLogIn}" icon="ui-icon ui-icon-key">
 			<p:menuitem value="Log Out"
-				actionListener="#{securityBean.doLogout}"
+				actionListener="#{securityMBean.doLogout}"
 				action="index.xhtml?faces-redirect=true"
 				icon="ui-icon ui-icon-close" />
 		</p:submenu>

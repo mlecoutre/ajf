@@ -57,7 +57,7 @@ public class EmployeeMBean implements Serializable {
 	/* POLICIES BUSINESS DELEGATE */
 
 	@Inject
-	EmployeeManagementBD employeeManagement;
+	protected EmployeeManagementBD employeeManagement;
 
 	/* CONSTANTS */
 	// private int MAX_RESULT = 200;
@@ -71,7 +71,9 @@ public class EmployeeMBean implements Serializable {
 
 	/**
 	 * Create an employee in the database
-	 * @throws Exception raise all error
+	 * 
+	 * @throws Exception
+	 *             raise all error
 	 */
 	public void hireEmployee() throws Exception {
 		logger.debug("createEmployee MBean");
@@ -97,7 +99,9 @@ public class EmployeeMBean implements Serializable {
 
 	/**
 	 * Remove an employee in the database
-	 * @throws Exception raise all error
+	 * 
+	 * @throws Exception
+	 *             raise all error
 	 */
 	public void fireEmployee() throws Exception {
 		logger.debug("fireEmployee MBean");
@@ -120,7 +124,9 @@ public class EmployeeMBean implements Serializable {
 
 	/**
 	 * list employee
-	 * @throws Exception raise all error
+	 * 
+	 * @throws Exception
+	 *             raise all error
 	 */
 	public void listEmployees() throws Exception {
 
@@ -145,7 +151,8 @@ public class EmployeeMBean implements Serializable {
 
 	/**
 	 * 
-	 * @param sex person sec
+	 * @param sex
+	 *            person sec
 	 */
 	public void setSex(char sex) {
 		this.sex = sex;
@@ -161,7 +168,8 @@ public class EmployeeMBean implements Serializable {
 
 	/**
 	 * 
-	 * @param birthday birthday date
+	 * @param birthday
+	 *            birthday date
 	 */
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;

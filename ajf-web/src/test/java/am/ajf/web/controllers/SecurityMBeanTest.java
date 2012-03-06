@@ -1,6 +1,6 @@
-package am.ajf.web;
+package am.ajf.web.controllers;
 
-import am.ajf.web.controllers.SecurityBean;
+import am.ajf.web.controllers.SecurityMBean;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -12,16 +12,16 @@ import org.slf4j.LoggerFactory;
  * @author E010925
  * 
  */
-public class SecurityBeanTest {
+public class SecurityMBeanTest {
 
-	private SecurityBean securityBean = new SecurityBean();
+	private SecurityMBean securityBean = new SecurityMBean();
 
-	private Logger logger = LoggerFactory.getLogger(SecurityBeanTest.class);
+	private Logger logger = LoggerFactory.getLogger(SecurityMBeanTest.class);
 
 	/**
 	 * Default constructor
 	 */
-	public SecurityBeanTest() {
+	public SecurityMBeanTest() {
 		super();
 	}
 

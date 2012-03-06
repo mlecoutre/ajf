@@ -26,13 +26,13 @@ import org.slf4j.LoggerFactory;
  */
 @Named
 @SessionScoped
-public class SecurityBean implements Serializable {
+public class SecurityMBean implements Serializable {
 
 	private static final String OUTCOME_OK = "/index";
 
 	private static final long serialVersionUID = 1L;
 	private static final String OUTCOME_ACCESS_DENIED = "/ajf/errors/accessDenied";
-	private transient Logger log = LoggerFactory.getLogger(SecurityBean.class);
+	private transient Logger log = LoggerFactory.getLogger(SecurityMBean.class);
 
 	private String username;
 	private String password;
@@ -40,7 +40,7 @@ public class SecurityBean implements Serializable {
 	/**
 	 * Default constructor
 	 */
-	public SecurityBean() {
+	public SecurityMBean() {
 		super();
 	}
 

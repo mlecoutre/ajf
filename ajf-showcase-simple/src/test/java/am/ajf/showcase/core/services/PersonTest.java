@@ -2,15 +2,14 @@ package am.ajf.showcase.core.services;
 
 import static org.junit.Assert.assertTrue;
 
+import am.ajf.showcase.lib.model.Person;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
@@ -29,22 +28,31 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
-import am.ajf.showcase.lib.model.Person;
-
+/**
+ * PersonTest
+ * 
+ * @author E010925
+ * 
+ */
 @RunWith(Arquillian.class)
 public class PersonTest {
-
-	@Inject
-	Logger log;
-
-	@Inject
-	private EntityManager em;
 
 	private static IDatabaseConnection dbUnitConn;
 	// private static IDataSet dataset;
 
-	private static String _dbFile = "dataset.xml";
+	private static final String DBUNIT_FILE = "dataset.xml";
 
+	@Inject
+	private Logger log;
+
+	@Inject
+	private EntityManager em;
+
+	/**
+	 * Arquillian deployer
+	 * 
+	 * @return archive
+	 */
 	@Deployment
 	public static JavaArchive createTestArchive() {
 		return ShrinkWrap
@@ -61,6 +69,11 @@ public class PersonTest {
 						ArchivePaths.create("persistence.xml"));
 	}
 
+	/**
+	 * initTable
+	 * 
+	 * @throws Exception
+	 */
 	@Before
 	public void initTable() throws Exception {
 
@@ -78,7 +91,7 @@ public class PersonTest {
 						FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
 						builder.setColumnSensing(true);
 						IDataSet dataSet = builder.build(PersonTest.class
-								.getResourceAsStream(_dbFile));
+								.getResourceAsStream(DBUNIT_FILE));
 
 						DatabaseOperation.CLEAN_INSERT.execute(dbUnitConn,
 								dataSet);
@@ -96,6 +109,9 @@ public class PersonTest {
 		}
 	}
 
+	/**
+	 * testAddPerson
+	 */
 	@Test
 	public void testAddPerson() {
 		log.debug("testAddPerson");
@@ -115,6 +131,9 @@ public class PersonTest {
 		assertTrue("PersonId should not be null", null != person.getPersonid());
 	}
 
+	/**
+	 * testFindall
+	 */
 	@Test
 	public void testFindall() {
 		log.debug("testFindall");

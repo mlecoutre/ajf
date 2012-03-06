@@ -1,5 +1,6 @@
 package am.ajf.web.controllers;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -7,13 +8,11 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.ServletContext;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +35,8 @@ public class AboutMBean implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private transient Logger logger = LoggerFactory.getLogger(AboutMBean.class);
+	private transient Logger logger = LoggerFactory
+			.getLogger(AboutMBeanTest.class);
 
 	// private List<KeyValueVO> keyValueList = new ArrayList<KeyValueVO>();
 	private String implementationTitle, implementationVendor,
@@ -74,14 +74,19 @@ public class AboutMBean implements Serializable {
 
 		InputStream in = null;
 		try {
-			in = new FileInputStream(manifestPath);
-			Manifest manifest = new Manifest(in);
+			File manifestFile = new File(manifestPath);
+			if (manifestFile.exists()) {
+				in = new FileInputStream(manifestFile);
+				Manifest manifest = new Manifest(in);
 
-			Attributes attrs = manifest.getMainAttributes();
+				Attributes attrs = manifest.getMainAttributes();
 
-			implementationTitle = attrs.getValue(IMPL_TITLE);
-			implementationVendor = attrs.getValue(IMPL_VENDOR);
-			implementationVersion = attrs.getValue(IMPL_VERSION);
+				implementationTitle = attrs.getValue(IMPL_TITLE);
+				implementationVendor = attrs.getValue(IMPL_VENDOR);
+				implementationVersion = attrs.getValue(IMPL_VERSION);
+			} else {
+				logger.warn("Impossible to get  'manifest file'");
+			}
 
 		} catch (FileNotFoundException e) {
 			logger.error("Unable to find the 'Manifest' file.", e);
