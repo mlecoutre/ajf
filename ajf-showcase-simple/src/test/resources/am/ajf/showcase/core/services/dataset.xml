@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 
 <dataset>
-	<person firstname='Richard' lastname='Wright' sex='M' />
-	<person firstname='Roger' lastname='Waters' sex='M' />
-	<person firstname='Nick' lastname='Mason' sex='M' />
-	<person firstname='David' lastname='Gilmour' sex='M' />
-	<person firstname='Syd' lastname='Barrett' sex='M' />
+	<person personid='31' firstname='Richard' lastname='Wright' sex='M' />
+	<person personid='32' firstname='Roger' lastname='Waters' sex='M' />
+	<person personid='33' firstname='Nick' lastname='Mason' sex='M' />
+	<person personid='34' firstname='David' lastname='Gilmour' sex='M' />
+	<person personid='35' firstname='Syd' lastname='Barrett' sex='M' />
 </dataset>

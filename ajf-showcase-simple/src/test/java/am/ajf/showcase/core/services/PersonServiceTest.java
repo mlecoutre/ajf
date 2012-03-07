@@ -97,6 +97,9 @@ public class PersonServiceTest {
 								.build(PersonServiceTest.class
 										.getResourceAsStream(DBUNIT_FILE));
 
+						// DatabaseOperation.TRUNCATE_TABLE.execute(dbUnitConn,
+						// dataSet);
+
 						DatabaseOperation.CLEAN_INSERT.execute(dbUnitConn,
 								dataSet);
 					} catch (Exception e) {
@@ -148,7 +151,9 @@ public class PersonServiceTest {
 		for (Person p : persons) {
 			log.debug("> " + p);
 		}
-		assertTrue("We should have 5 peoples in the DB", persons.size() == 5);
+		assertTrue(
+				"We should have 5 peoples in the DB and we have "
+						+ persons.size(), persons.size() == 5);
 	}
 
 	/**
@@ -161,7 +166,7 @@ public class PersonServiceTest {
 	public void testRemovePerson() throws Exception {
 		log.debug("testRemovePerson");
 
-		boolean result = personService.removeByPrimaryKey(10l);
+		boolean result = personService.removeByPrimaryKey(33l);
 		log.debug("Person deleted");
 
 		assertTrue("Person should be remove", result);
