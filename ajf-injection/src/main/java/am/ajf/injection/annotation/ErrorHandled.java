@@ -1,4 +1,4 @@
-package am.ajf.injection;
+package am.ajf.injection.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

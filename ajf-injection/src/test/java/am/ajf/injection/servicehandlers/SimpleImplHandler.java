@@ -3,7 +3,7 @@ package am.ajf.injection.servicehandlers;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import am.ajf.injection.ImplementationHandler;
+import am.ajf.injection.api.ImplementationHandler;
 
 public class SimpleImplHandler implements ImplementationHandler {
 

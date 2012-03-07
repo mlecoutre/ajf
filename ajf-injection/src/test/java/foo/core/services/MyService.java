@@ -6,9 +6,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import am.ajf.core.services.exceptions.ServiceLayerException;
-import am.ajf.injection.Cached;
-import am.ajf.injection.ErrorHandled;
-import am.ajf.injection.Property;
+import am.ajf.injection.annotation.Cached;
+import am.ajf.injection.annotation.ErrorHandled;
+import am.ajf.injection.annotation.Property;
 import foo.lib.services.MyServiceBD;
 
 @ApplicationScoped

@@ -1,4 +1,4 @@
-package am.ajf.injection;
+package am.ajf.injection.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 import javax.enterprise.util.Nonbinding;
 import javax.interceptor.InterceptorBinding;
 
+import am.ajf.injection.api.CacheBuilder;
+import am.ajf.injection.api.KeyBuilder;
 import am.ajf.injection.impl.DefaultCacheBuilder;
 import am.ajf.injection.impl.SimpleKeyBuilderImpl;
 

@@ -1,6 +1,6 @@
 package foo.errorhandling;
 
-import am.ajf.injection.ErrorHandled;
+import am.ajf.injection.annotation.ErrorHandled;
 
 public class UnknownType {
 

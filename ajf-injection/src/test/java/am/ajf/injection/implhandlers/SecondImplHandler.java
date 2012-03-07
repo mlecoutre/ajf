@@ -10,7 +10,7 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 
-import am.ajf.injection.ImplementationHandler;
+import am.ajf.injection.api.ImplementationHandler;
 
 public class SecondImplHandler implements ImplementationHandler {
 

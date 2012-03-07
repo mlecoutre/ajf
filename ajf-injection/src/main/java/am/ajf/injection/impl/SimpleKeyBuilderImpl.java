@@ -2,8 +2,8 @@ package am.ajf.injection.impl;
 
 import java.lang.reflect.Method;
 
-import am.ajf.injection.Cached;
-import am.ajf.injection.KeyBuilder;
+import am.ajf.injection.annotation.Cached;
+import am.ajf.injection.api.KeyBuilder;
 
 import com.google.common.base.Joiner;
 

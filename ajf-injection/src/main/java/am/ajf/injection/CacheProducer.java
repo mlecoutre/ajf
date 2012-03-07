@@ -21,10 +21,10 @@ public class CacheProducer {
 		CacheManager cacheManager = null;
 		Cache cache = null;		
 		
-		if (ip.getAnnotated().isAnnotationPresent(am.ajf.injection.Cache.class)) {
+		if (ip.getAnnotated().isAnnotationPresent(am.ajf.injection.annotation.Cache.class)) {
 			
-			am.ajf.injection.Cache cacheAnnotation = ip.getAnnotated().getAnnotation(
-					am.ajf.injection.Cache.class);
+			am.ajf.injection.annotation.Cache cacheAnnotation = ip.getAnnotated().getAnnotation(
+					am.ajf.injection.annotation.Cache.class);
 			
 			String cacheProvider = cacheAnnotation.cacheProvider();
 			if (Strings.isNullOrEmpty(cacheProvider)) {

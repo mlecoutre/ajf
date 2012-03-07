@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 
 import am.ajf.core.ApplicationContext;
 import am.ajf.core.logger.LoggerFactory;
+import am.ajf.injection.annotation.Property;
 
 public class PropertyProducer {
 

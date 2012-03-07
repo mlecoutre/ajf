@@ -1,7 +1,9 @@
-package am.ajf.injection;
+package am.ajf.injection.api;
 
 import java.lang.reflect.Method;
 import java.util.List;
+
+import am.ajf.injection.ClassGenerationException;
 
 /**
  * Interface for Handlers used by ajf-injection to auto generate methods

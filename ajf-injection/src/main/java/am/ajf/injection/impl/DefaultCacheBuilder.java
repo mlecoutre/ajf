@@ -7,8 +7,8 @@ import com.google.common.base.Strings;
 import am.ajf.core.cache.Cache;
 import am.ajf.core.cache.CacheManager;
 import am.ajf.core.cache.CacheManagerFactory;
-import am.ajf.injection.CacheBuilder;
-import am.ajf.injection.Cached;
+import am.ajf.injection.annotation.Cached;
+import am.ajf.injection.api.CacheBuilder;
 
 public class DefaultCacheBuilder implements CacheBuilder {
 

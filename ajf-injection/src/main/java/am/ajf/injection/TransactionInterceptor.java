@@ -1,6 +1,9 @@
 package am.ajf.injection;
 
 import am.ajf.core.logger.LoggerFactory;
+import am.ajf.injection.annotation.NonTransactional;
+import am.ajf.injection.annotation.Transactional;
+
 import java.io.Serializable;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;

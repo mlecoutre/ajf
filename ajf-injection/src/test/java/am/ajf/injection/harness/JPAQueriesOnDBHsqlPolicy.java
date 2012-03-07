@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
-import am.ajf.injection.Transactional;
+import am.ajf.injection.annotation.Transactional;
 import am.ajf.injection.helper.EntityManagerProvider;
 
 @Transactional

@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.utils.BeanUtils;
+import am.ajf.injection.api.ImplementationHandler;
 import am.ajf.injection.internal.EnrichableAnnotatedTypeWrapper;
 import am.ajf.injection.internal.ServiceBeanImpl;
 

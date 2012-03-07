@@ -1,6 +1,8 @@
-package am.ajf.injection;
+package am.ajf.injection.api;
 
 import java.lang.reflect.Method;
+
+import am.ajf.injection.annotation.Cached;
 
 public interface KeyBuilder {
 
