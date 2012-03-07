@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import am.ajf.core.utils.JavassistUtils;
 import am.ajf.injection.ClassGenerationException;
-import am.ajf.injection.ImplementationHandler;
+import am.ajf.injection.api.ImplementationHandler;
 import am.ajf.remoting.AnnotationHelper;
 import am.ajf.remoting.ConfigurationException;
 import am.ajf.remoting.SimpleFieldNamesMapper;
