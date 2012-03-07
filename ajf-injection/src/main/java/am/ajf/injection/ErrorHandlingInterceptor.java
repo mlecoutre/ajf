@@ -1,16 +1,15 @@
 package am.ajf.injection;
 
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.Interceptor;
-import javax.interceptor.InvocationContext;
-
-import org.slf4j.Logger;
-
 import am.ajf.core.busines.PolicyUtils;
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.services.ServiceUtils;
 import am.ajf.core.utils.ClassUtils;
 import am.ajf.web.WebUtils;
+import java.io.Serializable;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.Interceptor;
+import javax.interceptor.InvocationContext;
+import org.slf4j.Logger;
 
 /**
  * Intercept @ErrorHandled annotation and create a generic error handling
@@ -20,7 +19,11 @@ import am.ajf.web.WebUtils;
  */
 @Interceptor
 @ErrorHandled
-public class ErrorHandlingInterceptor {
+public class ErrorHandlingInterceptor implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final Logger logger = LoggerFactory
 			.getLogger(ErrorHandlingInterceptor.class);
 
@@ -46,18 +49,21 @@ public class ErrorHandlingInterceptor {
 	public Object manageErrorHandling(InvocationContext ctx) throws Exception {
 		Object res = null;
 		try {
-			if (logger.isTraceEnabled())
+			if (logger.isTraceEnabled()) {
 				logger.trace(">> manageErrorHandling interceptor");
+			}
 			res = ctx.proceed();
-			if (logger.isTraceEnabled())
+			if (logger.isTraceEnabled()) {
 				logger.trace("<< manageErrorHandling interceptor [OK]");
+			}
 		} catch (Exception exception) {
 			Class<? extends Object> targetClass = ctx.getMethod()
 					.getDeclaringClass();
-			if (logger.isTraceEnabled())
+			if (logger.isTraceEnabled()) {
 				logger.trace(String.format(
 						"<< manageErrorHandling interceptor [ERROR] in %s",
 						ctx.getMethod()));
+			}
 
 			Logger targetLog = LoggerFactory.getLogger(targetClass);
 			// Test type of class (Web, Policy, SERVICE)

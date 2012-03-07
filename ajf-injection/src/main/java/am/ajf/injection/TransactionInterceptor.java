@@ -1,24 +1,34 @@
 package am.ajf.injection;
 
+import am.ajf.core.logger.LoggerFactory;
+import java.io.Serializable;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import javax.transaction.Status;
 import javax.transaction.UserTransaction;
-
 import org.slf4j.Logger;
 
-import am.ajf.core.logger.LoggerFactory;
-
+/**
+ * TransactionInterceptor
+ * 
+ * @author E016696
+ * 
+ */
 @Transactional
 @Interceptor
-public class TransactionInterceptor {
+public class TransactionInterceptor implements Serializable {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Inject
 	UserTransaction utx;
+
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	/**
 	 * Add the transaction logic to the method. Dont start a transaction if @NoTransaction
@@ -35,8 +45,10 @@ public class TransactionInterceptor {
 	 * </ul>
 	 * 
 	 * @param ctx
-	 * @return
-	 * @throws Exception
+	 *            invocation context
+	 * @return the object
+	 * @throws Throwable
+	 *             all errror
 	 */
 	@AroundInvoke
 	public Object manageTransaction(InvocationContext ctx) throws Throwable {
@@ -49,8 +61,7 @@ public class TransactionInterceptor {
 
 		if (noTranOnClass || noTranOnMethod) {
 			res = ctx.proceed();
-		}
-		else {
+		} else {
 			logger.debug("Starting Transaction : " + utx.getStatus());
 			utx.begin();
 			try {
@@ -62,14 +73,12 @@ public class TransactionInterceptor {
 							+ utx.getStatus());
 					utx.rollback();
 					logger.debug("Transaction Rollbacked : " + utx.getStatus());
-				}
-				else {
+				} else {
 					logger.debug("Committing Transaction : " + utx.getStatus());
 					utx.commit();
 					logger.debug("Committed Transaction : " + utx.getStatus());
 				}
-			}
-			catch (Throwable e) {
+			} catch (Throwable e) {
 				logger.debug("Rolling back transaction : " + utx.getStatus());
 				utx.rollback();
 				logger.debug("Transaction Rollbacked : " + utx.getStatus());

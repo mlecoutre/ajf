@@ -1,20 +1,29 @@
 package am.ajf.injection;
 
-import java.lang.reflect.Method;
-
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.Interceptor;
-import javax.interceptor.InvocationContext;
-
-import org.slf4j.Logger;
-
 import am.ajf.core.cache.Cache;
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.utils.BeanUtils;
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.Interceptor;
+import javax.interceptor.InvocationContext;
+import org.slf4j.Logger;
 
+/**
+ * CacheInterceptor. Deliver cache value on a Cached annotated class or method.
+ * 
+ * @author U002617
+ * 
+ */
 @Cached
 @Interceptor
-public class CacheInterceptor {
+public class CacheInterceptor implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private final Logger logger = LoggerFactory
 			.getLogger(CacheInterceptor.class);
@@ -25,10 +34,22 @@ public class CacheInterceptor {
 	private Cache cache = null;
 	private KeyBuilder keyBuilder = null;
 
+	/**
+	 * Default constructor
+	 */
 	public CacheInterceptor() {
 		super();
 	}
 
+	/**
+	 * manageCache handling
+	 * 
+	 * @param ctx
+	 *            the invocation context
+	 * @return cache value
+	 * @throws Throwable
+	 *             on error
+	 */
 	@AroundInvoke
 	public Object manageCache(InvocationContext ctx) throws Throwable {
 
@@ -61,24 +82,31 @@ public class CacheInterceptor {
 			cache.put(key, res);
 
 			return res;
-		}
-		catch (Throwable e) {
+		} catch (Throwable e) {
 			throw e;
 		}
 
 	}
 
+	/**
+	 * Cache initialization regarding if cache annotation has been pushed on the
+	 * class or on the method.
+	 * 
+	 * @param ctx
+	 *            the invocation context
+	 */
 	public synchronized void init(InvocationContext ctx) {
 
-		if (initialized) return;
+		if (initialized) {
+			return;
+		}
 
 		Class<?> targetClass = ctx.getTarget().getClass();
 		Method targetMethod = ctx.getMethod();
 
 		if (targetMethod.isAnnotationPresent(Cached.class)) {
 			cachedAnnotation = targetMethod.getAnnotation(Cached.class);
-		}
-		else {
+		} else {
 			if (targetClass.isAnnotationPresent(Cached.class)) {
 				cachedAnnotation = targetClass.getAnnotation(Cached.class);
 			}
@@ -88,7 +116,9 @@ public class CacheInterceptor {
 		CacheBuilder cacheBuilder = (CacheBuilder) BeanUtils
 				.newInstance(cacheBuilderClass);
 		cache = cacheBuilder.build(targetClass, targetMethod, cachedAnnotation);
-		if (cachedAnnotation.clearCache()) cache.clear();
+		if (cachedAnnotation.clearCache()) {
+			cache.clear();
+		}
 
 		Class<?> keyBuilderClass = cachedAnnotation.keyBuilder();
 		keyBuilder = (KeyBuilder) BeanUtils.newInstance(keyBuilderClass);
