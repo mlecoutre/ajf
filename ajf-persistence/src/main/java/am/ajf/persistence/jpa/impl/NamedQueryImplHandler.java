@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import am.ajf.core.utils.JavassistUtils;
 import am.ajf.injection.ClassGenerationException;
-import am.ajf.injection.ImplementationHandler;
+import am.ajf.injection.api.ImplementationHandler;
 import am.ajf.persistence.jpa.annotation.NamedQuery;
 import am.ajf.persistence.jpa.annotation.QueryParam;
 
