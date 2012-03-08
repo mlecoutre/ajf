@@ -12,16 +12,17 @@ public class AuditDataContext {
 	 * 
 	 * @param auditData
 	 */
-	public static void initContextData(AuditData auditData) {
+	public static AuditData initContextData(AuditData auditData) {
 		contextData.set(auditData);
+		return auditData;
 	}
 
 	/**
 	 * 
 	 * @param auditData
 	 */
-	public static void initContextData() {
-		initContextData(new DefaultAuditData());
+	public static AuditData initContextData() {
+		return initContextData(new DefaultAuditData());
 	}
 
 	

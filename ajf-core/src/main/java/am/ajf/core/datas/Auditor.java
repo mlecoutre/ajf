@@ -1,6 +1,5 @@
 package am.ajf.core.datas;
 
-import static am.ajf.core.utils.StringUtils.buildString;
 
 import org.slf4j.Logger;
 
@@ -30,13 +29,13 @@ public class Auditor {
 	
 	/**
 	 * log audit message at INFO level
-	 * @param messagePattern
-	 * @param arguments
+	 * @param messageFormat as String.format
+	 * @param args the messageFormat arguments
 	 */
-	public static void audit(String messagePattern, Object... arguments) {
-		String message = buildString(messagePattern, arguments);
-		if (null == message)
+	public static void audit(String messageFormat, Object... args) {
+		if (null == messageFormat)
 			return;
+		String message = String.format(messageFormat, args);
 		auditLogger.trace(message);
 	}
 	
