@@ -1,0 +1,31 @@
+<Context>
+	<!-- http://tomcat.apache.org/tomcat-5.5-doc/jndi-resources-howto.html -->
+
+	<Listener className="org.apache.webbeans.web.tomcat.ContextLifecycleListener" />
+
+
+	<!-- USERS management <Resource name="UserDatabase" auth="Container" type="org.apache.catalina.UserDatabase" 
+		description="User database that can be updated and saved" factory="org.apache.catalina.users.MemoryUserDatabaseFactory" 
+		pathname="conf/tomcat-users.xml" readonly="false" /> -->
+
+	<!-- in a tomcat-users.xml file
+	
+	<?xml version='1.0' encoding='utf-8'?> <tomcat-users> 
+		<role rolename="tomcat"/> <role rolename="role1"/> <user username="tomcat" 
+		password="tomcat" roles="tomcat"/> <user username="both" password="tomcat" 
+		roles="tomcat,role1"/> <user username="role1" password="tomcat" roles="role1"/> 
+	</tomcat-users> 
+	
+	-->
+		
+		
+	<!-- DATASOURCE management -->
+	<Resource name="jdbc/SHOWCASE_DS" auth="Container" type="javax.sql.DataSource"
+		username="showcase" password="showcase" driverClassName="org.apache.derby.jdbc.EmbeddedDriver"
+		url="jdbc:derby:showcase;create=true" maxActive="1" maxIdle="1" />
+
+
+	<!-- EMAIL management -->
+	<Resource name="mail/Session" auth="Container" type="javax.mail.Session"
+		mail.smtp.host="applicatifs.appliarmony.net" />
+</Context>
