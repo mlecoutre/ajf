@@ -97,6 +97,8 @@ public class BeanUtils {
 	 */
 	private static void checkInit() {
 		
+		// can be identified as a bug, but improve parallelism performances
+		// because the synchronized section is not already accessed 
 		if (!initialized) {
 			synchronized (token) { 
 				if (!initialized) {

@@ -14,7 +14,7 @@ public class StringUtils {
 	 * @param arguments
 	 * @return a formatted string
 	 */
-	public static String buildString(String messagePattern, Object... arguments) {
+	public static String format(String messagePattern, Object... arguments) {
 		if (null == messagePattern)
 			return null;
 		String message = MessageFormat.format(messagePattern, arguments);
