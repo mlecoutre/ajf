@@ -3,6 +3,7 @@ package am.ajf.core.cache.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import am.ajf.core.cache.CacheAdapter;
@@ -98,8 +99,10 @@ public class ThreadLocalCacheTtlAdapter implements CacheAdapter {
 		Map<Object, CachedObject> cache = getCache(); 
 		long now = System.currentTimeMillis();
 		
-		for (Object key: cache.keySet()) {
-			CachedObject cachedObject = cache.get(key);
+		for (Entry<Object, CachedObject> entry: cache.entrySet()) {
+			Object key = entry.getKey();
+			CachedObject cachedObject = entry.getValue();
+		
 			if ((cachedObject.getLastAccess() - now) <= ttlInMs) {
 				cachedObject.updateLastAccess();
 				keys.add(key);

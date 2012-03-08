@@ -6,6 +6,7 @@ import org.infinispan.manager.EmbeddedCacheManager;
 
 import am.ajf.core.cache.CacheManagerAdapter;
 
+@SuppressWarnings("deprecation")
 public class InfinispanEmbeddedCacheManagerImpl extends AbstractCacheManager
 		implements CacheManagerAdapter {
 

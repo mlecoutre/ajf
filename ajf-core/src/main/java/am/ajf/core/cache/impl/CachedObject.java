@@ -30,6 +30,10 @@ public class CachedObject implements Serializable {
 		this.lastAccess = System.currentTimeMillis();
 		this.value = value;		
 	}
+	
+	public void setLastAccess(long lastAccess) {
+		this.lastAccess = lastAccess;
+	}
 
 	public long getLastAccess() {
 		return lastAccess;		
