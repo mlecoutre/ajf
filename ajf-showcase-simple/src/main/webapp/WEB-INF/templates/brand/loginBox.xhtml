@@ -10,15 +10,15 @@
 		<p:focus for="username" />
 		<h:panelGrid columns="7" styleClass="login">
 			<h:outputText value="#{m['loginBox.label.userName']}" />
-			<h:inputText id="username" value="#{securityBean.username}"
+			<h:inputText id="username" value="#{securityMBean.username}"
 				tabindex="1" styleClass="jq_watermark" />
 			<p:watermark for="username" value="#{m['loginBox.label.userName']}" />
 			<h:outputText value="#{m['loginBox.label.password']}" />
 
 			<h:inputSecret id="password" tabindex="2"
-				value="#{securityBean.password}" styleClass="jq_watermark" />
+				value="#{securityMBean.password}" styleClass="jq_watermark" />
 			<p:watermark for="password" value="#{m['loginBox.label.password']}" />
-			<h:commandButton tabindex="3" action="#{securityBean.doLogin}"
+			<h:commandButton tabindex="3" action="#{securityMBean.doLogin}"
 				styleClass="access" value="#{m['loginBox.label.login']}">
 			</h:commandButton>
 		</h:panelGrid>

@@ -24,6 +24,7 @@
 
 	<properties>
 		<ajfversion>2.1.0-SNAPSHOT</ajfversion>
+		<openwebbeansVersion>1.1.3</openwebbeansVersion>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -103,17 +104,17 @@
 		<dependency>
 			<groupId>org.apache.openwebbeans</groupId>
 			<artifactId>openwebbeans-resource</artifactId>
-			<version>1.1.3</version>
+			<version>${openwebbeansVersion}</version>
 		</dependency>
-	 	<dependency>
+		<dependency>
 			<groupId>org.apache.openwebbeans</groupId>
 			<artifactId>openwebbeans-jsf</artifactId>
-			<version>1.1.3</version>
+			<version>${openwebbeansVersion}</version>
 		</dependency>
-		 <dependency>
+		<dependency>
 			<groupId>org.apache.openwebbeans</groupId>
 			<artifactId>openwebbeans-web</artifactId>
-			<version>1.1.3</version>
+			<version>${openwebbeansVersion}</version>
 		</dependency>
 		<!-- END OPEN WEB BEANS -->
 
@@ -261,23 +262,23 @@
 				</configuration>
 			</plugin>
 
+			<!-- TOMCAT PLUGIN -->
+			<!-- L:\data\workspaces\ws_03\Servers\Tomcat v7.0 Server at localhost-config\server.xml -->
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>tomcat-maven-plugin</artifactId>
-				<version>1.1</version>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.0-beta-1</version>
 				<configuration>
-					<path>/${project.build.finalName}</path>
+					
 					<!-- Embedded port -->
 					<port>8080</port>
+					 <contextFile>src/test/resources/tomcat_context.xml</contextFile>
+					 <warFile>target/${project.artifactId}.war</warFile>
+                	<path>/${project.artifactId}</path>
 				</configuration>
 				<dependencies>
 					<!-- add drivers resources for the container -->
-					<dependency>
-						<groupId>amresources.ibm.db2.driver</groupId>
-						<artifactId>runtime-libraries</artifactId>
-						<version>9.7.4</version>
-						<type>pom</type>
-					</dependency>
+
 					<dependency>
 						<groupId>org.apache.derby</groupId>
 						<artifactId>derby</artifactId>
@@ -345,7 +346,54 @@
 						<artifactId>slf4j-api</artifactId>
 						<version>1.6.1</version>
 					</dependency>
+					<!-- START OPEN WEB BEANS -->
+					<dependency>
+						<groupId>org.apache.openwebbeans</groupId>
+						<artifactId>openwebbeans-impl</artifactId>
+						<version>${openwebbeansVersion}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.openwebbeans</groupId>
+						<artifactId>openwebbeans-spi</artifactId>
+						<version>${openwebbeansVersion}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.openwebbeans</groupId>
+						<artifactId>openwebbeans-tomcat7</artifactId>
+						<version>${openwebbeansVersion}</version>
+					</dependency>
 
+					<dependency>
+						<groupId>org.apache.geronimo.specs</groupId>
+						<artifactId>geronimo-atinject_1.0_spec</artifactId>
+						<version>1.0</version>
+					</dependency>
+					<dependency>
+						<groupId>net.sf.scannotation</groupId>
+						<artifactId>scannotation</artifactId>
+						<version>1.0.2</version>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.geronimo.specs</groupId>
+						<artifactId>geronimo-atinject_1.0_spec</artifactId>
+						<version>1.0</version>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.geronimo.specs</groupId>
+						<artifactId>geronimo-interceptor_1.1_spec</artifactId>
+						<version>1.0</version>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.geronimo.specs</groupId>
+						<artifactId>geronimo-jcdi_1.0_spec</artifactId>
+						<version>1.0</version>
+					</dependency>
+					<dependency>
+						<groupId>javassist</groupId>
+						<artifactId>javassist</artifactId>
+						<version>3.12.1.GA</version>
+					</dependency>
+					<!-- END OPEN WEB BEANS -->
 
 					<!-- Bean Validation -->
 					<dependency>
