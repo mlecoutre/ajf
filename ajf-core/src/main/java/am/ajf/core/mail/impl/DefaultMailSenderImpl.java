@@ -42,6 +42,7 @@ import javax.naming.NamingException;
 
 import org.slf4j.Logger;
 
+import am.ajf.core.ApplicationContext;
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.mail.AttachedFilesException;
 import am.ajf.core.mail.MailBean;
@@ -54,7 +55,7 @@ public class DefaultMailSenderImpl implements MailSender {
 	private static final String SMTP_HOST_PROPERTY = "applicatifs.appliarmony.net";
 	private static final int MAX_FILES_PROPERTY = 5;
 	private static final int MAX_FILES_SIZE_PROPERTY = 4;
-	private static final String DEFAULT_UPLOAD_TEMP_FILE_DIRECTORY = "./mailSenderAttachmentsTemp/";;
+	private static final String DEFAULT_UPLOAD_TEMP_FILE_DIRECTORY = "mailSenderAttachmentsTemp/";
 
 	// private static final String FORMAT = "text/plain;charset=iso-8859-1";
 
@@ -137,7 +138,7 @@ public class DefaultMailSenderImpl implements MailSender {
 		// check the attachments total size
 		checkAttachmentsSize(eMail);
 
-		// add the attchments
+		// add the attchements
 		File[] tmpFiles = null;
 		
 		try {
@@ -169,10 +170,14 @@ public class DefaultMailSenderImpl implements MailSender {
 		
 		String jndi = getJndiName();
 		if ((null != jndi) && (!jndi.trim().isEmpty())) {
-			Context initCtx = new InitialContext();
-			Context envCtx = (Context) initCtx.lookup("java:comp/env");
-			Session session = (Session) envCtx.lookup(jndi);
-			return session;
+			try {
+				Context initCtx = new InitialContext();
+				Context envCtx = (Context) initCtx.lookup("java:comp/env");
+				Session session = (Session) envCtx.lookup(jndi);
+				return session;
+			} catch (Exception e) {
+				logger.error(e.getMessage(), e);
+			}
 		}
 		
 		// build the sending
@@ -248,7 +253,7 @@ public class DefaultMailSenderImpl implements MailSender {
 					.size()];
 			FileOutputStream fos = null;
 
-			File directoryFile = new File(uploadTempFileDirectory);
+			File directoryFile = new File(ApplicationContext.getWorkingDir(), uploadTempFileDirectory);
 			directoryFile.mkdirs();
 
 			int numCurrentFile = 0;
