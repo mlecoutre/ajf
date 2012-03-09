@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<document>
+ <properties>
+  <title>Welcome to the AJF Testing Website</title>
+ </properties>
+ <body>
+  <section name="Welcome">
+  <p>This optional module contain the dependencies and code to help you for testing your code.</p>      
+  </section>
+ </body>
+</document>
