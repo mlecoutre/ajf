@@ -9,7 +9,11 @@
   <src>images/arcelormittal.png</src>
   <href>http://www.arcelormittal.com</href>
  </bannerLeft>
+ <bannerRight>
+ 	<name>${project.artifactId}</name>
+ </bannerRight>
  <publishDate format="dd MMM yyyy HH:mm" />
+ <version position="left"/>
  <body>
   <links>
    <item name="Web JAVA" href="http://web-maven-site"/>
