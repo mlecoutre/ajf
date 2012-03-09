@@ -14,6 +14,11 @@
  </bannerRight>
  <publishDate format="dd MMM yyyy HH:mm" />
  <version position="left"/>
+ <poweredBy> 
+ 	<logo width="0" height="0"/>
+ </poweredBy>
+ 
+ 
  <body>
   <links>
    <item name="Web JAVA" href="http://web-maven-site"/>

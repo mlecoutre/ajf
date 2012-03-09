@@ -17,6 +17,10 @@
  </bannerRight>
  <publishDate format="dd MMM yyyy HH:mm" />
  <version position="left"/>
+ <poweredBy> 
+ 	<logo width="0" height="0"/>
+ </poweredBy>
+ 
  <body>
   <links>
    <item name="Web JAVA" href="http://web-maven-site"/>
@@ -27,11 +31,11 @@
    <item name="TAE website" href="https://www.myarcelormittal.com/BGAuth/LoginScreen?RPReferer=/sps1/portal/teamsites/ITFCETAE/default.aspx" />
    <item name="TAE Wiki" href="http://web-xwiki" />
   </links>
+
   <menu name="Documentation">
   	  <item name="AJF" href="../../ajf-parent/index.html" />
       <item name="Home" href="index.html" />
   </menu>
-
   <menu ref="reports"/>
 
  </body>
