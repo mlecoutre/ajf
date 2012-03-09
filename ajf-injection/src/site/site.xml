@@ -21,8 +21,8 @@
  <body>
   <links>
    <item name="Web JAVA" href="http://web-maven-site"/>
-   <item name="Maven Repository" href="http://web-maven-repo/nexus"/>
-   <item name="Maven IC" href="http://web-maven-ic/hudson"/>
+   <item name="Maven Repository" href="http://web-maven-repo"/>
+   <item name="Maven IC" href="http://web-maven-ic"/>
    <item name="AJF Framework" href="http://web-java/projects/index.html" />
    <item name="Maven" href="http://maven.apache.org/maven2/" />
    <item name="TAE website" href="https://www.myarcelormittal.com/BGAuth/LoginScreen?RPReferer=/sps1/portal/teamsites/ITFCETAE/default.aspx" />
