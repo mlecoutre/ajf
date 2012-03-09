@@ -41,7 +41,7 @@ public class DirectConnectionFactory implements PersistenceConnectionFactory {
 	}
 
 	@Override
-	public Connection get() throws ClassNotFoundException, SQLException {
+	public Connection getConnection() throws ClassNotFoundException, SQLException {
 
 		// can throw ClassNotFoundException
 		Class.forName(getDriverName());

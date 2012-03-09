@@ -9,6 +9,6 @@ public interface PersistenceConnectionFactory {
 	 * @return a SQL connection
 	 * @throws Exception 
 	 */
-	Connection get() throws Exception;
+	Connection getConnection() throws Exception;
 	
 }

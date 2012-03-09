@@ -29,7 +29,7 @@ public class DataSourceConnectionFactory implements
 	}
 
 	@Override
-	public synchronized Connection get() throws NamingException, SQLException {
+	public synchronized Connection getConnection() throws NamingException, SQLException {
 
 		if (null == dataSource) {
 			
