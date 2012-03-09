@@ -1,6 +1,6 @@
 package am.ajf.injection;
 
-import am.ajf.core.busines.PolicyUtils;
+import am.ajf.core.business.PolicyUtils;
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.services.ServiceUtils;
 import am.ajf.core.utils.ClassUtils;

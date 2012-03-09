@@ -1,4 +1,4 @@
-package am.ajf.core.busines;
+package am.ajf.core.business;
 
 import org.slf4j.Logger;
 
