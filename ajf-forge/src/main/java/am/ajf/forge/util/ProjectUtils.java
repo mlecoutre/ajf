@@ -20,6 +20,8 @@ public class ProjectUtils {
 	public static final String PROJECT_TYPE_LIB = "lib";
 	public static final String PROJECT_TYPE_CONFIG = "config";
 
+	public static final String PROJECT_TYPE_COMPACT = "compacted";
+
 	public static final String PROJECT_GROUPID_PREFIX = "am.projects";
 
 	/**

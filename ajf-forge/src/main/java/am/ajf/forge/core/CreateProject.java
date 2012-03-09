@@ -81,7 +81,7 @@ public class CreateProject {
 
 			project = UIProjectGeneration.generateProjectUI(globalProjectName,
 					projectFinalName, javaPackage, projectFactory, projectType,
-					dir);
+					dir, false);
 
 		} else if (ProjectUtils.PROJECT_TYPE_LIB.equals(projectType)) {
 
@@ -92,6 +92,13 @@ public class CreateProject {
 
 			project = generateProjectWS(globalProjectName, projectFinalName,
 					javaPackage, projectFactory, projectType, dir);
+
+		} else if (ProjectUtils.PROJECT_TYPE_COMPACT.equals(projectType)) {
+
+			project = UIProjectGeneration.generateProjectUI(globalProjectName,
+					projectFinalName, javaPackage, projectFactory, projectType,
+					dir, true);
+
 		} else {
 
 			String errorMessage = "Unknown project type : ".concat(projectType);

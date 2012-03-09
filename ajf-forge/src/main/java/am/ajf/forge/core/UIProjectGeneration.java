@@ -27,13 +27,14 @@ public class UIProjectGeneration {
 	 * @param projectFactory
 	 * @param projectType
 	 * @param dir
-	 * @return
+	 * @param isCompact
+	 * @return project object
 	 */
 	@SuppressWarnings("unchecked")
 	public static Project generateProjectUI(String globalProjectName,
 			String projectFinalName, String javaPackage,
 			ProjectFactory projectFactory, String projectType,
-			DirectoryResource dir) {
+			DirectoryResource dir, boolean isCompact) {
 
 		// Create Project
 		Project project;
@@ -51,16 +52,23 @@ public class UIProjectGeneration {
 		// Set name of the project
 		packaging.setFinalName(projectFinalName);
 
-		// Set the pom parent
-		ProjectUtils.setPomParent(globalProjectName, project);
+		// This part is done only when an exploded ajf project is beeing
+		// generated
+		if (!isCompact) {
 
-		/*
-		 * Set internal dependencies linked to other project of the AJF-solution
-		 */
-		ProjectUtils.addInternalDependency(globalProjectName, project,
-				ProjectUtils.PROJECT_TYPE_CONFIG);
-		ProjectUtils.addInternalDependency(globalProjectName, project,
-				ProjectUtils.PROJECT_TYPE_CORE);
+			// Set the pom parent
+			ProjectUtils.setPomParent(globalProjectName, project);
+
+			/*
+			 * Set internal dependencies linked to other project of the
+			 * AJF-solution
+			 */
+
+			ProjectUtils.addInternalDependency(globalProjectName, project,
+					ProjectUtils.PROJECT_TYPE_CONFIG);
+			ProjectUtils.addInternalDependency(globalProjectName, project,
+					ProjectUtils.PROJECT_TYPE_CORE);
+		}
 
 		/*
 		 * Create a java class with a method
