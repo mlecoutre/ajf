@@ -35,6 +35,8 @@ import am.ajf.persistence.jpa.annotation.PersistenceUnit;
 @ApplicationScoped
 public class EntityManagerProvider {
 	
+	public static final String DEFAULT_PERISTENCE_UNIT = "default";
+	
 	private static final Logger logger = LoggerFactory.getLogger(EntityManagerProvider.class);
 	
 	private static final Map<String, TransactionType> persistenceUnitsTransactions = new ConcurrentHashMap<String, EntityManagerProvider.TransactionType>();
@@ -181,8 +183,8 @@ public class EntityManagerProvider {
 		} else if (puNames.size() == 1) {
 			return puNames.iterator().next();
 		} else {
-			if (puNames.contains("default")) {
-				return "default";
+			if (puNames.contains(DEFAULT_PERISTENCE_UNIT)) {
+				return DEFAULT_PERISTENCE_UNIT;
 			} else {
 				throw new IllegalStateException("Your META-INF/persistence.xml contain multiple persistence units and none named 'default'. Impossible to get the default persistence unit.");
 			}

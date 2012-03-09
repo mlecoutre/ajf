@@ -8,11 +8,13 @@ import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
 
+import am.ajf.persistence.jpa.EntityManagerProvider;
+
 @Documented
 @Retention(RetentionPolicy.RUNTIME) 
 @Qualifier
 @Target({ElementType.TYPE, ElementType.METHOD, ElementType.FIELD})
 public @interface PersistenceUnit {
-	String value() default "default";
+	String value() default EntityManagerProvider.DEFAULT_PERISTENCE_UNIT;
 }
 
