@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 
 import am.ajf.core.logger.LoggerFactory;
+import am.ajf.monitoring.api.EventEmitter;
 import am.ajf.monitoring.impl.ConsoleEmitter;
 import am.ajf.monitoring.impl.XmlJAXBFormatter;
 

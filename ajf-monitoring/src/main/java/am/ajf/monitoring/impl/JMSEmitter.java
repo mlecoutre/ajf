@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.monitoring.AbstractEvent;
-import am.ajf.monitoring.EventEmitter;
+import am.ajf.monitoring.api.EventEmitter;
 import am.ajf.monitoring.exceptions.EventEmitterException;
 
 /**

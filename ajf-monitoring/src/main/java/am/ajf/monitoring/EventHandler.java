@@ -1,5 +1,8 @@
 package am.ajf.monitoring;
 
+import am.ajf.monitoring.api.EventEmitter;
+import am.ajf.monitoring.api.EventFilter;
+import am.ajf.monitoring.api.EventFormatter;
 import am.ajf.monitoring.exceptions.EventException;
 
 import com.mycila.event.Event;

@@ -8,7 +8,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import am.ajf.monitoring.AbstractEvent;
-import am.ajf.monitoring.EventFormatter;
+import am.ajf.monitoring.api.EventFormatter;
 import am.ajf.monitoring.exceptions.EventFormatterException;
 
 public class XmlJAXBFormatter implements EventFormatter {

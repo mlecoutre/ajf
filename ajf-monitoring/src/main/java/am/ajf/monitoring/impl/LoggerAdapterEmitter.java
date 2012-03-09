@@ -3,7 +3,7 @@ package am.ajf.monitoring.impl;
 import org.slf4j.Logger;
 
 import am.ajf.monitoring.AbstractEvent;
-import am.ajf.monitoring.EventEmitter;
+import am.ajf.monitoring.api.EventEmitter;
 import am.ajf.monitoring.exceptions.EventEmitterException;
 
 public class LoggerAdapterEmitter implements EventEmitter {
