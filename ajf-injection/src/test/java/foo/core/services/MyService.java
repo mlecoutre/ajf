@@ -58,7 +58,7 @@ public class MyService extends AbstractService implements MyServiceBD {
 	}
 
 	@Override
-	@Cached(cacheProvider = "threadlocal")
+	@Cached(cacheManagerName = "threadlocal")
 	public String myFirstOperation(String string1, String string2) {
 		String res = "Hello ".concat(string1).concat(", ").concat(string2);
 		logger.debug("Process: ".concat(res));

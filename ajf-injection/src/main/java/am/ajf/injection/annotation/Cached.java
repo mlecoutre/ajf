@@ -19,7 +19,7 @@ import am.ajf.injection.impl.SimpleKeyBuilderImpl;
 public @interface Cached {
 	
 	@Nonbinding
-	public String cacheProvider() default "";
+	public String cacheManagerName() default "";
 
 	@Nonbinding
 	public String cacheName() default "";

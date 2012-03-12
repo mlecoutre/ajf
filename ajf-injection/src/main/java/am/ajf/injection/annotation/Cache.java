@@ -13,7 +13,7 @@ import javax.enterprise.util.Nonbinding;
 public @interface Cache {
 	
 	@Nonbinding
-	public String cacheProvider() default "";
+	public String cacheManagerName() default "";
 
 	@Nonbinding
 	public String cacheName() default "";

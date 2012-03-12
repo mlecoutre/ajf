@@ -8,7 +8,7 @@ import org.apache.commons.configuration.Configuration;
 
 import am.ajf.core.ApplicationContext;
 import am.ajf.core.mail.MailSender;
-import am.ajf.core.mail.impl.DefaultMailSenderImpl;
+import am.ajf.core.mail.impl.SimpleMailSenderImpl;
 
 import com.google.common.base.Strings;
 
@@ -37,7 +37,7 @@ public class MailSenderProducer {
 					.concat("' is null or empty."));
 		}
 		
-		DefaultMailSenderImpl mailSenderImpl = new DefaultMailSenderImpl();
+		SimpleMailSenderImpl mailSenderImpl = new SimpleMailSenderImpl();
 		mailSenderImpl.setJndiName(jndiName);
 		
 		return mailSenderImpl;

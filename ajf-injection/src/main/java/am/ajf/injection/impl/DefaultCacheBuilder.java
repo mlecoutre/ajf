@@ -22,9 +22,9 @@ public class DefaultCacheBuilder implements CacheBuilder {
 
 		CacheManager cacheManager = CacheManagerFactory.getFirstCacheManager();
 
-		String cacheProvider = cacheAnnotation.cacheProvider();
-		if (!Strings.isNullOrEmpty(cacheProvider)) {
-			cacheManager = CacheManagerFactory.getCacheManager(cacheProvider);
+		String cacheManagerName = cacheAnnotation.cacheManagerName();
+		if (!Strings.isNullOrEmpty(cacheManagerName)) {
+			cacheManager = CacheManagerFactory.getCacheManager(cacheManagerName);
 		}
 
 		String cacheName = cacheAnnotation.cacheName();

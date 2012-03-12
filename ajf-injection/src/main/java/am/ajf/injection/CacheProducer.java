@@ -26,7 +26,7 @@ public class CacheProducer {
 			am.ajf.injection.annotation.Cache cacheAnnotation = ip.getAnnotated().getAnnotation(
 					am.ajf.injection.annotation.Cache.class);
 			
-			String cacheProvider = cacheAnnotation.cacheProvider();
+			String cacheProvider = cacheAnnotation.cacheManagerName();
 			if (Strings.isNullOrEmpty(cacheProvider)) {
 				cacheManager = CacheManagerFactory.getFirstCacheManager();
 			}
