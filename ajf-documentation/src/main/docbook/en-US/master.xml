@@ -24,8 +24,9 @@
     <xi:include href="ajf-remoting.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
     
     <xi:include href="ajf-monitoring.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+	<!-- 
 	<xi:include href="ajf-notifier.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-	
+	-->
 	<xi:include href="ajf-testing.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 	<xi:include href="ajf-forge.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 

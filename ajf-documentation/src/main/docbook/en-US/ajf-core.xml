@@ -6,7 +6,7 @@
 		The AJF Core library provide a set of commons reusable components for use
 		on J2EE server and other Servlet containers. 		
 	</para>
-	<section id="applicationContext">
+	<section id="applicationContextSection">
 		<title>ApplicationContext</title>
 		<para>
 			The <classname>ApplicationContext</classname> is a component which is responsible of the application configuration.
@@ -226,12 +226,12 @@
 			</example>
 		</section>
 	</section>
-	<section id="logging">
+	<section id="loggingSection">
 		<title>Logging</title>
 		<para>			
 		</para>
 	</section>
-	<section id="mailSender">
+	<section id="mailSenderSection">
 		<title>MailSender</title>
 		<para>
 		The <classname>MailSender</classname> component allow to send messages by e-mail with attached files.
@@ -315,7 +315,7 @@
 	    <section>
 	    	<title>Default MailSender Implementation</title>
 	    	<para>
-	    		
+	    		The default MailSender implementation is the class <classname>am.ajf.core.mail.impl.SimpleMailSenderImpl</classname>.
 	    	</para>
 	    	<table frame="all">
    			  <title>API</title>
@@ -335,7 +335,7 @@
 		        	</row>
 		        	<row>
 		        		<entry>setSmtpServer(String smtpServer)</entry>
-		        		<entry>set the smtp server address</entry>
+		        		<entry>set the SMTP server address</entry>
 		        	</row>
 		        	<row>
 		        		<entry>setConnectionTimeout(long connectionTimeoutInMS)</entry>
@@ -379,14 +379,224 @@
 			</example>
 	    </section>
 	</section>
-	<section id="cache">
+	<section id="cacheSection">
 		<title>Cache</title>
 		<para>
+		The <classname>Cache</classname> component provide an extensible cache manager system.  
 		</para>
+		<figure id="cache-classdiagram.fig">
+      	  <title>Cache Class Diagram</title>
+	      <mediaobject>
+	        <imageobject>
+	          <imagedata align="center" fileref="images/cache-classdiagram.svg" scalefit="1" />
+	        </imageobject>
+	      </mediaobject>
+	    </figure>
+	    <section>
+			<title>CacheManagerFactory component</title>
+			<para>
+				<classname>CacheManagerFactory</classname> is the entry point for accessing <classname>CacheManager</classname> component.
+			</para>
+			<table frame="all">
+				<title>CaheManagerFactory API</title>
+				<tgroup cols="3">
+					<colspec colname="c1"/>
+					<colspec colname="c2"/>
+					<colspec colname="c3"/>
+					<thead>
+						<row>
+							<entry colname="1">Accessor</entry>
+							<entry colname="2">Method</entry>
+						    <entry colname="3">Description</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>static</entry>
+							<entry>CacheManager getFirstCacheManager()</entry>
+						    <entry>Return the first CacheManager entry</entry>
+						</row>
+						<row>
+							<entry>static</entry>
+							<entry>CacheManager getCacheManager(String cacheManagerName)</entry>
+						    <entry>Return a specific instance of CacheManager</entry>
+						</row>
+						<row>
+							<entry>static</entry>
+							<entry><![CDATA[Set<String> getCacheManagerNames()]]></entry>
+						    <entry>Return a set of CacheManager names</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</table>
+		</section>
+		<section>
+			<title>CacheManager component</title>
+			<para>
+				<classname>CacheManager</classname> is the entry point for accessing <classname>Cache</classname> instances.	
+			</para>
+			<table frame="all">
+				<title>CaheManager API</title>
+				<tgroup cols="2">
+					<colspec colname="c1"/>
+					<colspec colname="c2"/>
+					<thead>
+						<row>
+							<entry colname="1">Method</entry>
+						    <entry colname="2">Description</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>String getName()</entry>
+						    <entry>Return the CacheManager name</entry>
+						</row>
+						<row>
+							<entry>Cache getCache()</entry>
+						    <entry>Return the default Cache instance</entry>
+						</row>
+						<row>
+							<entry>Cache getCache(String cacheName)</entry>
+						    <entry>Return a nammed Cache instance</entry>
+						</row>
+						<row>
+							<entry>Cache getCache(String cacheName, long ttlInMs)</entry>
+						    <entry>Return a nammed TTL (Time To Live) Cache</entry>
+						</row>
+						<row>
+							<entry>void removeCache(String cacheName)</entry>
+						    <entry>Remove a specific Cache instance</entry>
+						</row>
+						<row>
+							<entry><![CDATA[Set<String> cacheNames()]]></entry>
+						    <entry>Return a set of Cache names</entry>
+						</row>
+						<row>
+							<entry>void clearAll()</entry>
+						    <entry>Clear all the Cache instances</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</table>
+		</section>
+		<section>
+			<title>Cache component</title>
+			<para>
+				<classname>Cache</classname> is the main component for caching operations.
+			</para>
+			<table frame="all">
+				<title>Cahe API</title>
+				<tgroup cols="2">
+					<colspec colname="c1"/>
+					<colspec colname="c2"/>
+					<thead>
+						<row>
+							<entry colname="1">Method</entry>
+						    <entry colname="2">Description</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>String getName()</entry>
+						    <entry>Return the Cache name</entry>
+						</row>
+						<row>
+							<entry>boolean exist(Object key)</entry>
+						    <entry>Return true if the entry can be found in the Cache</entry>
+						</row>
+						<row>
+							<entry>Object get(Object key)</entry>
+						    <entry>Return a Cached object</entry>
+						</row>
+						<row>
+							<entry>void put(Object key, Object value)</entry>
+						    <entry>Add a new entry in the Cache</entry>
+						</row>
+						<row>
+							<entry><![CDATA[Set<Object> keys()]]></entry>
+						    <entry>Return a set of entries</entry>
+						</row>
+						<row>
+							<entry>Object remove(Object key)</entry>
+						    <entry>Remove a specific entry from the Cache</entry>
+						</row>
+						<row>
+							<entry>void clear()</entry>
+						    <entry>Clear all the Cache entries</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</table>
+		</section>
+	    <section>
+	    	<title>Cache Principle</title>
+	    	<para>
+	    		The <classname>CacheManagerFactory</classname> allow to access a <classname>CacheManager</classname> instance (nammed or first) in a static way.
+	    		Then you can access a <classname>Cache</classname> instance (nammed or default one).
+	    	</para>
+		     <example>
+				<title>Accessing Cache</title>
+			<programlisting language="Java" role="Java"><![CDATA[
+	// for a specific CacheManager instance
+	CacheManager guavaCacheManager = CacheManagerFactory.getCacheManager("guava");
+	// get a nammed Cache instance
+	Cache nammedCache = CacheManagerFactory.getFirstCacheManager().getCache("myCache");
+	// get a time to live Cache instance
+	Cache ttlCache = CacheManagerFactory.getFirstCacheManager().getCache("ttlCache", 2000); // ttl is in milli-seconds
+	// get the default Cache instance
+	Cache cache = CacheManagerFactory.getFirstCacheManager().getCache(); 
+			]]></programlisting>
+			</example>
+			<example>
+				<title>Working with Cache</title>
+			<programlisting language="Java" role="Java"><![CDATA[
+	// get the default Cache instance
+	Cache cache = CacheManagerFactory.getFirstCacheManager().getCache();
+		
+	// put a new object in Cache
+	cache.put("myKey", "myValue"); 
+	// retrieve a cached object
+	String cachedValue = (String) cache.get(key);
+			]]></programlisting>
+			</example>
+	    </section>
+	    <section>
+		<title>Available CacheManager implementations</title>
+		<section>
+			<title>'ehcache' as am.ajf.core.cache.impl.EHCacheCacheManagerImpl</title>
+			<para>
+			Provide caching functionalities with EHCache implementation
+			</para>
+		</section>
+		<section>
+			<title>'infinispan' as am.ajf.core.cache.impl.InfinispanEmbeddedCacheManagerImpl</title>
+			<para>
+			Provide caching functionalities with Infinispan implementation
+			</para>
+		</section>
+		<section>
+			<title>'guava' as am.ajf.core.cache.impl.GuavaCacheManagerImpl</title>
+			<para>
+			Provide caching functionalities with Google Guava implementation
+			</para>
+		</section>
+		<section>
+			<title>'simple' as am.ajf.core.cache.impl.SimpleCacheManagerImpl</title>
+			<para>
+			Provide caching functionalities with ConcurrentHashMap implementation
+			</para>
+		</section>
+		<section>
+			<title>'threadlocal' as am.ajf.core.cache.impl.ThreadLocalCacheManagerImpl</title>
+			<para>
+			Provide caching functionalities with Threadlocal ConcurrentHashMap implementation
+			</para>
+		</section>
 	</section>
-	<section id="auditDatas">
+	</section>
+	<section id="auditDatasSection">
 		<title>AuditDatas</title>
-		<para>The <classname>AuditData</classname> object contain user context informations like :		
+		<para>The <classname>AuditData</classname> object is a valu object which contain some user context informations like :		
 			<itemizedlist>
 				<listitem>the user identifier</listitem>
 				<listitem>the user transaction UUID</listitem>
