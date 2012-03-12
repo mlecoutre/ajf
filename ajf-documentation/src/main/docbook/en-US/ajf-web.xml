@@ -5,24 +5,38 @@
   <para> The AJF Web module provides a common interface and design
 model to create a dynamic web site in order to interact with end users.
 The user interface will use standard services offered and exposed by the
-Business Layer. </para>
-  <section>
-    <title>Introduction</title>
-    <para>
+Business Layer.</para>
+  <para>
+Take a look on Error Handling and Security chapter as these two parts are related to the web.
 </para>
-  </section>
-  <section>
-    <title>Organization</title>
-    <para> Blabla</para>
-  </section>
   <section>
     <title>Norms and module organization</title>
-    <para>Blabla
+    <para>All Web resources are available on src/main/webapp. The web layer is just there to expose data to the end user across a web browser, 
+  <itemizedlist>
+        <listitem>
+          <para>
+        Create a specific sub folder for each P+ functions
+</para>
+        </listitem>
+        <listitem>
+          <para>
+ Put all your shared resources in the folder named <emphasis>shared</emphasis>.
+ </para>
+        </listitem>
+        <listitem>
+          <para>Avoid to update standard template. If you need to make some update, duplicate the templates in the /shared/templates folder and update this version.
+</para>
+        </listitem>
+        <listitem>
+          <para>backing bean should be named <emphasis role="italic">projectName.web.controllers.xxxMBean</emphasis>
+</para>
+        </listitem>
+      </itemizedlist>
 </para>
   </section>
   <section>
     <title>Standard facelet</title>
-    <para> the facelet aims to describe the view showed to the end user.</para>
+    <para> The facelet aims to describe the view showed to the end user. It reference a specific template and declare some graphical components linked with some JAVA backing beans that calls the business layer.</para>
     <programlisting language="XML" role="XML">
 <![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
@@ -31,7 +45,7 @@ xmlns:ui="http://java.sun.com/jsf/facelets"
 xmlns:f="http://java.sun.com/jsf/core"
 xmlns:h="http://java.sun.com/jsf/html"
 xmlns:p="http://primefaces.org/ui"
-template="WEB-INF/templates/simpleLayout.xhtml">
+template="WEB-INF/templates/brandLayout.xhtml">
 
 <ui:define name="applicationTitle">AJF2 Showcase</ui:define>
 <ui:define name="content">
@@ -44,8 +58,11 @@ template="WEB-INF/templates/simpleLayout.xhtml">
 </ui:composition>
 ]]></programlisting>
     <section>
-      <title>Graphical components: primefaces</title>
+      <title>Graphical components: primefaces and customisation</title>
       <para>The choice has been done to use an existing graphical components library that propose a lot of rich components. We will not describe here how use these components. A documentation and well explained samples are available on their website <ulink url="http://www.primefaces.org"/>
+</para>
+      <para>In order to add some specific CSS style or specific javascript, you can use specific files named <emphasis>resources/css/custom.css</emphasis> and <emphasis>resources/js/custom.js</emphasis>. Avoid to make any modification in other js and css coming from the framework. It will be easier in case of migration.
+
 </para>
     </section>
     <section>
@@ -150,6 +167,24 @@ private static final long serialVersionUID = 1L;
     <note>
       <para>Note that each ManageBean that use SessionScope or ViewScope has to implement Serializable interface.</para>
     </note>
+    <section>
+      <title>Web Error Handling</title>
+      <para>
+    As you can see, there is no <emphasis>try{} catch(Exception){}</emphasis> mechanism. By default, if an error commes from the Business layer, the exception is automatically catch by the framework and a popup is shown to the End user in order to indicate that the action has failed.
+    <important>Be care to respect norm for the Backing Beans (ie, <emphasis>projectName.web.controllers.xxxMBean</emphasis>) Norms are used to activate some automatic framework behaviour such as the Error Handling. </important>
+    </para>
+      <para>
+  Anyway, if you have  to customize the ErrorHandling model, up to youi to add a <emphasis>try{}catch(){}</emphasis> a do the job yourself. You have the possibility to use static methods of  <classname>WebUtils</classname> coming from ajf-web to define some messages to the end user.
+</para>
+<para>
+<programlisting language="Java" role="java"><![CDATA[
+  FacesMessage facesMessage = new FacesMessage(
+  		FacesMessage.SEVERITY_ERROR,
+  		getFieldLabel("application.error.occured"),
+  		"mon message d'erreur");
+  FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+]]></programlisting></para>
+    </section>
   </section>
   <section><title>User Input Validation</title><para>User Input validation mechanism is responsible of validate data before executing the business logic, avoiding to execute code if we know that inputs will not work.</para>In the managed bean, you can decorate the properties of the java bean using standard annotations defined in the JSF 303 <programlisting language="Java" role="java">
 <![CDATA[
@@ -235,8 +270,28 @@ Hibernate the choosed implementation add additional validators., @Email, @NotBla
     </section></section>
   <section>
     <title>Templating</title>
-    <para>AJF propose a standard layout named &quot;WEB-INF/templates/simpleLayout.xhtml&quot; that you can use in order to organize your page. This layout is divide in three parts:</para>
-    <para/>
+    <para>AJF proposes a standard layout named &quot;WEB-INF/templates/brandLayout.xhtml&quot; that you can use in order to organize your page. 
+This layout should only be used on the index page.
+This layout is divide in several parts:</para>
+<para>
+    <figure id="indexlayout.fig">
+      <title>Index Layout</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" fileref="images/brandLayout.png" scalefit="1"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+</para>
+    <para>
+The first page of the application is not securized by default and should expose some no securised linked and some information to the end user. Potentially the last services that the end users can used.
+In the header1, we have the ArcelorMittal and two menu. A technical menu with some links automaticaly managed by the framework, such acc to technical resources, About dialog to know the version of the application, logger access, or Contextual Help mechanism dialogs.
+The second menu allows user to use the business services of the application. End users can also use login fields to be authentified. When the user is logged,  the menu is refresh and users can access to secured menu items.
+
+</para>
+    <para>
+A second template can be use for other page in the application. By default, the WEB-INF/templates/brand/classicBrandLayout.xhtml template will load  menu and title which will be defined ion src/main/webapp/shared folder.
+</para>
     <itemizedlist>
       <listitem>
         <para>
@@ -264,7 +319,6 @@ The &quot;<emphasis role="bold">footer</emphasis>&quot; part.
         </mediaobject>
       </figure>
 </para>
-    <para>By default, the SimpleLayout.xhtml template will load  menu and title which will be defined ion src/main/webapp/shared folder.</para>
     <para>You also have the possibility for each page to overload the <emphasis role="bold">applicationTitle</emphasis> which will be used as title of the brower window. By default, the i18n key <emphasis role="bold">application.title</emphasis> will be displayed.</para>
     <section>
       <title>Template customization</title>
