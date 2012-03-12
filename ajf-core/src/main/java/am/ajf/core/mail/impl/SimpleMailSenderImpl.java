@@ -48,9 +48,9 @@ import am.ajf.core.mail.AttachedFilesException;
 import am.ajf.core.mail.MailBean;
 import am.ajf.core.mail.MailSender;
 
-public class DefaultMailSenderImpl implements MailSender {
+public class SimpleMailSenderImpl implements MailSender {
 
-	private static final Logger logger = LoggerFactory.getLogger(DefaultMailSenderImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(SimpleMailSenderImpl.class);
 
 	private static final String SMTP_HOST_PROPERTY = "applicatifs.appliarmony.net";
 	private static final int MAX_FILES_PROPERTY = 5;
@@ -73,7 +73,7 @@ public class DefaultMailSenderImpl implements MailSender {
 	private int attachedFileMaxSize = MAX_FILES_SIZE_PROPERTY;
 	private String uploadTempFileDirectory = DEFAULT_UPLOAD_TEMP_FILE_DIRECTORY;
 
-	public DefaultMailSenderImpl() {
+	public SimpleMailSenderImpl() {
 		super();
 	}
 
