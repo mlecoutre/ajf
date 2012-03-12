@@ -35,6 +35,7 @@ public class ServiceUtils {
 	public static void handleError(Exception exception,
 			Class<? extends Object> targetClass, Logger targetLog)
 			throws ServiceLayerException {
+		
 		String msg = "@ErrorHandlingInterceptor on Service";
 		ServiceLayerException ble = null;
 
