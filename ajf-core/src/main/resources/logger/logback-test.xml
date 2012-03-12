@@ -8,16 +8,16 @@
 	</root>
 	
 	<logger name="audit" level="TRACE" additivity="false">
-		<appender-ref ref="AUDIT_FILE" />
+		<appender-ref ref="STDERR" />
 	</logger>
 	
 	<logger name="am.ajf" level="INFO" additivity="false">
-		<appender-ref ref="AJF_FILE" />
+		<appender-ref ref="STDERR" />
 	</logger>	
 		
 	<!-- 
 	<logger name="youAppBasePackageName" level="DEBUG" additivity="false">
-		<appender-ref ref="APP_FILE" />
+		<appender-ref ref="STDOUT" />
 	</logger>
 	-->
 		

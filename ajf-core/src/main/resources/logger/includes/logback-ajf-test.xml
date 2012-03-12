@@ -14,41 +14,15 @@
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<target>System.out</target>
 		<encoder>
-			<pattern>[%thread] %-5level %X{uuid} %X{userid} %logger{36} - %msg%n</pattern>
+			<pattern>[%thread] %-5level %X{uuid} %X{userid} %logger{36} - %m%n</pattern>
 		</encoder>
 	</appender>
 	
 	<appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
 		<target>System.err</target>
 		<encoder>
-			<pattern>[%thread] %-5level %X{uuid} %X{userid} %logger{36} - %msg%n</pattern>
+			<pattern>[%thread] %-5level %X{uuid} %X{userid} %logger{36} - %m%n</pattern>
 		</encoder>
 	</appender>
-	
-	<!-- In test, only support STDOut and STDErr -->
-	<!-- 
-	<appender name="AUDIT_FILE" class="ch.qos.logback.core.FileAppender">
-		<target>${appLogDir}/audit.log</target>
-		<encoder>
-			<pattern>%d{yyyy/MM/dd HH:mm:ss.SSS} %X{uuid} %X{userid} - %msg%n</pattern>
-		</encoder>
-	</appender>
-	
-	<appender name="AJF_FILE" class="ch.qos.logback.core.FileAppender">
-		<file>${appLogDir}/ajf.log</file>
-		<append>false</append>
-		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %X{uuid} %X{userid} %logger{36} - %msg%n</pattern>
-		</encoder>
-	</appender>
-	
-	<appender name="APP_FILE" class="ch.qos.logback.core.FileAppender">
-		<file>${appLogDir}/application.log</file>
-		<append>false</append>
-		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %X{uuid} %X{userid} %logger{36} - %msg%n</pattern>
-		</encoder>
-	</appender>
-	-->
-	  	
+		  	
 </included>

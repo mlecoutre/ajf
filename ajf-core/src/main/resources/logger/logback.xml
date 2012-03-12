@@ -4,7 +4,8 @@
 	<include resource="logger/includes/logback-ajf.xml"/>
 	
 	<root level="WARN">
-		<appender-ref ref="STDOUT" />
+		<appender-ref ref="APP_FILE" />
+		<appender-ref ref="TROUBLESHOOTING_FILE" />
 	</root>
 	
 	<logger name="audit" level="TRACE" additivity="false">
@@ -18,6 +19,7 @@
 	<!-- 
 	<logger name="youAppBasePackageName" level="INFO" additivity="false">
 		<appender-ref ref="APP_FILE" />
+		<appender-ref ref="TROUBLESHOOTING_FILE" />
 	</logger>
 	-->
 		
