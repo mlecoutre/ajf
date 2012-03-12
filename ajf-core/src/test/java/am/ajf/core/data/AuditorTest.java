@@ -17,7 +17,7 @@ public class AuditorTest {
 	
 	@Before
 	public void setUp() {
-		EditableAuditData data = (EditableAuditData) AuditDataContext.getAuditData();
+		EditableAuditData data = (EditableAuditData) AuditDataContext.initContextData();
 		data.put(AuditData.KEY_USERID, "u002617");
 	}
 	
@@ -28,8 +28,7 @@ public class AuditorTest {
 	
 	@Test
 	public void testParameterizedMessage() {
-		audit("get resource: {0}", "myResource");
+		audit("get resource: %s", "myResource");
 	}
-	
 	
 }

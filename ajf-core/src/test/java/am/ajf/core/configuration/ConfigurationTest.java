@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.configuration.AbstractConfiguration;
-import org.apache.commons.configuration.BaseConfiguration;
-import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.SystemConfiguration;
@@ -28,26 +25,52 @@ public class ConfigurationTest implements PropertyListener {
 	public static final String NAME = "name";
 	private Logger logger = LoggerFactory.getLogger(ConfigurationTest.class);
 
-	
-
-
-	/**
-	 * Test configuration
-	 * @throws Exception on error
-	 */
 	@Test
-	public void testConfig() throws Exception {
+	public void testMergedConfig() throws Exception {
 
-		CompositeConfiguration configuration = new CompositeConfiguration();
+		// create th new Configuration object from resource
+		// 'settings.properties'
+		PropertiesConfiguration sConfig = new PropertiesConfiguration();
+		sConfig.addProperty("c", "${b}");
 
-		AbstractConfiguration pConfig = new PropertiesConfiguration();
+		PropertiesConfiguration pConfig = new PropertiesConfiguration();
 		pConfig.addProperty("b", "${a}_26");
 		pConfig.addProperty("a", "25");
-		configuration.addConfiguration(pConfig);
 
+		// merge (chain) the configurations objects
+		Configuration config = ConfigurationHelper.mergeConfigurations(sConfig,
+				pConfig);
+
+		// get 'c' property as String
+		logger.info(config.getString("c"));
+
+	}
+
+	@Test
+	public void testPropertiesConfig() throws Exception {
+
+		PropertiesConfiguration pConfig = new PropertiesConfiguration();
+		pConfig.addProperty("b", "${a}_26");
+		pConfig.addProperty("a", "25");
+
+		logger.info(pConfig.getString("a"));
+		logger.info(pConfig.getString("b"));
+	}
+
+	@Test
+	public void testBeanConfig() throws Exception {
+
+		Configuration bConfig = populateObjectConfig();
+
+		System.out.println(bConfig.getString("aMap.[name]"));
+		System.out.println(bConfig.getString("aMap.[d](0)"));
+			
+
+	}
+
+	public Configuration populateObjectConfig() {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("name", "value");
-		map.put("c", "${b}");
 
 		List<String> list = new ArrayList<String>();
 		list.add("x");
@@ -55,32 +78,20 @@ public class ConfigurationTest implements PropertyListener {
 		list.add("z");
 		map.put("d", list);
 
-		AbstractConfiguration bConfig = new BeanConfiguration();
+		BeanConfiguration bConfig = new BeanConfiguration();
 		bConfig.addProperty("aMap", map);
+		
+		return bConfig;
+	}
 
-		configuration.addConfiguration(bConfig);
+	@Test
+	public void testEvaluateInConfig() throws Exception {
 
-		logger.info(configuration.getString("a"));
-
-		List<String> keys = new ArrayList<String>();
-		keys.add("b");
-		pConfig.addConfigurationListener(new FilteredConfigurationListener(
-				keys, this));
-
-		pConfig.setProperty("b", "${a} =? ${a}");
-		logger.info(pConfig.getString("b"));
-		pConfig.clearProperty("b");
-		pConfig.clear();
-
-		logger.info(configuration.getString("a"));
-		logger.info(configuration.getString("b"));
-		logger.info(configuration.getString("aMap.[name]"));
-		logger.info(configuration.getString("aMap.[c]"));
-		logger.info(configuration.getString("aMap.[d](0)"));
-
+		Configuration bConfig = populateObjectConfig();
+		
 		logger.info(""
 				+ ConfigurationUtils.evaluate("the value is : ${aMap.[name]}",
-						configuration));
+						bConfig));
 
 	}
 
@@ -112,20 +123,20 @@ public class ConfigurationTest implements PropertyListener {
 	@Test
 	public void testPrefixedVarsInterpolation() {
 
-		Configuration configuration = new BaseConfiguration();
+		Configuration configuration = new PropertiesConfiguration();
 
 		String res = (String) ConfigurationUtils.evaluate("${sys:java.home}",
 				configuration);
-		System.out.println(res);
+		logger.info(res);
 
 		res = (String) ConfigurationUtils.evaluate("${env:JAVA_HOME}",
 				configuration);
-		System.out.println(res);
+		logger.info(res);
 
 		res = (String) ConfigurationUtils.evaluate(
 				"${const:am.ajf.core.configuration.ConfigurationTest.NAME}",
 				configuration);
-		System.out.println(res);
+		logger.info(res);
 
 	}
 
