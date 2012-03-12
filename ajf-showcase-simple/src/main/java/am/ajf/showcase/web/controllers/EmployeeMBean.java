@@ -1,5 +1,6 @@
 package am.ajf.showcase.web.controllers;
 
+import am.ajf.core.logger.LoggerFactory;
 import am.ajf.showcase.lib.business.EmployeeManagementBD;
 import am.ajf.showcase.lib.business.dto.FireEmployeePB;
 import am.ajf.showcase.lib.business.dto.FireEmployeeRB;
@@ -12,7 +13,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -29,13 +30,13 @@ import org.slf4j.Logger;
  * 
  */
 @Named
-@RequestScoped
+@SessionScoped
 public class EmployeeMBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Inject
-	private Logger logger;
+	private transient Logger logger = LoggerFactory
+			.getLogger(EmployeeMBean.class);
 
 	/* ATTRIBUTES */
 

@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<document>
+	<properties>
+		<title>Welcome to the AJF Injection Developer Website</title>
+	</properties>
+	<body>
+		<section name="Deployment">
+			<p>
+				This project has been set to be deployable easily on three different
+				way. Default target is Tomcat7.
+				<ul>
+					<li>Embeddable tomcat7</li>
+					<li>Tomcat7 within Eclipse WTP</li>
+					<li>Websphere 7</li>
+				</ul>
+			</p>
+			<p>
+				<b>For the embeddable way, you can use</b>
+				<br />
+				<source><![CDATA[
+mvn clean package tomcat7:run -PJEE5_PROFILE
+]]></source>
+			</p>
+
+			<p>
+				<b>Eclipse WTP</b>
+				<br />
+				This model requires that you install a specific installation of
+				tomcat7.
+
+				Moreover, some JARS has to be added to the
+				<i>lib</i>
+				folder of the traditional tomcat installation.
+				You will found this
+				resources in
+				\\dun-app-devf01\Data\Deploy\ajf-showcase-simple\1.1\resources.zip
+				<br />
+				<ul>
+				<li>derby-10.8.2.2</li>
+				<li>geronimo-atinject_1.0_spec-1.0</li>
+				<li>geronimo-interceptor_1.1_spec-1.0</li>
+				<li>geronimo-jcdi_1.0_spec-1.0</li>
+				<li>javassist-3.12.0.GA</li>
+				<li>openwebbeans-impl-1.1.3</li>
+				<li>openwebbeans-spi-1.1.3</li>
+				<li>openwebbeans-tomcat7-1.1.3</li>
+				<li>scannotation-1.0.2</li>
+				</ul>
+
+				in the server.xml file of tomcat, you need to add a specific listener
+				<source><![CDATA[
+<Listener className="org.apache.webbeans.web.tomcat.ContextLifecycleListener"/>
+]]></source>
+
+				Then you can use the traditional view of eclipse to manipulate
+				tomcat7
+			</p>
+
+			<p>
+				<b>WAS7</b>
+				<br />
+				You need to add a specific listener for CDI directly in the web.xml. (to be comment when youuse tomcat).
+				<source><![CDATA[
+<listener>
+    <listener-class>
+        org.apache.webbeans.servlet.WebBeansConfigurationListener
+    </listener-class>
+</listener>
+]]></source>
+				
+				Moreover, the jar to add in the archive are not exactly the same than for tomcat.
+				In order to add them, you need disabled TOMCAT7 profile and activate
+				the WAS7 profile. As usual, it's generate the WAR file into the target folder that you
+				can use to be deployed within the admin console.
+
+				<source><![CDATA[
+mvn clean package -PJEE5_PROFILE,!TOMCAT7,WAS7
+]]></source>
+
+			</p>
+		</section>
+	</body>
+</document>

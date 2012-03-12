@@ -1,12 +1,22 @@
 <?xml version="1.0"?>
 <document>
 	<properties>
-		<title>About to JEDI-WS App</title>
+		<title>AJF Showcase Simple</title>
 	</properties>
 	<body>
 		<section name="Welcome">
 			<p>
-				Java EDI POC project
+				Sample AJF2 project. It is used for demo and training around AJF2.
+				this project can be easily deployed either on tomcat or Websphere.
+				See
+				<a href="deployement.html">Deployment page</a>
+				for more information.
+			</p>
+			<p>
+				Source code is available on
+				<source>
+					http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-showcase-simple
+				</source>
 			</p>
 		</section>
 	</body>

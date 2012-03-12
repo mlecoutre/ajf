@@ -1,13 +1,14 @@
 package am.ajf.showcase.web.controllers;
 
+import static am.ajf.web.WebUtils.getFieldLabel;
+
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import static am.ajf.web.WebUtils.*;
 
-@ManagedBean
+@Named
 public class ShowcaseMBean {
 
 	@NotNull(message = "Should not be null")
@@ -33,7 +34,7 @@ public class ShowcaseMBean {
 				"mon message de warning");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 	}
-	
+
 	public void createInfo() {
 		FacesMessage facesMessage = new FacesMessage(
 				FacesMessage.SEVERITY_INFO,
