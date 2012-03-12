@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -28,7 +29,7 @@ public class CacheTest {
 	@Test
 	public void testGetNammedCacheManager() {
 		
-		Collection<String> names = CacheManagerFactory.getCacheManagerNames();
+		Set<String> names = CacheManagerFactory.getCacheManagerNames();
 		for (String name : names) {
 			CacheManager cacheManager = CacheManagerFactory.getCacheManager(name);
 			assertNotNull("Unable to obtain a named cache manager instance", cacheManager);
