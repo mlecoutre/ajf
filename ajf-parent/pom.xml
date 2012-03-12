@@ -91,7 +91,9 @@
 		
 		<!-- Utilities modules -->
 		<module>../ajf-testing</module>
+		<!-- 
 		<module>../ajf-forge</module>
+		-->
 		
 		<!-- demo and samples -->
 		<module>../ajf-showcase-simple</module>
