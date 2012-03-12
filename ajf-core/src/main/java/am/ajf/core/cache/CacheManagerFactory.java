@@ -1,17 +1,18 @@
 package am.ajf.core.cache;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 
-import com.google.common.base.Throwables;
-
+import am.ajf.core.beans.LifecycleAware;
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.utils.BeanUtils;
+
+import com.google.common.base.Throwables;
 
 public class CacheManagerFactory {
 
@@ -41,21 +42,23 @@ public class CacheManagerFactory {
 				CacheManager cacheManager = iterator.next();
 
 				BeanUtils.initialize(cacheManager);
-				cacheManager.start();
-				
+				if (cacheManager.getClass().isAssignableFrom(LifecycleAware.class)) {
+					((LifecycleAware) cacheManager).start();
+				}
+								
 				logger.info("Find CacheManager impl {} registered as {}",
 						cacheManager.getClass().getName(),
-						cacheManager.getProviderName());
+						cacheManager.getName());
 
 				// register the CacheManager impl
-				cacheManagersMap.put(cacheManager.getProviderName(),
+				cacheManagersMap.put(cacheManager.getName(),
 						cacheManager);
 				// is it the first CacheManager impl ?
 				if (null == firstCacheManager) {
 					firstCacheManager = cacheManager;
 					logger.info(
 							"Set CacheManager '{}' as default CacheManager",
-							cacheManager.getProviderName());
+							cacheManager.getName());
 				}
 			}
 			catch (Throwable e) {
@@ -88,19 +91,19 @@ public class CacheManagerFactory {
 	/**
 	 * return a specific CacheManager
 	 * 
-	 * @param cacheManagerSimpleClassName
+	 * @param cacheManagerName
 	 * @return
 	 * @throws NullPointerException
 	 */
-	public static CacheManager getCacheManager(String cacheManagerProviderName)
+	public static CacheManager getCacheManager(String cacheManagerName)
 			throws NullPointerException {
 
-		if (!cacheManagersMap.containsKey(cacheManagerProviderName))
+		if (!cacheManagersMap.containsKey(cacheManagerName))
 			throw new NullPointerException("The CacheManager '".concat(
-					cacheManagerProviderName).concat("' can not be found."));
+					cacheManagerName).concat("' can not be found."));
 
 		CacheManager cacheManager = cacheManagersMap
-				.get(cacheManagerProviderName);
+				.get(cacheManagerName);
 		return cacheManager;
 	}
 
@@ -109,7 +112,7 @@ public class CacheManagerFactory {
 	 * 
 	 * @return
 	 */
-	public static Collection<String> getCacheManagerNames() {
+	public static Set<String> getCacheManagerNames() {
 		return cacheManagersMap.keySet();
 	}
 

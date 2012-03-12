@@ -2,13 +2,14 @@ package am.ajf.core.cache.impl;
 
 import java.util.concurrent.TimeUnit;
 
+import am.ajf.core.beans.LifecycleAware;
 import am.ajf.core.cache.Cache;
 import am.ajf.core.cache.CacheManagerAdapter;
 
 import com.google.common.cache.CacheBuilder;
 
-public class GuavaCacheManagerImpl extends AbstractCacheManager implements
-		CacheManagerAdapter {
+public class GuavaCacheManagerImpl extends AbstractCacheManager 
+	implements CacheManagerAdapter, LifecycleAware {
 
 	private static final String GUAVA = "guava";
 
@@ -31,7 +32,7 @@ public class GuavaCacheManagerImpl extends AbstractCacheManager implements
 	}
 	
 	@Override
-	public String getProviderName() {
+	public String getName() {
 		return GUAVA;
 	}
 

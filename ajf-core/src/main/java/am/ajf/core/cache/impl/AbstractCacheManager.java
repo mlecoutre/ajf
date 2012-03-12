@@ -1,13 +1,13 @@
 package am.ajf.core.cache.impl;
 
-import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import am.ajf.core.cache.Cache;
 import am.ajf.core.cache.CacheManager;
 
-public abstract class AbstractCacheManager implements CacheManager {
+public abstract class AbstractCacheManager 
+	implements CacheManager {
 
 	protected Cache defaultCache;
 	protected ConcurrentHashMap<String, Cache> cachesMap = new ConcurrentHashMap<String, Cache>();
@@ -66,7 +66,7 @@ public abstract class AbstractCacheManager implements CacheManager {
 	}
 
 	@Override
-	public Collection<String> caches() {
+	public Set<String> cacheNames() {
 		Set<String> keys = cachesMap.keySet();
 		return keys;
 	}

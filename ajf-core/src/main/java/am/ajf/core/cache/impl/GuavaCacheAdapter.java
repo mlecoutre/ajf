@@ -1,6 +1,6 @@
 package am.ajf.core.cache.impl;
 
-import java.util.Collection;
+import java.util.Set;
 
 import am.ajf.core.cache.CacheAdapter;
 
@@ -34,7 +34,7 @@ public class GuavaCacheAdapter implements CacheAdapter {
 	}
 
 	@Override
-	public Collection<Object> keys() {
+	public Set<Object> keys() {
 		return cache.asMap().keySet();
 	}
 

@@ -1,10 +1,10 @@
 package am.ajf.core.cache.impl;
 
+import am.ajf.core.beans.LifecycleAware;
 import am.ajf.core.cache.Cache;
-import am.ajf.core.cache.CacheManager;
 
-public class ThreadLocalCacheManagerImpl extends AbstractCacheManager implements
-		CacheManager {
+public class ThreadLocalCacheManagerImpl extends AbstractCacheManager
+	implements LifecycleAware {
 
 	private static final String THREADLOCAL = "threadlocal";
 
@@ -26,7 +26,7 @@ public class ThreadLocalCacheManagerImpl extends AbstractCacheManager implements
 	}
 
 	@Override
-	public String getProviderName() {
+	public String getName() {
 		return THREADLOCAL;
 	}
 	

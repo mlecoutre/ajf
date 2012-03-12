@@ -1,9 +1,11 @@
 package am.ajf.core.cache.impl;
 
-import java.util.Collection;
+import java.util.Set;
 
 import net.sf.ehcache.Element;
 import am.ajf.core.cache.CacheAdapter;
+
+import com.google.common.collect.Sets;
 
 public class EHCacheCacheAdapter implements CacheAdapter {
 	
@@ -46,8 +48,9 @@ public class EHCacheCacheAdapter implements CacheAdapter {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Collection<Object> keys() {
-		return cache.getKeysWithExpiryCheck();
+	public Set<Object> keys() {
+		Set<Object> keys = Sets.newHashSet(cache.getKeysWithExpiryCheck());
+		return keys;
 	}
 
 	@Override

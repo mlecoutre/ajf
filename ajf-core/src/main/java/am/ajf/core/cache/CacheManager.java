@@ -1,24 +1,14 @@
 package am.ajf.core.cache;
 
-import java.util.Collection;
+import java.util.Set;
 
 
-public interface CacheManager{
+public interface CacheManager {
 	
 	/**
 	 * @return the CacheManager provider name
 	 */
-	String getProviderName();
-	
-	/**
-	 * start the CacheManager
-	 */
-	void start();
-	
-	/**
-	 * stop the CacheManager
-	 */
-	void stop();
+	String getName();
 	
 	/**
 	 * 
@@ -48,9 +38,9 @@ public interface CacheManager{
 	void removeCache(String cacheName);
 	
 	/**
-	 * @return the collection of caches name
+	 * @return the set of caches name
 	 */
-	Collection<String> caches();
+	Set<String> cacheNames();
 	
 	/**
 	 * clear all managed caches

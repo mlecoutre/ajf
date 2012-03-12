@@ -1,7 +1,7 @@
 package am.ajf.core.cache.impl;
 
-import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import am.ajf.core.cache.CacheAdapter;
@@ -51,7 +51,7 @@ public class ThreadLocalCacheAdapter implements CacheAdapter {
 	}
 
 	@Override
-	public Collection<Object> keys() {
+	public Set<Object> keys() {
 		return getCache().keySet();
 	}
 

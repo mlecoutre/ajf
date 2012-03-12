@@ -1,6 +1,6 @@
 package am.ajf.core.cache;
 
-import java.util.Collection;
+import java.util.Set;
 
 public interface Cache {
 
@@ -31,9 +31,9 @@ public interface Cache {
 	void put(Object key, Object value);
 
 	/**
-	 * @return the keys collections
+	 * @return the keys set
 	 */
-	Collection<Object> keys();
+	Set<Object> keys();
 
 	/**
 	 * remove a cached entry

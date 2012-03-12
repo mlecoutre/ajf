@@ -1,9 +1,9 @@
 package am.ajf.core.cache.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import am.ajf.core.cache.CacheAdapter;
@@ -93,8 +93,8 @@ public class ThreadLocalCacheTtlAdapter implements CacheAdapter {
 	}
 
 	@Override
-	public Collection<Object> keys() {
-		Collection<Object> keys = new ArrayList<Object>();
+	public Set<Object> keys() {
+		Set<Object> keys = new HashSet<Object>();
 		 
 		Map<Object, CachedObject> cache = getCache(); 
 		long now = System.currentTimeMillis();

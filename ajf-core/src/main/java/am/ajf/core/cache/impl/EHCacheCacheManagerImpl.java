@@ -3,10 +3,11 @@ package am.ajf.core.cache.impl;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.config.CacheConfiguration;
+import am.ajf.core.beans.LifecycleAware;
 import am.ajf.core.cache.CacheManagerAdapter;
 
-public class EHCacheCacheManagerImpl extends AbstractCacheManager implements
-		CacheManagerAdapter {
+public class EHCacheCacheManagerImpl extends AbstractCacheManager 
+	implements CacheManagerAdapter, LifecycleAware {
 
 	private static final String EHCACHE = "ehcache";
 
@@ -71,7 +72,7 @@ public class EHCacheCacheManagerImpl extends AbstractCacheManager implements
 	}
 
 	@Override
-	public String getProviderName() {
+	public String getName() {
 		return EHCACHE;
 	}
 
