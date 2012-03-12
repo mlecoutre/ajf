@@ -17,11 +17,10 @@
  <poweredBy> 
  	<logo width="0" height="0"/>
  </poweredBy>
- 
  <body>
   <links>
-   <item name="Web JAVA" href="http://web-maven-site"/>
-   <<item name="Maven Repository" href="http://web-maven-repo"/>
+   <item name="Web JAVA" href="http://web-maven-site" />
+   <item name="Maven Repository" href="http://web-maven-repo"/>
    <item name="Maven IC" href="http://web-maven-ic"/>
    <item name="AJF Framework" href="http://web-java/projects/index.html" />
    <item name="Maven" href="http://maven.apache.org/maven2/" />
