@@ -3,6 +3,7 @@ package am.ajf.injection;
 import static org.junit.Assert.assertNotNull;
 
 import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
 import org.apache.commons.configuration.Configuration;
@@ -57,6 +58,9 @@ public class InjectionTestInt {
 	@Inject
 	private MyServiceBD myService2;
 	
+	@Inject
+	private BeanManager beanManager;
+	
 	@BeforeClass
 	public static void setUpClass() {
 		
@@ -85,10 +89,17 @@ public class InjectionTestInt {
 	}
 	
 	@Test
+	public void testBeanManagerInjection() {
+		
+		assertNotNull(beanManager);
+		logger.info("BeanManager injected.");
+		
+	}
+	
+	@Test
 	public void testLoggerInjection() {
 		
 		assertNotNull(logger);
-		
 		logger.info("Logger injected.");
 		
 	}
@@ -97,7 +108,6 @@ public class InjectionTestInt {
 	public void testAuditDataInjection() {
 		
 		assertNotNull(auditData);
-		
 		logger.info("AuditData injected.");
 				
 	}
@@ -106,7 +116,6 @@ public class InjectionTestInt {
 	public void testDefaultCacheInjection() {
 		
 		assertNotNull(defaultCache);
-		
 		logger.info("Default Cache injected.");
 				
 	}
@@ -115,7 +124,6 @@ public class InjectionTestInt {
 	public void testAnotatedCacheInjection() {
 		
 		assertNotNull(cache);
-		
 		logger.info("Annotated Cache injected.");
 				
 	}
