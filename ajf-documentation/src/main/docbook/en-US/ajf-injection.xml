@@ -32,6 +32,21 @@
 		<title>Injectable components</title>
 		<para>
 			Some AJF components are directly injectables in Managed Beans.
+			It's the same for applicative Business Policies and Technical Services injection, with the following rules :
+			<itemizedlist>
+				<listitem>
+					<para>
+				[appBasePackageName].core.business.*Policy implementations classes which implements
+				[appBasePackageName].lib.business.*BD interfaces
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+				[appBasePackageName].core.services.*Service implementations classes which implements
+				[appBasePackageName].lib.services.*ServiceBD interfaces
+					</para>
+				</listitem>
+			</itemizedlist>
 		</para>
 		<section>
 			<title>Inject Logger</title>
@@ -40,7 +55,6 @@
 	import javax.inject.Inject;
 	
 	import org.slf4j.Logger;
-	
 	...
 	
 	@Inject
@@ -54,7 +68,6 @@
 	import javax.inject.Inject;
 	
 	import am.ajf.core.datas.AuditData;
-	
 	...
 	
 	@Inject
@@ -68,7 +81,6 @@
 	import javax.inject.Inject;
 	
 	import org.apache.commons.configuration.Configuration;
-	
 	...
 	
 	@Inject
@@ -82,7 +94,6 @@
 	import javax.inject.Inject;
 	
 	import am.ajf.injection.annotation.Property;
-	
 	...
 	
 	@Inject @Property("mySettingProperty")
@@ -95,12 +106,26 @@
 		</section>
 		<section>
 			<title>Inject MailSender</title>
-			<para></para>
+			<para>
+			The <classname>MailSender</classname> which is injected if configured with the following rule :
+			<itemizedlist>
+				<listitem>
+					<para>
+					the bean attribute 'jndiName' is equal to "mail/Session" 
+					if the application configuration "mailSender.jndiName" is not setted in the file "settings.properties"
+					</para> 
+				</listitem>
+				<listitem>
+					<para>
+					the bean attribute 'smtpServer' is equal to "applicatifs.appliarmony.net" 
+					</para>				
+				</listitem>
+			</itemizedlist>
+			</para>
 			<programlisting language="Java" role="Java"><![CDATA[
 	import javax.inject.Inject;
 	
 	import am.ajf.core.mail.MailSender;
-	
 	...
 	
 	@Inject
@@ -114,7 +139,6 @@
 	import javax.inject.Inject;
 	
 	import javax.transaction.UserTransaction;
-	
 	...
 	
 	@Inject
@@ -126,7 +150,6 @@
 			<para></para>
 			<programlisting language="Java" role="Java"><![CDATA[
 	import javax.inject.Inject;
-	
 	...
 	
 	@Inject 
