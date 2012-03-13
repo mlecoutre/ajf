@@ -75,41 +75,33 @@
 	<!-- SERVICE PART DEFINITION -->
 
 	<ui:define name="services">
-		<ul class="list">
+		<p:accordionPanel multiple="false" styleClass="services">
+			<p:tab title="Manage Employee">
+				<ul class="orange">
+					<li><a href="employeemanagement/listEmployees.xhtml">list
+							employees</a></li>
 
-			<li><a href="index.html#"><input class="arrow_list"
-					type="image"
-					src="resources/brand/images/up.png"
-					style="width: 7px;" />Employees Management</a>
+					<li><a href="employeemanagement/createEmployee.xhtml">hire
+							employee</a></li>
 
-				<div style="display: none;">
+					<li><a href="employeemanagement/listEmployees.xhtml">fire
+							employee</a></li>
 
-					Manage employees.
-
-					<ul class="orange">
-						<li><a href="employeemanagement/listEmployees.xhtml">list employees</a></li>
-
-						<li><a href="employeemanagement/createEmployee.xhtml">hire employee</a></li>
-
-						<li><a href="employeemanagement/listEmployees.xhtml">fire employee</a></li>
-
-
-					</ul>
-
-				</div></li>
-
-			<li><a href="index.html#"><input class="arrow_list"
-					type="image"
-					src="#{facesContext.externalContext.request.contextPath}/resources/brand/images/up.png"
-					style="width: 7px;" />Security</a>
-
-				<div style="display: none;">
-
-					<b>Based on SHIRO</b> : Work on every application servers (jetty,
+				</ul>
+			</p:tab>
+			<p:tab title="Security">
+				<b>Based on SHIRO</b> : Work on every application servers (jetty,
 					tomcat, was)
 
-				</div></li>
-		</ul>
+			</p:tab>
+			<p:tab title="Showcase">
+				<h:panelGrid columns="2" cellpadding="10">
+					<h:outputText
+						value="Just some demo of basic components and framework behaviour." />
+				</h:panelGrid>
+			</p:tab>
+		</p:accordionPanel>
+
 	</ui:define>
 
 </ui:composition>

@@ -16,12 +16,12 @@
 				<h:form id="loginFormPage">
 					<h:panelGrid columns="2">
 						<h:outputLabel value="User ID:" />
-						<p:inputText value="#{securityBean.username}" />
+						<p:inputText value="#{securityMBean.username}" />
 
 						<h:outputLabel value="Password:" />
-						<p:password value="#{securityBean.password}" />
+						<p:password value="#{securityMBean.password}" />
 
-						<h:commandButton  action="#{securityBean.doLogin}" value="login" />
+						<h:commandButton  action="#{securityMBean.doLogin}" value="login" />
 					</h:panelGrid>
 				</h:form>
 			</p:panel>
