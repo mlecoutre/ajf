@@ -36,7 +36,7 @@ public class DITestRunnner extends BlockJUnit4ClassRunner {
 	@Override
 	protected void validateZeroArgConstructor(List<Throwable> arg0) {
 
-		// Guice can inject constructors with parameters
+		// can inject constructors with parameters ?
 		// super.validateZeroArgConstructor(arg0);
 
 	}
