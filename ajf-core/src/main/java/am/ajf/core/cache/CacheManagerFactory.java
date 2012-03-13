@@ -42,7 +42,7 @@ public class CacheManagerFactory {
 				CacheManager cacheManager = iterator.next();
 
 				BeanUtils.initialize(cacheManager);
-				if (cacheManager.getClass().isAssignableFrom(LifecycleAware.class)) {
+				if (cacheManager instanceof LifecycleAware) {
 					((LifecycleAware) cacheManager).start();
 				}
 								
