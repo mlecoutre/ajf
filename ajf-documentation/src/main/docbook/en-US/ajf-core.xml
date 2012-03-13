@@ -6,6 +6,16 @@
 		The AJF Core library provide a set of commons reusable components for use
 		on J2EE server and other Servlet containers. 		
 	</para>
+	<example>
+			<title>Reference "ajf-core" in your Maven 2 project configuration file 'pom.xml'</title>
+			<programlisting language="Xml" role="Xml"><![CDATA[
+	<dependency>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-core</artifactId>
+		<version>${ajf.version}</version>
+	</dependency>
+			]]></programlisting>
+	</example>
 	<section id="applicationContextSection">
 		<title>ApplicationContext</title>
 		<para>
@@ -26,11 +36,11 @@
 			<title>Configuration file : 'settings.properties'</title>
 			<programlisting><![CDATA[	
 	application.name=TestApplication
-	log.dir=
 	working.dir=
 	myKey=myValue	
 			]]></programlisting>
-			<programlisting language="Java" role="Java"><![CDATA[
+		</example>
+		<programlisting language="Java" role="Java"><![CDATA[
 	// Get the logging directory
 	File logDir = ApplicationContext.getLogDir();
 	// Get the working directory
@@ -40,19 +50,21 @@
 
 	// get a specific attribute value (as String)
 	String value = ApplicationContext.getConfiguration().getString("myKey");	
-			]]></programlisting>
-		</example>
+		]]></programlisting>
 	</section>
 	<section id="configurationSection">
 		<title>Configuration</title>
 		<para>
-			The configuration component is provided by the project <ulink url="http://commons.apache.org/configuration">"commons-configuration" from the 
-			Apache Foundation</ulink>. 
+			The configuration component is provided by the project <ulink url="http://commons.apache.org/configuration">commons-configuration</ulink> 
+			from the Apache Foundation. 
+			<itemizedlist>
+				<listitem>commons-configuration documentation is available <ulink url="http://commons.apache.org/configuration/userguide/user_guide.html">here</ulink>.</listitem>
+			</itemizedlist>
 		</para>
 		<section>
 			<title>Create Configuration objects</title>
 			<para>
-				You can create configuration objects from the following sources :</para>
+				You can create configuration objects from the following sources :
 				<itemizedlist>
 					<listitem>Properties files</listitem>
 					<listitem>XML documents</listitem>
@@ -60,7 +72,8 @@
 					<listitem>System properties</listitem>
 					<listitem>JNDI entries</listitem>
 				</itemizedlist>
-				<para>				
+			</para>
+			<para>				
 				The configuration objects could be obtained by the <classname>ConfigurationHelper</classname> class.
 					<table frame="all">
 		   			  <title>ConfigurationHelper API</title>
@@ -101,29 +114,25 @@
 				        </tbody>
 				      </tgroup>
 				    </table>
-			    </para>
-				<example>
-						<title>Usage</title>
-						<programlisting language="Java" role="Java"><![CDATA[
+			</para>
+			<programlisting language="Java" role="Java"><![CDATA[
 		// create th new Configuration object from resource 'settings.properties'
-		Configuration config = ConfigurationHelper.newConfigurationFromPropertiesResource("settings.properties");
+		Configuration config = ConfigurationHelper.
+			newConfigurationFromPropertiesResource("settings.properties");
 		// get 'myFirstKey' property as String
 		config.getString("myFirstKey")
-						]]></programlisting>
-				</example>
-				<para>
+			 ]]></programlisting>
+			<para>
 					Others methods than <parameter>getString(String key)</parameter> are available, see the javaDoc 
 					<ulink url="http://commons.apache.org/configuration/apidocs/org/apache/commons/configuration/Configuration.html">here</ulink>.
-				</para>
+			</para>
 		</section>
 		<section>
 			<title>Bean Configuration objects</title>
 			<para>
 			The <classname>BeanConfiguration</classname> object allow to work with <parameter>Bean</parameter> objects and resolve 'nested' like properties. 
 			</para>
-			<example>
-						<title>Usage</title>
-						<programlisting language="Java" role="Java"><![CDATA[
+			<programlisting language="Java" role="Java"><![CDATA[
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("name", "value");
 
@@ -139,17 +148,14 @@
 		logger.info(bConfig.getString("aMap.[name]"));
 		logger.info(bConfig.getString("aMap.[c]"));
 		logger.info(bConfig.getString("aMap.[d](0)"));
-						]]></programlisting>
-					</example>
+			]]></programlisting>
 		</section>
 		<section>
 			<title>Merge Configuration objects</title>
 			<para>
 			Merging <classname>Configuration</classname> objects allow to chain them and resolve properties in a merged Configuration context. 
 			</para>
-			<example>
-						<title>Usage</title>
-						<programlisting language="Java" role="Java"><![CDATA[
+			<programlisting language="Java" role="Java"><![CDATA[
 		// create th new Configuration object from resource 'settings.properties'
 		PropertiesConfiguration sConfig = new PropertiesConfiguration();
 		sConfig.addProperty("c", "${b}");
@@ -159,13 +165,13 @@
 		pConfig.addProperty("a", "25");
 		
 		// merge (chain) the configurations objects
-		Configuration config = ConfigurationHelper.mergeConfigurations(sConfig, pConfig);
+		Configuration config = ConfigurationHelper.
+			mergeConfigurations(sConfig, pConfig);
 		
 		// get 'c' property as String
 		config.getString("c");
 		// << must return 25_26
-						]]></programlisting>
-					</example>
+			]]></programlisting>
 		</section>
 		<section>
 			<title>Prefixed Variables Interpolation</title>
@@ -177,9 +183,7 @@
 					<listitem>Java Constantes as 'const:'</listitem>
 				</itemizedlist>
 			</para>
-			<example>
-				<title>Usage</title>
-				<programlisting language="Java" role="Java"><![CDATA[
+			<programlisting language="Java" role="Java"><![CDATA[
 			Configuration configuration = new PropertiesConfiguration();
 
 		// resolve a System java variable
@@ -197,16 +201,13 @@
 				"${const:myPackage.MyClass.A_JAVA_CONSTANTE}", configuration);
 		logger.info(res);
 		]]></programlisting>
-			</example>
 		</section>
 		<section>
 			<title>Expressions Evaluation</title>
 			<para>
 			You can evaluate 'EL' like expressions in a <classname>Configuration</classname> context.
 			</para>
-			<example>
-				<title>Usage</title>
-				<programlisting language="Java" role="Java"><![CDATA[
+			<programlisting language="Java" role="Java"><![CDATA[
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("name", "value");
 
@@ -222,163 +223,313 @@
 		logger.info(""
 				+ ConfigurationUtils.evaluate("the value is : ${aMap.[name]}",
 						bConfig));
-						]]></programlisting>
-			</example>
+			]]></programlisting>
+		</section>
+	</section>
+	<section id="auditDatasSection">
+		<title>AuditDatas</title>
+		<para>The <classname>AuditData</classname> object is a valu object which contain some user context informations like :		
+			<itemizedlist>
+				<listitem>the user identifier</listitem>
+				<listitem>the user transaction UUID</listitem>
+				<listitem>the user transaction Date</listitem>
+				<listitem>... </listitem>
+			</itemizedlist>	
+			<important>
+				<para>'user transaction' is not in the JTA meaning but in the user requets meaning.</para>
+			</important>
+			Normally the <classname>AuditData</classname> object is initialized automatically for the web modules 
+			with a specific <classname>ServletFilter</classname>, but you can initialize it by yourself.
+		</para>
+		<section>
+			<title>Initialize AuditDatas</title>
+			<para>		
+			</para>
+			<programlisting language="Java" role="Java"><![CDATA[
+		EditableAuditData data = (EditableAuditData) AuditDataContext.initContextData();
+		// set the user Id
+		data.put(AuditData.KEY_USERID, "u002617");
+		// user transaction UUID and Date are automatically initialized
+			]]></programlisting>
+			<para><classname>String</classname> typed audit datas are automatically propagated in the <classname>Logger</classname> user context
+				and available in the logging message pattern as eXtended properties
+			</para>
+			<example>
+				<title>Using AuditDatas in a logger message pattern - from file 'logback.xml'</title>
+				<programlisting language="Xml" role="Xml"><![CDATA[
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<target>System.out</target>
+		<encoder>
+			<pattern>
+				[%thread] %-5level %X{uuid} %X{userid} %logger{36} - %msg%n
+			</pattern>
+		</encoder>
+	</appender>	
+				]]></programlisting>
+			</example> 
+		</section>
+		<section>
+			<title>Access AuditDatas</title>
+			<para>		
+			</para>
+			<programlisting language="Java" role="Java"><![CDATA[
+		AuditData auditData = AuditDataContext.getAuditData();
+		// get the user transaction UUID	
+		String uuid = data.getString(AuditData.KEY_UUID);
+		// get the user transaction Date
+		Date date = (Date) data.get(AuditData.KEY_DATE);
+		// get the user identifier
+		String userId = data.getString(AuditData.KEY_USERID);
+			]]></programlisting>
+		</section>
+		<section>
+			<title>Auditor</title>
+			<para>		
+				The <classname>Auditor</classname> component allow to trace application audit informations like :
+				<itemizedlist>
+					<listitem>who log in</listitem>
+					<listitem>the invoked action as [Function].[UnitTask]</listitem>
+					<listitem>the requested [Resource]</listitem>
+					<listitem>who log out</listitem>
+					<listitem>... </listitem>
+				</itemizedlist>
+				The audit informations are logged with the 'audit' logger as 'TRACE' level.  
+				<table frame="all">
+	   			  <title>Auditor API</title>
+	   			  <tgroup cols="2">
+			        <colspec colname="c1"/>
+			        <colspec colname="c2"/>
+			         <thead>
+			              <row>
+			                <entry colname="1">Method</entry>
+			                <entry colname="2">Description</entry>
+			              </row>
+		            </thead>
+			        <tbody>
+			        	<row>
+			        		<entry>audit(String message)</entry>
+			        		<entry>log the message in 'audit' logger as 'TRACE' level</entry>
+			        	</row>
+			        	<row>
+			        		<entry>audit(String messageFormat, Object.. args)</entry>
+			        		<entry>log the message (=<ulink url="http://docs.oracle.com/javase/1.5.0/docs/api/java/lang/String.html#format(java.lang.String, java.lang.Object...)">String.format(messageFormat, args)</ulink>) in 'audit' logger as 'TRACE' level</entry>
+			        	</row>
+			        </tbody>
+			      </tgroup>
+			    </table>
+			</para>
+			<programlisting language="Java" role="Java"><![CDATA[
+		import static am.ajf.core.datas.Auditor.audit;
+		import am.ajf.core.datas.Auditor;
+		
+		...
+		audit("try to get resource: %s", "mySecuriedResource");
+		// or
+		Auditor.audit("try to get resource: %s", "mySecurizedResource");
+		
+			]]></programlisting>
 		</section>
 	</section>
 	<section id="loggingSection">
 		<title>Logging</title>
-		<para>			
-		</para>
-	</section>
-	<section id="mailSenderSection">
-		<title>MailSender</title>
 		<para>
-		The <classname>MailSender</classname> component allow to send messages by e-mail with attached files.
+			The logging facade is provided by the project <ulink url="http://www.slf4j.org/">SLF4J</ulink> and the logging implementation is
+			provided by the project <ulink url="http://logback.qos.ch/">LOGBack</ulink>. 
+			<itemizedlist>
+				<listitem>SLF4J documentation is available <ulink url="http://www.slf4j.org/manual.html">here</ulink>.</listitem>
+				<listitem>LOGBack documentation is available <ulink url="http://logback.qos.ch/manual/index.html">here</ulink>.</listitem>
+			</itemizedlist>
 		</para>
-		<table frame="all">
-  			  <title>MailSender API</title>
-  			  <tgroup cols="2">
-	        <colspec colname="c1"/>
-	        <colspec colname="c2"/>
-	         <thead>
-	              <row>
-	                <entry colname="1">Method</entry>
-	                <entry colname="2">Description</entry>
-	              </row>
-            </thead>
-	        <tbody>
-	        	<row>
-	        		<entry>send(MailBean eMail)</entry>
-	        		<entry>send e-mail defined by the <classname>MailBean</classname> parameter</entry>
-	        	</row>
-	        </tbody>
-	      </tgroup>
-	    </table>
-	     <section>
-	    	<title>MailBean Content</title>
-	    	<para>
-	    	</para>
-		    <table frame="all">
-	  			  <title>MailBean Content</title>
-	  			  <tgroup cols="3">
-		        <colspec colname="c1"/>
-		        <colspec colname="c2"/>
-		        <colspec colname="c3"/>
-		        <thead>
-		              <row>
-		                <entry colname="1">Attribute</entry>
-		                <entry colname="2">Required</entry>
-		                <entry colname="3">Description</entry>
-		              </row>
-	            </thead>
-		        <tbody>
-		        	<row>
-		        		<entry>sender</entry>
-		        		<entry><emphasis>true</emphasis></entry>
-		        		<entry>the e-mail sender</entry>
-		        	</row>
-		        	<row>
-		        		<entry>to</entry>
-		        		<entry><emphasis>true</emphasis></entry>
-		        		<entry>the e-mail receivers with comma separator</entry>
-		        	</row>
-		        	<row>
-		        		<entry>cc</entry>
-		        		<entry>false</entry>
-		        		<entry>the e-mail copy receivers with comma separator</entry>
-		        	</row>
-		        	<row>
-		        		<entry>bcc</entry>
-		        		<entry>false</entry>
-		        		<entry>the e-mail hidden copy receivers with comma separator</entry>
-		        	</row>
-		        	<row>
-		        		<entry>subjet</entry>
-		        		<entry><emphasis>true</emphasis></entry>
-		        		<entry>the e-mail subject</entry>
-		        	</row>
-		        	<row>
-		        		<entry>body</entry>
-		        		<entry><emphasis>true</emphasis></entry>
-		        		<entry>the e-mail body, can be HTML formatted</entry>
-		        	</row>
-		        	<row>
-		        		<entry>attachedFiles</entry>
-		        		<entry>false</entry>
-		        		<entry>the attached files</entry>
-		        	</row>
-		        </tbody>
-		      </tgroup>
-		    </table>  
-		   </section>
-	    <section>
-	    	<title>Default MailSender Implementation</title>
-	    	<para>
-	    		The default MailSender implementation is the class <classname>am.ajf.core.mail.impl.SimpleMailSenderImpl</classname>.
-	    	</para>
-	    	<table frame="all">
-   			  <title>API</title>
-   			  <tgroup cols="2">
-		         <colspec colname="c1"/>
-		         <colspec colname="c2"/>
-		         <thead>
-		              <row>
-		                <entry colname="1">Method</entry>
-		                <entry colname="2">Description</entry>
-		              </row>
-	            </thead>
-		        <tbody>
-		        	<row>
-		        		<entry>setJndiName(String jndiName)</entry>
-		        		<entry>set the mail session service jndi name</entry>
-		        	</row>
-		        	<row>
-		        		<entry>setSmtpServer(String smtpServer)</entry>
-		        		<entry>set the SMTP server address</entry>
-		        	</row>
-		        	<row>
-		        		<entry>setConnectionTimeout(long connectionTimeoutInMS)</entry>
-		        		<entry>set the server connection timeout</entry>
-		        	</row>
-		        	<row>
-		        		<entry>setTimeout(long ioTimeoutInMS)</entry>
-		        		<entry>set the I/O timeout</entry>
-		        	</row>
-		        	<row>
-		        		<entry>setMaxAttachedFiles(int maxAttachedFiles)</entry>
-		        		<entry>set the maximum number of attached files</entry>
-		        	</row>
-		        	<row>
-		        		<entry>setAttachedFileMaxSize(int attachedFileMaxSize)</entry>
-		        		<entry>set the maximum size for one attached file</entry>
-		        	</row>
-		        	<row>
-		        		<entry>setUploadTempFileDirectory(String relativeTempDir)</entry>
-		        		<entry>set the attached file temporary directory</entry>
-		        	</row>		        			        			        	
-		        </tbody>
-		      </tgroup>
-		    </table>
-	    	<example>
-				<title>Usage</title>
-				<programlisting language="Java" role="Java"><![CDATA[
-		MailBean mailBean = new MailBean(subject);
-		mailBean.setSender("appli.my-sample-app@arcelormittal.com");
-		mailBean.setTo("laurent.dupont@arcelormittal.com");
-		mailBean.setBody("Hello");
-	
-		DefaultMailSenderImpl mailSender = new DefaultMailSenderImpl();
-								 
-		// additionnal properties could be initialized here
-		// entire properties list is available here : http://javamail.kenai.com/nonav/javadocs/com/sun/mail/smtp/package-summary.html
+		<section>
+			<title>Others Logging Frameworks Forwards</title>
+			<para>
+				You can include some specifics dependencies in you Maven 2 project configuration file, in order to forward others logging frameworks logs.
+				<itemizedlist>
+					<listitem>redirect log4j logs</listitem>
+					<listitem>redirect java commons logging logs</listitem>
+					<listitem>redirect java util logging logs</listitem>
+				</itemizedlist>
+			</para>
+			<programlisting language="Java" role="Java"><![CDATA[
+		<!-- loggers adapters -->
 		
-		// send the e-mail
-		mailSender.send(mailBean);			
+		<!-- redirect log4j logs : already done in ajf-core -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<!-- redirect java commons logging logs : already done in ajf-core -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<!-- redirect java util logging logs -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+			]]></programlisting>
+		</section>
+		<section>
+			<title>Import starter configuration files</title>
+			<para>
+				You will likely want to start with a base configuration file that you can build upon.
+				In Maven you can have a logging configuration for your main source and another for your testing. 
+				Default configuration files can be found in the package "logger" of  "ajf-core" archive.
+				You only have to copy them in you project to the appropriate directory.
+			</para>
+			<programlisting>
+			<![CDATA[
+			src
+				main
+					resources
+						logback.xml (copied from ajf-core/logger/logback.xml)
+				test
+					resources
+						logback-test.xml (copied from ajf-core/logger/logback-test.xml)
+			]]></programlisting>
+			<section>
+				<title>Standard configuration</title>
+				<para>
+				<parameter>Standard configuration</parameter> com with a set of included appenders 
+				(declared in the file "logger/includes/logback-ajf.xml").
+				This appenders are : 
+				<itemizedlist>
+					<listitem>STDOUT : appender on the "System.out" output</listitem>
+					<listitem>STDERR : appender on the "System.err" output</listitem>
+					<listitem>AUDIT_FILE : a daily rolling file - max : 10 files - for "audit" logs</listitem>
+					<listitem>TROUBLESHOOTING_FILE : a rolling file - max : 10 files of 10 Mbytes - for WARN logs</listitem>
+					<listitem>AJF_FILE : a daily rolling file - max : 10 files - for ajf logs</listitem>
+					<listitem>APP_FILE : a daily rolling file - max : 10 files - for applicative logs</listitem>
+				</itemizedlist>
+				</para>
+				<programlisting language="Xml" role="Xml"><![CDATA[
+			<?xml version="1.0" encoding="UTF-8"?>
+			<configuration>
+			
+				<include resource="logger/includes/logback-ajf.xml"/>
+				
+				<root level="WARN">
+					<appender-ref ref="APP_FILE" />
+					<appender-ref ref="TROUBLESHOOTING_FILE" />
+				</root>
+				
+				<logger name="audit" level="TRACE" additivity="false">
+					<appender-ref ref="AUDIT_FILE" />
+				</logger>
+				
+				<!-- can be level="TRACE" -->
+				<logger name="am.ajf" level="WARN" additivity="false">
+					<appender-ref ref="AJF_FILE" />
+				</logger>			
+				
+				<!-- where "youAppBasePackageName" is you applicative base package name -->
+				<!-- 
+				<logger name="youAppBasePackageName" level="INFO" additivity="false">
+					<appender-ref ref="APP_FILE" />
+					<appender-ref ref="TROUBLESHOOTING_FILE" />
+				</logger>
+				-->
+					
+			</configuration>
 				]]></programlisting>
-			</example>
-	    </section>
+			</section>
+			<section>
+				<title>Test</title>
+				<para>
+				<parameter>Test configuration</parameter> com with a set of included appenders 
+				(declared in the file "logger/includes/logback-ajf-test.xml").
+				This appenders are : 
+				<itemizedlist>
+					<listitem>STDOUT : appender on the "System.out" output</listitem>
+					<listitem>STDERR : appender on the "System.err" output</listitem>
+				</itemizedlist>
+				</para>
+				<programlisting language="Xml" role="Xml"><![CDATA[
+			<?xml version="1.0" encoding="UTF-8"?>
+			<configuration>
+			
+				<include resource="logger/includes/logback-ajf-test.xml"/>
+				
+				<root level="WARN">
+					<appender-ref ref="STDOUT" />
+				</root>
+				
+				<logger name="audit" level="TRACE" additivity="false">
+					<appender-ref ref="STDERR" />
+				</logger>
+				
+				<!-- can be level="TRACE" -->
+				<logger name="am.ajf" level="INFO" additivity="false">
+					<appender-ref ref="STDERR" />
+				</logger>	
+					
+				<!-- where "youAppBasePackageName" is you applicative base package name -->	
+				<!-- 
+				<logger name="youAppBasePackageName" level="DEBUG" additivity="false">
+					<appender-ref ref="STDOUT" />
+				</logger>
+				-->
+					
+			</configuration>
+				]]></programlisting>
+			</section>
+		</section>
+		<section>
+			<title>Customize configuration file</title>
+			<para>
+			The configuration principle is similar to "log4j" configuration file, but expressed as XML file.
+			The logback configuration documentation is available <ulink url="http://logback.qos.ch/manual/joran.html">here</ulink>.
+			</para>
+			<section>
+				<title>logback Appenders</title>
+				<para>
+					<parameter>logback</parameter> logging implementation come with a set of appenders.
+					The logback appenders documentation is available <ulink url="http://logback.qos.ch/manual/appenders.html">here</ulink>.
+				</para>
+			</section>
+		</section>
+		<section>
+			<title>Implement logging code</title>
+			<para>
+				Add the following to the import section of your java code
+			</para>
+			<programlisting language="Java" role="Java"><![CDATA[
+		import  org.slf4j.Logger;
+		import am.ajf.core.logger.LoggerFactory;
+			]]></programlisting>
+			<para>
+			Add the following at the top of your class in the global section 
+			(just under the line that declares your class public class Whatever extends Whatever). 
+			Change the name of the class (MyClassName) in the getLogger method call, of course. 
+			Name it the same as the class you're dropping this code into.
+			</para>
+			<programlisting language="Java" role="Java"><![CDATA[
+		Logger LOG = LoggerFactory.getLogger(MyClassName.class);
+		// or
+		Logger LOG = LoggerFactory.getLogger("a custom logging category");
+			]]></programlisting>
+			<para>
+			Add some logging statements in your code somewhere 
+			where you know they'll be fired right away when you run your app.
+			</para>
+			<programlisting language="Java" role="Java"><![CDATA[
+		LOG.trace("Hello World!");
+		LOG.debug("How are you today?");
+		LOG.info("I am fine.");
+		LOG.warn("I love programming.");
+		LOG.error("I am programming.");
+		// log parameterized message
+		LOG.info("I love {}.", "programming.");
+			]]></programlisting>
+		</section>
 	</section>
+	
 	<section id="cacheSection">
 		<title>Cache</title>
 		<para>
@@ -388,7 +539,7 @@
       	  <title>Cache Class Diagram</title>
 	      <mediaobject>
 	        <imageobject>
-	          <imagedata align="center" fileref="images/cache-classdiagram.svg" scalefit="1" />
+	          <imagedata align="center" fileref="images/cache-classdiagram.png" scalefit="1" />
 	        </imageobject>
 	      </mediaobject>
 	    </figure>
@@ -534,8 +685,6 @@
 	    		The <classname>CacheManagerFactory</classname> allow to access a <classname>CacheManager</classname> instance (nammed or first) in a static way.
 	    		Then you can access a <classname>Cache</classname> instance (nammed or default one).
 	    	</para>
-		     <example>
-				<title>Accessing Cache</title>
 			<programlisting language="Java" role="Java"><![CDATA[
 	// for a specific CacheManager instance
 	CacheManager guavaCacheManager = CacheManagerFactory.getCacheManager("guava");
@@ -545,11 +694,7 @@
 	Cache ttlCache = CacheManagerFactory.getFirstCacheManager().getCache("ttlCache", 2000); // ttl is in milli-seconds
 	// get the default Cache instance
 	Cache cache = CacheManagerFactory.getFirstCacheManager().getCache(); 
-			]]></programlisting>
-			</example>
-			<example>
-				<title>Working with Cache</title>
-			<programlisting language="Java" role="Java"><![CDATA[
+
 	// get the default Cache instance
 	Cache cache = CacheManagerFactory.getFirstCacheManager().getCache();
 		
@@ -558,200 +703,183 @@
 	// retrieve a cached object
 	String cachedValue = (String) cache.get(key);
 			]]></programlisting>
-			</example>
 	    </section>
 	    <section>
-		<title>Available CacheManager implementations</title>
-		<section>
-			<title>'ehcache' as am.ajf.core.cache.impl.EHCacheCacheManagerImpl</title>
-			<para>
-			Provide caching functionalities with EHCache implementation
-			</para>
-		</section>
-		<section>
-			<title>'infinispan' as am.ajf.core.cache.impl.InfinispanEmbeddedCacheManagerImpl</title>
-			<para>
-			Provide caching functionalities with Infinispan implementation
-			</para>
-		</section>
-		<section>
-			<title>'guava' as am.ajf.core.cache.impl.GuavaCacheManagerImpl</title>
-			<para>
-			Provide caching functionalities with Google Guava implementation
-			</para>
-		</section>
-		<section>
-			<title>'simple' as am.ajf.core.cache.impl.SimpleCacheManagerImpl</title>
-			<para>
-			Provide caching functionalities with ConcurrentHashMap implementation
-			</para>
-		</section>
-		<section>
-			<title>'threadlocal' as am.ajf.core.cache.impl.ThreadLocalCacheManagerImpl</title>
-			<para>
-			Provide caching functionalities with Threadlocal ConcurrentHashMap implementation
-			</para>
-		</section>
-	</section>
-	</section>
-	<section id="auditDatasSection">
-		<title>AuditDatas</title>
-		<para>The <classname>AuditData</classname> object is a valu object which contain some user context informations like :		
-			<itemizedlist>
-				<listitem>the user identifier</listitem>
-				<listitem>the user transaction UUID</listitem>
-				<listitem>the user transaction Date</listitem>
-				<listitem>... </listitem>
-			</itemizedlist>	
-			<important>
-				<para>'user transaction' is not in the JTA meaning but in the user requets meaning.</para>
-			</important>
-			Normally the <classname>AuditData</classname> object is initialized automatically for the web modules 
-			with a specific <classname>ServletFilter</classname>, but you can initialize it by yourself.
-		</para>
-		<section>
-			<title>Initialize AuditDatas</title>
-			<para>		
-			</para>
-			<example>
-				<title>Usage</title>
-				<programlisting language="Java" role="Java"><![CDATA[
-		EditableAuditData data = (EditableAuditData) AuditDataContext.initContextData();
-		// set the user Id
-		data.put(AuditData.KEY_USERID, "u002617");
-		// user transaction UUID and Date are automatically initialized
-				]]></programlisting>
-			</example>
-			<para><classname>String</classname> typed audit datas are automatically propagated in the <classname>Logger</classname> user context
-				and available in the logging message pattern as eXtended properties
-			</para>
-			<example>
-				<title>Using AuditDatas in a logger message pattern - from file 'logback.xml'</title>
-				<programlisting language="Xml" role="Xml"><![CDATA[
-	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-		<target>System.out</target>
-		<encoder>
-			<pattern>
-				[%thread] %-5level %X{uuid} %X{userid} %logger{36} - %msg%n
-			</pattern>
-		</encoder>
-	</appender>	
-				]]></programlisting>
-			</example> 
-		</section>
-		<section>
-			<title>Access AuditDatas</title>
-			<para>		
-			</para>
-			<example>
-				<title>Usage</title>
-				<programlisting language="Java" role="Java"><![CDATA[
-		AuditData auditData = AuditDataContext.getAuditData();
-		// get the user transaction UUID	
-		String uuid = data.getString(AuditData.KEY_UUID);
-		// get the user transaction Date
-		Date date = (Date) data.get(AuditData.KEY_DATE);
-		// get the user identifier
-		String userId = data.getString(AuditData.KEY_USERID);
-				]]></programlisting>
-			</example>
-		</section>
-		<section>
-			<title>Auditor</title>
-			<para>		
-				The <classname>Auditor</classname> component allow to trace application audit informations like :
-				<itemizedlist>
-					<listitem>who log in</listitem>
-					<listitem>the invoked action as [Function].[UnitTask]</listitem>
-					<listitem>the requested [Resource]</listitem>
-					<listitem>who log out</listitem>
-					<listitem>... </listitem>
-				</itemizedlist>
-				The audit informations are logged with the 'audit' logger as 'TRACE' level.  
-				<table frame="all">
-	   			  <title>Auditor API</title>
-	   			  <tgroup cols="2">
-			        <colspec colname="c1"/>
-			        <colspec colname="c2"/>
-			         <thead>
-			              <row>
-			                <entry colname="1">Method</entry>
-			                <entry colname="2">Description</entry>
-			              </row>
-		            </thead>
-			        <tbody>
-			        	<row>
-			        		<entry>audit(String message)</entry>
-			        		<entry>log the message in 'audit' logger as 'TRACE' level</entry>
-			        	</row>
-			        	<row>
-			        		<entry>audit(String messageFormat, Object.. args)</entry>
-			        		<entry>log the message (=<ulink url="http://docs.oracle.com/javase/1.5.0/docs/api/java/lang/String.html#format(java.lang.String, java.lang.Object...)">String.format(messageFormat, args)</ulink>) in 'audit' logger as 'TRACE' level</entry>
-			        	</row>
-			        </tbody>
-			      </tgroup>
-			    </table>
-			</para>
-			<example>
-				<title>Usage</title>
-				<programlisting language="Java" role="Java"><![CDATA[
-		import static am.ajf.core.datas.Auditor.audit;
-		import am.ajf.core.datas.Auditor;
-		
-		...
-		audit("try to get resource: %s", "mySecuriedResource");
-		// or
-		Auditor.audit("try to get resource: %s", "mySecurizedResource");
-		
-				]]></programlisting>
-			</example>
+			<title>Available CacheManager implementations</title>
+			<section>
+				<title>'ehcache' as am.ajf.core.cache.impl.EHCacheCacheManagerImpl</title>
+				<para>
+				Provide caching functionalities with EHCache implementation
+				</para>
+			</section>
+			<section>
+				<title>'infinispan' as am.ajf.core.cache.impl.InfinispanEmbeddedCacheManagerImpl</title>
+				<para>
+				Provide caching functionalities with Infinispan implementation
+				</para>
+			</section>
+			<section>
+				<title>'guava' as am.ajf.core.cache.impl.GuavaCacheManagerImpl</title>
+				<para>
+				Provide caching functionalities with Google Guava implementation
+				</para>
+			</section>
+			<section>
+				<title>'simple' as am.ajf.core.cache.impl.SimpleCacheManagerImpl</title>
+				<para>
+				Provide caching functionalities with ConcurrentHashMap implementation
+				</para>
+			</section>
+			<section>
+				<title>'threadlocal' as am.ajf.core.cache.impl.ThreadLocalCacheManagerImpl</title>
+				<para>
+				Provide caching functionalities with Threadlocal ConcurrentHashMap implementation
+				</para>
+			</section>
 		</section>
 	</section>
-	<!--  
-	<section>
-		<title></title>
+	<section id="mailSenderSection">
+		<title>MailSender</title>
 		<para>
-			
+		The <classname>MailSender</classname> component allow to send messages by e-mail with attached files.
 		</para>
-		<important>
-			<para>
-			 				
-			</para> 
-			<para><emphasis></emphasis></para>
-			<programlisting language="Xml" role="Xml"><![CDATA[
-
-			]]></programlisting>
-		</important>
-
-		<example>
-			<title></title>
-			<programlisting language="Java" role="Java"><![CDATA[
-
-				]]></programlisting>
-			<para><emphasis>or</emphasis></para>
-			<programlisting language="Java" role="Java"><![CDATA[
-
-			]]></programlisting>				
-		</example>
-			
-		<important>
-			<para>
-				
-			</para>
-			<itemizedlist>
-				<listitem>
-					<para>
-						<emphasis>dlsm:ldmlsmdl</emphasis>
-					</para>
-				</listitem>
-			</itemizedlist> 
-		</important>
-		<warning>
-			<para>
-				
-			</para>
-		</warning>	
+		<table frame="all">
+  			  <title>MailSender API</title>
+  			  <tgroup cols="2">
+	        <colspec colname="c1" />
+	        <colspec colname="c2" />
+	         <thead>
+	              <row>
+	                <entry colname="1">Method</entry>
+	                <entry colname="2">Description</entry>
+	              </row>
+            </thead>
+	        <tbody>
+	        	<row>
+	        		<entry>send(MailBean eMail)</entry>
+	        		<entry>send e-mail defined by the <classname>MailBean</classname> parameter</entry>
+	        	</row>
+	        </tbody>
+	      </tgroup>
+	    </table>
+	    <section>
+	    	<title>MailBean Content</title>
+	    	<table frame="all">
+	  			  <title>MailBean Content</title>
+	  			  <tgroup cols="3">
+		        <colspec colname="c1" />
+		        <colspec colname="c2" />
+		        <colspec colname="c3" />
+		        <thead>
+		              <row>
+		                <entry colname="1">Attribute</entry>
+		                <entry colname="2">Required</entry>
+		                <entry colname="3">Description</entry>
+		              </row>
+	            </thead>
+		        <tbody>
+		        	<row>
+		        		<entry>sender</entry>
+		        		<entry><emphasis>true</emphasis></entry>
+		        		<entry>the e-mail sender</entry>
+		        	</row>
+		        	<row>
+		        		<entry>to</entry>
+		        		<entry><emphasis>true</emphasis></entry>
+		        		<entry>the e-mail receivers with comma separator</entry>
+		        	</row>
+		        	<row>
+		        		<entry>cc</entry>
+		        		<entry>false</entry>
+		        		<entry>the e-mail copy receivers with comma separator</entry>
+		        	</row>
+		        	<row>
+		        		<entry>bcc</entry>
+		        		<entry>false</entry>
+		        		<entry>the e-mail hidden copy receivers with comma separator</entry>
+		        	</row>
+		        	<row>
+		        		<entry>subjet</entry>
+		        		<entry><emphasis>true</emphasis></entry>
+		        		<entry>the e-mail subject</entry>
+		        	</row>
+		        	<row>
+		        		<entry>body</entry>
+		        		<entry><emphasis>true</emphasis></entry>
+		        		<entry>the e-mail body, can be HTML formatted</entry>
+		        	</row>
+		        	<row>
+		        		<entry>attachedFiles</entry>
+		        		<entry>false</entry>
+		        		<entry>the attached files</entry>
+		        	</row>
+		        </tbody>
+		      </tgroup>
+		    </table>  
+		</section>
+	    <section>
+	    	<title>Default MailSender Implementation</title>
+	    	<para>
+	    		The default MailSender implementation is the class <classname>am.ajf.core.mail.impl.SimpleMailSenderImpl</classname>.
+	    	</para>
+	    	<table frame="all">
+   			  <title>API</title>
+   			  <tgroup cols="2">
+		         <colspec colname="c1" />
+		         <colspec colname="c2" />
+		         <thead>
+		              <row>
+		                <entry colname="1">Method</entry>
+		                <entry colname="2">Description</entry>
+		              </row>
+	            </thead>
+		        <tbody>
+		        	<row>
+		        		<entry>setJndiName(String jndiName)</entry>
+		        		<entry>set the mail session service jndi name</entry>
+		        	</row>
+		        	<row>
+		        		<entry>setSmtpServer(String smtpServer)</entry>
+		        		<entry>set the SMTP server address</entry>
+		        	</row>
+		        	<row>
+		        		<entry>setConnectionTimeout(long connectionTimeoutInMS)</entry>
+		        		<entry>set the server connection timeout</entry>
+		        	</row>
+		        	<row>
+		        		<entry>setTimeout(long ioTimeoutInMS)</entry>
+		        		<entry>set the I/O timeout</entry>
+		        	</row>
+		        	<row>
+		        		<entry>setMaxAttachedFiles(int maxAttachedFiles)</entry>
+		        		<entry>set the maximum number of attached files</entry>
+		        	</row>
+		        	<row>
+		        		<entry>setAttachedFileMaxSize(int attachedFileMaxSize)</entry>
+		        		<entry>set the maximum size for one attached file</entry>
+		        	</row>
+		        	<row>
+		        		<entry>setUploadTempFileDirectory(String relativeTempDir)</entry>
+		        		<entry>set the attached file temporary directory</entry>
+		        	</row>		        			        			        	
+		        </tbody>
+		      </tgroup>
+		    </table>
+	    	<programlisting language="Java" role="Java"><![CDATA[
+		MailBean mailBean = new MailBean(subject);
+		mailBean.setSender("appli.my-sample-app@arcelormittal.com");
+		mailBean.setTo("laurent.dupont@arcelormittal.com");
+		mailBean.setBody("Hello");
+	
+		DefaultMailSenderImpl mailSender = new DefaultMailSenderImpl();
+								 
+		// additionnal properties could be initialized here
+		// entire properties list is available here : 
+		// http://javamail.kenai.com/nonav/javadocs/com/sun/mail/smtp/package-summary.html
 		
+		// send the e-mail
+		mailSender.send(mailBean);			
+			]]></programlisting>
+	    </section>
 	</section>
-	-->
 </chapter>
