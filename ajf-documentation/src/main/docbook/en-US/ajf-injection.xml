@@ -6,13 +6,84 @@
 		The AJF Core library provide a set of commons reusable components for use
 		on J2EE server and other Servlet containers. 		
 	</para>
+	<example>
+			<title>Reference "ajf-injection" in your Maven 2 project configuration file 'pom.xml'</title>
+			<programlisting language="Xml" role="Xml"><![CDATA[
+	<dependency>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-injection</artifactId>
+		<version>${ajf.version}</version>
+	</dependency>
+			]]></programlisting>
+	</example>
 	<section>
 		<title>Introduction</title>
 		<para>
-			
+			Contexts and Dependency Injection for the Java EE Platform (CDI), JSR 299 is a technology that supplies a powerful set 
+			of services to Java EE components. These services allow Java EE components, including EJB session beans and 
+			JavaServer Faces (JSF) managed beans, to be bound to lifecycle contexts, to be injected, and to interact in a loosely coupled
+			way by firing and observing events. Perhaps most significantly, CDI unifies and simplifies the EJB and JSF programming models.
+		</para>
+		<para>
+			AJF injection provide a set of injectors (as CDI Producers) and behaviors (as CDI Interceptors).
 		</para>
 	</section>
-	
+	<section>
+		<title>Injectable components</title>
+		<para>
+			
+		</para>
+		<section>
+			<title>Inject Logger</title>
+			<para></para>
+		</section>
+		<section>
+			<title>Inject AuditData</title>
+			<para></para>
+		</section>
+		<section>
+			<title>Inject Configuration</title>
+			<para></para>
+		</section>
+		<section>
+			<title>Inject Property</title>
+			<para></para>
+		</section>
+		<section>
+			<title>Inject Cache</title>
+			<para></para>
+		</section>
+		<section>
+			<title>Inject MailSender</title>
+			<para></para>
+		</section>
+		<section>
+			<title>Inject JTA UserTransaction</title>
+			<para></para>
+		</section>
+	</section>
+	<section>
+		<title>Interceptors</title>
+		<para>
+			
+		</para>
+		<section>
+			<title>Monitoring Interceptor</title>
+			<para></para>
+		</section>
+		<section>
+			<title>ErrorHandling Interceptor</title>
+			<para></para>
+		</section>
+		<section>
+			<title>Cache Interceptor</title>
+			<para></para>
+		</section>
+		<section>
+			<title>Transactional/NonTransactional Interceptor</title>
+			<para></para>
+		</section>
+	</section>
 	<!--  
 	<section>
 		<title></title>

@@ -12,6 +12,16 @@
 		a minimum
 		the complexity of simple CRUD functionality.
 	</para>
+	<example>
+			<title>Reference "ajf-persistence" in your Maven 2 project configuration file 'pom.xml'</title>
+			<programlisting language="Xml" role="Xml"><![CDATA[
+	<dependency>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-persistence</artifactId>
+		<version>${ajf.version}</version>
+	</dependency>
+			]]></programlisting>
+	</example>
 	<section>
 		<title>Introduction</title>
 		<para>

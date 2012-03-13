@@ -6,6 +6,16 @@
 model to create a dynamic web site in order to interact with end users.
 The user interface will use standard services offered and exposed by the
 Business Layer.</para>
+<example>
+			<title>Reference "ajf-web" in your Maven 2 project configuration file 'pom.xml'</title>
+			<programlisting language="Xml" role="Xml"><![CDATA[
+	<dependency>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-web</artifactId>
+		<version>${ajf.version}</version>
+	</dependency>
+			]]></programlisting>
+	</example>
   <para>
 Take a look on Error Handling and Security chapter as these two parts are related to the web.
 </para>

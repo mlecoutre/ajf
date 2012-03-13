@@ -6,6 +6,16 @@
 		The AJF Monitoring library provide object model and components for creating and sending application events
 		on J2EE server and other Servlet containers. 		
 	</para>
+	<example>
+			<title>Reference "ajf-monitoring" in your Maven 2 project configuration file 'pom.xml'</title>
+			<programlisting language="Xml" role="Xml"><![CDATA[
+	<dependency>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-monitoring</artifactId>
+		<version>${ajf.version}</version>
+	</dependency>
+			]]></programlisting>
+	</example>
 	<figure id="monitoring.fig">
       	<title>Monitoring Principle</title>
 	      <mediaobject>

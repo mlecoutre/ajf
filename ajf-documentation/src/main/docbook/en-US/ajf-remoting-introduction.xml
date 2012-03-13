@@ -15,6 +15,16 @@
 		by this configuration. 
 	</para>
 	<example>
+			<title>Reference "ajf-remoting" in your Maven 2 project configuration file 'pom.xml'</title>
+			<programlisting language="Xml" role="Xml"><![CDATA[
+	<dependency>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-remoting</artifactId>
+		<version>${ajf.version}</version>
+	</dependency>
+			]]></programlisting>
+	</example>
+	<example>
 		<title />
 		<programlisting language="Java" role="Java"><![CDATA[
 @Remote(jndi="jdbc/database")

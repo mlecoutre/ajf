@@ -6,6 +6,16 @@
 		The AJF Core library provide a set of commons reusable components for use
 		on J2EE server and other Servlet containers. 		
 	</para>
+	<example>
+			<title>Reference "ajf-notifier" in your Maven 2 project configuration file 'pom.xml'</title>
+			<programlisting language="Xml" role="Xml"><![CDATA[
+	<dependency>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-notifier</artifactId>
+		<version>${ajf.version}</version>
+	</dependency>
+			]]></programlisting>
+	</example>
 	<section>
 		<title>Introduction</title>
 		<para>

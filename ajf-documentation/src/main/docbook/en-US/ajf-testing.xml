@@ -3,19 +3,38 @@
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
 <chapter id="testing">
   <title>AJF - Testing Reference</title>
-  <para>
-  Design code with testing in mind
- </para>
-  <section>
+  <important>
+	 <para>
+	  Design your code with testing in mind
+	 </para>
+ </important>
+ <example>
+	<title>Reference "ajf-testing" in your Maven 2 project configuration file 'pom.xml'</title>
+	<programlisting language="Xml" role="Xml"><![CDATA[
+	<dependency>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-testing</artifactId>
+		<version>${ajf.version}</version>
+	</dependency>
+	]]></programlisting>
+  </example>
+  <section id="introductionSection">
     <title>Introduction</title>
     <para>
-   
-  </para>
+   		AJF Testing include differents testing frameworks distributions, such as :
+   		<itemizedlist>
+			<listitem>JUnit : a framework for java unit testing</listitem>
+			<listitem>DBUnit : a framework for database testing and filling (using with Jailer)</listitem>
+			<listitem>XMLUnit : a framework for XML testing with differents matching rules</listitem>
+			<listitem>Mockito : a mocking framework for mocking objects</listitem>
+			<listitem>Powermock : extension of mockito targeting the static objects</listitem>
+			<listitem>Arquillian : a lightweight JEE container for integration testing</listitem>
+		</itemizedlist>
+    </para>
   </section>
-  <section>
+  <section is="testingRulesSection">
     <title>Testing rules</title>
     <para>
-  
    <itemizedlist>
         <listitem>
           <para>
@@ -65,13 +84,11 @@ Not writing unit tests is costly, but writing unit tests is costly too. There is
         </listitem>
       </itemizedlist> 
   </para>
-    <para>More rules at http://geosoft.no/development/unittesting.html</para>
+    <para>More rules at <ulink url="http://geosoft.no/development/unittesting.html">http://geosoft.no/development/unittesting.html</ulink></para> 
   </section>
-  <section>
+  <section id="namingRulesSection">
     <title>Unit testing naming conventions</title>
     <para>
-  
-  
    <itemizedlist>
         <listitem>
           <para>
@@ -88,9 +105,149 @@ Not writing unit tests is costly, but writing unit tests is costly too. There is
         </listitem>
         <listitem>
           <para>Naming convention for test methods  <classname>test[what]</classname> such as  <classname>testSaveAs()</classname>
- or <classname>testSaveAsOnError()</classname></para>
+ 		  or <classname>testSaveAsOnError()</classname></para>
         </listitem>
       </itemizedlist> 
   </para>
   </section>
+  <section id="testingFrameworksSection">
+  	  <title>Testing frameworks</title>
+  	  <section id="junitSection">
+	  	<title>JUnit</title>
+	  	<para>
+	  	JUnit is a Framework which allows you to write and run some unit tests.
+		Just writing test cases is not the biggest interest of such a framework. What is important is that those test cases will be re-usable
+		and will be executed over and over again and guarantee the project non regression.
+		They will also be used (if they are clearly written) to help in understanding how to use a specific java component.
+		The idea is to create at least one test case per implemented method, in order to make it tested. 
+		</para>
+		<para>
+		JUnit complete documentation is available <ulink url="http://junit.sourceforge.net/#Documentation">here</ulink>.
+		</para>
+		<example>
+			<title>Junit Test Class</title>
+			<programlisting language="Java" role="Java"><![CDATA[
+	public class NotifyForInterchangeTest {
+		
+			@BeforeClass
+			public static void setUpClass() {
+				// Nothing to do, invoked before test class instanciation
+			}
+		
+			@Before
+			public void setUp() throws JAXBException {
+				// Nothing to do, invoked before each test method
+			}
+			
+			@After
+			public void tearDown() throws JAXBException {
+				// Nothing to do, invoked after each test method
+			}
+			
+			@AfterClass
+			public static void tearDownClass() {
+				// Nothing to do, invoked after test class instanciation
+			}
+			
+			@Test
+			public void testWriteNotifygForInterchange() throws Exception {
+				
+				// Given
+			
+				Writer writer = new StringWriter();
+				NotifForInterchangeBean notif = new NotifForInterchangeBean((Long)2648L, 4, 4);
+				
+				Marshaller marshaller = jaxbContext.createMarshaller();
+								
+				// When
+				
+				marshaller.marshal(notif, writer);
+				String xmlContent = writer.toString();
+				
+				// Then
+				
+				assertThat("Marshalling return null.", xmlContent, is(notNullValue()) );
+						
+			}
+			
+		}
+			]]></programlisting>
+		</example>
+		<section>
+			<title>Anatomy of a test method</title>
+			<para>
+			
+			</para>
+			<programlisting language="Java" role="Java"><![CDATA[
+			
+			@Test
+			public void testWriteNotifygForInterchange() throws Exception {
+				
+				// Given
+			
+				Writer writer = new StringWriter();
+				NotifForInterchangeBean notif = new NotifForInterchangeBean((Long)2648L, 4, 4);
+				
+				Marshaller marshaller = jaxbContext.createMarshaller();
+								
+				// When
+				
+				marshaller.marshal(notif, writer);
+				String xmlContent = writer.toString();
+				
+				// Then
+				
+				assertThat("Marshalling return null.", xmlContent, is(notNullValue()) );
+						
+			}
+		
+			]]></programlisting>
+		</section>
+		<section>
+			<title>Test method execution plan</title>
+			<para>
+				<itemizedlist>
+					<listitem>Load test clas</listitem>
+					<listitem>invoke @BeforeClass annotated static method</listitem>
+					<para />
+					<listitem>invoke @Before annotated method</listitem>
+					<listitem>invoke @Test annotated method</listitem>
+					<listitem>invoke @After annotated method</listitem>
+					<para />
+					<listitem>invoke @Before annotated method</listitem>
+					<listitem>invoke @Test annotated method</listitem>
+					<listitem>invoke @After annotated method</listitem>
+					<para />
+					<listitem>invoke @AfterClass annotated static method</listitem>
+				</itemizedlist>
+			</para>
+			
+		</section>
+	  </section>
+	   <section id="dbunitSection">>
+	  	<title>DBUnit</title>
+	  	<para>
+	  	</para>
+	  	</section>
+	  	<section id="xmlunitSection">>
+	  	<title>XMLUnit</title>
+	  	<para>
+	  	</para>
+	  	</section>
+	  	<section id="mockitoSection">>
+	  	<title>Mockito</title>
+	  	<para>
+	  	</para>
+	  	</section>
+	  	<section id="powermockSection">>
+	  	<title>Powermock</title>
+	  	<para>
+	  	</para>
+	  	</section>
+	  	<section id="arquillianSection">>
+	  	<title>Arquillian</title>
+	  	<para>
+	  	</para>
+	  	</section>
+  	</section>
 </chapter>
