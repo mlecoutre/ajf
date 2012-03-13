@@ -29,7 +29,7 @@ public class EclipseUtils {
 	 * Path name of the maven pref example file used to be copied (/ root
 	 * correspond to main/resource directory)
 	 */
-	private static final String MAVEC_PREF_EXAMPLE_FILE = "/MavenPrefs";
+	private static final String MAVEC_PREF_EXAMPLE_FILE = "/generationSources/MavenPrefs";
 
 	/*
 	 * .Project file : buildCommands names
@@ -280,13 +280,14 @@ public class EclipseUtils {
 			writer.add(xmlEventFactory.createStartElement("", "", "classpath"));
 
 			/*
-			 * Main and Test java packages exists only for CORE, UI, Lib, and WS
-			 * type projects
+			 * Main and Test java packages exists only for CORE, UI, Lib, WS and
+			 * COMPACT type projects
 			 */
 			if (ProjectUtils.PROJECT_TYPE_CORE.equals(projectType)
 					|| ProjectUtils.PROJECT_TYPE_UI.equals(projectType)
 					|| ProjectUtils.PROJECT_TYPE_WS.equals(projectType)
-					|| ProjectUtils.PROJECT_TYPE_LIB.equals(projectType)) {
+					|| ProjectUtils.PROJECT_TYPE_LIB.equals(projectType)
+					|| ProjectUtils.PROJECT_TYPE_COMPACT.equals(projectType)) {
 
 				// Classpath entry for src main java
 				addClassPathEntry(xmlEventFactory, writer, "src",

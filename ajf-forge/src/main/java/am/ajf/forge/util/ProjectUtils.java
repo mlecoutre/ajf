@@ -1,6 +1,7 @@
 package am.ajf.forge.util;
 
 import java.io.File;
+import java.util.Properties;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
@@ -10,8 +11,18 @@ import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.DependencyFacet;
 import org.jboss.forge.project.facets.MetadataFacet;
 
+/**
+ * This utility class implements some methods that deals with the project
+ * definition. Such as maven pom manipulation etc.
+ * 
+ * @author E019851
+ * 
+ */
 public class ProjectUtils {
 
+	/*
+	 * Public variables
+	 */
 	public static final String PROJECT_TYPE_PARENT = "parent";
 	public static final String PROJECT_TYPE_EAR = "ear";
 	public static final String PROJECT_TYPE_CORE = "core";
@@ -19,30 +30,43 @@ public class ProjectUtils {
 	public static final String PROJECT_TYPE_UI = "ui";
 	public static final String PROJECT_TYPE_LIB = "lib";
 	public static final String PROJECT_TYPE_CONFIG = "config";
-
 	public static final String PROJECT_TYPE_COMPACT = "compacted";
-
 	public static final String PROJECT_GROUPID_PREFIX = "am.projects";
+
+	/*
+	 * private variable
+	 */
+	private static final String PROJECT_WEB_PATH = "/src/main/webapp";
+	private static final String START_PROJECT_MILESTONE = "1.0.0-SNAPSHOT";
 
 	/**
 	 * Create an src/main/webapp/WEB-INF package for the input project
 	 * 
+	 * 
 	 * @param project
+	 * @return File corresponding to webApp
 	 */
-	public static void generateWebAppDirectory(Project project) {
+	public static File generateWebAppDirectory(Project project) {
 
-		File webAppPackagePath = new File(project.getProjectRoot()
+		System.out.println("** START - Generate webapp directory");
+
+		File webInfPackagePath = new File(project.getProjectRoot()
 				.getUnderlyingResourceObject().getAbsolutePath()
-				.concat("/src/main/webapp/WEB-INF"));
+				.concat(PROJECT_WEB_PATH));
 
-		if (!webAppPackagePath.exists()) {
-			webAppPackagePath.mkdirs();
+		if (!webInfPackagePath.exists()) {
+			webInfPackagePath.mkdirs();
 		}
+
+		System.out.println("** END - Generate webapp directory");
+
+		return webInfPackagePath;
 
 	}
 
 	/**
-	 * Return
+	 * Return the group ID of the procject. Project group id, suffixed by the
+	 * project global name
 	 * 
 	 * @param globalProjectName
 	 * @return
@@ -99,20 +123,10 @@ public class ProjectUtils {
 	public static void addInternalDependency(String globalProjectName,
 			Project project, String dependencyProjectType) {
 
-		// Get the MavenFacet in order to grab the pom
-		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
-		Model pom = mavenCoreFacet.getPOM();
+		String artifactId = globalProjectName + "-" + dependencyProjectType;
 
-		// Create the dependecy
-		Dependency dependency = new Dependency();
-		dependency.setGroupId(projectGroupId(globalProjectName));
-		dependency.setVersion("1.0.0-SNAPSHOT");
-		dependency.setArtifactId(globalProjectName + "-"
-				+ dependencyProjectType);
-
-		// Add the dependency to the pom
-		pom.addDependency(dependency);
-		mavenCoreFacet.setPOM(pom);
+		addDependency(project, projectGroupId(globalProjectName), artifactId,
+				START_PROJECT_MILESTONE);
 
 	}
 
@@ -145,6 +159,28 @@ public class ProjectUtils {
 	}
 
 	/**
+	 * Add a property to the pom.xml file of the project
+	 * 
+	 * @param project
+	 * @param propertyName
+	 * @param propertyValue
+	 */
+	public static void addPomProperty(Project project, String propertyName,
+			String propertyValue) {
+
+		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
+		Model pom = mavenCoreFacet.getPOM();
+
+		Properties properties = new Properties();
+		properties.setProperty(propertyName, propertyValue);
+		pom.setProperties(properties);
+
+		mavenCoreFacet.setPOM(pom);
+
+	}
+
+	
+	/**
 	 * Insert in the pom.xml of the input project, the parent corresponding to
 	 * the globalProjectname-parent according to the ajf convention
 	 * 
@@ -163,7 +199,7 @@ public class ProjectUtils {
 		parent.setArtifactId(globalProjectName + "-"
 				+ ProjectUtils.PROJECT_TYPE_PARENT);
 
-		parent.setVersion("1.0.0-SNAPSHOT");
+		parent.setVersion(START_PROJECT_MILESTONE);
 		parent.setRelativePath("../" + globalProjectName + "-"
 				+ ProjectUtils.PROJECT_TYPE_PARENT + "/pom.xml");
 

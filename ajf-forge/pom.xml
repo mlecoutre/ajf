@@ -12,9 +12,12 @@
 
 	<properties>
 		<forge.api.version>1.0.0.CR2</forge.api.version>
+		<slf4j.version>1.6.4</slf4j.version>
 	</properties>
 
 	<dependencies>
+
+		<!-- JBOSS FORGE API -->
 		<dependency>
 			<groupId>org.jboss.forge</groupId>
 			<artifactId>forge-shell-api</artifactId>
@@ -35,6 +38,16 @@
 			<type>pom</type>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- Begin : Logging dependencies -->
+
+		<!-- LOGGING <dependency> <groupId>ch.qos.logback</groupId> <artifactId>logback-classic</artifactId> 
+			<version>0.9.24</version> </dependency> <dependency> <groupId>org.slf4j</groupId> 
+			<artifactId>log4j-over-slf4j</artifactId> <version>1.6.1</version> </dependency> 
+			<dependency> <groupId>org.slf4j</groupId> <artifactId>jcl-over-slf4j</artifactId> 
+			<version>1.6.1</version> </dependency> <dependency> <groupId>org.slf4j</groupId> 
+			<artifactId>slf4j-api</artifactId> <version>1.6.1</version> </dependency> -->
+		<!-- end LOGGING -->
 
 		<!-- junit -->
 		<dependency>
@@ -59,7 +72,7 @@
 	</dependencies>
 
 	<build>
-	 <finalName>ajfForgePlugin</finalName>
+		<finalName>ajfForgePlugin</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

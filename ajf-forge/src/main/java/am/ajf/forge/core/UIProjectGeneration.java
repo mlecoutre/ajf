@@ -1,7 +1,10 @@
 package am.ajf.forge.core;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 
+import org.apache.maven.model.Dependency;
 import org.jboss.forge.parser.JavaParser;
 import org.jboss.forge.parser.java.JavaClass;
 import org.jboss.forge.project.Project;
@@ -15,11 +18,17 @@ import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
 import am.ajf.forge.util.ProjectUtils;
+import am.ajf.forge.util.UIProjectUtils;
 
 public class UIProjectGeneration {
 
+	// private static final Logger logger = LoggerFactory
+	// .getLogger(UIProjectGeneration.class);
+
 	/**
-	 * Generate AJF UI Project
+	 * Generate AJF UI Project. The isCompact input param determine if this
+	 * current UI project will be part of an exploded AJF project (false) or a
+	 * compact ajf-project
 	 * 
 	 * @param globalProjectName
 	 * @param projectFinalName
@@ -55,15 +64,12 @@ public class UIProjectGeneration {
 		// This part is done only when an exploded ajf project is beeing
 		// generated
 		if (!isCompact) {
-
 			// Set the pom parent
 			ProjectUtils.setPomParent(globalProjectName, project);
-
 			/*
 			 * Set internal dependencies linked to other project of the
 			 * AJF-solution
 			 */
-
 			ProjectUtils.addInternalDependency(globalProjectName, project,
 					ProjectUtils.PROJECT_TYPE_CONFIG);
 			ProjectUtils.addInternalDependency(globalProjectName, project,
@@ -73,42 +79,45 @@ public class UIProjectGeneration {
 		/*
 		 * Create a java class with a method
 		 */
-		generateManagedBeanClass(javaPackage, project);
+		// generateManagedBeanClass(javaPackage, project);
 
 		try {
 			/*
 			 * WEB part
 			 */
-			// // Create webapp/Webinf directories
-			// String projectDirectory = project.getProjectRoot()
-			// .getFullyQualifiedName();
-			// File webAppDir = new File(projectDirectory + "/main/webapp");
-			//
-			// if (!webAppDir.exists())
-			// webAppDir.mkdirs();
-			//
-			// // Web-in template
-			// File mytemplateDir = new File(webAppDir.getAbsolutePath().concat(
-			// "/WEB-INF/templates"));
-			//
-			// if (!mytemplateDir.exists())
-			// mytemplateDir.mkdirs();
-			//
-			// // SimpleLayout - Copy simpleLayoutFile to destination project
-			// File mySimpleLayoutFile = new
-			// File(CreateProject.class.getResource(
-			// "SimpleLayout.xhtml").toURI());
-			// FileUtils.copyFileToDirectory(mySimpleLayoutFile, mytemplateDir);
+			System.out.println("** START - WEB PART");
+			// Create webapp/Webinf directories
+			File webAppDir = ProjectUtils.generateWebAppDirectory(project);
+
+			System.out.println("-- DEBUG : webappDir = "
+					+ webAppDir.getAbsolutePath());
+
+			// Unzip webapp resources
+			UIProjectUtils.unzipFile("UIResources.zip", webAppDir);
 
 			/*
-			 * JSF Dependency
+			 * Maven Dependencies TODO: use an XML conf file
 			 */
-			System.out.println("Adding JSF dependencies...");
-			ProjectUtils.addDependency(project, "javax.faces", "jsf-api",
-					"2.0.3");
-			ProjectUtils.addDependency(project, "javax.faces", "jsf-impl",
-					"2.0.3");
-			System.out.println("JSF dependencies added.");
+			System.out.println("** START - Adding dependencies...");
+			UIProjectUtils.setUIDependencies(project);
+
+			System.out.println("** Dependencies added.");
+
+			System.out.println("** START - Create TOMCAT Plugin");
+			UIProjectUtils.setTomCatPlugin(project);
+			System.out.println("** END - Create TOMCAT Plugin");
+
+			// Unzip test resources to project
+			System.out.println("** START - extracting test resources");
+			ResourceFacet resource = project.getFacet(ResourceFacet.class);
+			File resourceFolder = resource.getTestResourceFolder()
+					.getUnderlyingResourceObject();
+			System.out.println("Test Resource directory : "
+					+ resourceFolder.getAbsolutePath());
+			UIProjectUtils.unzipFile("UIResourcesTest.zip", resourceFolder);
+			System.out.println("** END - Test resources extracted");
+
+			System.out.println("** END - WEB PART");
 
 		} catch (Exception e) {
 
