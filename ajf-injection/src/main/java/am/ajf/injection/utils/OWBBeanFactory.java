@@ -20,7 +20,7 @@ import am.ajf.core.utils.BeanFactory;
 public class OWBBeanFactory 
 	implements BeanFactory {
 	
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private Logger logger = LoggerFactory.getLogger(OWBBeanFactory.class);
 	
 	private static ContainerLifecycle container;
 	private static BeanManager beanManager;
@@ -59,9 +59,13 @@ public class OWBBeanFactory
 		
 		WebBeansContext beansContext = WebBeansContext.currentInstance();
 		container = beansContext.getService(ContainerLifecycle.class);
-		container.startApplication(null);
-		
 		beanManager = container.getBeanManager();
+		
+		try {
+			container.startApplication(null);
+		} catch (Exception e) {
+			logger.warn("Exception occured while starting the application.", e);
+		}			
 		
 	}
 

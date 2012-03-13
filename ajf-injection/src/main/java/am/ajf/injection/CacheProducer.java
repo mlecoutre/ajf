@@ -45,7 +45,7 @@ public class CacheProducer {
 		}
 		else {
 		
-			cacheManager = CacheManagerFactory.getFirstCacheManager();
+			cacheManager = CacheManagerFactory.getCacheManager("simple");
 			cache = cacheManager.getCache();
 				
 		}

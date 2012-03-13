@@ -1,6 +1,5 @@
 package am.ajf.injection;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
@@ -9,13 +8,13 @@ import org.apache.commons.configuration.Configuration;
 import am.ajf.core.ApplicationContext;
 import am.ajf.core.mail.MailSender;
 import am.ajf.core.mail.impl.SimpleMailSenderImpl;
+import am.ajf.core.utils.BeanUtils;
 
 import com.google.common.base.Strings;
 
-@ApplicationScoped
 public class MailSenderProducer {
 	
-	private static final String MAIL_SESSION_JNDI_NAME = "mail/Session";
+	private static final String DEFAULT_MAIL_SESSION_JNDI_NAME = "mail/Session";
 	private static final String MAIL_SENDER_JNDI_NAME_PROPERTY = "mailSender.jndiName";
 	
 	public MailSenderProducer() {
@@ -26,7 +25,7 @@ public class MailSenderProducer {
 	public MailSender produceMailSender(InjectionPoint ip) {
 		
 		Configuration config = ApplicationContext.getConfiguration();
-		String jndiName = config.getString(MAIL_SENDER_JNDI_NAME_PROPERTY, MAIL_SESSION_JNDI_NAME);
+		String jndiName = config.getString(MAIL_SENDER_JNDI_NAME_PROPERTY, DEFAULT_MAIL_SESSION_JNDI_NAME);
 		if (Strings.isNullOrEmpty(jndiName)) {
 			String who = ip.getMember().getDeclaringClass().getName()
 				.concat("#").concat(ip.getMember().getName());
@@ -37,7 +36,7 @@ public class MailSenderProducer {
 					.concat("' is null or empty."));
 		}
 		
-		SimpleMailSenderImpl mailSenderImpl = new SimpleMailSenderImpl();
+		SimpleMailSenderImpl mailSenderImpl = BeanUtils.newInstance(SimpleMailSenderImpl.class);
 		mailSenderImpl.setJndiName(jndiName);
 		
 		return mailSenderImpl;
