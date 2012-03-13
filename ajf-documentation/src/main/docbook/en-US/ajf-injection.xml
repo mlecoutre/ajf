@@ -31,35 +31,120 @@
 	<section>
 		<title>Injectable components</title>
 		<para>
-			
+			Some AJF components are directly injectables in Managed Beans.
 		</para>
 		<section>
 			<title>Inject Logger</title>
 			<para></para>
+			<programlisting language="Java" role="Java"><![CDATA[
+	import javax.inject.Inject;
+	
+	import org.slf4j.Logger;
+	
+	...
+	
+	@Inject
+	Logger myLogger;
+			]]></programlisting>
 		</section>
 		<section>
 			<title>Inject AuditData</title>
 			<para></para>
+			<programlisting language="Java" role="Java"><![CDATA[
+	import javax.inject.Inject;
+	
+	import am.ajf.core.datas.AuditData;
+	
+	...
+	
+	@Inject
+	AuditData auditData;
+			]]></programlisting>
 		</section>
 		<section>
 			<title>Inject Configuration</title>
 			<para></para>
+			<programlisting language="Java" role="Java"><![CDATA[
+	import javax.inject.Inject;
+	
+	import org.apache.commons.configuration.Configuration;
+	
+	...
+	
+	@Inject
+	Configuration myConfig;
+			]]></programlisting>
 		</section>
 		<section>
 			<title>Inject Property</title>
 			<para></para>
-		</section>
-		<section>
-			<title>Inject Cache</title>
-			<para></para>
+			<programlisting language="Java" role="Java"><![CDATA[
+	import javax.inject.Inject;
+	
+	import am.ajf.injection.annotation.Property;
+	
+	...
+	
+	@Inject @Property("mySettingProperty")
+	String myProp1;
+	
+	@Inject 
+	@Property(value="mySettingProperty", defaultValue="aDefaultValue")
+	private String myProp2;
+			]]></programlisting>
 		</section>
 		<section>
 			<title>Inject MailSender</title>
 			<para></para>
+			<programlisting language="Java" role="Java"><![CDATA[
+	import javax.inject.Inject;
+	
+	import am.ajf.core.mail.MailSender;
+	
+	...
+	
+	@Inject
+	MailSender myMailSender;
+			]]></programlisting>
 		</section>
 		<section>
 			<title>Inject JTA UserTransaction</title>
 			<para></para>
+			<programlisting language="Java" role="Java"><![CDATA[
+	import javax.inject.Inject;
+	
+	import javax.transaction.UserTransaction;
+	
+	...
+	
+	@Inject
+	UserTransaction myUserTx;
+			]]></programlisting>
+		</section>
+		<section>
+			<title>Inject Cache</title>
+			<para></para>
+			<programlisting language="Java" role="Java"><![CDATA[
+	import javax.inject.Inject;
+	
+	...
+	
+	@Inject 
+	private Cache defaultCache;
+	
+	@Inject 
+	@am.ajf.injection.annotation.Cache(cacheManagerName="simple")
+	private Cache defaultCacheFromACacheManager;
+	
+	@Inject 
+	@am.ajf.injection.annotation.Cache(cacheName="default")
+	private Cache aCacheFromDefaultCacheManager
+	
+	@Inject 
+	@am.ajf.injection.annotation.Cache(cacheManagerName="guava", 
+		cacheName="aCustomCache")
+	private Cache aCacheFromACacheManager;	
+			]]></programlisting>
 		</section>
 	</section>
 	<section>
