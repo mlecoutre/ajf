@@ -10,6 +10,8 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import org.slf4j.Logger;
 
+import com.google.common.base.Strings;
+
 /**
  * MonitoringInterceptor. Push elasped time for the method invocation in the
  * logs.
@@ -25,6 +27,7 @@ public class MonitoringInterceptor implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	private final Logger logger = LoggerFactory
 			.getLogger(MonitoringInterceptor.class);
 
@@ -48,8 +51,13 @@ public class MonitoringInterceptor implements Serializable {
 	public Object monitor(InvocationContext ctx) throws Throwable {
 
 		Class<? extends Object> targetClass = ctx.getTarget().getClass();
+		
 		String serviceName = ClassUtils
 				.processServiceInterfaceName(targetClass);
+		if (Strings.isNullOrEmpty(serviceName)) {
+			serviceName = targetClass.getSimpleName();
+		}
+		
 		String operation = ctx.getMethod().getName();
 
 		logger.trace(">> ".concat(serviceName).concat("#").concat(operation)
