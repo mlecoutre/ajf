@@ -10,12 +10,9 @@
  *******************************************************************************/
 package am.ajf.core.mail.impl;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -23,7 +20,6 @@ import java.util.List;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
-import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.Address;
 import javax.mail.Message;
@@ -52,7 +48,7 @@ public class SimpleMailSenderImpl implements MailSender {
 
 	private static final Logger logger = LoggerFactory.getLogger(SimpleMailSenderImpl.class);
 
-	private static final String SMTP_HOST_PROPERTY = "applicatifs.appliarmony.net";
+	private static final String DEFAULT_SMTP_HOST_PROPERTY = "applicatifs.appliarmony.net";
 	private static final int MAX_FILES_PROPERTY = 5;
 	private static final int MAX_FILES_SIZE_PROPERTY = 4;
 	private static final String DEFAULT_UPLOAD_TEMP_FILE_DIRECTORY = "mailSenderAttachmentsTemp/";
@@ -63,7 +59,7 @@ public class SimpleMailSenderImpl implements MailSender {
 
 	private String jndiName = null;
 	
-	private String smtpServer = SMTP_HOST_PROPERTY;
+	private String smtpServer = DEFAULT_SMTP_HOST_PROPERTY;
 	private long connectionTimeout = -1;
 	private long timeout = -1;
 	
@@ -467,34 +463,4 @@ public class SimpleMailSenderImpl implements MailSender {
 		uploadTempFileDirectory = string;
 	}
 	
-	/*
-     * Inner class to act as a JAF datasource to send HTML e-mail content
-     */
-    static class HTMLDataSource implements DataSource {
-        private String html;
-
-        public HTMLDataSource(String htmlString) {
-            html = htmlString;
-        }
-
-        // Return html string in an InputStream.
-        // A new stream must be returned each time.
-        public InputStream getInputStream() throws IOException {
-            if (html == null) throw new IOException("Null HTML");
-            return new ByteArrayInputStream(html.getBytes());
-        }
-
-        public OutputStream getOutputStream() throws IOException {
-            throw new IOException("This DataHandler cannot write HTML");
-        }
-
-        public String getContentType() {
-            return "text/html";
-        }
-
-        public String getName() {
-            return "JAF text/html dataSource to send e-mail only";
-        }
-    }
-
 }
