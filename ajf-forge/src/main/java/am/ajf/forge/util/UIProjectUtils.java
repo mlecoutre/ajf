@@ -1,12 +1,12 @@
 package am.ajf.forge.util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -17,16 +17,14 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.events.XMLEvent;
 
-import org.apache.maven.model.Activation;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Exclusion;
 import org.apache.maven.model.Model;
-import org.apache.maven.model.Plugin;
-import org.apache.maven.model.Profile;
-import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.jboss.forge.maven.MavenCoreFacet;
+import org.jboss.forge.parser.JavaParser;
+import org.jboss.forge.parser.java.JavaClass;
 import org.jboss.forge.project.Project;
-import static am.ajf.forge.lib.ForgeConstants.*;
+import org.jboss.forge.project.facets.JavaSourceFacet;
 
 public class UIProjectUtils {
 
@@ -101,160 +99,37 @@ public class UIProjectUtils {
 	}
 
 	/**
-	 * Set to the current project's pom.xml, the tomcat plugin with all it's
-	 * dependencies defined in the resources tomcatPlugin.xml
+	 * Uses a model reousrce pom.xml file and sets the dependencies, properties,
+	 * profiles and the whole build sections to the generated project's pom.xml
+	 * file
 	 * 
 	 * @param project
-	 * @throws IOException
+	 * @param resourcePomFile
+	 * @throws Exception
 	 */
-	public static void setTomCatPlugin(Project project) throws IOException {
+	public static void setUIPomFromFile(Project project,
+			String resourcePomFile, boolean isCompacted) throws Exception {
 
-		try {
-			MavenCoreFacet mavenCoreFacet = project
-					.getFacet(MavenCoreFacet.class);
-			Model pom = mavenCoreFacet.getPOM();
-
-			Plugin plugin = new Plugin();
-			plugin.setGroupId(TOMCAT_PLUGIN_GROUPID);
-			plugin.setArtifactId(TOMCAT_PLUGIN_ARTIFACTID);
-			plugin.setVersion(TOMCAT_PLUGIN_VERSION);
-
-			/*
-			 * Plugin configuration
-			 */
-			Xpp3Dom config = new Xpp3Dom("configuration");
-
-			// Port
-			Xpp3Dom configPort = new Xpp3Dom("port");
-			configPort.setValue("8080");
-			config.addChild(configPort);
-			configPort = null;
-
-			// contextFile
-			Xpp3Dom configContextFile = new Xpp3Dom(("contextFile"));
-			configContextFile.setValue(TOMCAT_DEPENDENCIES_FILE);
-			config.addChild(configContextFile);
-			configContextFile = null;
-
-			// warFile
-			Xpp3Dom configWarFile = new Xpp3Dom(("warFile"));
-			configWarFile.setValue("target/${project.artifactId}.war");
-			config.addChild(configWarFile);
-			configWarFile = null;
-
-			// Path
-			Xpp3Dom configPath = new Xpp3Dom(("path"));
-			configPath.setValue("/${project.artifactId}");
-			config.addChild(configPath);
-			configPath = null;
-
-			/*
-			 * Plugin dependencies
-			 */
-			List<Dependency> dependencyList = manageDependenciesFromFile(TOMCAT_DEPENDENCIES_FILE);
-			for (Dependency dep : dependencyList) {
-				plugin.addDependency(dep);
-			}
-
-			// Add plugin to the pom.xml
-			List<Plugin> plugins = new ArrayList<Plugin>();
-			plugins.add(plugin);
-			pom.getBuild().setPlugins(plugins);
-			mavenCoreFacet.setPOM(pom);
-
-		} catch (XMLStreamException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	/**
-	 * Set TOMCAT7 and WAS 7 profiles to the input project's pom.xml. XML
-	 * resources files are used to extract each profile's dependencies
-	 * 
-	 * @param project
-	 * @throws XMLStreamException
-	 */
-	public static void setProfiles(Project project) throws XMLStreamException {
+		Model resourcePom = ProjectUtils.getPomFromFile(resourcePomFile);
 
 		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
-		Model pom = mavenCoreFacet.getPOM();
+		Model generatedPom = mavenCoreFacet.getPOM();
 
-		List<Profile> profiles = new ArrayList<Profile>();
+		// Set Properties only in compacted mode
+		if (isCompacted)
+			generatedPom.setProperties(resourcePom.getProperties());
 
-		/*
-		 * TOMCAT 7 PROFILE
-		 */
-		Profile tomCatProfile = new Profile();
-		tomCatProfile.setId("TOMCAT7");
-		Activation tomcatProfileActivation = new Activation();
-		tomcatProfileActivation.setActiveByDefault(true);
-		tomCatProfile.setActivation(tomcatProfileActivation);
+		// Set dependencies
+		generatedPom.setDependencies(resourcePom.getDependencies());
 
-		List<Dependency> tomcatProfileDeps = manageDependenciesFromFile(TOMCAT_PLUGIN_PROFILE_DEPENDENCIES_FILE);
+		// set Profiles
+		generatedPom.setProfiles(resourcePom.getProfiles());
 
-		for (Dependency dep : tomcatProfileDeps) {
-			tomCatProfile.addDependency(dep);
-		}
+		// set build Plugins
+		// generatedPom.getBuild().setPlugins(resourcePom.getBuild().getPlugins());
+		generatedPom.setBuild(resourcePom.getBuild());
 
-		profiles.add(tomCatProfile);
-		tomCatProfile = null;
-
-		/*
-		 * WAS 7 Profile
-		 */
-		Profile wasProfile = new Profile();
-		wasProfile.setId("WAS7");
-		Activation activation = new Activation();
-		activation.setActiveByDefault(false);
-		wasProfile.setActivation(activation);
-
-		List<Dependency> wasProfileDeps = manageDependenciesFromFile(WAS_PROFILE_DEPENDENCIES_FILE);
-
-		for (Dependency dep : wasProfileDeps) {
-			wasProfile.addDependency(dep);
-		}
-		profiles.add(wasProfile);
-		wasProfile = null;
-
-		/*
-		 * Add Profiles to project's pom.xml
-		 */
-		pom.setProfiles(profiles);
-		mavenCoreFacet.setPOM(pom);
-
-	}
-
-	/**
-	 * Browse resources xml file which describe all the needed dependencies for
-	 * a UI project. Extracts and set dependencies to current project's pom.xml
-	 * 
-	 * @param project
-	 * @throws FactoryConfigurationError
-	 * @throws XMLStreamException
-	 */
-	public static void setUIDependencies(Project project)
-			throws FactoryConfigurationError, XMLStreamException {
-
-		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
-		Model pom = mavenCoreFacet.getPOM();
-
-		// Add properties to the pom
-		Properties properties = new Properties();
-		properties.setProperty("ajfversion", "2.1.0-SNAPSHOT");
-		properties.setProperty("openwebbeansVersion", "1.1.3");
-		pom.setProperties(properties);
-
-		// Add dependency list from resource XML file
-		List<Dependency> dependencies = UIProjectUtils
-				.manageDependenciesFromFile("UIprojectDependencies.xml");
-
-		for (Dependency dep : dependencies) {
-			pom.addDependency(dep);
-		}
-
-		mavenCoreFacet.setPOM(pom);
+		mavenCoreFacet.setPOM(generatedPom);
 	}
 
 	/**
@@ -319,21 +194,6 @@ public class UIProjectUtils {
 		}
 
 		return dependencyList;
-	}
-
-	/**
-	 * Return event name whatever it's type
-	 * 
-	 * @param event
-	 */
-	private static String getEventValue(XMLEvent event) {
-		if (event.isStartElement())
-			return event.asStartElement().getName().toString();
-		if (event.isEndElement())
-			return event.asEndElement().getName().toString();
-		if (event.isCharacters())
-			return event.asCharacters().getData();
-		return null;
 	}
 
 	/**
@@ -477,6 +337,55 @@ public class UIProjectUtils {
 		} else {
 
 			return false;
+		}
+
+	}
+
+	/**
+	 * Generate a managed bean class to the current project. It uses as package
+	 * name the javaPackage input params, suffixed of web.controllers :
+	 * 
+	 * 'javaPackage'.web.controllers.
+	 * 
+	 * @param javaPackage
+	 * @param project
+	 * @throws Exception
+	 * @throws FileNotFoundException
+	 */
+	public static void generateManagedBeanClass(String javaPackage,
+			Project project) throws Exception {
+
+		try {
+			System.out.println("** DEBUG : START generating java class for UI");
+
+			JavaSourceFacet javaSourcefacet = project
+					.getFacet(JavaSourceFacet.class);
+
+			// Create a java class
+			JavaClass javaclass = JavaParser
+					.create(JavaClass.class)
+					.setPackage(javaPackage + ".web.controllers")
+					.setName("ExempleMBean")
+					.addMethod(
+							"public static void exempleMBeanMethod(String[] args) {}")
+					.setBody(
+							"System.out.println(\"Hi there! This is an AJF Project UI method ")
+					.getOrigin();
+
+			// Add the annotation for JSF2 managed bean
+			javaclass.addAnnotation("ManagedBean");
+
+			javaclass.addImport("javax.faces.bean.ManagedBean");
+
+			// Save the java class in the project
+			javaSourcefacet.saveJavaSource(javaclass);
+
+			System.out.println("**DEBUG : END Java class MBean generated.");
+
+		} catch (Exception e) {
+			String message = "Error when generating example java Managed bean file";
+			System.err.println("** ERROR : ".concat(message));
+			throw new Exception(message, e);
 		}
 
 	}

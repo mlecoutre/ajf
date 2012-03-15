@@ -44,17 +44,22 @@ public class ForgeConstants {
 	public static final String UI_TEST_RESOURCES = "UIResourcesTest.zip";
 
 	/*
-	 * TOMCAT PLUGIN
+	 * Resources xml file
 	 */
-	public static final String TOMCAT_PLUGIN_GROUPID = "org.apache.tomcat.maven";
-	public static final String TOMCAT_PLUGIN_ARTIFACTID = "tomcat7-maven-plugin";
-	public static final String TOMCAT_PLUGIN_VERSION = "2.0-beta-1";
-	public static final String TOMCAT_DEPENDENCIES_FILE = "tomcatPlugin.xml";
-	public static final String TOMCAT_PLUGIN_PROFILE_DEPENDENCIES_FILE = "tomcatProfile.xml";
-	public static final String TOMCAT_PLUGIN_GENERATED_CONTEXTFILEPATH = "src/test/resources/tomcat_context.xml";
+	public static final String UI_MODEL_POM_FILE = "pom-ui.xml";
+	public static final String AJF_DEPS_MODEL_FILE = "ajf-dependencies.xml";
 
 	/*
-	 * WAS PLUGIN
+	 * AJF ArtifactIds
 	 */
-	public static final String WAS_PROFILE_DEPENDENCIES_FILE = "wasProfile.xml";
+	public static final String AJF_CORE = "ajf-core";
+	public static final String AJF_INJECTION = "ajf-injection";
+	public static final String AJF_MONITORING = "ajf-monitoring";
+	public static final String AJF_NOTIF = "ajf-notif";
+	public static final String AJF_PERSISTENCE = "ajf-persistence";
+	public static final String AJF_REMOTING = "ajf-remoting";
+	public static final String AJF_SECURITY = "ajf-SECURITY";
+	public static final String AJF_TESTING = "ajf-testing";
+	public static final String AJF_WEB = "ajf-web";
+
 }

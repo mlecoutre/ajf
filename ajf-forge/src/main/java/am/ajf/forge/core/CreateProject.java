@@ -1,6 +1,6 @@
 package am.ajf.forge.core;
 
-import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_COMPACT;
+import static am.ajf.forge.lib.ForgeConstants.*;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_EAR;
@@ -18,11 +18,8 @@ import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
 import org.apache.maven.model.Scm;
 import org.jboss.forge.maven.MavenCoreFacet;
-import org.jboss.forge.parser.JavaParser;
-import org.jboss.forge.parser.java.JavaClass;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.DependencyFacet;
-import org.jboss.forge.project.facets.JavaSourceFacet;
 import org.jboss.forge.project.facets.MetadataFacet;
 import org.jboss.forge.project.facets.PackagingFacet;
 import org.jboss.forge.project.facets.ResourceFacet;
@@ -83,32 +80,38 @@ public class CreateProject {
 
 		} else if (PROJECT_TYPE_CORE.equals(projectType)) {
 
-			project = generateProjectCore(globalProjectName, projectFinalName,
-					javaPackage, projectFactory, projectType, dir);
+			CoreProjectGeneration coreProjectGen = new CoreProjectGeneration();
+			project = coreProjectGen.generateCoreAjfProject(globalProjectName,
+					projectFinalName, javaPackage, projectFactory, projectType,
+					dir);
 
 		} else if (PROJECT_TYPE_UI.equals(projectType)) {
 
-			UIProjectGeneration uiProject = new UIProjectGeneration();
+			WebProjectGeneration uiProject = new WebProjectGeneration();
 
-			project = uiProject.generateProjectUI(globalProjectName,
+			project = uiProject.generateWebAjfProject(globalProjectName,
 					projectFinalName, javaPackage, projectFactory, projectType,
 					dir, false);
 
 		} else if (PROJECT_TYPE_LIB.equals(projectType)) {
 
-			project = generateProjectLib(globalProjectName, projectFinalName,
-					javaPackage, projectFactory, projectType, dir);
+			LibProjectGeneration libProjectGen = new LibProjectGeneration();
+			project = libProjectGen.generateLibAjfProject(globalProjectName,
+					projectFinalName, javaPackage, projectFactory, projectType,
+					dir);
 
 		} else if (PROJECT_TYPE_WS.equals(projectType)) {
 
-			project = generateProjectWS(globalProjectName, projectFinalName,
-					javaPackage, projectFactory, projectType, dir);
+			WebProjectGeneration uiProject = new WebProjectGeneration();
+			project = uiProject.generateWebAjfProject(globalProjectName,
+					projectFinalName, javaPackage, projectFactory, projectType,
+					dir, false);
 
 		} else if (PROJECT_TYPE_COMPACT.equals(projectType)) {
 
-			UIProjectGeneration uiProject = new UIProjectGeneration();
+			WebProjectGeneration uiProject = new WebProjectGeneration();
 
-			project = uiProject.generateProjectUI(globalProjectName,
+			project = uiProject.generateWebAjfProject(globalProjectName,
 					projectFinalName, javaPackage, projectFactory, projectType,
 					dir, true);
 
@@ -150,24 +153,6 @@ public class CreateProject {
 	}
 
 	/**
-	 * Generate the .Settings/org.maven.ide.eclipse.prefs file containing the
-	 * preferences for maven dealing with the current project (for example the
-	 * maven profile)
-	 * 
-	 * @param projectRootDirectory
-	 * @throws Exception
-	 */
-	private void generateMavenPrefsFile(String projectRootDirectory)
-			throws Exception {
-		try {
-			EclipseUtils.generateEclipseMavenPrefFile(projectRootDirectory);
-		} catch (Exception e) {
-			throw new Exception(
-					"Error occured during the generation of the MAVEN preferences file, containing the preferences dealing with maven such as the profile.");
-		}
-	}
-
-	/**
 	 * Generate the .project file needed to import the current project in
 	 * Eclipse
 	 * 
@@ -203,11 +188,12 @@ public class CreateProject {
 	 * @param projectFinalName
 	 * @param dir
 	 * @return Project object corresponding to the generated project
+	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	private Project generateProjectParent(String globalProjectName,
 			String javaPackage, ProjectFactory projectFactory,
-			String projectFinalName, DirectoryResource dir) {
+			String projectFinalName, DirectoryResource dir) throws Exception {
 
 		Project project;
 		project = projectFactory.createProject(dir, DependencyFacet.class,
@@ -231,11 +217,17 @@ public class CreateProject {
 
 		// Set am/parent
 		Parent parent = new Parent();
-		parent.setGroupId("am.parent");
-		parent.setArtifactId("standard");
-		parent.setVersion("2.0.7");
+		parent.setGroupId(STANDARD_PARENT_GROUPID);
+		parent.setArtifactId(STANDARD_PARENT_ARTIFACTID);
+		parent.setVersion(STANDARD_PARENT_VERSION);
 
 		pom.setParent(parent);
+
+		// Add properties
+		Model resourcePom = ProjectUtils.getPomFromFile(AJF_DEPS_MODEL_FILE);
+
+		// Set Properties
+		pom.setProperties(resourcePom.getProperties());
 
 		mavenCoreFacet.setPOM(pom);
 
@@ -377,159 +369,6 @@ public class CreateProject {
 
 		ProjectUtils.setInternalPomParent(globalProjectName, project);
 		return project;
-	}
-
-	/**
-	 * 
-	 * Construction of an AJF core type project
-	 * 
-	 * @param projectFinalName
-	 * @param javaPackage
-	 * @param projectFactory
-	 * @param projectType
-	 * @param dir
-	 * @return Project object corresponding to the generated project
-	 */
-	@SuppressWarnings("unchecked")
-	private Project generateProjectCore(String globalProjectName,
-			String projectFinalName, String javaPackage,
-			ProjectFactory projectFactory, String projectType,
-			DirectoryResource dir) {
-
-		Project project;
-		project = projectFactory
-				.createProject(dir, DependencyFacet.class, MetadataFacet.class,
-						JavaSourceFacet.class, ResourceFacet.class);
-
-		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
-				project);
-
-		// Packaging
-		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
-		packaging.setPackagingType(PackagingType.JAR);
-
-		// Set name of the project
-		packaging.setFinalName(projectFinalName);
-
-		System.out.println("--> start generating java source");
-		try {
-			JavaSourceFacet javaSourcefacet = project
-					.getFacet(JavaSourceFacet.class);
-
-			// Create a main with some code in a package
-			javaSourcefacet
-					.saveJavaSource(JavaParser
-							.create(JavaClass.class)
-							.setPackage(javaPackage + ".dao")
-							.setName("ExempleDAO")
-							.addMethod(
-									"public static void exempleDaoMethod(String[] args) {}")
-							.setBody(
-									"System.out.println(\"Hi there! This is an AJF Project "
-											+ projectFinalName + " "
-											+ projectType + " component.\");")
-							.getOrigin());
-
-			System.out.println("--> End generating java source");
-
-		} catch (Exception e) {
-
-			System.out.println("Error occured Exception : " + e.toString());
-		}
-
-		// Set the pom parent
-		ProjectUtils.setInternalPomParent(globalProjectName, project);
-
-		/*
-		 * Set dependencies
-		 */
-		ProjectUtils.addInternalDependency(globalProjectName, project,
-				PROJECT_TYPE_CONFIG);
-
-		return project;
-	}
-
-	/**
-	 * 
-	 * Construction of an AJF LIB type project
-	 * 
-	 * @param globalProjectName
-	 * @param projectFinalName
-	 * @param javaPackage
-	 * @param projectFactory
-	 * @param projectType
-	 * @param dir
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private Project generateProjectLib(String globalProjectName,
-			String projectFinalName, String javaPackage,
-			ProjectFactory projectFactory, String projectType,
-			DirectoryResource dir) {
-
-		Project project;
-		project = projectFactory
-				.createProject(dir, DependencyFacet.class, MetadataFacet.class,
-						JavaSourceFacet.class, ResourceFacet.class);
-
-		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
-				project);
-
-		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
-		packaging.setPackagingType(PackagingType.JAR);
-
-		// Set name of the project
-		packaging.setFinalName(projectFinalName);
-
-		// Set the pom parent
-		ProjectUtils.setInternalPomParent(globalProjectName, project);
-
-		return project;
-
-	}
-
-	/**
-	 * 
-	 * Construction of an AJF LIB type project
-	 * 
-	 * @param globalProjectName
-	 * @param projectFinalName
-	 * @param javaPackage
-	 * @param projectFactory
-	 * @param projectType
-	 * @param dir
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private Project generateProjectWS(String globalProjectName,
-			String projectFinalName, String javaPackage,
-			ProjectFactory projectFactory, String projectType,
-			DirectoryResource dir) {
-
-		Project project;
-		project = projectFactory
-				.createProject(dir, DependencyFacet.class, MetadataFacet.class,
-						JavaSourceFacet.class, ResourceFacet.class);
-
-		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
-				project);
-
-		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
-		packaging.setPackagingType(PackagingType.WAR);
-
-		// Set name of the project
-		packaging.setFinalName(projectFinalName);
-
-		// Set the pom parent
-		ProjectUtils.setInternalPomParent(globalProjectName, project);
-
-		/*
-		 * Create an src/main/webapp package
-		 */
-		ProjectUtils.generateWebAppDirectory(project);
-
-		return project;
-
 	}
 
 	/**

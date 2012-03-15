@@ -6,11 +6,14 @@ import static am.ajf.forge.lib.ForgeConstants.PROJECT_WEB_PATH;
 import static am.ajf.forge.lib.ForgeConstants.START_PROJECT_MILESTONE;
 
 import java.io.File;
+import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.DependencyFacet;
@@ -117,6 +120,40 @@ public class ProjectUtils {
 
 		addDependency(project, projectGroupId(globalProjectName), artifactId,
 				START_PROJECT_MILESTONE);
+
+	}
+
+	/**
+	 * 
+	 * @param resourcePomFile
+	 * @return
+	 * @throws Exception
+	 */
+	public static Model getPomFromFile(String resourcePomFile) throws Exception {
+
+		try {
+
+			InputStream pomModelIs = ProjectUtils.class.getClassLoader()
+					.getResourceAsStream(resourcePomFile);
+			Model pom = new Model();
+			pom = new MavenXpp3Reader().read(pomModelIs);
+			return pom;
+
+		} catch (Exception e) {
+
+			String message = "Error occured while readim reource pom File :"
+					.concat(resourcePomFile);
+
+			System.out.println("** ERROR : ".concat(message));
+
+			throw new Exception(message, e);
+
+		}
+
+		// if (myPomFile.exists())
+		// myPomFile.delete();
+		//
+		// myPomFile = null;
 
 	}
 
@@ -245,4 +282,45 @@ public class ProjectUtils {
 
 	}
 
+	/**
+	 * 
+	 * Set all AJF dependencies to the input pom.xml, corresponding to input ajf
+	 * artifact ids
+	 * 
+	 * @param ajfDependenciesArtifactIds
+	 * @param sourceFileName
+	 * @param pom
+	 * @throws Exception
+	 */
+	public static void addAjfDependenciesToPom(
+			List<String> ajfDependenciesArtifactIds, String sourceFileName,
+			Model pom) throws Exception {
+
+		try {
+			InputStream mavenDepsIs = ProjectUtils.class.getClassLoader()
+					.getResourceAsStream(sourceFileName);
+
+			Model ajfDepsModel = new MavenXpp3Reader().read(mavenDepsIs);
+
+			List<Dependency> deps = ajfDepsModel.getDependencies();
+
+			for (String ajfDepName : ajfDependenciesArtifactIds) {
+				for (Dependency dep : deps) {
+					if (ajfDepName.equals(dep.getArtifactId())) {
+
+						pom.addDependency(dep);
+						break;
+
+					}
+				}
+			}
+
+		} catch (Exception e) {
+
+			System.err
+					.println("**ERROR : exception occured while setting AJF dependencies to project");
+			throw e;
+
+		}
+	}
 }

@@ -85,16 +85,16 @@ public class CreateSolutionPlugin implements
 		if (AJF_PROJECT_TYPE_SIMPLE.equals(projectType)) {
 
 			String projectName = shell.prompt("Project Name :");
-			String projectDirectory = shell.prompt("Project directory :");
-
-			createAjfSolutionCompacted(projectName, projectDirectory, out);
+			String projectDirectory = promptProjectDirectory("Project directory (empty is current directory) :");
+			if (!"exit".equals(projectDirectory))
+				createAjfSolutionCompacted(projectName, projectDirectory, out);
 
 		} else if (AJF_PROJECT_TYPE_COMPLEX.equals(projectType)) {
 
 			String projectName = shell.prompt("Project Name :");
-			String projectDirectory = shell.prompt("Project directory :");
-
-			createAjfSolutionExploded(projectName, projectDirectory, out);
+			String projectDirectory = promptProjectDirectory("Project directory (empty is current directory) :");
+			if (!"exit".equals(projectDirectory))
+				createAjfSolutionExploded(projectName, projectDirectory, out);
 
 		} else {
 
@@ -102,6 +102,89 @@ public class CreateSolutionPlugin implements
 
 		}
 
+	}
+
+	/**
+	 * Return a correct directory for the generated project
+	 * 
+	 * @param shellPromptMessage
+	 * @return projectDirectory
+	 */
+	private String promptProjectDirectory(String shellPromptMessage) {
+
+		boolean isCorrectDirectory = false;
+		String projectDirectory = null;
+
+		while (isCorrectDirectory == false) {
+			// Loop on project directory prompt message until directory is
+			// correct (or 'exit')
+			projectDirectory = shell.prompt(shellPromptMessage);
+			isCorrectDirectory = checkProjectDirectoryConsistency(projectDirectory);
+
+		}
+
+		return projectDirectory;
+	}
+
+	/**
+	 * Validate that the input directory (in which the project is to be
+	 * generated) is a correct directory. If it is empty, the current shell
+	 * directory is used. Elseway the directory is checked by an attempt of
+	 * creating it. If the directory uses a wrong drives (or another error) this
+	 * will be noticed.
+	 * 
+	 * @param projectDirectory
+	 * @return
+	 */
+	private boolean checkProjectDirectoryConsistency(String projectDirectory) {
+
+		ShellMessages.info(shell, "Checking project directory...");
+
+		File myFile;
+		boolean isCorrectDirectory = false;
+		// If input project directory not set, use the current directory of
+		// the shell
+		if (null == projectDirectory || projectDirectory.isEmpty()) {
+
+			projectDirectory = shell.getCurrentDirectory()
+					.getUnderlyingResourceObject().getAbsolutePath();
+
+		} else if ("exit".equals(projectDirectory)) {
+			// way of escaping the loop
+			return true;
+
+		} else if (!projectDirectory.contains(":")) {
+			// In case the hard drive is not specified, create a
+			// subFolder in the current shell directory
+			projectDirectory = shell.getCurrentDirectory()
+					.getUnderlyingResourceObject().getAbsolutePath()
+					.concat("/").concat(projectDirectory);
+
+		}
+
+		myFile = new File(projectDirectory);
+		boolean isCreated = myFile.mkdir();
+		if (!myFile.exists()) {
+			if (!isCreated) {
+				ShellMessages.error(shell,
+						"Entered directory is not correct ! Please try Again");
+				return false;
+			}
+		}
+
+		List<String> options = new ArrayList<String>();
+		options.add("Yes, let's do this !");
+		options.add("No, change directory.");
+		int choice = shell.promptChoice(
+				"Are you sure to generate AJF project in :"
+						.concat(projectDirectory), options);
+
+		if (choice == 0) {
+			// If choice "Yes" is selected
+			isCorrectDirectory = true;
+		}
+
+		return isCorrectDirectory;
 	}
 
 	/**
@@ -117,42 +200,53 @@ public class CreateSolutionPlugin implements
 			@Option(name = "Directory", required = true) final String folderName,
 			final PipeOut out) {
 
-		/*
-		 * START LOG
-		 */
-		ShellMessages.info(
-				out,
-				"Creating the AJF exploded solution".concat(name)
-						.concat(" in the directory : ").concat(folderName));
-
-		try {
-
-			// Generate the list of different ajf project type
-			generateAjfProject(name, folderName, PROJECT_TYPE_PARENT, out);
-
-			generateAjfProject(name, folderName, PROJECT_TYPE_EAR, out);
-
-			generateAjfProject(name, folderName, PROJECT_TYPE_CORE, out);
-
-			generateAjfProject(name, folderName, PROJECT_TYPE_UI, out);
-
-			generateAjfProject(name, folderName, PROJECT_TYPE_CONFIG, out);
-
-			generateAjfProject(name, folderName, PROJECT_TYPE_WS, out);
-
-			generateAjfProject(name, folderName, PROJECT_TYPE_LIB, out);
+		// Check project directory
+		if (checkProjectDirectoryConsistency(folderName)) {
 
 			/*
-			 * FINAL LOG
+			 * START LOG
 			 */
-			ShellMessages.info(out, "AJF solution done.[" + folderName + "]");
+			ShellMessages.info(
+					out,
+					"Creating the AJF exploded solution".concat(name)
+							.concat(" in the directory : ").concat(folderName));
 
-		} catch (Exception e) {
+			try {
 
-			// print on the shell the exception thrown
-			ShellMessages.error(out,
-					"AJF project generation process has thrown an Exception : "
-							+ e.toString());
+				// Generate the list of different ajf project type
+				generateAjfProject(name, folderName, PROJECT_TYPE_PARENT, out);
+
+				generateAjfProject(name, folderName, PROJECT_TYPE_EAR, out);
+
+				generateAjfProject(name, folderName, PROJECT_TYPE_CORE, out);
+
+				generateAjfProject(name, folderName, PROJECT_TYPE_UI, out);
+
+				generateAjfProject(name, folderName, PROJECT_TYPE_CONFIG, out);
+
+				generateAjfProject(name, folderName, PROJECT_TYPE_WS, out);
+
+				generateAjfProject(name, folderName, PROJECT_TYPE_LIB, out);
+
+				/*
+				 * FINAL LOG
+				 */
+				ShellMessages.info(out, "AJF solution done.[" + folderName
+						+ "]");
+
+			} catch (Exception e) {
+
+				// print on the shell the exception thrown
+				ShellMessages.error(out,
+						"AJF project generation process has thrown an Exception : "
+								+ e.toString());
+
+			}
+		} else {
+
+			ShellMessages
+					.error(shell,
+							"Input project directory is not correct. Please try again...");
 
 		}
 
@@ -215,7 +309,7 @@ public class CreateSolutionPlugin implements
 		Resource<?> projectFolder = factory.getResourceFrom(file);
 
 		// Begining of the Name of all the java packages of the project
-		String javaPackage = "am." + globalProjectName.replace("-", "");
+		String javaPackage = "am." + globalProjectName.replace("-", ".");
 
 		// Call the CreateProject class (out of the Plugin)
 		CreateProject createProject = new CreateProject();
