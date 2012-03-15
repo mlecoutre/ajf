@@ -1,5 +1,12 @@
 package am.ajf.core.util;
 
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_EAR;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_PARENT;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -14,7 +21,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import am.ajf.forge.util.EclipseUtils;
-import am.ajf.forge.util.ProjectUtils;
 
 /**
  * Tests dealing with the EclipseUtils utilities class tham aims to create all
@@ -104,13 +110,13 @@ public class EclipseUtilsTest {
 	public static void createTestDirecotry() {
 
 		// My project types list
-		projectTypeList.add(ProjectUtils.PROJECT_TYPE_UI);
-		projectTypeList.add(ProjectUtils.PROJECT_TYPE_WS);
-		projectTypeList.add(ProjectUtils.PROJECT_TYPE_PARENT);
-		projectTypeList.add(ProjectUtils.PROJECT_TYPE_LIB);
-		projectTypeList.add(ProjectUtils.PROJECT_TYPE_EAR);
-		projectTypeList.add(ProjectUtils.PROJECT_TYPE_CORE);
-		projectTypeList.add(ProjectUtils.PROJECT_TYPE_CONFIG);
+		projectTypeList.add(PROJECT_TYPE_UI);
+		projectTypeList.add(PROJECT_TYPE_WS);
+		projectTypeList.add(PROJECT_TYPE_PARENT);
+		projectTypeList.add(PROJECT_TYPE_LIB);
+		projectTypeList.add(PROJECT_TYPE_EAR);
+		projectTypeList.add(PROJECT_TYPE_CORE);
+		projectTypeList.add(PROJECT_TYPE_CONFIG);
 
 		// Create directory for the whole test suite
 		myDirectory = new File(MY_TEST_REPO);

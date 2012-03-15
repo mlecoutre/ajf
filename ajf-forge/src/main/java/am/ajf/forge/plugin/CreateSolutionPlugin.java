@@ -1,5 +1,14 @@
 package am.ajf.forge.plugin;
 
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_COMPACT;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_EAR;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_PARENT;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +28,6 @@ import org.jboss.forge.shell.plugins.Option;
 import org.jboss.forge.shell.plugins.PipeOut;
 
 import am.ajf.forge.core.CreateProject;
-import am.ajf.forge.util.ProjectUtils;
 
 //import org.jboss.forge.shell.plugins.builtin.NewProjectPackagingTypeCompleter;
 
@@ -120,26 +128,19 @@ public class CreateSolutionPlugin implements
 		try {
 
 			// Generate the list of different ajf project type
-			generateAjfProject(name, folderName,
-					ProjectUtils.PROJECT_TYPE_PARENT, out);
+			generateAjfProject(name, folderName, PROJECT_TYPE_PARENT, out);
 
-			generateAjfProject(name, folderName, ProjectUtils.PROJECT_TYPE_EAR,
-					out);
+			generateAjfProject(name, folderName, PROJECT_TYPE_EAR, out);
 
-			generateAjfProject(name, folderName,
-					ProjectUtils.PROJECT_TYPE_CORE, out);
+			generateAjfProject(name, folderName, PROJECT_TYPE_CORE, out);
 
-			generateAjfProject(name, folderName, ProjectUtils.PROJECT_TYPE_UI,
-					out);
+			generateAjfProject(name, folderName, PROJECT_TYPE_UI, out);
 
-			generateAjfProject(name, folderName,
-					ProjectUtils.PROJECT_TYPE_CONFIG, out);
+			generateAjfProject(name, folderName, PROJECT_TYPE_CONFIG, out);
 
-			generateAjfProject(name, folderName, ProjectUtils.PROJECT_TYPE_WS,
-					out);
+			generateAjfProject(name, folderName, PROJECT_TYPE_WS, out);
 
-			generateAjfProject(name, folderName, ProjectUtils.PROJECT_TYPE_LIB,
-					out);
+			generateAjfProject(name, folderName, PROJECT_TYPE_LIB, out);
 
 			/*
 			 * FINAL LOG
@@ -179,8 +180,7 @@ public class CreateSolutionPlugin implements
 						.concat(" in the directory : ").concat(folderName));
 
 		try {
-			generateAjfProject(name, folderName,
-					ProjectUtils.PROJECT_TYPE_COMPACT, out);
+			generateAjfProject(name, folderName, PROJECT_TYPE_COMPACT, out);
 		} catch (Exception e) {
 			// print on the shell the exception thrown
 			ShellMessages.error(out,

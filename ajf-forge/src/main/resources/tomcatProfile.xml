@@ -1,0 +1,50 @@
+<profile>
+	<id>TOMCAT7</id>
+	<activation>
+		<activeByDefault>true</activeByDefault>
+	</activation>
+	<dependencies>
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>el-api</artifactId>
+			<version>2.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-jcdi_1.0_spec</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope><!-- provided for tomcat -->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-atinject_1.0_spec</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope><!-- provided for tomcat -->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-interceptor_1.1_spec</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope><!-- provided for tomcat -->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-jcdi_1.0_spec</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope><!-- provided for tomcat -->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-atinject_1.0_spec</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope><!-- provided for tomcat -->
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-interceptor_1.1_spec</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope><!-- provided for tomcat -->
+		</dependency>
+	</dependencies>
+</profile>

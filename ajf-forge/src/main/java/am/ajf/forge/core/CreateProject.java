@@ -1,5 +1,14 @@
 package am.ajf.forge.core;
 
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_COMPACT;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_EAR;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_PARENT;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -57,45 +66,49 @@ public class CreateProject {
 		 */
 		Project project = null;
 
-		if (ProjectUtils.PROJECT_TYPE_PARENT.equals(projectType)) {
+		if (PROJECT_TYPE_PARENT.equals(projectType)) {
 
 			project = generateProjectParent(globalProjectName, javaPackage,
 					projectFactory, projectFinalName, dir);
 
-		} else if (ProjectUtils.PROJECT_TYPE_CONFIG.equals(projectType)) {
+		} else if (PROJECT_TYPE_CONFIG.equals(projectType)) {
 
 			project = generateProjectConfig(globalProjectName, javaPackage,
 					projectFactory, projectFinalName, dir);
 
-		} else if (ProjectUtils.PROJECT_TYPE_EAR.equals(projectType)) {
+		} else if (PROJECT_TYPE_EAR.equals(projectType)) {
 
 			project = generateProjectEar(globalProjectName, javaPackage,
 					projectFactory, projectFinalName, dir);
 
-		} else if (ProjectUtils.PROJECT_TYPE_CORE.equals(projectType)) {
+		} else if (PROJECT_TYPE_CORE.equals(projectType)) {
 
 			project = generateProjectCore(globalProjectName, projectFinalName,
 					javaPackage, projectFactory, projectType, dir);
 
-		} else if (ProjectUtils.PROJECT_TYPE_UI.equals(projectType)) {
+		} else if (PROJECT_TYPE_UI.equals(projectType)) {
 
-			project = UIProjectGeneration.generateProjectUI(globalProjectName,
+			UIProjectGeneration uiProject = new UIProjectGeneration();
+
+			project = uiProject.generateProjectUI(globalProjectName,
 					projectFinalName, javaPackage, projectFactory, projectType,
 					dir, false);
 
-		} else if (ProjectUtils.PROJECT_TYPE_LIB.equals(projectType)) {
+		} else if (PROJECT_TYPE_LIB.equals(projectType)) {
 
 			project = generateProjectLib(globalProjectName, projectFinalName,
 					javaPackage, projectFactory, projectType, dir);
 
-		} else if (ProjectUtils.PROJECT_TYPE_WS.equals(projectType)) {
+		} else if (PROJECT_TYPE_WS.equals(projectType)) {
 
 			project = generateProjectWS(globalProjectName, projectFinalName,
 					javaPackage, projectFactory, projectType, dir);
 
-		} else if (ProjectUtils.PROJECT_TYPE_COMPACT.equals(projectType)) {
+		} else if (PROJECT_TYPE_COMPACT.equals(projectType)) {
 
-			project = UIProjectGeneration.generateProjectUI(globalProjectName,
+			UIProjectGeneration uiProject = new UIProjectGeneration();
+
+			project = uiProject.generateProjectUI(globalProjectName,
 					projectFinalName, javaPackage, projectFactory, projectType,
 					dir, true);
 
@@ -120,7 +133,7 @@ public class CreateProject {
 		/*
 		 * Generate the MAVEN PREFS file
 		 */
-		generateMavenPrefsFile(projectRootDirectory);
+		// generateMavenPrefsFile(projectRootDirectory);
 
 		/*
 		 * generate classPath file
@@ -138,7 +151,8 @@ public class CreateProject {
 
 	/**
 	 * Generate the .Settings/org.maven.ide.eclipse.prefs file containing the
-	 * preferences for maven dealing with the current project
+	 * preferences for maven dealing with the current project (for example the
+	 * maven profile)
 	 * 
 	 * @param projectRootDirectory
 	 * @throws Exception
@@ -210,14 +224,10 @@ public class CreateProject {
 		Model pom = mavenCoreFacet.getPOM();
 
 		// Add the children modules
-		pom.addModule("../" + globalProjectName + "-"
-				+ ProjectUtils.PROJECT_TYPE_CONFIG);
-		pom.addModule("../" + globalProjectName + "-"
-				+ ProjectUtils.PROJECT_TYPE_CORE);
-		pom.addModule("../" + globalProjectName + "-"
-				+ ProjectUtils.PROJECT_TYPE_UI);
-		pom.addModule("../" + globalProjectName + "-"
-				+ ProjectUtils.PROJECT_TYPE_EAR);
+		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_CONFIG);
+		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_CORE);
+		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_UI);
+		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_EAR);
 
 		// Set am/parent
 		Parent parent = new Parent();
@@ -282,19 +292,19 @@ public class CreateProject {
 		/*
 		 * Set the Pom parent
 		 */
-		ProjectUtils.setPomParent(globalProjectName, project);
+		ProjectUtils.setInternalPomParent(globalProjectName, project);
 
 		/*
 		 * Set dependencies
 		 */
 		ProjectUtils.addInternalDependency(globalProjectName, project,
-				ProjectUtils.PROJECT_TYPE_UI);
+				PROJECT_TYPE_UI);
 		ProjectUtils.addInternalDependency(globalProjectName, project,
-				ProjectUtils.PROJECT_TYPE_CORE);
+				PROJECT_TYPE_CORE);
 		ProjectUtils.addInternalDependency(globalProjectName, project,
-				ProjectUtils.PROJECT_TYPE_CONFIG);
+				PROJECT_TYPE_CONFIG);
 		ProjectUtils.addInternalDependency(globalProjectName, project,
-				ProjectUtils.PROJECT_TYPE_UI);
+				PROJECT_TYPE_UI);
 
 		return project;
 	}
@@ -365,7 +375,7 @@ public class CreateProject {
 		 * Set the Pom parent
 		 */
 
-		ProjectUtils.setPomParent(globalProjectName, project);
+		ProjectUtils.setInternalPomParent(globalProjectName, project);
 		return project;
 	}
 
@@ -428,13 +438,13 @@ public class CreateProject {
 		}
 
 		// Set the pom parent
-		ProjectUtils.setPomParent(globalProjectName, project);
+		ProjectUtils.setInternalPomParent(globalProjectName, project);
 
 		/*
 		 * Set dependencies
 		 */
 		ProjectUtils.addInternalDependency(globalProjectName, project,
-				ProjectUtils.PROJECT_TYPE_CONFIG);
+				PROJECT_TYPE_CONFIG);
 
 		return project;
 	}
@@ -472,7 +482,7 @@ public class CreateProject {
 		packaging.setFinalName(projectFinalName);
 
 		// Set the pom parent
-		ProjectUtils.setPomParent(globalProjectName, project);
+		ProjectUtils.setInternalPomParent(globalProjectName, project);
 
 		return project;
 
@@ -511,7 +521,7 @@ public class CreateProject {
 		packaging.setFinalName(projectFinalName);
 
 		// Set the pom parent
-		ProjectUtils.setPomParent(globalProjectName, project);
+		ProjectUtils.setInternalPomParent(globalProjectName, project);
 
 		/*
 		 * Create an src/main/webapp package

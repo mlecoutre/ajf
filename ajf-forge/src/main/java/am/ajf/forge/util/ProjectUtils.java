@@ -1,5 +1,10 @@
 package am.ajf.forge.util;
 
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_GROUPID_PREFIX;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_PARENT;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_WEB_PATH;
+import static am.ajf.forge.lib.ForgeConstants.START_PROJECT_MILESTONE;
+
 import java.io.File;
 import java.util.Properties;
 
@@ -18,26 +23,8 @@ import org.jboss.forge.project.facets.MetadataFacet;
  * @author E019851
  * 
  */
+
 public class ProjectUtils {
-
-	/*
-	 * Public variables
-	 */
-	public static final String PROJECT_TYPE_PARENT = "parent";
-	public static final String PROJECT_TYPE_EAR = "ear";
-	public static final String PROJECT_TYPE_CORE = "core";
-	public static final String PROJECT_TYPE_WS = "ws";
-	public static final String PROJECT_TYPE_UI = "ui";
-	public static final String PROJECT_TYPE_LIB = "lib";
-	public static final String PROJECT_TYPE_CONFIG = "config";
-	public static final String PROJECT_TYPE_COMPACT = "compacted";
-	public static final String PROJECT_GROUPID_PREFIX = "am.projects";
-
-	/*
-	 * private variable
-	 */
-	private static final String PROJECT_WEB_PATH = "/src/main/webapp";
-	private static final String START_PROJECT_MILESTONE = "1.0.0-SNAPSHOT";
 
 	/**
 	 * Create an src/main/webapp/WEB-INF package for the input project
@@ -99,7 +86,8 @@ public class ProjectUtils {
 
 		// Dependencies
 		DependencyFacet deps = project.getFacet(DependencyFacet.class);
-		// TODO add repository
+
+		// TODO add repository to generated project's pom.xml?
 		// deps.addRepository(KnownRepository.JBOSS_NEXUS);
 
 		return deps;
@@ -109,16 +97,18 @@ public class ProjectUtils {
 	 * Add a dependency in the pom.xml of the input project to the project (of
 	 * the same global project) corresponding to the input dependencyProjectType
 	 * 
-	 * For example : Global project ajf-project
+	 * For example : If Global project name is ajf-project.
 	 * 
 	 * if input Project=ajf-project-core and dependencyProjectType="lib" then a
 	 * dependency on ajf-project-lib will be added to the ajf-project-core's
 	 * pom.xml
 	 * 
 	 * @param globalProjectName
+	 *            : Name of the global project (without any suffixe)
 	 * @param project
 	 *            object of the current project beeing generated
 	 * @param dependencyProjectType
+	 *            : project type of the internal project dependency.
 	 */
 	public static void addInternalDependency(String globalProjectName,
 			Project project, String dependencyProjectType) {
@@ -179,15 +169,62 @@ public class ProjectUtils {
 
 	}
 
-	
 	/**
 	 * Insert in the pom.xml of the input project, the parent corresponding to
-	 * the globalProjectname-parent according to the ajf convention
+	 * the globalProjectname-parent according to the ajf convention. This works
+	 * for an exploded ajf project;
 	 * 
 	 * @param globalProjectName
 	 * @param project
 	 */
-	public static void setPomParent(String globalProjectName, Project project) {
+	public static void setInternalPomParent(String globalProjectName,
+			Project project) {
+
+		String parentGroupId = projectGroupId(globalProjectName);
+		String parentArtifactId = globalProjectName + "-" + PROJECT_TYPE_PARENT;
+
+		String parentVersion = START_PROJECT_MILESTONE;
+
+		String parentRelativePath = "../".concat(globalProjectName).concat("-")
+				.concat(PROJECT_TYPE_PARENT).concat("/pom.xml");
+
+		setPomParentWithPath(parentGroupId, parentArtifactId, parentVersion,
+				parentRelativePath, project);
+
+	}
+
+	/**
+	 * 
+	 * Set a pom parent to the input project from a parent's groupId, artifactId
+	 * and version
+	 * 
+	 * @param parentGroupId
+	 * @param parentArtifactId
+	 * @param parentVersion
+	 * @param project
+	 */
+	public static void setPomParent(String parentGroupId,
+			String parentArtifactId, String parentVersion, Project project) {
+
+		setPomParentWithPath(parentGroupId, parentArtifactId, parentVersion,
+				null, project);
+
+	}
+
+	/**
+	 * Set a pom parent to the input project from a parent's groupId, artifactId
+	 * version and relativePath. If the relative path is set to 'null', the
+	 * relativePath is not set for the parent
+	 * 
+	 * @param parentGroupId
+	 * @param parentArtifactId
+	 * @param parentVersion
+	 * @param parentRelativPath
+	 * @param project
+	 */
+	private static void setPomParentWithPath(String parentGroupId,
+			String parentArtifactId, String parentVersion,
+			String parentRelativPath, Project project) {
 
 		// Get the Pom
 		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
@@ -195,17 +232,17 @@ public class ProjectUtils {
 
 		// Create the parent
 		Parent parent = new Parent();
-		parent.setGroupId(projectGroupId(globalProjectName));
-		parent.setArtifactId(globalProjectName + "-"
-				+ ProjectUtils.PROJECT_TYPE_PARENT);
+		parent.setGroupId(parentGroupId);
+		parent.setArtifactId(parentArtifactId);
+		parent.setVersion(parentVersion);
 
-		parent.setVersion(START_PROJECT_MILESTONE);
-		parent.setRelativePath("../" + globalProjectName + "-"
-				+ ProjectUtils.PROJECT_TYPE_PARENT + "/pom.xml");
+		if (!(null == parentRelativPath))
+			parent.setRelativePath(parentRelativPath);
 
 		// Set the parent to the pom of the project
 		pom.setParent(parent);
 		mavenCoreFacet.setPOM(pom);
+
 	}
 
 }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -16,13 +17,16 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.events.XMLEvent;
 
+import org.apache.maven.model.Activation;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Exclusion;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
+import org.apache.maven.model.Profile;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.project.Project;
+import static am.ajf.forge.lib.ForgeConstants.*;
 
 public class UIProjectUtils {
 
@@ -111,9 +115,9 @@ public class UIProjectUtils {
 			Model pom = mavenCoreFacet.getPOM();
 
 			Plugin plugin = new Plugin();
-			plugin.setGroupId("org.apache.tomcat.maven");
-			plugin.setArtifactId("tomcat7-maven-plugin");
-			plugin.setVersion("2.0-beta-1");
+			plugin.setGroupId(TOMCAT_PLUGIN_GROUPID);
+			plugin.setArtifactId(TOMCAT_PLUGIN_ARTIFACTID);
+			plugin.setVersion(TOMCAT_PLUGIN_VERSION);
 
 			/*
 			 * Plugin configuration
@@ -128,7 +132,7 @@ public class UIProjectUtils {
 
 			// contextFile
 			Xpp3Dom configContextFile = new Xpp3Dom(("contextFile"));
-			configContextFile.setValue("src/test/resources/tomcat_context.xml");
+			configContextFile.setValue(TOMCAT_DEPENDENCIES_FILE);
 			config.addChild(configContextFile);
 			configContextFile = null;
 
@@ -147,8 +151,7 @@ public class UIProjectUtils {
 			/*
 			 * Plugin dependencies
 			 */
-			final String TOMCAT_PLUGIN_FILE = "tomcatPlugin.xml";
-			List<Dependency> dependencyList = manageDependenciesFromFile(TOMCAT_PLUGIN_FILE);
+			List<Dependency> dependencyList = manageDependenciesFromFile(TOMCAT_DEPENDENCIES_FILE);
 			for (Dependency dep : dependencyList) {
 				plugin.addDependency(dep);
 			}
@@ -167,6 +170,63 @@ public class UIProjectUtils {
 	}
 
 	/**
+	 * Set TOMCAT7 and WAS 7 profiles to the input project's pom.xml. XML
+	 * resources files are used to extract each profile's dependencies
+	 * 
+	 * @param project
+	 * @throws XMLStreamException
+	 */
+	public static void setProfiles(Project project) throws XMLStreamException {
+
+		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
+		Model pom = mavenCoreFacet.getPOM();
+
+		List<Profile> profiles = new ArrayList<Profile>();
+
+		/*
+		 * TOMCAT 7 PROFILE
+		 */
+		Profile tomCatProfile = new Profile();
+		tomCatProfile.setId("TOMCAT7");
+		Activation tomcatProfileActivation = new Activation();
+		tomcatProfileActivation.setActiveByDefault(true);
+		tomCatProfile.setActivation(tomcatProfileActivation);
+
+		List<Dependency> tomcatProfileDeps = manageDependenciesFromFile(TOMCAT_PLUGIN_PROFILE_DEPENDENCIES_FILE);
+
+		for (Dependency dep : tomcatProfileDeps) {
+			tomCatProfile.addDependency(dep);
+		}
+
+		profiles.add(tomCatProfile);
+		tomCatProfile = null;
+
+		/*
+		 * WAS 7 Profile
+		 */
+		Profile wasProfile = new Profile();
+		wasProfile.setId("WAS7");
+		Activation activation = new Activation();
+		activation.setActiveByDefault(false);
+		wasProfile.setActivation(activation);
+
+		List<Dependency> wasProfileDeps = manageDependenciesFromFile(WAS_PROFILE_DEPENDENCIES_FILE);
+
+		for (Dependency dep : wasProfileDeps) {
+			wasProfile.addDependency(dep);
+		}
+		profiles.add(wasProfile);
+		wasProfile = null;
+
+		/*
+		 * Add Profiles to project's pom.xml
+		 */
+		pom.setProfiles(profiles);
+		mavenCoreFacet.setPOM(pom);
+
+	}
+
+	/**
 	 * Browse resources xml file which describe all the needed dependencies for
 	 * a UI project. Extracts and set dependencies to current project's pom.xml
 	 * 
@@ -180,14 +240,20 @@ public class UIProjectUtils {
 		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
 		Model pom = mavenCoreFacet.getPOM();
 
+		// Add properties to the pom
+		Properties properties = new Properties();
+		properties.setProperty("ajfversion", "2.1.0-SNAPSHOT");
+		properties.setProperty("openwebbeansVersion", "1.1.3");
+		pom.setProperties(properties);
+
+		// Add dependency list from resource XML file
 		List<Dependency> dependencies = UIProjectUtils
 				.manageDependenciesFromFile("UIprojectDependencies.xml");
 
 		for (Dependency dep : dependencies) {
-
 			pom.addDependency(dep);
-
 		}
+
 		mavenCoreFacet.setPOM(pom);
 	}
 
@@ -196,20 +262,20 @@ public class UIProjectUtils {
 	 * current project's pom.xml. We use a list of dependecyVO object in order
 	 * to be able to test this method (without creating a pom.xml)
 	 * 
-	 * @param TOMCAT_PLUGIN_FILE
+	 * @param xmlFileContainingDependencies
 	 * @return number of dependency found
 	 * @throws FactoryConfigurationError
 	 * @throws XMLStreamException
 	 */
 	public static List<Dependency> manageDependenciesFromFile(
-			String TOMCAT_PLUGIN_FILE) throws FactoryConfigurationError,
-			XMLStreamException {
+			String xmlFileContainingDependencies)
+			throws FactoryConfigurationError, XMLStreamException {
 
 		// STAX init
 		XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
 
 		InputStream is = ProjectUtils.class.getClassLoader()
-				.getResourceAsStream(TOMCAT_PLUGIN_FILE);
+				.getResourceAsStream(xmlFileContainingDependencies);
 
 		XMLStreamReader xmlsr = xmlInputFactory.createXMLStreamReader(is);
 
@@ -255,13 +321,19 @@ public class UIProjectUtils {
 		return dependencyList;
 	}
 
-	private static void printEventValue(XMLEvent event) {
+	/**
+	 * Return event name whatever it's type
+	 * 
+	 * @param event
+	 */
+	private static String getEventValue(XMLEvent event) {
 		if (event.isStartElement())
-			System.out.println(event.asStartElement().getName().toString());
+			return event.asStartElement().getName().toString();
 		if (event.isEndElement())
-			System.out.println(event.asEndElement().getName().toString());
+			return event.asEndElement().getName().toString();
 		if (event.isCharacters())
-			System.out.println(event.asCharacters().getData());
+			return event.asCharacters().getData();
+		return null;
 	}
 
 	/**
@@ -301,9 +373,15 @@ public class UIProjectUtils {
 			String version = event.asCharacters().getData();
 			myDependency.setVersion(version);
 
+		} else if (isStartElementEqualsTo(event, "scope")) {
+
+			event = (XMLEvent) xmleventReader.next();
+			String scope = event.asCharacters().getData();
+			myDependency.setScope(scope);
+
 		} else if (isStartElementEqualsTo(event, "exclusions")) {
 
-			manageDependecyExclusions(xmleventReader, event);
+			manageDependecyExclusions(xmleventReader, event, myDependency);
 		}
 	}
 
@@ -316,19 +394,22 @@ public class UIProjectUtils {
 	 * @param event
 	 */
 	private static void manageDependecyExclusions(
-			XMLEventReader xmleventReader, XMLEvent event) {
+			XMLEventReader xmleventReader, XMLEvent event,
+			Dependency myDependency) {
 
+		// System.out.println("EXCLUSIONS START");
 		// Manage exclusion
 		while (!isEndElementEqualsTo(event, "exclusions")) {
 
 			event = (XMLEvent) xmleventReader.next();
 
-			if (isStartElementEqualsTo(event, "exclusions")) {
+			if (isStartElementEqualsTo(event, "exclusion")) {
 
+				Exclusion exclusion = new Exclusion();
+				// System.out.println("EXCLUSION START");
 				while (!isEndElementEqualsTo(event, "exclusion")) {
-					event = (XMLEvent) xmleventReader.next();
 
-					Exclusion exclusion = new Exclusion();
+					event = (XMLEvent) xmleventReader.next();
 
 					if (isStartElementEqualsTo(event, "groupId")) {
 
@@ -343,6 +424,8 @@ public class UIProjectUtils {
 						exclusion.setArtifactId(artifactId);
 					}
 				}
+				// Add exclusion to dependeny
+				myDependency.addExclusion(exclusion);
 			}
 		}
 	}

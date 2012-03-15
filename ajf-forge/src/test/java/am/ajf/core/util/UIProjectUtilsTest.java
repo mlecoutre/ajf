@@ -1,6 +1,7 @@
 package am.ajf.core.util;
 
 import static org.junit.Assert.assertTrue;
+import static am.ajf.forge.lib.ForgeConstants.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,14 +23,19 @@ public class UIProjectUtilsTest {
 		if (!myTempDir.exists()) {
 			myTempDir.mkdirs();
 		}
-		
+
 	}
 
 	@Test
 	public void unzipWebResourceTest() throws IOException {
 
-		boolean isSucceed = UIProjectUtils.unzipFile("UIResources.zip",
-				myTempDir);
+		boolean isSucceed = false;
+		isSucceed = UIProjectUtils.unzipFile(UI_MAIN_RESOURCES, myTempDir);
+
+		assertTrue(isSucceed);
+
+		isSucceed = false;
+		isSucceed = UIProjectUtils.unzipFile(UI_TEST_RESOURCES, myTempDir);
 
 		assertTrue(isSucceed);
 	}

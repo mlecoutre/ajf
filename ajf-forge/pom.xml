@@ -13,9 +13,17 @@
 	<properties>
 		<forge.api.version>1.0.0.CR2</forge.api.version>
 		<slf4j.version>1.6.4</slf4j.version>
+		<ajfversion>2.1.0-SNAPSHOT</ajfversion>
 	</properties>
 
 	<dependencies>
+
+		<!-- AJF -->
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-injection</artifactId>
+			<version>${ajfversion}</version>
+		</dependency>
 
 		<!-- JBOSS FORGE API -->
 		<dependency>

@@ -1,5 +1,12 @@
 package am.ajf.forge.util;
 
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_COMPACT;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_PARENT;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -244,7 +251,8 @@ public class EclipseUtils {
 	}
 
 	/**
-	 * Generate the .classPath file of the project
+	 * Generate the .classPath file of the project. Depending on the project
+	 * type, the .classpath file will differ a little bit
 	 * 
 	 * @param projectRootDirectory
 	 * @return File classPath file
@@ -283,11 +291,11 @@ public class EclipseUtils {
 			 * Main and Test java packages exists only for CORE, UI, Lib, WS and
 			 * COMPACT type projects
 			 */
-			if (ProjectUtils.PROJECT_TYPE_CORE.equals(projectType)
-					|| ProjectUtils.PROJECT_TYPE_UI.equals(projectType)
-					|| ProjectUtils.PROJECT_TYPE_WS.equals(projectType)
-					|| ProjectUtils.PROJECT_TYPE_LIB.equals(projectType)
-					|| ProjectUtils.PROJECT_TYPE_COMPACT.equals(projectType)) {
+			if (PROJECT_TYPE_CORE.equals(projectType)
+					|| PROJECT_TYPE_UI.equals(projectType)
+					|| PROJECT_TYPE_WS.equals(projectType)
+					|| PROJECT_TYPE_LIB.equals(projectType)
+					|| PROJECT_TYPE_COMPACT.equals(projectType)) {
 
 				// Classpath entry for src main java
 				addClassPathEntry(xmlEventFactory, writer, "src",
@@ -299,7 +307,7 @@ public class EclipseUtils {
 			/*
 			 * Only the parent type project does not have the resources packages
 			 */
-			if (!ProjectUtils.PROJECT_TYPE_PARENT.equals(projectType)) {
+			if (!PROJECT_TYPE_PARENT.equals(projectType)) {
 				addClassPathEntry(xmlEventFactory, writer, "src",
 						"src/main/resources");
 				addClassPathEntry(xmlEventFactory, writer, "src",
