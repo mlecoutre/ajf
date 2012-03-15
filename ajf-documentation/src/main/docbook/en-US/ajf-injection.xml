@@ -16,7 +16,7 @@
 	</dependency>
 			]]></programlisting>
 	</example>
-	<section>
+	<section id="injection-introductionSection">
 		<title>Introduction</title>
 		<para>
 			Contexts and Dependency Injection for the Java EE Platform (CDI), JSR 299 is a technology that supplies a powerful set 
@@ -28,11 +28,11 @@
 			AJF injection provide a set of injectors (as CDI Producers) and behaviors (as CDI Interceptors).
 		</para>
 	</section>
-	<section>
+	<section id="injection-injectableComponentsSection">
 		<title>Injectable components</title>
 		<para>
 			Some AJF components are directly injectables in Managed Beans.
-			It's the same for applicative Business Policies and Technical Services injection, with the following rules :
+			It's the case for applicative Business Policies and Technical Services injection, with the following rules :
 			<itemizedlist>
 				<listitem>
 					<para>
@@ -47,6 +47,20 @@
 					</para>
 				</listitem>
 			</itemizedlist>
+			In reality, each interface which have only one implementation is injectable (without CDI decoration - Qualifiers annotations for exemple -)
+			if the library contain a beans configuration file (META-INF/beans.xml)
+			<example>
+				<title>Empty 'beans.xml' file</title>
+				<programlisting language="Xml" role="Xml"><![CDATA[
+	<beans
+	   xmlns="http://java.sun.com/xml/ns/javaee"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="
+	   	http://java.sun.com/xml/ns/javaee
+	   	http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+	</beans>
+				]]></programlisting>
+			</example>
 		</para>
 		<section>
 			<title>Inject Logger</title>
@@ -170,26 +184,56 @@
 			]]></programlisting>
 		</section>
 	</section>
-	<section>
+	<section id="injection-interceptorsSection">
 		<title>Interceptors</title>
 		<para>
-			
+			Interceptors are AOP - Aspect Oriented Programming - like components.
+			This kind of components allow to intercept methods invocations, 
+			you can DO something Before and After the target method invocation. AJF provide a set interceptors.   
+			In order to activate the interceptors, you have to declare them in the beans configuration file. 
+			Be careful, the declaration order is the execution order when the interceptors are cumulated.
+			<programlisting language="Xml" role="Xml"><![CDATA[
+	<beans
+	   xmlns="http://java.sun.com/xml/ns/javaee"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="
+	   	http://java.sun.com/xml/ns/javaee
+	   	http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+		 <interceptors>
+			  <class>am.ajf.injection.MonitoringInterceptor</class>
+			  <class>am.ajf.injection.TransactionInterceptor</class>
+			  <class>am.ajf.injection.CacheInterceptor</class>
+			  <!-- should be the last one -->
+			  <class>am.ajf.injection.ErrorHandlingInterceptor</class>
+		 </interceptors>
+	</beans>
+			]]></programlisting>
+			The interceptors are attached to specific annotations they observe.
+			For the interceptor to be triggered, the observed annotation have to be positioned before the concerned method.
 		</para>
 		<section>
 			<title>Monitoring Interceptor</title>
-			<para></para>
+			<para>
+			This interceptor instrument the concerned method invocation by computing the target method execution time 
+			and firing AJF monitoring events.
+			
+			</para>			
 		</section>
 		<section>
-			<title>ErrorHandling Interceptor</title>
-			<para></para>
+			<title>Transactional Interceptor</title>
+			<para>
+			
+			</para>
 		</section>
 		<section>
 			<title>Cache Interceptor</title>
-			<para></para>
+			<para>
+			</para>
 		</section>
 		<section>
-			<title>Transactional/NonTransactional Interceptor</title>
-			<para></para>
+			<title>ErrorHandling Interceptor</title>
+			<para>
+			</para>
 		</section>
 	</section>
 	<!--  
