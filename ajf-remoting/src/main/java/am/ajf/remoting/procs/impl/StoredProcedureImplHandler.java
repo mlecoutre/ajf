@@ -50,7 +50,7 @@ public class StoredProcedureImplHandler implements ImplementationHandler {
 			cc = JavassistUtils.initClass(superClass, interfaceClass, pool, "StoredProcedures");
 			
 			//Add the class attributes (logger, Datasource, ...)			
-			cc.addField(JavassistUtils.createLogger(cc));
+			cc.addField(JavassistUtils.createLoggerField(cc));
 			//TODO Datasource could be injected in Remote class annotation setup
 			//so, validation occur at deploy time in opposition
 			//of execution time if we used a manual jndi lookup
