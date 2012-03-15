@@ -14,7 +14,7 @@ import am.ajf.injection.impl.DefaultCacheBuilder;
 import am.ajf.injection.impl.SimpleKeyBuilderImpl;
 
 @InterceptorBinding
-@Target({ ElementType.METHOD, ElementType.TYPE })
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Cached {
 	
@@ -27,9 +27,12 @@ public @interface Cached {
 	@Nonbinding
 	public Class<? extends CacheBuilder> cacheBuilder() default DefaultCacheBuilder.class;
 	
-	 @Nonbinding
-	 public boolean clearCache() default true;
+	@Nonbinding
+	public boolean clearCache() default true;
 
 	@Nonbinding
 	public Class<? extends KeyBuilder> keyBuilder() default SimpleKeyBuilderImpl.class;
+	
+	@Nonbinding
+	public String defaultKey() default "";
 }
