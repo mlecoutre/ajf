@@ -14,6 +14,8 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import org.slf4j.Logger;
 
+import com.google.common.base.Strings;
+
 /**
  * CacheInterceptor. Deliver cache value on a Cached annotated class or method.
  * 
@@ -37,6 +39,7 @@ public class CacheInterceptor implements Serializable {
 	private Cached cachedAnnotation = null;
 	private Cache cache = null;
 	private KeyBuilder keyBuilder = null;
+	private String defaultKey = null;
 
 	/**
 	 * Default constructor
@@ -70,6 +73,9 @@ public class CacheInterceptor implements Serializable {
 		// process key
 		Object key = keyBuilder.build(targetClass, targetMethod,
 				cachedAnnotation, ctx.getParameters());
+		if ((null == key)) {
+			key = defaultKey;
+		}
 
 		// lookup in cache
 		if (cache.exist(key)) {
@@ -83,7 +89,8 @@ public class CacheInterceptor implements Serializable {
 			res = ctx.proceed();
 			// store result Object in cache
 			logger.debug("Store result in cache with key: {}", key);
-			cache.put(key, res);
+			if (null != res)
+				cache.put(key, res);
 
 			return res;
 		} catch (Throwable e) {
@@ -127,6 +134,11 @@ public class CacheInterceptor implements Serializable {
 		Class<?> keyBuilderClass = cachedAnnotation.keyBuilder();
 		keyBuilder = (KeyBuilder) BeanUtils.newInstance(keyBuilderClass);
 
+		defaultKey = cachedAnnotation.defaultKey();
+		if (Strings.isNullOrEmpty(defaultKey)) {
+			defaultKey = targetMethod.toGenericString();
+		}
+		
 		initialized = true;
 	}
 
