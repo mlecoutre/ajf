@@ -19,7 +19,7 @@ public class DefaultServiceFactory implements ServiceFactory {
 	}
 
 	public boolean accept(Class<?> serviceClass) {
-		return ClassUtils.isServiceInterface(serviceClass);
+		return ClassUtils.isPolicyOrServiceInterface(serviceClass);
 	}
 
 	public int getOrdinal() {
