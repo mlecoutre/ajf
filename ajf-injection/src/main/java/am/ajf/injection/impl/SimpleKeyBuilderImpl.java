@@ -18,6 +18,9 @@ public class SimpleKeyBuilderImpl implements KeyBuilder {
 	@Override
 	public Object build(Class<?> targetClass, Method targetMethod, Cached cachedAnnotation, Object[] parameters) {
 		
+		if ((null == parameters) || (0 == parameters.length)) {
+			return null;
+		}
 		String processedKey = joiner.join(parameters);
 		return processedKey;
 	}
