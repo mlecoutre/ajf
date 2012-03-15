@@ -60,7 +60,7 @@ public class CrudImplHandler extends AbstractPersistenceImplHandler
 			cc = JavassistUtils.initClass(superClass, interfaceClass, pool, "Crud");
 			
 			//Add the class attributes (logger, EntityManagerFactory, @PersitenceUnit...)
-			CtField f1 = JavassistUtils.createLogger(cc);
+			CtField f1 = JavassistUtils.createLoggerField(cc);
 			cc.addField(f1);
 			CtField f2 = createEntityManager(cc);
 			logger.trace(f2.toString());

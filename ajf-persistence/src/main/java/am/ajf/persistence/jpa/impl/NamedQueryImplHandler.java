@@ -44,7 +44,7 @@ public class NamedQueryImplHandler extends AbstractPersistenceImplHandler implem
 			cc = JavassistUtils.initClass(superClass, interfaceClass, pool, "NamedQuery");
 			
 			//Add the class attributes (logger, EntityManagerFactory, @PersitenceUnit...)
-			CtField f1 = JavassistUtils.createLogger(cc);
+			CtField f1 = JavassistUtils.createLoggerField(cc);
 			logger.trace(f1.toString());
 			cc.addField(f1);
 			CtField f2 = createEntityManager(cc);
