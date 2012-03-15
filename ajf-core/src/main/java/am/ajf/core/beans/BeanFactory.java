@@ -28,12 +28,11 @@ public class BeanFactory {
 	 * @return a new bean instance
 	 * @throws ClassNotFoundException
 	 */
-	@SuppressWarnings("unchecked")
-	protected <T> T createBeanInstance(ExtendedBeanDeclaration beanDeclaration)
+	protected Object createBeanInstance(ExtendedBeanDeclaration beanDeclaration)
 			throws ClassNotFoundException {
 		
 		Class<?> beanClazz = getBeanClass(beanDeclaration);
-		return (T) BeanUtils.newInstance(beanClazz);
+		return BeanUtils.newInstance(beanClazz);
 		
 	}
 
@@ -57,13 +56,12 @@ public class BeanFactory {
 	 * @return
 	 * @throws Exception
 	 */
-	@SuppressWarnings("unchecked")
-	public <T> T createBean(ExtendedBeanDeclaration data)
+	public Object createBean(ExtendedBeanDeclaration data)
 			throws Exception {
 		
 		Object result = createBeanInstance(data);
         initBean(result, data);
-        return ((T) result);
+        return result;
 		
 	}
 

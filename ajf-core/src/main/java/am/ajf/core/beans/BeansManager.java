@@ -41,6 +41,7 @@ public class BeansManager {
 		return BeanDeclarationsLoader.getBeans();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static <T> T getBean(Class<T> beanClass, String beanRole)
 			throws Exception {
 
@@ -69,16 +70,16 @@ public class BeansManager {
 		ExtendedBeanDeclaration extendedBeanDeclaration = beanDeclarations
 				.iterator().next();
 
-		T beanInstance = getBean(extendedBeanDeclaration);
+		T beanInstance = (T) getBean(extendedBeanDeclaration);
 		return beanInstance;
 	}
 
-	public static <T> T getBean(ExtendedBeanDeclaration extendedBeanDeclaration)
+	public static Object getBean(ExtendedBeanDeclaration extendedBeanDeclaration)
 			throws ClassNotFoundException, Exception {
 		
 		BeanFactory factory = getBeanFactory(extendedBeanDeclaration);
 		 
-		T beanInstance = factory.createBean(extendedBeanDeclaration);
+		Object beanInstance = factory.createBean(extendedBeanDeclaration);
 		return beanInstance;
 	}
 
