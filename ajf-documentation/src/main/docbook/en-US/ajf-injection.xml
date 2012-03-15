@@ -134,7 +134,7 @@
 		</section>
 		<section>
 			<title>Inject JTA UserTransaction</title>
-			<para></para>
+			<para>Can only work if the code is invoked in a container which include the service JTA</para>
 			<programlisting language="Java" role="Java"><![CDATA[
 	import javax.inject.Inject;
 	
