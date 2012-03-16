@@ -16,6 +16,8 @@ import com.google.common.base.Throwables;
 
 public class CacheManagerFactory {
 
+	public static final String SIMPLE_CACHE_MANAGER = "simple";
+	
 	private final static Logger logger = LoggerFactory
 			.getLogger(CacheManagerFactory.class);
 
