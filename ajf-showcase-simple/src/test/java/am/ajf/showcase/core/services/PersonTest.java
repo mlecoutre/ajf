@@ -2,6 +2,15 @@ package am.ajf.showcase.core.services;
 
 import static org.junit.Assert.assertTrue;
 
+import am.ajf.injection.AuditDataProducer;
+import am.ajf.injection.CacheInterceptor;
+import am.ajf.injection.CacheProducer;
+import am.ajf.injection.ConfigurationProducer;
+import am.ajf.injection.ErrorHandlingInterceptor;
+import am.ajf.injection.LoggerProducer;
+import am.ajf.injection.MonitoringInterceptor;
+import am.ajf.injection.PropertyProducer;
+import am.ajf.injection.TransactionInterceptor;
 import am.ajf.showcase.lib.model.Person;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -57,16 +66,20 @@ public class PersonTest {
 	public static JavaArchive createTestArchive() {
 		return ShrinkWrap
 				.create(JavaArchive.class, "test.jar")
-				.addPackages(true, "am.ajf.showcase")
-				.addPackages(true, "am.ajf.injection")
-				.addPackages(true, "am.ajf.core.logger")
-				.addPackages(true, "am.ajf.core.helper")
-				.addPackages(true, "am.ajf.core.utils")
-				.addPackages(true, "am.ajf.persistence")
+				.addClasses(AuditDataProducer.class)
+				.addClasses(LoggerProducer.class)
+				.addClasses(CacheProducer.class)
+				.addClasses(PropertyProducer.class)
+				.addClasses(ConfigurationProducer.class)
+				.addClasses(MonitoringInterceptor.class)
+				.addClasses(TransactionInterceptor.class)
+				.addClasses(CacheInterceptor.class)
+				.addClasses(ErrorHandlingInterceptor.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,
 						ArchivePaths.create("beans.xml"))
 				.addAsManifestResource("META-INF/persistence.xml",
 						ArchivePaths.create("persistence.xml"));
+
 	}
 
 	/**
