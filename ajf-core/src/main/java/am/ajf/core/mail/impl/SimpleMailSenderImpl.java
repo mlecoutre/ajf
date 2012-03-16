@@ -462,5 +462,17 @@ public class SimpleMailSenderImpl implements MailSender {
 	public void setUploadTempFileDirectory(String string) {
 		uploadTempFileDirectory = string;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return String.format(
+				"SimpleMailSenderImpl [jndiName=%s, smtpServer=%s]", jndiName,
+				smtpServer);
+	}
+	
+	
 	
 }
