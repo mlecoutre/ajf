@@ -11,11 +11,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.stream.FactoryConfigurationError;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,7 +33,8 @@ import am.ajf.forge.util.EclipseUtils;
  */
 public class EclipseUtilsTest {
 
-	private static final String MY_TEST_REPO = "C:/AJF-Forge-TestDirectory-tmp";
+	// private static final String MY_TEST_REPO =
+	// "C:/AJF-Forge-TestDirectory-tmp";
 	private static File myDirectory;
 
 	// All the project type
@@ -43,7 +46,7 @@ public class EclipseUtilsTest {
 		File returnedFile = null;
 		try {
 			returnedFile = EclipseUtils.generateEclipseProjectFile(
-					"myprojectName", MY_TEST_REPO);
+					"myprojectName", myDirectory.getAbsolutePath());
 		} catch (FactoryConfigurationError e) {
 			System.out
 					.println("generateEclipseProjectFileTest - Error occured : "
@@ -56,24 +59,6 @@ public class EclipseUtilsTest {
 
 		assertNotNull(
 				"Error occured during the Eclipse .project file generation",
-				returnedFile);
-
-	}
-
-	@Test
-	public void generateEclipseMavenPrefFileTest() {
-
-		File returnedFile = null;
-		try {
-			returnedFile = EclipseUtils
-					.generateEclipseMavenPrefFile(MY_TEST_REPO);
-		} catch (Exception e) {
-			System.out
-					.println("generateEclipseMavenPrefFileTest - Error occured : "
-							+ e.toString());
-		}
-
-		assertNotNull("Error occured while generating eclipse maven pref file",
 				returnedFile);
 
 	}
@@ -92,8 +77,8 @@ public class EclipseUtilsTest {
 
 			try {
 
-				myFile = EclipseUtils.generateClassPathFile(MY_TEST_REPO,
-						projectType);
+				myFile = EclipseUtils.generateClassPathFile(
+						myDirectory.getAbsolutePath(), projectType);
 
 			} catch (Exception e) {
 				errorOccured = true;
@@ -119,11 +104,16 @@ public class EclipseUtilsTest {
 		projectTypeList.add(PROJECT_TYPE_CONFIG);
 
 		// Create directory for the whole test suite
-		myDirectory = new File(MY_TEST_REPO);
+		myDirectory = new File(FileUtils.getTempDirectoryPath().concat(
+				"/eclipseUtilsTest"));
 
 		if (!myDirectory.exists()) {
 			myDirectory.mkdirs();
 		}
+
+		System.out
+				.println("**INFO : Test suite EclipseUtils executed in temp directory :"
+						.concat(myDirectory.getAbsolutePath()));
 
 	}
 
@@ -134,42 +124,16 @@ public class EclipseUtilsTest {
 	@AfterClass
 	public static void cleanFiles() {
 
-		myDirectory = new File(MY_TEST_REPO);
-
 		if (myDirectory.exists()) {
 
-			deleteDirectory(myDirectory);
+			try {
+				FileUtils.deleteDirectory(myDirectory);
+			} catch (IOException e) {
+				System.out.println("**ERROR while deleting temp repo : "
+						+ myDirectory.getAbsolutePath());
+			}
 
 		}
 		myDirectory = null;
-
-	}
-
-	/**
-	 * Delete a whole directory and all it's descendents
-	 * 
-	 * @param path
-	 * @return
-	 */
-	private static boolean deleteDirectory(File path) {
-
-		// Check the existence of the directory
-		if (path.exists()) {
-
-			// List of files contained in the directory
-			File[] files = path.listFiles();
-
-			// For each file of the directory
-			for (int i = 0; i < files.length; i++) {
-				if (files[i].isDirectory()) {
-					// IF file is a directory, we start again for it
-					deleteDirectory(files[i]);
-				} else {
-					// If file isnot a directory, simply delete it
-					files[i].delete();
-				}
-			}
-		}
-		return (path.delete());
 	}
 }

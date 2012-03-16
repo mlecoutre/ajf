@@ -1,5 +1,11 @@
 package am.ajf.forge.util;
 
+import static am.ajf.forge.lib.ForgeConstants.AJF_CORE;
+import static am.ajf.forge.lib.ForgeConstants.AJF_INJECTION;
+import static am.ajf.forge.lib.ForgeConstants.AJF_PERSISTENCE;
+import static am.ajf.forge.lib.ForgeConstants.AJF_TESTING;
+import static am.ajf.forge.lib.ForgeConstants.AJF_WEB;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,15 +16,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.events.XMLEvent;
-
 import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Exclusion;
 import org.apache.maven.model.Model;
 import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.parser.JavaParser;
@@ -99,246 +97,62 @@ public class UIProjectUtils {
 	}
 
 	/**
-	 * Uses a model reousrce pom.xml file and sets the dependencies, properties,
+	 * Uses model resources files and sets the dependencies, properties,
 	 * profiles and the whole build sections to the generated project's pom.xml
-	 * file
+	 * file. AJF dependencies are taken from the ajfDependencies model xml file.
+	 * All the other pom settings (dependencies, profiles, build...) are taken
+	 * from the ui pom model file.
 	 * 
 	 * @param project
-	 * @param resourcePomFile
+	 * @param uiModelPomFile
+	 *            example ui pom.xml file, containing all maven settings such as
+	 *            external dependencies, profiles, build, plugins... (without
+	 *            AJF)
+	 * @param ajfDependenciesFiles
+	 *            sample pom.xml file containint all possible AJF dependencies
 	 * @throws Exception
 	 */
-	public static void setUIPomFromFile(Project project,
-			String resourcePomFile, boolean isCompacted) throws Exception {
+	public static void setUIPomFromFile(Project project, String uiModelPomFile,
+			String ajfDependenciesFiles, boolean isCompacted) throws Exception {
 
-		Model resourcePom = ProjectUtils.getPomFromFile(resourcePomFile);
+		// Model Pom file corresponding to UI POM (without AJF deps)
+		Model uiModelPom = ProjectUtils.getPomFromFile(uiModelPomFile);
+		// Model Pom file containing all the ajf dependencies
+		Model ajfDepsPom = ProjectUtils.getPomFromFile(ajfDependenciesFiles);
 
+		// Get the current generated project's pom file
 		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
 		Model generatedPom = mavenCoreFacet.getPOM();
 
-		// Set Properties only in compacted mode
+		// Set Properties only in compacted mode (when not compacted, the
+		// properties are set in parent project)
 		if (isCompacted)
-			generatedPom.setProperties(resourcePom.getProperties());
+			generatedPom.setProperties(ajfDepsPom.getProperties());
 
-		// Set dependencies
-		generatedPom.setDependencies(resourcePom.getDependencies());
+		// Set Ajf Dependencies for web Project, using model file containing ajf
+		// deps
+		List<String> ajfDepsWeb = new ArrayList<String>();
+		ajfDepsWeb.add(AJF_WEB);
+		ajfDepsWeb.add(AJF_CORE);
+		ajfDepsWeb.add(AJF_INJECTION);
+		ajfDepsWeb.add(AJF_PERSISTENCE);
+		ajfDepsWeb.add(AJF_TESTING);
+		ProjectUtils.addAjfDependenciesToPom(ajfDepsWeb, ajfDependenciesFiles,
+				generatedPom);
 
-		// set Profiles
-		generatedPom.setProfiles(resourcePom.getProfiles());
+		// Set dependencies (other than AJF, specific for web project)
+		for (Dependency dep : uiModelPom.getDependencies()) {
+			generatedPom.getDependencies().add(dep);
+		}
+
+		// set Profiles for web project
+		generatedPom.setProfiles(uiModelPom.getProfiles());
 
 		// set build Plugins
 		// generatedPom.getBuild().setPlugins(resourcePom.getBuild().getPlugins());
-		generatedPom.setBuild(resourcePom.getBuild());
+		generatedPom.setBuild(uiModelPom.getBuild());
 
 		mavenCoreFacet.setPOM(generatedPom);
-	}
-
-	/**
-	 * Use the tomcat plug in XML file in order to add all dependcy to the
-	 * current project's pom.xml. We use a list of dependecyVO object in order
-	 * to be able to test this method (without creating a pom.xml)
-	 * 
-	 * @param xmlFileContainingDependencies
-	 * @return number of dependency found
-	 * @throws FactoryConfigurationError
-	 * @throws XMLStreamException
-	 */
-	public static List<Dependency> manageDependenciesFromFile(
-			String xmlFileContainingDependencies)
-			throws FactoryConfigurationError, XMLStreamException {
-
-		// STAX init
-		XMLInputFactory xmlInputFactory = XMLInputFactory.newInstance();
-
-		InputStream is = ProjectUtils.class.getClassLoader()
-				.getResourceAsStream(xmlFileContainingDependencies);
-
-		XMLStreamReader xmlsr = xmlInputFactory.createXMLStreamReader(is);
-
-		XMLEventReader xmleventReader = xmlInputFactory
-				.createXMLEventReader(xmlsr);
-
-		List<Dependency> dependencyList = new ArrayList<Dependency>();
-
-		// init the output List of dependency
-		// List<DependencyVO> dependencyList = new ArrayList<DependencyVO>();
-
-		while (xmleventReader.hasNext()) {
-
-			XMLEvent event = (XMLEvent) xmleventReader.next();
-
-			// We wait for the start of 'dependencies' section
-			if (isStartElementEqualsTo(event, "dependencies")) {
-
-				// While it's not the end of dependencies : </dependecies>
-				while (!isEndDependencies(event)) {
-
-					event = (XMLEvent) xmleventReader.next();
-
-					// If we find event = <dependency>
-					if (isStartElementEqualsTo(event, "dependency")) {
-
-						// Create a dependencyVO object (to stored dependencies)
-						Dependency myDependency = new Dependency();
-						// printEventValue(event);
-
-						while (!isEndElementEqualsTo(event, "dependency")) {
-							event = (XMLEvent) xmleventReader.next();
-							manageDependencies(xmleventReader, myDependency,
-									event);
-						}
-						// Add the current dependency to plugin
-						dependencyList.add(myDependency);
-					}
-				}
-			}
-		}
-
-		return dependencyList;
-	}
-
-	/**
-	 * Loop on dependencies on the input XML containing a list of dependencies
-	 * and create output dependency object
-	 * 
-	 * @param xmleventReader
-	 * @param myDependency
-	 */
-	private static void manageDependencies(XMLEventReader xmleventReader,
-			Dependency myDependency, XMLEvent event) {
-
-		if (isStartElementEqualsTo(event, "groupId")) {
-
-			/*
-			 * Dependecy - Group Id
-			 */
-			event = (XMLEvent) xmleventReader.next();
-			String groupId = event.asCharacters().getData();
-			myDependency.setGroupId(groupId);
-
-		} else if (isStartElementEqualsTo(event, "artifactId")) {
-
-			/*
-			 * Dependecy - artifactId
-			 */
-			event = (XMLEvent) xmleventReader.next();
-			String artifactId = event.asCharacters().getData();
-			myDependency.setArtifactId(artifactId);
-
-		} else if (isStartElementEqualsTo(event, "version")) {
-
-			/*
-			 * Dependecy - version
-			 */
-			event = (XMLEvent) xmleventReader.next();
-			String version = event.asCharacters().getData();
-			myDependency.setVersion(version);
-
-		} else if (isStartElementEqualsTo(event, "scope")) {
-
-			event = (XMLEvent) xmleventReader.next();
-			String scope = event.asCharacters().getData();
-			myDependency.setScope(scope);
-
-		} else if (isStartElementEqualsTo(event, "exclusions")) {
-
-			manageDependecyExclusions(xmleventReader, event, myDependency);
-		}
-	}
-
-	/**
-	 * 
-	 * Manage exclusions dealing with the current dependency beeing extracted
-	 * from XML source file and pass it to the output dependency object
-	 * 
-	 * @param xmleventReader
-	 * @param event
-	 */
-	private static void manageDependecyExclusions(
-			XMLEventReader xmleventReader, XMLEvent event,
-			Dependency myDependency) {
-
-		// System.out.println("EXCLUSIONS START");
-		// Manage exclusion
-		while (!isEndElementEqualsTo(event, "exclusions")) {
-
-			event = (XMLEvent) xmleventReader.next();
-
-			if (isStartElementEqualsTo(event, "exclusion")) {
-
-				Exclusion exclusion = new Exclusion();
-				// System.out.println("EXCLUSION START");
-				while (!isEndElementEqualsTo(event, "exclusion")) {
-
-					event = (XMLEvent) xmleventReader.next();
-
-					if (isStartElementEqualsTo(event, "groupId")) {
-
-						event = (XMLEvent) xmleventReader.next();
-						String groupId = event.asCharacters().getData();
-						exclusion.setGroupId(groupId);
-
-					} else if (isStartElementEqualsTo(event, "artifactId")) {
-
-						event = (XMLEvent) xmleventReader.next();
-						String artifactId = event.asCharacters().getData();
-						exclusion.setArtifactId(artifactId);
-					}
-				}
-				// Add exclusion to dependeny
-				myDependency.addExclusion(exclusion);
-			}
-		}
-	}
-
-	/**
-	 * is the input event sent on the 'dependencies' end element.
-	 * 
-	 * @param event
-	 * @return boolean: true if the event is on the dependency end element
-	 */
-	private static boolean isEndDependencies(XMLEvent event) {
-
-		boolean bool = event.isEndElement()
-				&& "dependencies".equals(event.asEndElement().getName()
-						.toString());
-		return bool;
-
-	}
-
-	/**
-	 * Is the input event is a START XML element ? And is it equal to the input
-	 * value ?
-	 * 
-	 * @param event
-	 * @param value
-	 * @return boolean : true if both condition are verified
-	 */
-	private static boolean isStartElementEqualsTo(XMLEvent event, String value) {
-
-		return event.isStartElement()
-				&& value.equals(event.asStartElement().getName().toString());
-	}
-
-	/**
-	 * Is the input event is an END XML element ? And is it equal to the input
-	 * value ?
-	 * 
-	 * @param event
-	 * @param value
-	 * @return
-	 */
-	private static boolean isEndElementEqualsTo(XMLEvent event, String value) {
-
-		if (event.isEndElement()) {
-
-			String endElemenValue = event.asEndElement().getName().toString();
-			return value.equals(endElemenValue);
-
-		} else {
-
-			return false;
-		}
-
 	}
 
 	/**
@@ -373,9 +187,9 @@ public class UIProjectUtils {
 					.getOrigin();
 
 			// Add the annotation for JSF2 managed bean
-			javaclass.addAnnotation("ManagedBean");
+			javaclass.addAnnotation("Named");
 
-			javaclass.addImport("javax.faces.bean.ManagedBean");
+			javaclass.addImport("javax.inject.Named");
 
 			// Save the java class in the project
 			javaSourcefacet.saveJavaSource(javaclass);

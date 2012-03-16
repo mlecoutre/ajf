@@ -7,6 +7,7 @@ import static am.ajf.forge.lib.ForgeConstants.AJF_MONITORING;
 import static am.ajf.forge.lib.ForgeConstants.AJF_PERSISTENCE;
 import static am.ajf.forge.lib.ForgeConstants.AJF_REMOTING;
 import static am.ajf.forge.lib.ForgeConstants.AJF_TESTING;
+import static am.ajf.forge.lib.ForgeConstants.META_INF_FOLDER_ZIP;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
 import am.ajf.forge.util.ProjectUtils;
+import am.ajf.forge.util.UIProjectUtils;
 
 @Singleton
 public class LibProjectGeneration {
@@ -97,11 +99,12 @@ public class LibProjectGeneration {
 	 * @param dir
 	 * @param isCompact
 	 * @return Project
+	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	private Project generateProject(String globalProjectName,
 			String projectFinalName, ProjectFactory projectFactory,
-			DirectoryResource dir) {
+			DirectoryResource dir) throws Exception {
 
 		// Create Project
 		Project project = projectFactory.createProject(dir,
@@ -127,6 +130,13 @@ public class LibProjectGeneration {
 		 */
 		ProjectUtils.addInternalDependency(globalProjectName, project,
 				PROJECT_TYPE_CONFIG);
+
+		/*
+		 * Extract META-INF/beans.xml to generated project
+		 */
+		ResourceFacet rsf = project.getFacet(ResourceFacet.class);
+		UIProjectUtils.unzipFile(META_INF_FOLDER_ZIP, rsf.getResourceFolder()
+				.getUnderlyingResourceObject());
 
 		return project;
 	}

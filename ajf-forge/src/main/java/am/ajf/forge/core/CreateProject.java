@@ -213,6 +213,7 @@ public class CreateProject {
 		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_CONFIG);
 		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_CORE);
 		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_UI);
+		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_LIB);
 		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_EAR);
 
 		// Set am/parent
@@ -295,8 +296,6 @@ public class CreateProject {
 				PROJECT_TYPE_CORE);
 		ProjectUtils.addInternalDependency(globalProjectName, project,
 				PROJECT_TYPE_CONFIG);
-		ProjectUtils.addInternalDependency(globalProjectName, project,
-				PROJECT_TYPE_UI);
 
 		return project;
 	}

@@ -50,6 +50,8 @@ public class CreateSolutionPlugin implements
 	@Inject
 	private ResourceFactory factory;
 
+	private boolean isProjectDirFlag = false;
+
 	private static final String AJF_PROJECT_TYPE_SIMPLE = "Simple ajf solution";
 	private static final String AJF_PROJECT_TYPE_COMPLEX = "Complex ajf solution";
 
@@ -86,20 +88,120 @@ public class CreateSolutionPlugin implements
 
 			String projectName = shell.prompt("Project Name :");
 			String projectDirectory = promptProjectDirectory("Project directory (empty is current directory) :");
-			if (!"exit".equals(projectDirectory))
+			if (!"exit".equals(projectDirectory)) {
+				isProjectDirFlag = true;
 				createAjfSolutionCompacted(projectName, projectDirectory, out);
+			}
 
 		} else if (AJF_PROJECT_TYPE_COMPLEX.equals(projectType)) {
 
 			String projectName = shell.prompt("Project Name :");
 			String projectDirectory = promptProjectDirectory("Project directory (empty is current directory) :");
-			if (!"exit".equals(projectDirectory))
+			if (!"exit".equals(projectDirectory)) {
+				isProjectDirFlag = true;
 				createAjfSolutionExploded(projectName, projectDirectory, out);
+			}
 
 		} else {
 
 			ShellMessages.error(out, "ERROR OCCURED");
 
+		}
+
+	}
+
+	/**
+	 * Creation of a 'complex ajf-solution' composed of different project types
+	 * 
+	 * @param name
+	 * @param folderName
+	 * @param out
+	 */
+	@Command("exploded")
+	public void createAjfSolutionExploded(
+			@Option(name = "named", description = "The name of the new AJF project", required = true) final String name,
+			@Option(name = "Directory", required = true) final String folderName,
+			final PipeOut out) {
+
+		// Check project directory
+		if (isProjectDirFlag || checkProjectDirectoryConsistency(folderName)) {
+
+			/*
+			 * START LOG
+			 */
+			ShellMessages.info(
+					out,
+					"Creating the AJF exploded solution".concat(name)
+							.concat(" in the directory : ").concat(folderName));
+
+			try {
+
+				// Generate the list of different ajf project type
+				generateAjfProject(name, folderName, PROJECT_TYPE_PARENT, out);
+				generateAjfProject(name, folderName, PROJECT_TYPE_EAR, out);
+				generateAjfProject(name, folderName, PROJECT_TYPE_CORE, out);
+				generateAjfProject(name, folderName, PROJECT_TYPE_UI, out);
+				generateAjfProject(name, folderName, PROJECT_TYPE_CONFIG, out);
+				generateAjfProject(name, folderName, PROJECT_TYPE_WS, out);
+				generateAjfProject(name, folderName, PROJECT_TYPE_LIB, out);
+
+				/*
+				 * FINAL LOG
+				 */
+				ShellMessages.info(out, "AJF solution done.[" + folderName
+						+ "]");
+
+			} catch (Exception e) {
+
+				// print on the shell the exception thrown
+				ShellMessages.error(out,
+						"AJF project generation process has thrown an Exception : "
+								+ e.toString());
+
+			}
+		} else {
+
+			// DO nothing
+
+		}
+
+	}
+
+	/**
+	 * Creation of an AJF compact project
+	 * 
+	 * @param name
+	 * @param folderName
+	 * @param out
+	 */
+	@Command("compacted")
+	public void createAjfSolutionCompacted(
+			@Option(name = "named", description = "The name of the new AJF project", required = true) final String name,
+			@Option(name = "Directory", required = true) final String folderName,
+			final PipeOut out) {
+
+		// Check project directory
+		if (isProjectDirFlag || checkProjectDirectoryConsistency(folderName)) {
+
+			/*
+			 * START LOG
+			 */
+			ShellMessages.info(
+					out,
+					"Creating the AJF compacted solution".concat(name)
+							.concat(" in the directory : ").concat(folderName));
+
+			try {
+				generateAjfProject(name, folderName, PROJECT_TYPE_COMPACT, out);
+			} catch (Exception e) {
+				// print on the shell the exception thrown
+				ShellMessages.error(out,
+						"AJF project generation process has thrown an Exception : "
+								+ e.toString());
+			}
+
+		} else {
+			// Do nothing
 		}
 
 	}
@@ -182,106 +284,13 @@ public class CreateSolutionPlugin implements
 		if (choice == 0) {
 			// If choice "Yes" is selected
 			isCorrectDirectory = true;
+		} else {
+			if (myFile.exists()) {
+				myFile.delete();
+			}
 		}
 
 		return isCorrectDirectory;
-	}
-
-	/**
-	 * Creation of a 'complex ajf-solution' composed of different project types
-	 * 
-	 * @param name
-	 * @param folderName
-	 * @param out
-	 */
-	@Command("exploded")
-	public void createAjfSolutionExploded(
-			@Option(name = "named", description = "The name of the new AJF project", required = true) final String name,
-			@Option(name = "Directory", required = true) final String folderName,
-			final PipeOut out) {
-
-		// Check project directory
-		if (checkProjectDirectoryConsistency(folderName)) {
-
-			/*
-			 * START LOG
-			 */
-			ShellMessages.info(
-					out,
-					"Creating the AJF exploded solution".concat(name)
-							.concat(" in the directory : ").concat(folderName));
-
-			try {
-
-				// Generate the list of different ajf project type
-				generateAjfProject(name, folderName, PROJECT_TYPE_PARENT, out);
-
-				generateAjfProject(name, folderName, PROJECT_TYPE_EAR, out);
-
-				generateAjfProject(name, folderName, PROJECT_TYPE_CORE, out);
-
-				generateAjfProject(name, folderName, PROJECT_TYPE_UI, out);
-
-				generateAjfProject(name, folderName, PROJECT_TYPE_CONFIG, out);
-
-				generateAjfProject(name, folderName, PROJECT_TYPE_WS, out);
-
-				generateAjfProject(name, folderName, PROJECT_TYPE_LIB, out);
-
-				/*
-				 * FINAL LOG
-				 */
-				ShellMessages.info(out, "AJF solution done.[" + folderName
-						+ "]");
-
-			} catch (Exception e) {
-
-				// print on the shell the exception thrown
-				ShellMessages.error(out,
-						"AJF project generation process has thrown an Exception : "
-								+ e.toString());
-
-			}
-		} else {
-
-			ShellMessages
-					.error(shell,
-							"Input project directory is not correct. Please try again...");
-
-		}
-
-	}
-
-	/**
-	 * Creation of an AJF compact project
-	 * 
-	 * @param name
-	 * @param folderName
-	 * @param out
-	 */
-	@Command("compacted")
-	public void createAjfSolutionCompacted(
-			@Option(name = "named", description = "The name of the new AJF project", required = true) final String name,
-			@Option(name = "Directory", required = true) final String folderName,
-			final PipeOut out) {
-
-		/*
-		 * START LOG
-		 */
-		ShellMessages.info(
-				out,
-				"Creating the AJF compacted solution".concat(name)
-						.concat(" in the directory : ").concat(folderName));
-
-		try {
-			generateAjfProject(name, folderName, PROJECT_TYPE_COMPACT, out);
-		} catch (Exception e) {
-			// print on the shell the exception thrown
-			ShellMessages.error(out,
-					"AJF project generation process has thrown an Exception : "
-							+ e.toString());
-		}
-
 	}
 
 	/**

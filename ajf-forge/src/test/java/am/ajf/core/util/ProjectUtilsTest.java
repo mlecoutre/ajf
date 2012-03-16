@@ -22,7 +22,7 @@ public class ProjectUtilsTest {
 	@Test
 	public void getPomFromFileTest() throws Exception {
 
-		Model pom = ProjectUtils.getPomFromFile("pom-ui.xml");
+		Model pom = ProjectUtils.getPomFromFile(UI_MODEL_POM_FILE);
 
 		Plugin myPlugin = null;
 		for (Plugin plugin : pom.getBuild().getPlugins()) {
@@ -33,7 +33,9 @@ public class ProjectUtilsTest {
 			}
 		}
 
-		assertNotNull("plugin war should not be null", myPlugin);
+		assertNotNull(
+				"plugin war should not be null. Please check that the maven war plugin artifact id is in accordance with the test case.",
+				myPlugin);
 
 		System.out.println("PLUGIN CONF : "
 				+ myPlugin.getConfiguration().toString());

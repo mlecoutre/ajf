@@ -2,6 +2,8 @@ package am.ajf.forge.util;
 
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_GROUPID_PREFIX;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_PARENT;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_WEB_PATH;
 import static am.ajf.forge.lib.ForgeConstants.START_PROJECT_MILESTONE;
 
@@ -118,8 +120,17 @@ public class ProjectUtils {
 
 		String artifactId = globalProjectName + "-" + dependencyProjectType;
 
-		addDependency(project, projectGroupId(globalProjectName), artifactId,
-				START_PROJECT_MILESTONE);
+		if (PROJECT_TYPE_UI.equals(dependencyProjectType)
+				|| PROJECT_TYPE_WS.equals(dependencyProjectType)) {
+			// In case it is internal dependency to UI or WS project, have to
+			// set the "war" type
+			addDependencyWithType(project, projectGroupId(globalProjectName),
+					artifactId, START_PROJECT_MILESTONE, "war");
+		} else {
+			addDependency(project, projectGroupId(globalProjectName),
+					artifactId, START_PROJECT_MILESTONE);
+
+		}
 
 	}
 
@@ -169,6 +180,22 @@ public class ProjectUtils {
 	public static void addDependency(Project project, String groupId,
 			String artifactId, String version) {
 
+		addDependencyWithType(project, groupId, artifactId, version, null);
+
+	}
+
+	/**
+	 * Add a dependency to a projectw with the possibility to set to type to it
+	 * 
+	 * @param project
+	 * @param groupId
+	 * @param artifactId
+	 * @param version
+	 * @param type
+	 */
+	private static void addDependencyWithType(Project project, String groupId,
+			String artifactId, String version, String type) {
+
 		// Get the MavenFacet in order to grab the pom
 		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
 		Model pom = mavenCoreFacet.getPOM();
@@ -178,6 +205,10 @@ public class ProjectUtils {
 		dependency.setGroupId(groupId);
 		dependency.setVersion(version);
 		dependency.setArtifactId(artifactId);
+
+		if (null != type) {
+			dependency.setType(type);
+		}
 
 		// Add the dependency to the pom
 		pom.addDependency(dependency);

@@ -87,7 +87,8 @@ public class WebProjectGeneration {
 			}
 
 			System.out.println("** START - generating pom.xml from model...");
-			UIProjectUtils.setUIPomFromFile(project, "pom-ui.xml", isCompact);
+			UIProjectUtils.setUIPomFromFile(project, UI_MODEL_POM_FILE,
+					AJF_DEPS_MODEL_FILE, isCompact);
 			System.out.println("** END - pom.xml gebnerated...");
 
 		} catch (Exception e) {

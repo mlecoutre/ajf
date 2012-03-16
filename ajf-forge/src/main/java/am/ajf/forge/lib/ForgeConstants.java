@@ -39,15 +39,17 @@ public class ForgeConstants {
 	/*
 	 * Resources zip files
 	 */
-	public static final String WEBAPP_ZIP_RESOURCES = "WebAppResources.zip";
-	public static final String UI_MAIN_RESOURCES = "UIResourcesMain.zip";
-	public static final String UI_TEST_RESOURCES = "UIResourcesTest.zip";
+	public static final String WEBAPP_ZIP_RESOURCES = "webResources/WebAppResources.zip";
+	public static final String UI_MAIN_RESOURCES = "webResources/UIResourcesMain.zip";
+	public static final String UI_TEST_RESOURCES = "webResources/UIResourcesTest.zip";
+	public static final String META_INF_FOLDER_ZIP = "META-INF.zip";
 
 	/*
 	 * Resources xml file
 	 */
-	public static final String UI_MODEL_POM_FILE = "pom-ui.xml";
+	public static final String UI_MODEL_POM_FILE = "webResources/pom-ui.xml";
 	public static final String AJF_DEPS_MODEL_FILE = "ajf-dependencies.xml";
+	public static final String EMPTY_BEANS_SOURCE_FILE = "beans-empty.xml";
 
 	/*
 	 * AJF ArtifactIds
@@ -61,5 +63,10 @@ public class ForgeConstants {
 	public static final String AJF_SECURITY = "ajf-SECURITY";
 	public static final String AJF_TESTING = "ajf-testing";
 	public static final String AJF_WEB = "ajf-web";
+
+	/*
+	 * FreeMarker
+	 */
+	public static final String DEFAULT_TEMPLATES_DIRECTORY = "/FreeMarkerTemplate";
 
 }

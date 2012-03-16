@@ -15,6 +15,8 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
+import static am.ajf.forge.lib.ForgeConstants.*;
+
 /**
  * Html Utilities (based on FreeMarker)
  * 
@@ -24,7 +26,6 @@ import freemarker.template.TemplateException;
 @Singleton
 public class TemplateUtils {
 
-	private static final String DEFAULT_TEMPLATES_DIRECTORY = "/FreeMarkerTemplate";
 	private Configuration cfg;// = new Configuration(
 
 	/**
