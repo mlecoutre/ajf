@@ -71,6 +71,7 @@ public class PersonServiceTest {
 	public static JavaArchive createTestArchive() {
 		return ShrinkWrap
 				.create(JavaArchive.class, "test.jar")
+				.addPackages(true, "am.ajf.showcase")
 				.addClasses(AuditDataProducer.class)
 				.addClasses(LoggerProducer.class)
 				.addClasses(CacheProducer.class)
