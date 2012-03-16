@@ -16,6 +16,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import am.ajf.injection.AuditDataProducer;
+import am.ajf.injection.CacheInterceptor;
+import am.ajf.injection.CacheProducer;
+import am.ajf.injection.ConfigurationProducer;
+import am.ajf.injection.LoggerProducer;
+import am.ajf.injection.MonitoringInterceptor;
+import am.ajf.injection.PropertyProducer;
 import am.ajf.remoting.procs.impl.StoredProcedureHelper;
 import am.ajf.remoting.procs.impl.StoredProcedureImplHandler;
 import am.ajf.remoting.test.procs.harness.ModelSp;
@@ -32,9 +39,17 @@ public class StoredProcedureTest {
 	public static JavaArchive createTestArchive() {
 		return ShrinkWrap
 				.create(JavaArchive.class, "test.jar")
+				.addPackages(true, "am.ajf.core", "am.ajf.injection")
 				.addClasses(StoredProcedureNoImplServiceBD.class)
 				.addClasses(StoredProcedureImplHandler.class)
 				.addClasses(StoredProcedureHelper.class)
+				.addClasses(AuditDataProducer.class)
+				.addClasses(LoggerProducer.class)
+				.addClasses(CacheProducer.class)
+				.addClasses(PropertyProducer.class)
+				.addClasses(ConfigurationProducer.class)
+				.addClasses(MonitoringInterceptor.class)
+				.addClasses(CacheInterceptor.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,
 						ArchivePaths.create("beans.xml"));
 	}
