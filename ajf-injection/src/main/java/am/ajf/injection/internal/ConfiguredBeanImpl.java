@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.NormalScope;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.Alternative;
@@ -210,7 +210,7 @@ public class ConfiguredBeanImpl<T> implements Bean<T> {
 			}
 		}
 	
-		return Dependent.class;
+		return ApplicationScoped.class;
 	}
 
 	@Override
