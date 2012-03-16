@@ -25,7 +25,7 @@ import am.ajf.injection.annotation.Property;
 import foo.lib.services.MyServiceBD;
 
 @RunWith(Arquillian.class)
-public class InjectionTestInt {
+public class AutomatedInjectionTestInt {
 	
 	@Inject
 	private Logger logger;
@@ -33,20 +33,20 @@ public class InjectionTestInt {
 	@Inject
 	private AuditData auditData;
 	
-	@Inject
+	@Inject 
 	private Cache defaultCache;
 	
 	@Inject @am.ajf.injection.annotation.Cache(cacheManagerName="simple", cacheName="default")
 	private Cache cache;
-	
+
 	@Inject
 	private Configuration appConfiguration;
 	
-	@Inject @Property("application.name")
+	@Inject @Property(value="application.name", defaultValue="")
 	private String property;
 	
 	@Inject
-	private Instance<MyServiceBD> myServiceFactory; 
+	private Instance<MyServiceBD> myServiceFactory;
 		
 	@Inject
 	private MyServiceBD myService1;
@@ -73,14 +73,14 @@ public class InjectionTestInt {
 				.addClasses(CacheProducer.class)
 				.addClasses(PropertyProducer.class)
 				.addClasses(ConfigurationProducer.class)
-				//.addClasses(MailSenderProducer.class)
+				.addClasses(MailSenderProducer.class)
 				.addClasses(MonitoringInterceptor.class)
 				.addAsManifestResource("META-INF/beans.xml",
 						ArchivePaths.create("beans.xml"));
 		return archive;
 	}
 
-	public InjectionTestInt() {
+	public AutomatedInjectionTestInt() {
 		super();
 	}
 	

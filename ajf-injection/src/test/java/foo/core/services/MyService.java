@@ -5,6 +5,8 @@ import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+
 import am.ajf.core.services.exceptions.ServiceLayerException;
 import am.ajf.injection.annotation.Cached;
 import am.ajf.injection.annotation.ErrorHandled;
@@ -12,8 +14,11 @@ import am.ajf.injection.annotation.Property;
 import foo.lib.services.MyServiceBD;
 
 @ApplicationScoped
-public class MyService extends AbstractService implements MyServiceBD {
+public class MyService implements MyServiceBD {
 
+	@Inject
+	private Logger logger;
+	
 	@Inject
 	@Property("myKey")
 	private String myKeyValue;

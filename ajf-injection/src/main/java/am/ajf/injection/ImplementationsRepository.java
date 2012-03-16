@@ -81,7 +81,7 @@ public class ImplementationsRepository {
 	}
 	
 	
-	public void addService(Class<?> service) throws MalformedServiceException {	
+	public boolean addService(Class<?> service) throws MalformedServiceException {	
 		//first test the interface case
 		if (isServiceInterface(service)) {
 			//dont add it if the interface was already added
@@ -100,7 +100,7 @@ public class ImplementationsRepository {
 			}
 			if (vInterface == null) {
 				//This is not a service
-				return;
+				return false;
 				//throw new MalformedServiceException(service);
 			}
 							
@@ -138,6 +138,9 @@ public class ImplementationsRepository {
 		} else {
 			//nothing, you are trying to add a non service class
 		}
+		
+		return true;
+		
 	}
 	
 	public List<Class<?>> getServicesForInterface(Class<?> pInterface) throws NotInitializedException{
