@@ -11,8 +11,6 @@ import com.google.common.base.Strings;
 
 public class CacheProducer {
 
-	private static final String SIMPLE_CACHE_MANAGER = "simple";
-
 	public CacheProducer() {
 		super();
 	}
@@ -30,7 +28,7 @@ public class CacheProducer {
 			
 			String cacheProvider = cacheAnnotation.cacheManagerName();
 			if (Strings.isNullOrEmpty(cacheProvider)) {
-				cacheManager = CacheManagerFactory.getCacheManager(SIMPLE_CACHE_MANAGER);
+				cacheManager = CacheManagerFactory.getCacheManager(CacheManagerFactory.SIMPLE_CACHE_MANAGER);
 			}
 			else {
 				cacheManager = CacheManagerFactory.getCacheManager(cacheProvider);
@@ -47,7 +45,7 @@ public class CacheProducer {
 		}
 		else {
 		
-			cacheManager = CacheManagerFactory.getCacheManager(SIMPLE_CACHE_MANAGER);
+			cacheManager = CacheManagerFactory.getCacheManager(CacheManagerFactory.SIMPLE_CACHE_MANAGER);
 			cache = cacheManager.getCache();
 				
 		}
