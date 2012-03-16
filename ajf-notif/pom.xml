@@ -4,16 +4,16 @@
 	<parent>
 		<groupId>am.ajf</groupId>
 		<artifactId>ajf-parent</artifactId>
-		<version>2.1.0</version>
+		<version>2.1.1-SNAPSHOT</version>
 		<relativePath>../ajf-parent/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>ajf-notif</artifactId>
 
 	<scm>
-		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-2.1.0/ajf-notif</connection>
-		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-2.1.0/ajf-notif</developerConnection>
-		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/tags/ajf-2.1.0/ajf-notif?repname=ITSWE&path=/ajf/trunk/ajf-notif/]]></url>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-notif</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-notif</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-notif/]]></url>
 	</scm>
 
 	<dependencies>

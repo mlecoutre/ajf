@@ -3,15 +3,15 @@
 	<parent>
 		<groupId>am.ajf</groupId>
 		<artifactId>ajf-parent</artifactId>
-		<version>2.1.0</version>
+		<version>2.1.1-SNAPSHOT</version>
 		<relativePath>../ajf-parent</relativePath>
 	</parent>
 	<artifactId>ajf-remoting</artifactId>	
 
 	<scm>
-		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-2.1.0/ajf-remoting</connection>
-		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-2.1.0/ajf-remoting</developerConnection>
-		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/ajf-remoting/tags/ajf-2.1.0/ajf-remoting?repname=ITSWE&path=/ajf/ajf-remoting/]]></url>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-remoting</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-remoting</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/ajf-remoting/]]></url>
 	</scm>
 	
 	<dependencies>

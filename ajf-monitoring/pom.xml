@@ -4,16 +4,16 @@
 	<parent>
 		<groupId>am.ajf</groupId>
 		<artifactId>ajf-parent</artifactId>
-		<version>2.1.0</version>
+		<version>2.1.1-SNAPSHOT</version>
 		<relativePath>../ajf-parent/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>ajf-monitoring</artifactId>
 
 	<scm>
-		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-2.1.0/ajf-monitoring</connection>
-		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-2.1.0/ajf-monitoring</developerConnection>
-		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/tags/ajf-2.1.0/ajf-monitoring?repname=ITSWE&path=/ajf/trunk/ajf-monitoring/]]></url>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-monitoring</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-monitoring</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-monitoring/]]></url>
 	</scm>
 
 	<dependencies>
@@ -22,7 +22,7 @@
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-testing</artifactId>
-			<version>2.1.0</version>
+			<version>2.1.1-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 		
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-core</artifactId>
-			<version>2.1.0</version>
+			<version>2.1.1-SNAPSHOT</version>
 		</dependency>
 		
 		<!-- Event framework for monitoring -->

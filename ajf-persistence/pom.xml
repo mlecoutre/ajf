@@ -3,15 +3,15 @@
 	<parent>
 		<groupId>am.ajf</groupId>
 		<artifactId>ajf-parent</artifactId>
-		<version>2.1.0</version>		
+		<version>2.1.1-SNAPSHOT</version>		
 		<relativePath>../ajf-parent</relativePath>
 	</parent>
 	<artifactId>ajf-persistence</artifactId>
 	
 	<scm>
-		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-2.1.0/ajf-persistence</connection>
-		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-2.1.0/ajf-persistence</developerConnection>
-		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf-persistence/tags/ajf-2.1.0/ajf-persistence?repname=ITSWE&path=/ajf-persistence/]]></url>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-persistence</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-persistence</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf-persistence/]]></url>
 	</scm>
 	
 
