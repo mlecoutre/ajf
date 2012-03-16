@@ -203,21 +203,21 @@ public class ServicesExtension implements Extension {
 			
 			try {
 				
-				Set<Class<?>> notConfiguredBeanImplems = BeansManager.getNotConfiguredBeanImplementations(beanInterface);
-				for (Class<?> beanImplemClass : notConfiguredBeanImplems) {
-					AnnotatedType<?> at = beanManager
-							.createAnnotatedType(beanImplemClass);
-					InjectionTarget<?> it = beanManager
-							.createInjectionTarget(at);
-					Bean<?> bean = new BeanImpl(beanImplemClass, beanInterface, 
-							at, it);
-					abd.addBean(bean);
-				}
-								
 				Map<String, Set<ExtendedBeanDeclaration>> beanDeclarationsMap = 
 						BeansManager.getBeanDeclarations(beanInterface);
 				
 				if ((null != beanDeclarationsMap) && (!beanDeclarationsMap.isEmpty())) {
+					
+					Set<Class<?>> notConfiguredBeanImplems = BeansManager.getNotConfiguredBeanImplementations(beanInterface);
+					for (Class<?> beanImplemClass : notConfiguredBeanImplems) {
+						AnnotatedType<?> at = beanManager
+								.createAnnotatedType(beanImplemClass);
+						InjectionTarget<?> it = beanManager
+								.createInjectionTarget(at);
+						Bean<?> bean = new BeanImpl(beanImplemClass, beanInterface, 
+								at, it);
+						abd.addBean(bean);
+					}
 					
 					Set<String> keySet = beanDeclarationsMap.keySet();
 					Iterator<String> keysIterator = keySet.iterator();
@@ -294,19 +294,6 @@ public class ServicesExtension implements Extension {
 			}
 					
 		}
-		
-		/*
-		if (javaClass.isInterface()) { 
-			if (annotatedType.isAnnotationPresent(am.ajf.injection.annotation.Bean.class)) {
-				try {
-					BeansManager.getBeans().add(javaClass);
-					logger.trace(String.format("Register interface '%s' as Bean.", javaClass.getName()));
-				} catch (Exception e) {
-					logger.warn("Exception throwed while loading Beans.", e);
-				}
-			}		
-		}
-		*/
 		
 		try {
 			
