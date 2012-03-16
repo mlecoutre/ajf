@@ -11,10 +11,11 @@
 
     <toc/>
     <xi:include href="ajf-norms.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-    <xi:include href="ajf-error-handling.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
-    
+        
     <xi:include href="ajf-core.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
     <xi:include href="ajf-injection.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    
+    <xi:include href="ajf-error-handling.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
     
     <xi:include href="ajf-security.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
     <xi:include href="ajf-web.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>

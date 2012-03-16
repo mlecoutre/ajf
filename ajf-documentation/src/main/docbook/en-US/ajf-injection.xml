@@ -51,15 +51,12 @@
 			if the library contain a beans configuration file (META-INF/beans.xml)
 			<example>
 				<title>Empty 'beans.xml' file</title>
-				<programlisting language="Xml" role="Xml"><![CDATA[
-	<beans
-	   xmlns="http://java.sun.com/xml/ns/javaee"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="
-	   	http://java.sun.com/xml/ns/javaee
-	   	http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
-	</beans>
-				]]></programlisting>
+				<programlisting>
+				<![CDATA[
+				<beans>
+				</beans>
+				]]>
+				</programlisting>
 			</example>
 		</para>
 		<section>
@@ -77,7 +74,7 @@
 		</section>
 		<section>
 			<title>Inject AuditData</title>
-			<para></para>
+			<para><classname>AuditData</classname> injection.</para>
 			<programlisting language="Java" role="Java"><![CDATA[
 	import javax.inject.Inject;
 	
@@ -90,7 +87,7 @@
 		</section>
 		<section>
 			<title>Inject Configuration</title>
-			<para></para>
+			<para>ApplicationContect configuration.</para>
 			<programlisting language="Java" role="Java"><![CDATA[
 	import javax.inject.Inject;
 	
@@ -103,7 +100,7 @@
 		</section>
 		<section>
 			<title>Inject Property</title>
-			<para></para>
+			<para>ApplicationContect configured property (defined in the 'settings.properties' file).</para>
 			<programlisting language="Java" role="Java"><![CDATA[
 	import javax.inject.Inject;
 	
@@ -147,21 +144,39 @@
 			]]></programlisting>
 		</section>
 		<section>
-			<title>Inject JTA UserTransaction</title>
-			<para>Can only work if the code is invoked in a container which include the service JTA</para>
-			<programlisting language="Java" role="Java"><![CDATA[
-	import javax.inject.Inject;
-	
-	import javax.transaction.UserTransaction;
-	...
-	
-	@Inject
-	UserTransaction myUserTx;
-			]]></programlisting>
-		</section>
-		<section>
 			<title>Inject Cache</title>
 			<para></para>
+			<table frame="all">
+				<title><classname>am.ajf.injection.annotation.Cache</classname> API</title>
+				<tgroup cols="4">
+					<colspec colname="c1"/>
+					<colspec colname="c2"/>
+					<colspec colname="c3"/>
+					<colspec colname="c4"/>
+					<thead>
+						<row>
+							<entry colname="1">Attribute</entry>
+							<entry colname="2">Type</entry>
+							<entry colname="3">Default Value</entry>
+						    <entry colname="4">Description</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>cacheManagerName</entry>
+							<entry>java.lang.String</entry>
+							<entry><parameter>simple</parameter> <classname>am.ajf.core.cache.CacheManager</classname>.</entry>
+							<entry>the named <classname>am.ajf.core.cache.CacheManager</classname> instance to use.</entry>
+						</row>
+						<row>
+							<entry>cacheName</entry>
+							<entry>java.lang.String</entry>
+							<entry><parameter>[methodDeclaredClassName]</parameter>#<parameter>[methodName]</parameter></entry>
+							<entry>the named <classname>am.ajf.core.cache.Cache</classname> instance to use.</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</table>
 			<programlisting language="Java" role="Java"><![CDATA[
 	import javax.inject.Inject;
 	...
@@ -192,19 +207,12 @@
 			you can DO something Before and After the target method invocation. AJF provide a set interceptors.   
 			In order to activate the interceptors, you have to declare them in the beans configuration file. 
 			Be careful, the declaration order is the execution order when the interceptors are cumulated.
-			<programlisting language="Xml" role="Xml"><![CDATA[
-	<beans
-	   xmlns="http://java.sun.com/xml/ns/javaee"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="
-	   	http://java.sun.com/xml/ns/javaee
-	   	http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+			<programlisting>
+			<![CDATA[
+	<beans>
 		 <interceptors>
 			  <class>am.ajf.injection.MonitoringInterceptor</class>
-			  <class>am.ajf.injection.TransactionInterceptor</class>
 			  <class>am.ajf.injection.CacheInterceptor</class>
-			  <!-- should be the last one -->
-			  <class>am.ajf.injection.ErrorHandlingInterceptor</class>
 		 </interceptors>
 	</beans>
 			]]></programlisting>
@@ -214,26 +222,151 @@
 		<section>
 			<title>Monitoring Interceptor</title>
 			<para>
-			This interceptor instrument the concerned method invocation by computing the target method execution time 
-			and firing AJF monitoring events.
-			
+			This interceptor instrument the concerned method invocation by computing the targetted method execution time 
+			and firing specifics AJF monitoring events. The trigerred annotation is <classname>am.ajf.injection.annotation.@Monitored</classname>.
+			<programlisting language="Java" role="Java"><![CDATA[
+				
+			@Monitored
+			public String myFirstOperation(String string1, String string2) {
+				String res = String.format("Process: Hello %s, %s.", string1 , string2);
+				logger.debug(res);
+				return res;
+			}
+				
+			]]></programlisting>			
 			</para>			
-		</section>
-		<section>
-			<title>Transactional Interceptor</title>
-			<para>
-			
-			</para>
 		</section>
 		<section>
 			<title>Cache Interceptor</title>
 			<para>
+			This interceptor add cache  capacities on the targetted method. 
+			The trigerred annotation is <classname>am.ajf.injection.annotation.@Cached</classname>.
+			The annotation <classname>@Cached</classname> has optional parameters.
+			<table frame="all">
+				<title>@Cached annotation API</title>
+				<tgroup cols="4">
+					<colspec colname="c1"/>
+					<colspec colname="c2"/>
+					<colspec colname="c3"/>
+					<colspec colname="c4"/>
+					<thead>
+						<row>
+							<entry colname="1">Attribute</entry>
+							<entry colname="2">Type</entry>
+							<entry colname="3">Default Value</entry>
+						    <entry colname="4">Description</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>cacheManagerName</entry>
+							<entry>java.lang.String</entry>
+							<entry><parameter>simple</parameter> <classname>am.ajf.core.cache.CacheManager</classname>.</entry>
+							<entry>the named <classname>am.ajf.core.cache.CacheManager</classname> instance to use.</entry>
+						</row>
+						<row>
+							<entry>cacheName</entry>
+							<entry>java.lang.String</entry>
+							<entry><parameter>[methodDeclaredClassName]</parameter>#<parameter>[methodName]</parameter></entry>
+							<entry>the named <classname>am.ajf.core.cache.Cache</classname> instance to use.</entry>
+						</row>
+						<row>
+							<entry>cacheBuilder</entry>
+							<entry><![CDATA[Class<? extends am.ajf.injection.api.CacheBuilder>]]></entry>
+							<entry><classname>am.ajf.injection.impl.DefaultCacheBuilder.class</classname></entry>
+							<entry>allow to use a custom <classname>am.ajf.core.cache.Cache</classname> provider class.</entry>
+						</row>
+						<row>
+							<entry>keyBuilder</entry>
+							<entry><![CDATA[Class<? extends KeyBuilder>]]></entry>
+							<entry><classname>am.ajf.injection.impl.SimpleKeyBuilderImpl.class</classname></entry>
+							<entry>allow to use a custom <parameter>key</parameter> builder class.</entry>
+						</row>
+						<row>
+							<entry>defaultKey</entry>
+							<entry>String</entry>
+							<entry><parameter>[methodDeclaredClassName]</parameter>#<parameter>[methodName]</parameter></entry>
+							<entry>is used if the generated key is <parameter>null</parameter> or <parameter>empty</parameter>.</entry>
+						</row>
+						<row>
+							<entry>clearCache</entry>
+							<entry>boolean</entry>
+							<entry>true</entry>
+							<entry>specify to clear or not the used cache at the fist method - of instance - call.</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</table>
+			<programlisting language="Java" role="Java"><![CDATA[
+				
+			@Cached(cacheManagerName="infinispan", cacheName="myCache", clearCache=true);
+			public String myFirstOperation(String string1, String string2) {
+				String res = String.format("Process: Hello %s, %s.", string1 , string2);
+				logger.debug(res);
+				return res;
+			}
+				
+			]]></programlisting>			
 			</para>
-		</section>
-		<section>
-			<title>ErrorHandling Interceptor</title>
-			<para>
-			</para>
+			<section>
+				<title>CacheBuilder</title>
+				<para>
+						
+				</para>
+				<table frame="all">
+					<title><classname>am.ajf.injection.api.CacheBuilder</classname> API</title>
+					<tgroup cols="2">
+						<colspec colname="c1"/>
+						<colspec colname="c2"/>
+						<thead>
+							<row>
+								<entry colname="1">Method</entry>
+							    <entry colname="2">Description</entry>
+							</row>
+						</thead>
+						<tbody>
+							<row>
+								<entry><![CDATA[
+								am.ajf.core.cache.Cache build(Class<?> targetClass, 
+									Method targetMethod, 
+									am.ajf.injection.annotation.Cached cacheAnnotation)
+								]]></entry>
+								<entry>method return a <classname>am.ajf.core.cache.Cache</classname> instance</entry>
+							</row>
+						</tbody>
+					</tgroup>
+				</table>
+			</section>
+			<section>
+				<title>KeyBuilder</title>
+				<para>
+						
+				</para>
+				<table frame="all">
+					<title><classname>am.ajf.injection.api.KeyBuilder</classname> API</title>
+					<tgroup cols="2">
+						<colspec colname="c1"/>
+						<colspec colname="c2"/>
+						<thead>
+							<row>
+								<entry colname="1">Method</entry>
+							    <entry colname="2">Description</entry>
+							</row>
+						</thead>
+						<tbody>
+							<row>
+								<entry><![CDATA[
+								Object build(Class<?> targetClass, Method targetMethod,
+									am.ajf.injection.annotation.Cached cachedAnnotation,
+									Object[] parameters);
+								]]></entry>
+								<entry>method return a <classname>java.lang.Object</classname> instance for the key value (in general, the generated 
+									<parameter>key</parameter> is a <classname>java.lang.String</classname></entry>
+							</row>
+						</tbody>
+					</tgroup>
+				</table>
+			</section>
 		</section>
 	</section>
 	<!--  
