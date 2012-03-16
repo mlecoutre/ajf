@@ -1,7 +1,10 @@
 package am.ajf.core.beans;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import am.ajf.core.utils.BeanUtils;
@@ -33,12 +36,41 @@ public class BeansManager {
 		return getBean(beanClass, null);
 	}
 
-	public static Set<Class<?>> getBeanImplementations(Class<?> componentType) throws Exception {
+	public static Set<Class<?>> getDeclaredBeanImplementations(Class<?> componentType) throws Exception {
 		return BeanDeclarationsLoader.getBeanImplementations(componentType);
 	}
 	
 	public static Set<Class<?>> getBeans() throws Exception {
 		return BeanDeclarationsLoader.getBeans();
+	}
+	
+	public static Set<Class<?>> getNotConfiguredBeanImplementations(Class<?> classInterface)
+			throws Exception, ClassNotFoundException {
+		
+		Set<Class<?>> beanImplementations = BeansManager.getDeclaredBeanImplementations(classInterface);
+		
+		Set<Class<?>> missingConfiguredBeans = new HashSet<Class<?>>();
+		for (Class<?> beanImplementation : beanImplementations) {
+			missingConfiguredBeans.add(beanImplementation);
+		}
+									
+		Map<String, Set<ExtendedBeanDeclaration>> declarations = BeansManager.getBeanDeclarations(classInterface);
+		Set<Entry<String, Set<ExtendedBeanDeclaration>>> entries = declarations
+				.entrySet();
+		for (Iterator<Entry<String, Set<ExtendedBeanDeclaration>>> iterator = entries
+				.iterator(); iterator.hasNext();) {
+			Entry<String, Set<ExtendedBeanDeclaration>> entry = (Entry<String, Set<ExtendedBeanDeclaration>>) iterator
+					.next();
+			ExtendedBeanDeclaration firstBeanConfig = entry.getValue().iterator().next();
+			Class<?> firstBeanconfigClass  = BeansManager.getBeanClass(firstBeanConfig);
+			
+			if (missingConfiguredBeans.contains(firstBeanconfigClass)) {
+				missingConfiguredBeans.remove(firstBeanconfigClass);
+			}
+			
+		}
+		return missingConfiguredBeans;
+		
 	}
 	
 	@SuppressWarnings("unchecked")
