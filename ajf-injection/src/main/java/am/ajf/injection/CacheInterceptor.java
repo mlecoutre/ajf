@@ -136,7 +136,7 @@ public class CacheInterceptor implements Serializable {
 
 		defaultKey = cachedAnnotation.defaultKey();
 		if (Strings.isNullOrEmpty(defaultKey)) {
-			defaultKey = targetMethod.toGenericString();
+			defaultKey = String.format("%s#%s",targetMethod.getDeclaringClass().getName(), targetMethod.getName());
 		}
 		
 		initialized = true;
