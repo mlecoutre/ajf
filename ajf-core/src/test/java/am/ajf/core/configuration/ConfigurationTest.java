@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.SystemConfiguration;
 import org.junit.Test;
@@ -121,7 +122,7 @@ public class ConfigurationTest implements PropertyListener {
 	}
 
 	@Test
-	public void testPrefixedVarsInterpolation() {
+	public void testPrefixedVarsInterpolation() throws ConfigurationException {
 
 		Configuration configuration = new PropertiesConfiguration();
 

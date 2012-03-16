@@ -2,8 +2,8 @@ package am.ajf.core.configuration;
 
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertyConverter;
-import org.infinispan.config.ConfigurationException;
 
 public class ConfigurationUtils {
 	
