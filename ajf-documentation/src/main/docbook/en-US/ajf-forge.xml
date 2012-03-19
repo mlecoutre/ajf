@@ -1,63 +1,152 @@
 <?xml version='1.0' encoding='ISO-8859-1'?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
+<!-- This document was created with Syntext Serna Free. --><!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
 <chapter id="forge">
-	<title>AJF - Forge Reference</title>
+	<title>AJF - Forge</title>
 	<para>
-		The AJF Core library provide a set of commons reusable components for use
-		on J2EE server and other Servlet containers. 		
+		Forge &quot;ready to use&quot; AJF2 projects
+
+		<figure id="ajf-forge-logo.fig">
+			<mediaobject>
+				<imageobject>
+					<imagedata align="center" scale="50"
+						fileref="images/forge/ajf-forge-logo.png" />
+				</imageobject>
+			</mediaobject>
+		</figure>
 	</para>
 	<section>
 		<title>Introduction</title>
 		<para>
-			
+			The ajf-forge is in fact a plugin for JBOSS FORGE which
+			is a
+			powerful project building tool.
+			With this plugin you will be able
+			to
+			easily generate an empty ajf2 project, instantly deployable on a
+			local
+			tomcat server. It gives you the key to a &quot;ready to
+			use&quot;
+			ajf2
+			project.
 		</para>
 	</section>
-	
-	<!--  
 	<section>
-		<title></title>
+		<title>Introduction</title>
 		<para>
-			
+			Installing the Jboss Forge tool will allow you to use the
+			ajf-forge plugin.
 		</para>
-		<important>
-			<para>
-			 				
-			</para> 
-			<para><emphasis></emphasis></para>
-			<programlisting language="Xml" role="Xml"><![CDATA[
-
-			]]></programlisting>
-		</important>
-
-		<example>
-			<title></title>
-			<programlisting language="Java" role="Java"><![CDATA[
-
-				]]></programlisting>
-			<para><emphasis>or</emphasis></para>
-			<programlisting language="Java" role="Java"><![CDATA[
-
-			]]></programlisting>				
-		</example>
-			
-		<important>
-			<para>
-				
-			</para>
-			<itemizedlist>
-				<listitem>
-					<para>
-						<emphasis>dlsm:ldmlsmdl</emphasis>
-					</para>
-				</listitem>
-			</itemizedlist> 
-		</important>
-		<warning>
-			<para>
-				
-			</para>
-		</warning>	
-		
 	</section>
-	-->
+	<section>
+		<title>Install forge distribution</title>
+		<para>
+			First, download the Jboss forge distribution here :
+		</para>
+		<para>TODO</para>
+		<para>
+			Unzip the forge distribution in you
+			<quote>C:/appli</quote>
+			directory.
+		</para>
+		<screenshot>
+			<mediaobject>
+				<imageobject>
+					<imagedata align="center" scale="70"
+						fileref="images/forge/forge-appli-install.png" />
+				</imageobject>
+			</mediaobject>
+		</screenshot>
+		<para>
+		</para>
+		<section>
+			<title>Set environment variables</title>
+			<para>
+				You have add JBoss distribution&apos;s bin directory to the
+				build
+				path of
+				your system.
+				After right clicking on your workstation and
+				go in
+				properties/Environment variable section, create a variable
+				FORGE_HOME, targeting the forge distribution directory
+			</para>
+			<para>
+				<screenshot>
+					<mediaobject>
+						<imageobject>
+							<imagedata align="center" scale="60"
+								fileref="images/forge/forge-envVar.png" />
+						</imageobject>
+					</mediaobject>
+				</screenshot>
+			</para>
+			<para>After that you have to add &quot;%FORGE_HOME%/bin&quot; to your
+				system&apos;s path. To do so, just mofiy the &quot;Path&quot;
+				environment variable :
+			</para>
+			<screenshot>
+				<mediaobject>
+					<imageobject>
+						<imagedata align="center" scale="60"
+							fileref="images/forge/forge-envVar1.png" />
+					</imageobject>
+				</mediaobject>
+			</screenshot>
+		</section>
+		<section>
+			<title>Run JBOSS forge tool</title>
+			<para>Now you are ready to use the JBOSS Forge tool. For that, just
+				launch a command terminal and set the &apos;forge&apos; command :
+			</para>
+			<screenshot>
+				<mediaobject>
+					<imageobject>
+						<imagedata contentwidth="500" align="center" scalefit="1"
+							fileref="images/forge/forge-launch.png" />
+					</imageobject>
+				</mediaobject>
+			</screenshot>
+		</section>
+	</section>
+	<section>
+		<title>Install ajf-forge plugin</title>
+		<para>
+			Now you are able to use the forge tool, you just need to install
+			the
+			ajf-forge plugin.
+		</para>
+		<section>
+			<title>Download ajf-forge plugin</title>
+			<para>
+				First and foremost, you have to download the zip file of the
+				plugin here
+				:
+			</para>
+			<para>TODO.
+			</para>
+			<para>
+				Then, launch forge in order to see your working directory of
+				FORGE. This
+				is simply logged on you terminal each time you launch
+				forge.
+			</para>
+			<figure id="forgeWorkingdir.fig">
+				<title>forge working directory</title>
+				<mediaobject>
+					<imageobject>
+						<imagedata align="center" fileref="images/forge/ajf-forge-workingDir.png"
+							scale="80" />
+					</imageobject>
+				</mediaobject>
+			</figure>
+		</section>
+	</section>
+	<!-- <section> <title></title> <para> </para> <important> <para> </para> 
+		<para> <emphasis></emphasis> </para> <programlisting language="Xml" role="Xml"><![CDATA[ 
+		]]></programlisting> </important> <example> <title></title> <programlisting 
+		language="Java" role="Java"><![CDATA[ ]]></programlisting> <para> <emphasis>or</emphasis> 
+		</para> <programlisting language="Java" role="Java"><![CDATA[ ]]></programlisting> 
+		</example> <important> <para> </para> <itemizedlist> <listitem> <para> <emphasis>dlsm:ldmlsmdl</emphasis> 
+		</para> </listitem> </itemizedlist> </important> <warning> <para> </para> 
+		</warning> </section> -->
 </chapter>
