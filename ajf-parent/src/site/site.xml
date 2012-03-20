@@ -9,7 +9,9 @@
   <src>images/arcelormittal.png</src>
   <href>http://www.arcelormittal.com</href>
  </bannerLeft>
- 
+  <bannerRight>
+ 	<name>${project.name}</name>
+ </bannerRight>
  <publishDate format="dd MMM yyyy HH:mm" />
  <version position="left"/>
  <poweredBy> 
