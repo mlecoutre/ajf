@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.35//EN"
+        "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<book lang="en">
+
+	<!--
+	docbook ref : http://www.sagehill.net/docbookxsl/ 
+	-->
+
+	<title>AJF Cook Book</title>
+
+    <toc/>
+    
+    <xi:include href="ajf-norms.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    
+</book>

@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding="ISO-8859-1"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.35//EN"
+        "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<book lang="en">
+
+	<!--
+	docbook ref : http://www.sagehill.net/docbookxsl/ 
+	-->
+
+	<title>AJF User Guide</title>
+
+    <toc/>
+    <xi:include href="ajf-norms.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+        
+    <xi:include href="ajf-core.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include href="ajf-injection.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    
+    <xi:include href="ajf-error-handling.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    
+    <xi:include href="ajf-security.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include href="ajf-web.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    
+    <xi:include href="ajf-persistence.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include href="ajf-transaction.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    <xi:include href="ajf-remoting.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+    
+    <xi:include href="ajf-monitoring.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+	<!-- 
+	<xi:include href="ajf-notifier.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+	-->
+	<xi:include href="ajf-testing.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+	<xi:include href="ajf-forge.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+</book>

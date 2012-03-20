@@ -11,7 +11,6 @@
 
 	<properties>
 		<translation>en-US</translation>
-		<docname>master</docname>
 	</properties>
 
 	<build>
@@ -40,10 +39,7 @@
 						 -->
 					</dependencies>
 					<configuration>
-						<sourceDirectory>${basedir}/src/main/docbook</sourceDirectory>
-						<sourceDocumentName>${docname}.xml</sourceDocumentName>
 						<masterTranslation>en-US</masterTranslation>
-						<baseOutputDirectory>${project.build.directory}/site</baseOutputDirectory>						
 						<imageResource>
 							<directory>${basedir}/src/main/docbook/en-US</directory>
 							<includes>
@@ -62,7 +58,7 @@
 							<format>
 								<formatName>pdf</formatName>
 								<stylesheetResource>file:${basedir}/src/main/resources/xslt/am/ajf/pdf.xsl</stylesheetResource>
-								<finalName>${docname}.pdf</finalName>
+								<finalName>book.pdf</finalName>
 							</format>
 							<format>
 								<formatName>html</formatName>
@@ -92,13 +88,29 @@
 				<artifactId>maven-jdocbook-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>generate</id>
-						<phase>pre-site</phase>
+						<id>user-guide</id>
+						<phase>compile</phase>
 						<goals>
 							<goal>resources</goal>
 							<goal>generate</goal>
 						</goals>
-					</execution>					
+						<configuration>
+							<sourceDocumentName>master-user-guide.xml</sourceDocumentName>
+							<baseOutputDirectory>${project.build.directory}/site/user-guide</baseOutputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>cook-book</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>resources</goal>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<sourceDocumentName>master-cook-book.xml</sourceDocumentName>
+							<baseOutputDirectory>${project.build.directory}/site/cook-book</baseOutputDirectory>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>
