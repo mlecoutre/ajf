@@ -13,7 +13,7 @@
 	<description>specific utility classes for ajf web application</description>
 
 	<properties>
-		<ajfVersion>2.1.0</ajfVersion>
+		<ajfVersion>2.1.1-SNAPSHOT</ajfVersion>
 	</properties>
 
 	<scm>
