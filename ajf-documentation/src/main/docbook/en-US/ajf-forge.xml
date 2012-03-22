@@ -1,151 +1,424 @@
 <?xml version='1.0' encoding='ISO-8859-1'?>
 <!-- This document was created with Syntext Serna Free. --><!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
 <chapter id="forge">
-	<title>AJF - Forge</title>
-	<para>
-		Forge &quot;ready to use&quot; AJF2 projects
-		<figure id="ajf-forge-logo.fig">
-			<mediaobject>
-				<imageobject>
-					<imagedata align="center" scale="50"
-						fileref="images/forge/ajf-forge-logo.png" />
-				</imageobject>
-			</mediaobject>
-		</figure>
-	</para>
-	<section>
-		<title>Introduction</title>
-		<para>
-			The ajf-forge is in fact a plugin for JBOSS FORGE which
-			is a
-			powerful project building tool.
-			With this plugin you will be able
-			to
-			easily generate an empty ajf2 project, instantly deployable on a
-			local
-			tomcat server. It gives you the key to a &quot;ready to
-			use&quot;
-			ajf2
-			project.
-		</para>
-	</section>
-	<section>
-		<title>Introduction</title>
-		<para>
-			Installing the Jboss Forge tool will allow you to use the
-			ajf-forge plugin.
-		</para>
-	</section>
-	<section>
-		<title>Install forge distribution</title>
-		<para>
-			First, download the Jboss forge distribution here :
-		</para>
-		<para>TODO</para>
-		<para>
-			Unzip the forge distribution in you
-			<quote>C:/appli</quote>
-			directory.
-		</para>
-		<screenshot>
-			<mediaobject>
-				<imageobject>
-					<imagedata align="center" scale="70"
-						fileref="images/forge/forge-appli-install.png" />
-				</imageobject>
-			</mediaobject>
-		</screenshot>
-		<para>
-		</para>
-		<section>
-			<title>Set environment variables</title>
-			<para>
-				You have add JBoss distribution&apos;s bin directory to the
-				build
-				path of
-				your system.
-				After right clicking on your workstation and
-				go in
-				properties/Environment variable section, create a variable
-				FORGE_HOME, targeting the forge distribution directory
-			</para>
-			<para>
-				<screenshot>
-					<mediaobject>
-						<imageobject>
-							<imagedata align="center" scale="60"
-								fileref="images/forge/forge-envVar.png" />
-						</imageobject>
-					</mediaobject>
-				</screenshot>
-			</para>
-			<para>After that you have to add &quot;%FORGE_HOME%/bin&quot; to your
-				system&apos;s path. To do so, just mofiy the &quot;Path&quot;
-				environment variable :
-			</para>
-			<screenshot>
-				<mediaobject>
-					<imageobject>
-						<imagedata align="center" scale="60"
-							fileref="images/forge/forge-envVar1.png" />
-					</imageobject>
-				</mediaobject>
-			</screenshot>
-		</section>
-		<section>
-			<title>Run JBOSS forge tool</title>
-			<para>Now you are ready to use the JBOSS Forge tool. For that, just
-				launch a command terminal and set the &apos;forge&apos; command :
-			</para>
-			<screenshot>
-				<mediaobject>
-					<imageobject>
-						<imagedata contentwidth="500" align="center" scalefit="1"
-							fileref="images/forge/forge-launch.png" />
-					</imageobject>
-				</mediaobject>
-			</screenshot>
-		</section>
-	</section>
-	<section>
-		<title>Install ajf-forge plugin</title>
-		<para>
-			Now you are able to use the forge tool, you just need to install
-			the
-			ajf-forge plugin.
-		</para>
-		<section>
-			<title>Download ajf-forge plugin</title>
-			<para>
-				First and foremost, you have to download the zip file of the
-				plugin here
-				:
-			</para>
-			<para>TODO.
-			</para>
-			<para>
-				Then, launch forge in order to see your working directory of
-				FORGE. This
-				is simply logged on you terminal each time you launch
-				forge.
-			</para>
-			<figure id="forgeWorkingdir.fig">
-				<title>forge working directory</title>
-				<mediaobject>
-					<imageobject>
-						<imagedata align="center" fileref="images/forge/ajf-forge-workingDir.png"
-							scale="80" />
-					</imageobject>
-				</mediaobject>
-			</figure>
-		</section>
-	</section>
-	<!-- <section> <title></title> <para> </para> <important> <para> </para> 
-		<para> <emphasis></emphasis> </para> <programlisting language="Xml" role="Xml"><![CDATA[ 
-		]]></programlisting> </important> <example> <title></title> <programlisting 
-		language="Java" role="Java"><![CDATA[ ]]></programlisting> <para> <emphasis>or</emphasis> 
-		</para> <programlisting language="Java" role="Java"><![CDATA[ ]]></programlisting> 
-		</example> <important> <para> </para> <itemizedlist> <listitem> <para> <emphasis>dlsm:ldmlsmdl</emphasis> 
-		</para> </listitem> </itemizedlist> </important> <warning> <para> </para> 
-		</warning> </section> -->
-</chapter>
+  <title>AJF - Forge</title>
+  <para>
+  <figure id="ajf-forge-logo.fig">
+      <title>Forge &quot;ready to use&quot; AJF2 projects</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" scale="50" fileref="images/forge/ajf-forge-logo.png"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+ </para>
+  <section>
+    <title>Introduction</title>
+    <para>
+   The ajf-forge is in fact a plugin for JBOSS FORGE which
+   is a
+   powerful project building tool.
+   With this plugin you will be able
+   to
+   easily generate an empty ajf2 project, instantly deployable on a
+   local
+   tomcat server. It gives you the key to a &quot;ready to
+   use&quot;
+   ajf2
+   project.
+  </para>
+  </section>
+  <section>
+    <title>Install forge distribution</title>
+    <para>
+   Installing the Jboss Forge tool will allow you to use the
+   ajf-forge plugin.
+  </para>
+    <para>
+   First, download the Jboss forge distribution here :
+  </para>
+    <para>TODO</para>
+    <para>
+   Unzip the forge distribution in you
+   <quote>C:/appli</quote>
+   directory.
+  </para>
+    <screenshot>
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" scale="50" fileref="images/forge/forge-appli-install.png"/>
+        </imageobject>
+      </mediaobject>
+    </screenshot>
+    <para>
+  </para>
+    <section>
+      <title>Set environment variables</title>
+      <para>
+    In order for the forge to work, you have to add the JBoss Forge
+    distribution&apos;s bin directory to the
+    build
+    path of
+    your system.
+    After right clicking on your workstation and
+    go in
+    properties/Environment variable section, create a variable
+    FORGE_HOME, targeting the forge distribution directory
+   </para>
+      <para>
+    <screenshot>
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center" scale="60" fileref="images/forge/forge-envVar.png"/>
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+   </para>
+      <para>After that you have to add &quot;%FORGE_HOME%/bin&quot; to your
+    system&apos;s path. To do so, just mofiy the &quot;Path&quot;
+    environment variable :
+   </para>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" scale="60" fileref="images/forge/forge-envVar1.png"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </section>
+    <section>
+      <title>Run JBOSS forge tool</title>
+      <para>Now you are ready to use the JBOSS Forge tool. For that, just
+    launch a command prompt terminal and set the command :
+   </para>
+      <screen>
+   <prompt>User&gt;</prompt><userinput>forge</userinput> 
+   </screen>
+      <screenshot>
+        <mediaobject>
+          <imageobject>
+            <imagedata contentwidth="500" align="center" scalefit="1" fileref="images/forge/forge-launch.png"/>
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </section>
+  </section>
+  <section>
+    <title>Install ajf-forge plugin</title>
+    <para>
+   Now you are able to use the forge tool, you just need to install
+   the
+   ajf-forge plugin.
+  </para>
+    <para>
+   First and foremost, you have to download the zip file of the
+   plugin here
+   :
+  </para>
+    <para>TODO.
+  </para>
+    <para>
+   Then, launch forge in order to see your working directory of
+   FORGE. This
+   is simply logged on you terminal each time you launch
+   forge.
+  </para>
+    <figure id="forgeWorkingdir.fig">
+      <title>forge working directory</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" scale="80" fileref="images/forge/ajf-forge-workingDir.png"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+    <para>
+   In order to install the ajf-forge plugin, just un-zip the
+   downloaded
+   file into your forge working directory.
+  </para>
+    <figure id="forge-installedPlugin.fig">
+      <title>ajf-forge plugin un-zip</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" scale="80" fileref="images/forge/ajf-forge-installedPlugin.png"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+    <para>
+   That&apos;s it, your
+   plugin is installed. You can&apos;t quit the forge
+   with
+   the
+   &apos;exit&apos; command,
+   and then reload it. If you run the
+   command
+   <i>&apos;forge list-plugins&apos;</i>
+   , you should be able to see the installed plugin :
+  </para>
+    <figure id="forge-installedPlugin2.fig">
+      <title>ajf-forge plugin installed</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" scale="60" fileref="images/forge/ajf-forge-installedPlugin2.png"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </section>
+  <section>
+    <title id="useForgePlugin">Use the ajf-forge Plugin</title>
+    <para>
+   In order to run the ajf-forge plugin you can just run the command : </para>
+    <screen>
+   <prompt>[no-project] C:\$&gt;</prompt><userinput>ajf-solution</userinput> 
+   </screen>
+    <para>And you should now be prompted of the kind of ajf project that you want to generate.</para>
+    <figure id="forgeDefaultCommandScreen.fig">
+      <title>launch ajf-forge default command</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" scale="80" fileref="images/forge/ajf-forge-screen-defaultCommand.png"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+<?ajfProjectTypes compacted&quot; AJF project is a mono-web project. It can be used to make a simple web application (a stand alone ui application). The &quot;exploded&quot; AJF project will be composed of several project types (core, ws, ui, config, lib). This kind of project is suitable for more complex applications. For more details, see the <link linkend="norms">
+  <classname>AJF-Norms chapter.</classname></link>?>    <para>Both of the two options will work pretty much the same way. Two inputs will be prompted :
+- Project name ( general name of your application, i.e: <emphasis role="italic">myApplication</emphasis> )
+- Project folder : Directory where to create the application (i.e: <emphasis role="italic">C:/projects/myProjectFolder</emphasis>)
+If selecting the &quot;exploded&quot; ajf project, several java maven projects will be generated:</para>
+    <para>
+ <filename>C:/projects/myProjectFolder/myApplication-core </filename></para>
+    <para> <filename>C:/projects/myProjectFolder/myApplication-lib </filename></para>
+    <para><filename>C:/projects/myProjectFolder/myApplication-ui </filename></para>
+    <para><emphasis role="italic">(...)</emphasis></para>
+    <para>In case of chosing the &quot;compacted&quot; project type, only the UI project will be generated.
+</para>
+    <section id="compactedGenerationSection">
+      <title>Generate a &quot;compacted&quot; ajf project</title>
+      <para>On the &quot;ajf-solution&quot; default command prompted choice, enter &quot;1&quot; value in order to select choice number one corresponding to &quot;compacted&quot; ajf solution.
+     Immediately, you will be prompted for the name you want to give to your application, and the folder. 
+</para>
+      <important>
+        <para>Entering the value &apos;exit&apos; for the project name OR the project directory will allow you to escape the process !</para>
+        <screen>
+<prompt>[ajf-context-project] ajf-context-project $<command>ajf-solution</command></prompt>
+Which type of AJF project ?
+
+  1 - [Compacted ajf solution]
+  2 - [Exploded ajf solution]
+
+ ? Choose an option by typing the number of the selection: <userinput>1</userinput>
+ ? Project Name : <userinput>myApplication</userinput>
+ ? Project directory (empty is current directory) : <userinput>exit</userinput>
+***INFO*** Checking project directory...
+***INFO*** bye bye !
+<prompt>[ajf-context-project] ajf-context-project $</prompt>
+ </screen>
+      </important>
+      <screen>NOTE : you could also have entered as a shortcut from the choice prompt.
+<prompt>[ajf-context-project] ajf-context-project $<command>ajf-solution compacted</command></prompt>
+</screen>
+      <para><warning>When entering the inputs data, a validation of the input folder is done. If the directory is not correct, you will be invited to start again the process.</warning> 
+<screen>
+<prompt>[ajf-context-project] ajf-context-project $ <command>ajf-solution compacted</command></prompt>
+ ? [named=The name of the new AJF project (of type java.lang.String)]: <userinput>myProject</userinput>
+ ? [Directory=ARG (of type java.lang.String)]: <userinput>Y:/notExistingPath</userinput>
+***INFO*** Checking project directory...
+***ERROR*** Entered directory is not correct ! Please try Again
+<prompt>[ajf-context-project] ajf-context-project $ </prompt>
+</screen>
+</para>
+      <para>Let&apos;s now generate the compacted ajf project. For that, use the correct choice number 1.
+
+      </para>
+      <para>Once the validation of the project directory done, a validation will be asked to the user, showing the directory where is going to be created the project. This is a simple validation to be sure that the entered folder has been correctly set.
+</para>
+      <para>After this last validation, the project generation starts...</para>
+      <screen>
+<prompt>[ajf-context-project] ajf-context-project $ <command>ajf-solution compacted</command></prompt>
+ ? [named=The name of the new AJF project (of type java.lang.String)]: <userinput>myApplication</userinput>
+ ? [Directory=ARG (of type java.lang.String)]: <userinput>C:/Projects/myProjectFolder</userinput>
+***INFO*** Checking project directory...
+Are you sure to generate AJF project in :C:/Projects/myProjectFolder
+
+  1 - [Yes, let&apos;s do this !]
+  2 - [No, change directory.]
+
+ ? Choose an option by typing the number of the selection: <userinput>1</userinput>
+***INFO*** Creating the AJF compacted solutionmyApplication in the directory : C
+:/Projects/myProjectFolder
+** DEBUG  :C:\/Projects/myProjectFolder/myApplication-compacted
+START generating ajf project compacted
+** START - WEB PART
+** DEBUG : START generating java class for UI
+**DEBUG : END Java class MBean generated.
+** START - Generate webapp directory
+** END - Generate webapp directory
+-- DEBUG : webappDir = C:\Projects\myProjectFolder\myApplication-compacted\src\m
+ain\webapp
+** START - Extracting web resources...
+** END - Web resources extracted
+** START - extracting resources
+Test Resource directory : C:\Projects\myProjectFolder\myApplication-compacted\sr
+c\test\resources
+Main Resource directory : C:\Projects\myProjectFolder\myApplication-compacted\sr
+c\main\resources
+** END - resources extracted
+** END - WEB PART
+** START - generating pom.xml from model...
+** END - pom.xml gebnerated...
+ProjectmyApplication-compacted created
+
+***SUCCESS*** Project : myApplication-compacted created.
+Wrote C:\/Projects/myProjectFolder/myApplication-compacted/pom.xml
+Wrote C:\/Projects/myProjectFolder/myApplication-compacted/src/main/java
+Wrote C:\/Projects/myProjectFolder/myApplication-compacted/src/test/java
+Wrote C:\/Projects/myProjectFolder/myApplication-compacted/src/main/resources
+Wrote C:\/Projects/myProjectFolder/myApplication-compacted/src/test/resources
+Wrote C:\/Projects/myProjectFolder/myApplication-compacted/src/main/java/am/myAp
+plication/web/controllers/ExempleMBean.java
+<prompt>[ajf-context-project] ajf-context-project $</prompt>
+</screen>
+    </section>
+    <section>
+      <title>Generate an &quot;exploded&quot; ajf project</title>
+      <para>When entering the choice 2 on the ajf-solution prompt choice screen, or by entering directely the shortcut command :</para>
+      <screen>
+<prompt>[ajf-context-project] ajf-context-project $ <command>ajf-solution exploded</command></prompt>
+</screen>
+      <para>You are now about to generate an exploded ajf project. Again you will be prompted for a project name and a project folder. The process is precisely the same as for the
+<link linkend="compactedGenerationSection">
+          <classname>compacted project generation.</classname>
+        </link>
+</para>
+      <screen>
+<prompt>[ajf-context-project] ajf-context-project $ <command>ajf-solution exploded</command></prompt>
+ ? [named=The name of the new AJF project (of type java.lang.String)]: <userinput>myExplodedProject</userinput>
+ ? [Directory=ARG (of type java.lang.String)]: <userinput>C:/projects/explodedProject</userinput>
+***INFO*** Checking project directory...
+Are you sure to generate AJF project in :C:/projects/explodedProject
+
+  1 - [Yes, let&apos;s do this !]
+  2 - [No, change directory.]
+
+ ? Choose an option by typing the number of the selection: <userinput>1</userinput>
+***INFO*** Creating the AJF exploded solutionmyExplodedProject in the directory
+: C:/projects/explodedProject
+** DEBUG  :C:\/projects/explodedProject/myExplodedProject-parent
+START generating ajf project parent
+ProjectmyExplodedProject-parent created
+
+***SUCCESS*** Project : myExplodedProject-parent created.
+** DEBUG  :C:\/projects/explodedProject/myExplodedProject-ear
+START generating ajf project ear
+ProjectmyExplodedProject-ear created
+
+***SUCCESS*** Project : myExplodedProject-ear created.
+** DEBUG  :C:\/projects/explodedProject/myExplodedProject-core
+START generating ajf project core
+ProjectmyExplodedProject-core created
+
+***SUCCESS*** Project : myExplodedProject-core created.
+** DEBUG  :C:\/projects/explodedProject/myExplodedProject-ui
+START generating ajf project ui
+** START - WEB PART
+** DEBUG : START generating java class for UI
+**DEBUG : END Java class MBean generated.
+** START - Generate webapp directory
+** END - Generate webapp directory
+-- DEBUG : webappDir = C:\projects\explodedProject\myExplodedProject-ui\src\main
+\webapp
+** START - Extracting web resources...
+** END - Web resources extracted
+** START - extracting resources
+Test Resource directory : C:\projects\explodedProject\myExplodedProject-ui\src\t
+est\resources
+Main Resource directory : C:\projects\explodedProject\myExplodedProject-ui\src\m
+ain\resources
+** END - resources extracted
+** END - WEB PART
+** START - generating pom.xml from model...
+** END - pom.xml gebnerated...
+ProjectmyExplodedProject-ui created
+
+***SUCCESS*** Project : myExplodedProject-ui created.
+** DEBUG  :C:\/projects/explodedProject/myExplodedProject-config
+START generating ajf project config
+Creating config project
+--&gt; Config resource path : C:\/projects/explodedProject/myExplodedProject-config
+/src/main/resources
+ProjectmyExplodedProject-config created
+
+***SUCCESS*** Project : myExplodedProject-config created.
+** DEBUG  :C:\/projects/explodedProject/myExplodedProject-ws
+START generating ajf project ws
+** START - generating pom.xml from model...
+** END - pom.xml gebnerated...
+ProjectmyExplodedProject-ws created
+
+***SUCCESS*** Project : myExplodedProject-ws created.
+** DEBUG  :C:\/projects/explodedProject/myExplodedProject-lib
+START generating ajf project lib
+ProjectmyExplodedProject-lib created
+
+***SUCCESS*** Project : myExplodedProject-lib created.
+***INFO*** AJF solution done.[C:/projects/explodedProject]
+Wrote C:\/projects/explodedProject/myExplodedProject-parent/pom.xml
+Wrote C:\/projects/explodedProject/myExplodedProject-ear/pom.xml
+Wrote C:\/projects/explodedProject/myExplodedProject-ear/src/main/resources
+Wrote C:\/projects/explodedProject/myExplodedProject-ear/src/test/resources
+Wrote C:\/projects/explodedProject/myExplodedProject-core/pom.xml
+Wrote C:\/projects/explodedProject/myExplodedProject-core/src/main/java
+Wrote C:\/projects/explodedProject/myExplodedProject-core/src/test/java
+Wrote C:\/projects/explodedProject/myExplodedProject-core/src/main/resources
+Wrote C:\/projects/explodedProject/myExplodedProject-core/src/test/resources
+Wrote C:\/projects/explodedProject/myExplodedProject-ui/pom.xml
+Wrote C:\/projects/explodedProject/myExplodedProject-ui/src/main/java
+Wrote C:\/projects/explodedProject/myExplodedProject-ui/src/test/java
+Wrote C:\/projects/explodedProject/myExplodedProject-ui/src/main/resources
+Wrote C:\/projects/explodedProject/myExplodedProject-ui/src/test/resources
+Wrote C:\/projects/explodedProject/myExplodedProject-ui/src/main/java/am/myExplo
+dedProject/web/controllers/ExempleMBean.java
+Wrote C:\/projects/explodedProject/myExplodedProject-config/pom.xml
+Wrote C:\/projects/explodedProject/myExplodedProject-config/src/main/resources
+Wrote C:\/projects/explodedProject/myExplodedProject-config/src/test/resources
+Wrote C:\/projects/explodedProject/myExplodedProject-ws/pom.xml
+Wrote C:\/projects/explodedProject/myExplodedProject-ws/src/main/java
+Wrote C:\/projects/explodedProject/myExplodedProject-ws/src/test/java
+Wrote C:\/projects/explodedProject/myExplodedProject-ws/src/main/resources
+Wrote C:\/projects/explodedProject/myExplodedProject-ws/src/test/resources
+Wrote C:\/projects/explodedProject/myExplodedProject-lib/pom.xml
+Wrote C:\/projects/explodedProject/myExplodedProject-lib/src/main/java
+Wrote C:\/projects/explodedProject/myExplodedProject-lib/src/test/java
+Wrote C:\/projects/explodedProject/myExplodedProject-lib/src/main/resources
+Wrote C:\/projects/explodedProject/myExplodedProject-lib/src/test/resources
+<prompt>[ajf-context-project] ajf-context-project $</prompt>
+</screen>
+      <para>
+You can now  check the resources that has been generated.
+</para>
+    </section>
+  </section>
+  <section>
+    <title>Deploy UI project on the embedded tomcat7 application server</title>
+    <para>You can immediately deploy your application on a tomcat7 application server which is embedded to the web project via a maven plugin.</para>
+    <para>For that, just launch a command prompt, get on your project UI directory and run the command:</para>
+    <important>
+      <para>Maven has to be correctly installed on your workstation !</para>
+      <para>If it&apos;s not, you can see the documentation  <ulink url="https://www.myarcelormittal.com/sps1/portal/teamsites/ITFCETAE/techno/java/Documentation/Development%20tools/How%20to%20install%20Eclipse%20Environnement.doc">here</ulink></para>
+    </important>
+    <screen>
+<prompt>C:\Projects\myProject\myApplication-ui <command>mvn clean install tomcat7:run</command></prompt>
+</screen>
+  </section>
+  <section>
+    <title>Import you project in Eclipse</title>
+    <para>You are now ready to import your project in eclipse.</para>
+  </section>
+<!-- <section> <title></title> <para> </para> <important> <para> </para> 
+  <para> <emphasis></emphasis> </para> <programlisting language="Xml" role="Xml"><![CDATA[ 
+  ]]></programlisting> </important> <example> <title></title> <programlisting 
+  language="Java" role="Java"><![CDATA[ ]]></programlisting> <para> <emphasis>or</emphasis> 
+  </para> <programlisting language="Java" role="Java"><![CDATA[ ]]></programlisting> 
+  </example> <important> <para> </para> <itemizedlist> <listitem> <para> <emphasis>dlsm:ldmlsmdl</emphasis> 
+  </para> </listitem> </itemizedlist> </important> <warning> <para> </para> 
+  </warning> </section> --></chapter>
