@@ -48,7 +48,7 @@ public class CreateProject {
 	 * @throws Exception
 	 */
 	public void createAjfProject(String globalProjectName, String javaPackage,
-			Resource<?> projectFolder, ProjectFactory projectFactory,
+			DirectoryResource dir, ProjectFactory projectFactory,
 			String projectType, String projectFinalName) throws Exception {
 
 		System.out.println("START generating ajf project " + projectType);
@@ -56,7 +56,7 @@ public class CreateProject {
 		/*
 		 * project directory initialization
 		 */
-		DirectoryResource dir = initializeProjectDirectory(projectFolder);
+		// DirectoryResource dir = initializeProjectDirectory(projectFolder);
 
 		/*
 		 * Creation of the project depending on the project type

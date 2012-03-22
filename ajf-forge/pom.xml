@@ -2,30 +2,47 @@
 <project
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>am.ajf</groupId>
 	<artifactId>ajf-forge</artifactId>
 	<version>2.1.0-SNAPSHOT</version>
-
-
 	<properties>
-		<forge.api.version>1.0.0.CR2</forge.api.version>
-		<slf4j.version>1.6.4</slf4j.version>
 		<ajfversion>2.1.0-SNAPSHOT</ajfversion>
+		<slf4j.version>1.6.4</slf4j.version>
+		<forge.api.version>1.0.0.CR2</forge.api.version>
 	</properties>
-
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.spec</groupId>
+				<artifactId>jboss-javaee-6.0</artifactId>
+				<version>2.0.0.Final</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.forge</groupId>
+				<artifactId>forge-shell-api</artifactId>
+				<version>${forge.api.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.forge</groupId>
+				<artifactId>forge-test-harness</artifactId>
+				<version>${forge.api.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.forge</groupId>
+				<artifactId>forge-shell</artifactId>
+				<version>${forge.api.version}</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
-
-		<!-- AJF -->
-		<dependency>
-			<groupId>am.ajf</groupId>
-			<artifactId>ajf-injection</artifactId>
-			<version>${ajfversion}</version>
-		</dependency>
-
-		<!-- JBOSS FORGE API -->
+	<!-- <dependency> <groupId>am.ajf</groupId> <artifactId>ajf-injection</artifactId> 
+		<version>${ajfversion}</version> </dependency> -->
 		<dependency>
 			<groupId>org.jboss.forge</groupId>
 			<artifactId>forge-shell-api</artifactId>
@@ -46,44 +63,40 @@
 			<type>pom</type>
 			<scope>provided</scope>
 		</dependency>
-
-		<!-- Begin : Logging dependencies -->
-
-		<!-- LOGGING <dependency> <groupId>ch.qos.logback</groupId> <artifactId>logback-classic</artifactId> 
-			<version>0.9.24</version> </dependency> <dependency> <groupId>org.slf4j</groupId> 
-			<artifactId>log4j-over-slf4j</artifactId> <version>1.6.1</version> </dependency> 
-			<dependency> <groupId>org.slf4j</groupId> <artifactId>jcl-over-slf4j</artifactId> 
-			<version>1.6.1</version> </dependency> <dependency> <groupId>org.slf4j</groupId> 
-			<artifactId>slf4j-api</artifactId> <version>1.6.1</version> </dependency> -->
-		<!-- end LOGGING -->
-
-		<!-- junit -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.5</version>
 		</dependency>
-
-		<!-- FreeMarker (templating) -->
+	<!-- <dependency> <groupId>org.freemarker</groupId> <artifactId>freemarker</artifactId> 
+		<version>[2.3.18,2.4)</version> </dependency> -->
+	<!-- <dependency> <groupId>org.apache.commons</groupId> <artifactId>commons-io</artifactId> 
+		<version>1.3.2</version> </dependency> -->
 		<dependency>
-			<groupId>org.freemarker</groupId>
-			<artifactId>freemarker</artifactId>
-			<!-- Latest 2.3.x (not 2.4.x), at least 2.3.18 -->
-			<version>[2.3.18,2.4)</version>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>1.3.2</version>
+			<groupId>org.jboss.spec.javax.annotation</groupId>
+			<artifactId>jboss-annotations-api_1.1_spec</artifactId>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-
+	<repositories>
+		<repository>
+			<id>JBOSS_NEXUS</id>
+			<url>http://repository.jboss.org/nexus/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>CENTRAL</id>
+			<url>http://web-maven-repo/nexus/content/groups/public</url>
+		</repository>
+	</repositories>
 	<build>
 		<finalName>ajfForgePlugin</finalName>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.3.2</version>
 				<configuration>
@@ -91,6 +104,19 @@
 					<target>1.6</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration></configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
