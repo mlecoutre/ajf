@@ -89,7 +89,7 @@
 				<executions>
 					<execution>
 						<id>user-guide</id>
-						<phase>compile</phase>
+						<phase>pre-site</phase>
 						<goals>
 							<goal>resources</goal>
 							<goal>generate</goal>
@@ -101,7 +101,7 @@
 					</execution>
 					<execution>
 						<id>cook-book</id>
-						<phase>compile</phase>
+						<phase>pre-site</phase>
 						<goals>
 							<goal>resources</goal>
 							<goal>generate</goal>
