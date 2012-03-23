@@ -1,6 +1,7 @@
 package am.ajf.forge.core;
 
-import static am.ajf.forge.lib.ForgeConstants.*;
+import static am.ajf.forge.lib.ForgeConstants.AJF_DEPS_MODEL_FILE;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_COMPACT;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_EAR;
@@ -8,11 +9,12 @@ import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_PARENT;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
+import static am.ajf.forge.lib.ForgeConstants.STANDARD_PARENT_ARTIFACTID;
+import static am.ajf.forge.lib.ForgeConstants.STANDARD_PARENT_GROUPID;
+import static am.ajf.forge.lib.ForgeConstants.STANDARD_PARENT_VERSION;
 
 import java.io.File;
 import java.io.IOException;
-
-import javax.xml.stream.FactoryConfigurationError;
 
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
@@ -26,8 +28,6 @@ import org.jboss.forge.project.facets.ResourceFacet;
 import org.jboss.forge.project.packaging.PackagingType;
 import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
-import org.jboss.forge.resources.FileResource;
-import org.jboss.forge.resources.Resource;
 
 import am.ajf.forge.util.EclipseUtils;
 import am.ajf.forge.util.ProjectUtils;
@@ -52,11 +52,6 @@ public class CreateProject {
 			String projectType, String projectFinalName) throws Exception {
 
 		System.out.println("START generating ajf project " + projectType);
-
-		/*
-		 * project directory initialization
-		 */
-		// DirectoryResource dir = initializeProjectDirectory(projectFolder);
 
 		/*
 		 * Creation of the project depending on the project type
@@ -129,9 +124,9 @@ public class CreateProject {
 
 		/*
 		 * Generate .project file of the project for it to be importable in
-		 * eclipse
+		 * eclipse (Not necessary)
 		 */
-		generateEclipseProjectFile(projectFinalName, projectRootDirectory);
+		// generateEclipseProjectFile(projectFinalName, projectRootDirectory);
 
 		/*
 		 * Generate the MAVEN PREFS file
@@ -152,32 +147,32 @@ public class CreateProject {
 
 	}
 
-	/**
-	 * Generate the .project file needed to import the current project in
-	 * Eclipse
-	 * 
-	 * @param projectFinalName
-	 * @param projectRootDirectory
-	 * @throws FactoryConfigurationError
-	 * @throws Exception
-	 */
-	private void generateEclipseProjectFile(String projectFinalName,
-			String projectRootDirectory) throws FactoryConfigurationError,
-			Exception {
-
-		try {
-			EclipseUtils.generateEclipseProjectFile(projectFinalName,
-					projectRootDirectory);
-
-		} catch (Exception e) {
-
-			// Exception should already be logged
-			throw new Exception(
-					"Error occured during the generation of the .Project file, which is needed to correctly import the project in Eclipse.",
-					e);
-
-		}
-	}
+	// /**
+	// * Generate the .project file needed to import the current project in
+	// * Eclipse
+	// *
+	// * @param projectFinalName
+	// * @param projectRootDirectory
+	// * @throws FactoryConfigurationError
+	// * @throws Exception
+	// */
+	// private void generateEclipseProjectFile(String projectFinalName,
+	// String projectRootDirectory) throws FactoryConfigurationError,
+	// Exception {
+	//
+	// try {
+	// EclipseUtils.generateEclipseProjectFile(projectFinalName,
+	// projectRootDirectory);
+	//
+	// } catch (Exception e) {
+	//
+	// // Exception should already be logged
+	// throw new Exception(
+	// "Error occured during the generation of the .Project file, which is needed to correctly import the project in Eclipse.",
+	// e);
+	//
+	// }
+	// }
 
 	/**
 	 * Construction of an PARENT core type project
@@ -350,15 +345,14 @@ public class CreateProject {
 		persistenceFile = null;
 
 		/*
-		 * Create logback.xlml
+		 * Create logback.xml
 		 */
 		File logbackFile = new File(resourcesFolder + "/logback.xml");
 
 		try {
 			logbackFile.createNewFile();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("** ERROR ");
 		}
 		logbackFile = null;
 
@@ -370,40 +364,41 @@ public class CreateProject {
 		return project;
 	}
 
-	/**
-	 * Initialization of the project directory
-	 * 
-	 * @param projectFolder
-	 * @return
-	 * @throws Exception
-	 */
-	private DirectoryResource initializeProjectDirectory(
-			Resource<?> projectFolder) throws Exception {
-		// Check Project Directory
-		DirectoryResource dir = null;
-		if (projectFolder instanceof FileResource<?>) {
-
-			if (!projectFolder.exists()) {
-
-				// Creation of folder
-				((FileResource<?>) projectFolder).mkdirs();
-				dir = projectFolder.reify(DirectoryResource.class);
-
-			} else if (projectFolder instanceof DirectoryResource) {
-				dir = (DirectoryResource) projectFolder;
-
-			} else {
-				String errorMessage = "The root directory of the project beeing generated is incorrect";
-				System.out.println(errorMessage);
-				throw new Exception(errorMessage);
-			}
-		}
-
-		// Create folder
-		if (!dir.exists()) {
-			dir.mkdirs();
-		}
-		return dir;
-	}
+	// /**
+	// * Initialization of the project directory
+	// *
+	// * @param projectFolder
+	// * @return
+	// * @throws Exception
+	// */
+	// private DirectoryResource initializeProjectDirectory(
+	// Resource<?> projectFolder) throws Exception {
+	// // Check Project Directory
+	// DirectoryResource dir = null;
+	// if (projectFolder instanceof FileResource<?>) {
+	//
+	// if (!projectFolder.exists()) {
+	//
+	// // Creation of folder
+	// ((FileResource<?>) projectFolder).mkdirs();
+	// dir = projectFolder.reify(DirectoryResource.class);
+	//
+	// } else if (projectFolder instanceof DirectoryResource) {
+	// dir = (DirectoryResource) projectFolder;
+	//
+	// } else {
+	// String errorMessage =
+	// "The root directory of the project beeing generated is incorrect";
+	// System.out.println(errorMessage);
+	// throw new Exception(errorMessage);
+	// }
+	// }
+	//
+	// // Create folder
+	// if (!dir.exists()) {
+	// dir.mkdirs();
+	// }
+	// return dir;
+	// }
 
 }

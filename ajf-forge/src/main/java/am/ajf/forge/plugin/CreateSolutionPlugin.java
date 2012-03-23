@@ -1,6 +1,7 @@
 package am.ajf.forge.plugin;
 
-import static am.ajf.forge.lib.ForgeConstants.*;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_GROUPID_PREFIX;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_COMPACT;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_EAR;
@@ -8,31 +9,17 @@ import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_PARENT;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
+import static am.ajf.forge.lib.ForgeConstants.START_PROJECT_MILESTONE;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.jboss.forge.maven.MavenCoreFacet;
-import org.jboss.forge.project.Facet;
-import org.jboss.forge.project.Project;
-import org.jboss.forge.project.facets.DependencyFacet;
-import org.jboss.forge.project.facets.JavaSourceFacet;
-import org.jboss.forge.project.facets.MetadataFacet;
-import org.jboss.forge.project.facets.ResourceFacet;
 import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.project.services.ResourceFactory;
 import org.jboss.forge.resources.DirectoryResource;
@@ -40,6 +27,7 @@ import org.jboss.forge.resources.FileResource;
 import org.jboss.forge.resources.Resource;
 import org.jboss.forge.resources.ResourceException;
 import org.jboss.forge.shell.Shell;
+import org.jboss.forge.shell.ShellColor;
 import org.jboss.forge.shell.ShellMessages;
 import org.jboss.forge.shell.plugins.Alias;
 import org.jboss.forge.shell.plugins.Command;
@@ -48,14 +36,12 @@ import org.jboss.forge.shell.plugins.Help;
 import org.jboss.forge.shell.plugins.Option;
 import org.jboss.forge.shell.plugins.PipeOut;
 import org.jboss.forge.shell.plugins.Plugin;
-import org.jboss.forge.shell.plugins.Topic;
 import org.jboss.forge.shell.util.Files;
 import org.jboss.forge.shell.util.ResourceUtil;
 
 import am.ajf.forge.core.CreateProject;
+import am.ajf.forge.lib.ForgeConstants;
 import am.ajf.forge.util.ProjectUtils;
-
-//import org.jboss.forge.shell.plugins.builtin.NewProjectPackagingTypeCompleter;
 
 /**
  * 
@@ -63,7 +49,6 @@ import am.ajf.forge.util.ProjectUtils;
  * 
  */
 @Alias("ajf-solution")
-@Topic("Project")
 @Help("Create a new AJF solution in selected directory.")
 public class CreateSolutionPlugin implements Plugin {
 
@@ -75,6 +60,8 @@ public class CreateSolutionPlugin implements Plugin {
 
 	@Inject
 	private ResourceFactory factory;
+
+	boolean isProjectDirFlag = false;
 
 	/**
 	 * Default command of the plug-in which will prompt the user in order to let
@@ -89,9 +76,8 @@ public class CreateSolutionPlugin implements Plugin {
 			@Option(name = "projectType", description = "S: Simple AJF project; C:Complex AJF project split in different projects (parent, ui, core...)", required = false) String projectType,
 			final PipeOut out) {
 
-		boolean isProjectDirFlag = false;
-		String AJF_PROJECT_TYPE_SIMPLE = "Simple ajf solution";
-		String AJF_PROJECT_TYPE_COMPLEX = "Complex ajf solution";
+		String AJF_PROJECT_TYPE_SIMPLE = "Compacted ajf solution";
+		String AJF_PROJECT_TYPE_COMPLEX = "Exploded ajf solution";
 
 		/*
 		 * if user does not fill in the otion, he will be prompted of which ajf
@@ -112,25 +98,42 @@ public class CreateSolutionPlugin implements Plugin {
 
 		if (AJF_PROJECT_TYPE_SIMPLE.equals(projectType)) {
 
-			String projectName = shell.prompt("Project Name :");
-			String projectDirectory = promptProjectDirectory("Project directory (empty is current directory) :");
-			if (!"exit".equals(projectDirectory)) {
-				isProjectDirFlag = true;
-				createAjfSolutionCompacted(projectName, projectDirectory, out);
+			String projectName = promptForProjectName();
+
+			if ("exit".equals(projectName)) {
+				ShellMessages.info(out, "bye bye !");
+			} else {
+				String projectDirectory = promptProjectDirectory("Project directory (empty is current directory) :");
+				if (!"exit".equals(projectDirectory)) {
+					isProjectDirFlag = true;
+					createAjfSolutionCompacted(projectName, projectDirectory,
+							out);
+				} else {
+					ShellMessages.info(out, "bye bye !");
+				}
 			}
 
 		} else if (AJF_PROJECT_TYPE_COMPLEX.equals(projectType)) {
 
-			String projectName = shell.prompt("Project Name :");
-			String projectDirectory = promptProjectDirectory("Project directory (empty is current directory) :");
-			if (!"exit".equals(projectDirectory)) {
-				isProjectDirFlag = true;
-				createAjfSolutionExploded(projectName, projectDirectory, out);
+			String projectName = promptForProjectName();
+
+			if ("exit".equals(projectName)) {
+				ShellMessages.info(out, "bye bye !");
+			} else {
+				String projectDirectory = promptProjectDirectory("Project directory (empty is current directory) :");
+				if (!"exit".equals(projectDirectory)) {
+					isProjectDirFlag = true;
+					createAjfSolutionExploded(projectName, projectDirectory,
+							out);
+				} else {
+					ShellMessages.info(out, "bye bye !");
+				}
 			}
 
 		} else {
 
-			ShellMessages.error(out, "ERROR OCCURED");
+			ShellMessages.error(out, "Project Type ".concat(projectType)
+					.concat(" does not exist... please try again..."));
 
 		}
 
@@ -150,47 +153,53 @@ public class CreateSolutionPlugin implements Plugin {
 			final PipeOut out) {
 
 		// Check project directory
-		// if (isProjectDirFlag || checkProjectDirectoryConsistency(folderName))
-		// {
+		if (isProjectDirFlag || checkProjectDirectoryConsistency(folderName)) {
 
-		/*
-		 * START LOG
-		 */
-		ShellMessages.info(
-				out,
-				"Creating the AJF exploded solution".concat(name)
-						.concat(" in the directory : ").concat(folderName));
+			if ("exit".equals(folderName) || "exit".equals(name)) {
+				ShellMessages.info(out, "bye bye !");
+			} else {
 
-		try {
+				/*
+				 * START LOG
+				 */
+				ShellMessages.info(
+						out,
+						"Creating the AJF exploded solution".concat(name)
+								.concat(" in the directory : ")
+								.concat(folderName));
 
-			// Generate the list of different ajf project type
-			generateAjfProject(name, folderName, PROJECT_TYPE_PARENT, out);
-			generateAjfProject(name, folderName, PROJECT_TYPE_EAR, out);
-			generateAjfProject(name, folderName, PROJECT_TYPE_CORE, out);
-			generateAjfProject(name, folderName, PROJECT_TYPE_UI, out);
-			generateAjfProject(name, folderName, PROJECT_TYPE_CONFIG, out);
-			generateAjfProject(name, folderName, PROJECT_TYPE_WS, out);
-			generateAjfProject(name, folderName, PROJECT_TYPE_LIB, out);
+				try {
 
-			/*
-			 * FINAL LOG
-			 */
-			ShellMessages.info(out, "AJF solution done.[" + folderName + "]");
+					// Generate the list of different ajf project type
+					generateAjfProject(name, folderName, PROJECT_TYPE_PARENT,
+							out);
+					generateAjfProject(name, folderName, PROJECT_TYPE_EAR, out);
+					generateAjfProject(name, folderName, PROJECT_TYPE_CORE, out);
+					generateAjfProject(name, folderName, PROJECT_TYPE_UI, out);
+					generateAjfProject(name, folderName, PROJECT_TYPE_CONFIG,
+							out);
+					generateAjfProject(name, folderName, PROJECT_TYPE_WS, out);
+					generateAjfProject(name, folderName, PROJECT_TYPE_LIB, out);
 
-		} catch (Exception e) {
+					/*
+					 * FINAL LOG
+					 */
+					ShellMessages.info(out, "AJF solution done.[" + folderName
+							+ "]");
 
-			// print on the shell the exception thrown
-			ShellMessages.error(out,
-					"AJF project generation process has thrown an Exception : "
-							+ e.toString());
+				} catch (Exception e) {
 
+					// print on the shell the exception thrown
+					ShellMessages.error(out,
+							"AJF project generation process has thrown an Exception : "
+									+ e.toString());
+
+				}
+			}
+		} else {
+
+			// Do nothing - If coming here : problem with input project folder
 		}
-		// } else {
-		//
-		// // DO nothing
-		//
-		// }
-
 	}
 
 	/**
@@ -208,113 +217,91 @@ public class CreateSolutionPlugin implements Plugin {
 			final PipeOut out) {
 
 		// Check project directory
-		// if (isProjectDirFlag || checkProjectDirectoryConsistency(folderName))
-		// {
+		if (isProjectDirFlag || checkProjectDirectoryConsistency(folderName)) {
 
-		/*
-		 * START LOG
-		 */
-		ShellMessages.info(
-				out,
-				"Creating the AJF compacted solution".concat(name)
-						.concat(" in the directory : ").concat(folderName));
+			if ("exit".equals(folderName) || "exit".equals(name)) {
+				ShellMessages.info(out, "bye bye !");
+			} else {
 
-		try {
-			generateAjfProject(name, folderName, PROJECT_TYPE_COMPACT, out);
+				/*
+				 * START LOG
+				 */
+				ShellMessages.info(
+						out,
+						"Creating the AJF compacted solution".concat(name)
+								.concat(" in the directory : ")
+								.concat(folderName));
 
-		} catch (Exception e) {
-			// print on the shell the exception thrown
-			ShellMessages.error(out,
-					"AJF project generation process has thrown an Exception : "
-							+ e.toString());
+				try {
+					generateAjfProject(name, folderName, PROJECT_TYPE_COMPACT,
+							out);
+
+				} catch (Exception e) {
+					// print on the shell the exception thrown
+					ShellMessages.error(out,
+							"AJF project generation process has thrown an Exception : "
+									+ e.toString());
+				}
+			}
+		} else {
+			// Do nothing - If coming here : problem with input project folder
 		}
-
-		// } else {
-		// // Do nothing
-		// }
 
 	}
 
-	@Command("compacted2")
-	public void createAjfSolutionCompacted2(
-			@Option(name = "named", description = "The name of the new AJF project", required = true) final String name,
-			@Option(name = "Directory", required = true) final String projectFolder,
-			final PipeOut out) {
+	/**
+	 * generate the AJF solution corresponding to the input 'ProjectType'
+	 * architecture
+	 * 
+	 * @param globalProjectName
+	 * @param folderName
+	 * @param projectType
+	 * @param out
+	 * @throws Exception
+	 */
+	private void generateAjfProject(final String globalProjectName,
+			String projectFolder, String projectType, PipeOut out)
+			throws Exception {
 
-		try {
-			String projectFinalName = name + "-" + "ui";
-			// DirectoryResource dir =
-			// prepareDirectoryResource(projectFinalName,
-			// projectFolder, out);
+		// Setting the project name
+		String projectFinalName;
+		if (ForgeConstants.PROJECT_TYPE_COMPACT.equals(projectType)) {
 
-			// got the final directory
-			// ShellMessages.info(out,
-			// "Creating project in " + dir.getFullyQualifiedName());
-
-			File projectDirecory = new File(projectFolder.concat("/").concat(
-					projectFinalName));
-
-			ShellMessages.info(out,
-					"Creating project in " + projectDirecory.getAbsolutePath());
-			if (!projectDirecory.exists()) {
-				ShellMessages.info(out, "Create project dir :"
-						+ projectDirecory.mkdirs());
-			}
-
-			File pomFile = new File(projectDirecory.getAbsolutePath().concat(
-					"/pom.xml"));
-			ShellMessages.info(out,
-					"Creating pomFile : " + pomFile.createNewFile());
-
-			ProjectUtils.copyPomFile("initial-pom.xml", pomFile);
-
-			System.out.println("copy input stream done");
-
-			// Create project directories
-			// FileUtils.openInputStream(pomFile);
-			FileInputStream fis = new FileInputStream(pomFile);
-			Model pom = new MavenXpp3Reader().read(fis);
-
-			pom.setArtifactId(projectFinalName);
-			pom.setGroupId(PROJECT_GROUPID_PREFIX);
-			pom.setVersion(START_PROJECT_MILESTONE);
-
-			/*
-			 * Create folders
-			 */
-			File srcFolder = new File(projectDirecory.getAbsolutePath().concat(
-					"/src"));
-
-			System.out.println("create src : " + srcFolder.mkdirs());
-
-			File mainFolder = new File(srcFolder.getAbsolutePath().concat(
-					"/main/java"));
-			System.out.println("create src/main java : " + mainFolder.mkdirs());
-
-			File srcMainResource = new File(projectDirecory.getAbsolutePath()
-					.concat("/src"));
-
-		} catch (IOException e1) {
-			ShellMessages.error(out, e1.toString());
-			e1.printStackTrace();
-		} catch (XmlPullParserException e) {
-			ShellMessages.error(out, e.toString());
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			projectFinalName = globalProjectName + "-"
+					+ ForgeConstants.PROJECT_TYPE_UI;
+		} else {
+			projectFinalName = globalProjectName + "-" + projectType;
 		}
 
-		ShellMessages.success(out, "VOILA");
+		String projectCompletePath = projectFolder + "/" + projectFinalName;
+		File file = new File(projectCompletePath);
+
+		Resource<?> projectResource = shell.getCurrentDirectory().createFrom(
+				file);
+		DirectoryResource dir = prepareDirectoryResource(projectFinalName,
+				projectResource, out);
+
+		String javaPackage = "am." + globalProjectName.replace("-", ".");
+
+		// Call the CreateProject class (out of the Plugin)
+		CreateProject createProject = new CreateProject();
+
+		createProject.createAjfProject(globalProjectName, javaPackage, dir,
+				projectFactory, projectType, projectFinalName);
+
+		/*
+		 * Final Log
+		 */
+		shell.println();
+		ShellMessages.success(out, "Project : " + projectFinalName
+				+ " created.");
 
 	}
 
 	/**
 	 * Prepare Resource directory for project: this code is mainly duplicated of
-	 * jboss forge source code
+	 * jboss forge "new-project" plugin source code. The aim of this is to
+	 * prepare the directory resource for the project
 	 * 
 	 * @param projectname
 	 * @param myProjectFolder
@@ -356,6 +343,7 @@ public class CreateSolutionPlugin implements Plugin {
 				&& (projectFactory.containsProject(dir) || !shell
 						.promptBoolean("Use [" + dir.getFullyQualifiedName()
 								+ "] as project directory?"))) {
+
 			if (projectFactory.containsProject(dir)) {
 				ShellMessages
 						.error(out,
@@ -438,6 +426,20 @@ public class CreateSolutionPlugin implements Plugin {
 	}
 
 	/**
+	 * Loop until user enter a project name.
+	 * 
+	 * 
+	 * @return
+	 */
+	private String promptForProjectName() {
+		String projectName = shell.prompt("Project Name :");
+		while (null == projectName || projectName.isEmpty()) {
+			projectName = shell.prompt("Project Name :");
+		}
+		return projectName;
+	}
+
+	/**
 	 * Validate that the input directory (in which the project is to be
 	 * generated) is a correct directory. If it is empty, the current shell
 	 * directory is used. Elseway the directory is checked by an attempt of
@@ -462,6 +464,7 @@ public class CreateSolutionPlugin implements Plugin {
 
 		} else if ("exit".equals(projectDirectory)) {
 			// way of escaping the loop
+
 			return true;
 
 		} else if (!projectDirectory.contains(":")) {
@@ -474,7 +477,7 @@ public class CreateSolutionPlugin implements Plugin {
 		}
 
 		myFile = new File(projectDirectory);
-		boolean isCreated = myFile.mkdir();
+		boolean isCreated = myFile.mkdirs();
 		if (!myFile.exists()) {
 			if (!isCreated) {
 				ShellMessages.error(shell,
@@ -483,6 +486,9 @@ public class CreateSolutionPlugin implements Plugin {
 			}
 		}
 
+		/*
+		 * Ask user validation of the project directory
+		 */
 		List<String> options = new ArrayList<String>();
 		options.add("Yes, let's do this !");
 		options.add("No, change directory.");
@@ -503,50 +509,75 @@ public class CreateSolutionPlugin implements Plugin {
 	}
 
 	/**
-	 * generate the AJF solution corresponding to the input 'ProjectType'
-	 * architecture
+	 * Temporary command to be completed. Generate project resources without
+	 * using forge-shell-api (not finished yet)
 	 * 
-	 * @param globalProjectName
-	 * @param folderName
-	 * @param projectType
+	 * @param name
+	 * @param projectFolder
 	 * @param out
-	 * @throws Exception
 	 */
-	private void generateAjfProject(final String globalProjectName,
-			String projectFolder, String projectType, PipeOut out)
-			throws Exception {
+	// @Command("compacted2")
+	public void createAjfSolutionCompacted2(
+			@Option(name = "named", description = "The name of the new AJF project", required = true) final String name,
+			@Option(name = "Directory", required = true) final String projectFolder,
+			final PipeOut out) {
 
-		String projectFinalName = globalProjectName + "-" + projectType;
-		// DirectoryResource dir = prepareDirectoryResource(projectFinalName,
-		// projectFolder, out);
-		// Create the Project directory and resource
-		// Generate the Full path of the project
-		String projectCompletePath = projectFolder + "/" + projectFinalName;
-		File file = new File(projectCompletePath);
+		ShellMessages.warn(out, "This is an experimental command...");
+		try {
+			String projectFinalName = name + "-" + "ui";
 
-		ShellMessages.warn(out, "FACTORY :" + factory.toString());
-		Resource<?> projectResource = factory.getResourceFrom(file);
-		DirectoryResource dir = prepareDirectoryResource(projectFinalName,
-				projectResource, out);
+			File projectDirecory = new File(projectFolder.concat("/").concat(
+					projectFinalName));
 
-		shell.setCurrentResource(dir);
+			ShellMessages.info(out,
+					"Creating project in " + projectDirecory.getAbsolutePath());
+			if (!projectDirecory.exists()) {
+				ShellMessages.info(out, "Create project dir :"
+						+ projectDirecory.mkdirs());
+			}
 
-		// Resource<?> dir1 = factory.getResourceFrom(file);
-		// DirectoryResource dir = (DirectoryResource) dir1;
-		// Begining of the Name of all the java packages of the project
-		String javaPackage = "am." + globalProjectName.replace("-", ".");
+			File pomFile = new File(projectDirecory.getAbsolutePath().concat(
+					"/pom.xml"));
+			ShellMessages.info(out,
+					"Creating pomFile : " + pomFile.createNewFile());
 
-		// Call the CreateProject class (out of the Plugin)
-		CreateProject createProject = new CreateProject();
+			ProjectUtils.copyPomFile("initial-pom.xml", pomFile);
 
-		createProject.createAjfProject(globalProjectName, javaPackage, dir,
-				projectFactory, projectType, projectFinalName);
+			System.out.println("copy input stream done");
 
-		// Log : End of the project creation
-		// ShellMessages.success(out, "Project : " + dir.getFullyQualifiedName()
-		// + " created.");
-		shell.println();
-		ShellMessages.success(out, "ok");
+			// Create project directories
+			// FileUtils.openInputStream(pomFile);
+			FileInputStream fis = new FileInputStream(pomFile);
+			Model pom = new MavenXpp3Reader().read(fis);
+
+			pom.setArtifactId(projectFinalName);
+			pom.setGroupId(PROJECT_GROUPID_PREFIX);
+			pom.setVersion(START_PROJECT_MILESTONE);
+
+			/*
+			 * Create folders
+			 */
+			File srcFolder = new File(projectDirecory.getAbsolutePath().concat(
+					"/src"));
+
+			System.out.println("** DEBUG create src folder : "
+					+ srcFolder.mkdirs());
+
+			File mainJavaFolder = new File(srcFolder.getAbsolutePath().concat(
+					"/main/java"));
+			System.out.println("** DEBUG create src/main/java : "
+					+ mainJavaFolder.mkdirs());
+
+			File mainResourceFolder = new File(srcFolder.getAbsolutePath()
+					.concat("/main/resources"));
+			System.out.println("** DEBUG create src/main/resource : "
+					+ mainResourceFolder.mkdirs());
+
+			ShellMessages.success(out, "Done");
+
+		} catch (Exception e) {
+			ShellMessages.error(out, "Error occured : " + e.toString());
+		}
 
 	}
 }
