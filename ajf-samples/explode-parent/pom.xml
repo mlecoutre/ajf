@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>standard</artifactId>
+		<groupId>am.parent</groupId>
+		<version>2.0.7</version>
+	</parent>
+	<groupId>am.projects.explode</groupId>
+	<artifactId>explode-parent</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<properties>
+		<ajfversion>2.1.0</ajfversion>
+		<openwebbeansVersion>1.1.3</openwebbeansVersion>
+	</properties>
+
+	<scm>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/trunk/explode/explode-parent</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/trunk/explode/explode-parent</developerConnection>
+		<url>http://web-svn-viewer/listing.php?repname=ITSWE&amp;amp;path=/trunk/explode/explode-parent</url>
+	</scm>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- project internal dependencies -->
+			<dependency>
+				<groupId>am.projects.explode</groupId>
+				<artifactId>explode-config</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.projects.explode</groupId>
+				<artifactId>explode-lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.projects.explode</groupId>
+				<artifactId>explode-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.projects.explode</groupId>
+				<artifactId>explode-ui</artifactId>
+				<version>${project.version}</version>
+				<type>war</type>
+			</dependency>
+			<dependency>
+				<groupId>am.projects.explode</groupId>
+				<artifactId>explode-ws</artifactId>
+				<version>${project.version}</version>
+				<type>war</type>
+			</dependency>
+
+			<!-- framework dependencies -->
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-core</artifactId>
+				<version>${ajfversion}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-injection</artifactId>
+				<version>${ajfversion}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-persistence</artifactId>
+				<version>${ajfversion}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-remoting</artifactId>
+				<version>${ajfversion}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-monitoring</artifactId>
+				<version>${ajfversion}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-web</artifactId>
+				<version>${ajfversion}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-testing</artifactId>
+				<version>${ajfversion}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<modules>
+		<module>../explode-config</module>
+		<module>../explode-lib</module>
+		<module>../explode-core</module>
+		<module>../explode-ui</module>
+		<module>../explode-ws</module>
+		<module>../explode-ear</module>
+	</modules>
+
+	<build>
+
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.3.2</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+
+	</build>
+
+</project>

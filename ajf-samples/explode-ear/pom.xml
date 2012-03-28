@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>explode-parent</artifactId>
+		<groupId>am.projects.explode</groupId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../explode-parent/pom.xml</relativePath>
+	</parent>
+
+	<artifactId>explode-ear</artifactId>
+	<name>explode-ear</name>
+	<packaging>ear</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>am.projects.explode</groupId>
+			<artifactId>explode-ws</artifactId>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>am.projects.explode</groupId>
+			<artifactId>explode-ui</artifactId>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>am.projects.explode</groupId>
+			<artifactId>explode-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>am.projects.explode</groupId>
+			<artifactId>explode-lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>am.projects.explode</groupId>
+			<artifactId>explode-config</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.scannotation</groupId>
+			<artifactId>scannotation</artifactId>
+			<version>1.0.3</version>
+		</dependency>
+		
+	</dependencies>
+
+	<build>
+		<finalName>${project.name}-${project.version}</finalName>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ear-plugin</artifactId>
+				<configuration>
+					<displayName>${project.name}</displayName>
+					<description>${project.name} - ${project.groupId}
+						${project.artifactId}
+						${project.version}</description>
+					<version>5</version>
+					<defaultLibBundleDir>lib</defaultLibBundleDir>
+
+					<modules>
+						<webModule>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>explode-ws</artifactId>
+							<contextRoot>/explode-ws</contextRoot>
+							<bundleDir>/</bundleDir>
+							<bundleFileName>explode-ws.war</bundleFileName>
+						</webModule>
+
+						<webModule>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>explode-ui</artifactId>
+							<contextRoot>/explode-ui</contextRoot>
+							<bundleDir>/</bundleDir>
+							<bundleFileName>explode-ui.war</bundleFileName>
+						</webModule>
+
+					</modules>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+						<manifest>
+							<addClasspath>false</addClasspath>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+						<manifestEntries>
+							<Implementation-Build>${buildNumber}</Implementation-Build>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+
+		</plugins>
+
+	</build>
+
+</project>

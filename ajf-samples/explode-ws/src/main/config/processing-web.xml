@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<processor>
+
+	<!-- Add CDI support for WAS -->
+	<add>
+		<after>//s:display-name</after>
+		<value>
+			<![CDATA[
+			<!-- Add CDI support for WAS -->
+			<listener>
+				<listener-class>org.apache.webbeans.servlet.WebBeansConfigurationListener</listener-class>
+			</listener>
+			]]>
+		</value>
+	</add>
+</processor>
