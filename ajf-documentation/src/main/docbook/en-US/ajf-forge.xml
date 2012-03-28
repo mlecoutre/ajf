@@ -205,132 +205,146 @@
 	<section>
 		<title id="useForgePlugin">Use the ajf-forge Plugin</title>
 		<para>
-			In order to run the ajf-forge plugin, you first have to attach
-			the
-			ajf-forge-context to the shell.
-			To do so, download the
-			<ulink
-				url="http://web-maven-repo/nexus/content/repositories/releases/am/ajf/forge/ajf-forge-context/2.0.1/ajf-forge-context-2.0.1.zip">ajf-forge-context.zip</ulink>
-			file.
+			Let's now use the ajf-forge plugin to generate an ajf2
+			application
 		</para>
-		<para>
-			Unzip it in the
-			directory that you like. (i.e : C:/myDirectory).
-			<figure id="forge-ajfForgeContextFolder-screen.fig">
-				<title>ajf-forge-context folder</title>
-				<mediaobject>
-					<imageobject>
-						<imagedata align="center"
-							fileref="images/forge/forge-ajfForgeContextFolder-screen.png" />
-					</imageobject>
-				</mediaobject>
-			</figure>
-		</para>
-		<para>
-			Secondly, launch the forge Shell and navigate to this context folder
-			(via
-			<emphasis>cd</emphasis>
-			command). You should see the forge prompt switch to green color
-			written :
-			<emphasis> ajf-forge-context </emphasis>
+		<section>
+			<title id="attachForgeContext">Attach forge's context</title>
+			<para>
+				First and foremost, in order to run the ajf-forge plugin, you
+				have to
+				attach
+				the
+				ajf-forge-context to the shell.
+				To do so, download
+				the
+				<ulink
+					url="http://web-maven-repo/nexus/content/repositories/releases/am/ajf/forge/ajf-forge-context/2.0.1/ajf-forge-context-2.0.1.zip">ajf-forge-context.zip</ulink>
+				file.
+			</para>
+			<para>
+				Unzip it in the
+				directory that you like. (i.e : C:/myDirectory).
+				<figure id="forge-ajfForgeContextFolder-screen.fig">
+					<title>ajf-forge-context folder</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata align="center"
+								fileref="images/forge/forge-ajfForgeContextFolder-screen.png" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</para>
+			<para>
+				Secondly, launch the forge Shell and navigate to this context folder
+				(via
+				<command>cd</command>
+				command). You should see the forge prompt switch to green color
+				written :
 
-			<figure id="forge-attachForgeContext-screen.fig">
-				<title>attach forge shell&apos;s context</title>
-				<mediaobject>
-					<imageobject>
-						<imagedata align="center"
-							fileref="images/forge/forge-attachForgeContext-screen.png" />
-					</imageobject>
-				</mediaobject>
-			</figure>
+				<emphasis> ajf-forge-context </emphasis>
 
-		</para>
-		<para>Once you've done this, you can just run the
-			command :
-		</para>
-		<screen>
+				<figure id="forge-attachForgeContext-screen.fig">
+					<title>attach forge shell&apos;s context</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata align="center"
+								fileref="images/forge/forge-attachForgeContext-screen.png" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</para>
+		</section>
+		<section>
+			<title>Run AJF-Forge commands</title>
+			<para>You are now ready to run the
+				commands for AJF solution
+				generation :
+			</para>
+			<screen>
    <prompt>[ajf-forge-context] ajf-forge-context $&gt;</prompt><userinput>ajf-solution</userinput> 
-   </screen>
-		<para>And you should now be prompted the kind of ajf project that
-			you
-			want to generate.
-		</para>
-		<figure id="forgeDefaultCommandScreen.fig">
-			<title>launch ajf-forge default command</title>
-			<mediaobject>
-				<imageobject>
-					<imagedata align="center" scale="80"
-						fileref="images/forge/forge-defaultCommand-screen.png" />
-				</imageobject>
-			</mediaobject>
-		</figure>
+  			</screen>
+			<para>And you should now be prompted the kind of ajf project that
+				you
+				want to generate.
+			</para>
+			<figure id="forgeDefaultCommandScreen.fig">
+				<title>launch ajf-forge default command</title>
+				<mediaobject>
+					<imageobject>
+						<imagedata align="center" scale="80"
+							fileref="images/forge/forge-defaultCommand-screen.png" />
+					</imageobject>
+				</mediaobject>
+			</figure>
 <?ajfProjectTypes compacted&quot; AJF project is a mono-web project. It can be used to make a simple web application (a stand alone ui application). The &quot;exploded&quot; AJF project will be composed of several project types (core, ws, ui, config, lib). This kind of project is suitable for more complex applications. For more details, see the <link linkend="norms">
  >AJF-Norms chapter.</link>?>
-		<para>
-			Both of the two options will work pretty much the same way. Two
-			inputs will be prompted :
+			<para>
+				Both of the two options will work pretty much the same way. Two
+				inputs will be prompted :
+				<itemizedlist>
+					<listitem>
+						<para>
+							- Project name ( general name of your
+							application, i.e:
+							<emphasis role="italic">myApplication</emphasis>
+							)
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							- Project folder : Directory where to create the application
+							(i.e:
+							<emphasis role="italic">C:/projects/myProjectFolder</emphasis>
+							)
+						</para>
+					</listitem>
+				</itemizedlist>
+				If selecting the &quot;exploded&quot; ajf project, several java
+				maven
+				projects will be generated:
+			</para>
 			<itemizedlist>
 				<listitem>
 					<para>
-						- Project name ( general name of your
-						application, i.e:
-						<emphasis role="italic">myApplication</emphasis>
-						)
+						<filename>C:/projects/myProjectFolder/myApplication-core
+						</filename>
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						- Project folder : Directory where to create the application
-						(i.e:
-						<emphasis role="italic">C:/projects/myProjectFolder</emphasis>
-						)
+						<filename>C:/projects/myProjectFolder/myApplication-lib </filename>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<filename>C:/projects/myProjectFolder/myApplication-ui </filename>
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						<emphasis role="italic">(...)</emphasis>
 					</para>
 				</listitem>
 			</itemizedlist>
-			If selecting the &quot;exploded&quot; ajf project, several java
-			maven
-			projects will be generated:
-		</para>
-		<itemizedlist>
-			<listitem>
-				<para>
-					<filename>C:/projects/myProjectFolder/myApplication-core </filename>
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					<filename>C:/projects/myProjectFolder/myApplication-lib </filename>
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					<filename>C:/projects/myProjectFolder/myApplication-ui </filename>
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					<emphasis role="italic">(...)</emphasis>
-				</para>
-			</listitem>
-		</itemizedlist>
-		<para>In case of chosing the &quot;compacted&quot; project type,
-			only
-			the UI project will be generated.
-		</para>
-		<section id="compactedGenerationSection">
-			<title>Generate a &quot;compacted&quot; ajf project</title>
-			<para>On the &quot;ajf-solution&quot; default command prompted
-				choice, enter &quot;1&quot; value in order to select choice number
-				one corresponding to &quot;compacted&quot; ajf solution.
-				Immediately, you will be prompted for the name you want to give to
-				your application, and the folder where you want to create your
-				project.
+			<para>In case of chosing the &quot;compacted&quot; project type,
+				only
+				the UI project will be generated.
 			</para>
-			<note>
-				<para>Entering the value &apos;exit&apos; for the project name OR
-					the project directory will allow you to escape the process !
+			<section id="compactedGenerationSection">
+				<title>Generate a &quot;compacted&quot; ajf project</title>
+				<para>On the &quot;ajf-solution&quot; default command prompted
+					choice, enter &quot;1&quot; value in order to select choice number
+					one corresponding to &quot;compacted&quot; ajf solution.
+					Immediately, you will be prompted for the name you want to give to
+					your application, and the folder where you want to create your
+					project.
 				</para>
-				<screen>
+				<note>
+					<para>Entering the value &apos;exit&apos; for the project name OR
+						the project directory will allow you to escape the process !
+					</para>
+					<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt><command>ajf-solution</command>
 Which type of AJF project ?
 
@@ -344,24 +358,24 @@ Which type of AJF project ?
 ***INFO*** bye bye !
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt>
  </screen>
-			</note>
-			<note>
-				<para>
-					you could also have entered as a shortcut from the choice
-					prompt.
-				</para>
-				<screen>
+				</note>
+				<note>
+					<para>
+						you could also have entered as a shortcut from the choice
+						prompt.
+					</para>
+					<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt><command>ajf-solution compacted</command>
 </screen>
-			</note>
-			<warning>
-				<para>When entering the inputs data, a validation of the input
-					folder is done. If the directory is not correct, you will be
-					invited to start again the process. (example here : the Y drive
-					does not exist)
-				</para>
-				<para>
-					<screen>
+				</note>
+				<warning>
+					<para>When entering the inputs data, a validation of the input
+						folder is done. If the directory is not correct, you will be
+						invited to start again the process. (example here : the Y drive
+						does not exist)
+					</para>
+					<para>
+						<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt> <command>ajf-solution compacted</command>
  ? [named=The name of the new AJF project (of type java.lang.String)]: <userinput>myProject</userinput>
  ? [Directory=ARG (of type java.lang.String)]: <userinput>Y:/notExistingPath</userinput>
@@ -370,29 +384,29 @@ Which type of AJF project ?
 <prompt>[ajf-forge-context] ajf-forge-context $ </prompt>
 </screen>
 
-					Note : if the input folder path does not exist, but is correct and
-					creatable, it will be correctly create and no error message will
+						Note : if the input folder path does not exist, but is correct and
+						creatable, it will be correctly create and no error message will
+						be
+						prompted.
+						This error message is thrown only when the directory
+						path
+						is not possible to create.
+					</para>
+				</warning>
+				<para>Let&apos;s now generate the compacted ajf project.</para>
+				<para>Once the validation of the project directory is done, a
+					validation
+					will be asked to the user, showing the directory where is
+					going to
 					be
-					prompted.
-					This error message is thrown only when the directory
-					path
-					is not possible to create.
+					created the project. This is a simple validation to be
+					sure that
+					the
+					entered folder has been correctly set.
 				</para>
-			</warning>
-			<para>Let&apos;s now generate the compacted ajf project.</para>
-			<para>Once the validation of the project directory is done, a
-				validation
-				will be asked to the user, showing the directory where is
-				going to
-				be
-				created the project. This is a simple validation to be
-				sure that
-				the
-				entered folder has been correctly set.
-			</para>
-			<para>After this last validation, the project generation starts...
-			</para>
-			<screen>
+				<para>After this last validation, the project generation starts...
+				</para>
+				<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt> <command>ajf-solution compacted</command>
  ? [named=The name of the new AJF project (of type java.lang.String)]: <userinput>myApplication</userinput>
  ? [Directory=ARG (of type java.lang.String)]: <userinput>C:/Projects/myProjectFolder</userinput>
@@ -437,22 +451,22 @@ Wrote C:\/Projects/myProjectFolder/myApplication-compacted/src/main/java/am/myAp
 plication/web/controllers/ExempleMBean.java
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt>
 </screen>
-		</section>
-		<section>
-			<title>Generate an &quot;exploded&quot; ajf project</title>
-			<para>When entering the choice 2 on the ajf-solution prompt choice
-				screen, or by entering directely the shortcut command :
-			</para>
-			<screen>
+			</section>
+			<section>
+				<title>Generate an &quot;exploded&quot; ajf project</title>
+				<para>When entering the choice 2 on the ajf-solution prompt choice
+					screen, or by entering directely the shortcut command :
+				</para>
+				<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $ </prompt><command>ajf-solution exploded</command>
 </screen>
-			<para>
-				You are now about to generate an exploded ajf project. Again you
-				will be prompted for a project name and a project folder. The
-				process is precisely the same as for the
-				<link linkend="compactedGenerationSection"> compacted project generation. </link>
-			</para>
-			<screen>
+				<para>
+					You are now about to generate an exploded ajf project. Again you
+					will be prompted for a project name and a project folder. The
+					process is precisely the same as for the
+					<link linkend="compactedGenerationSection"> compacted project generation. </link>
+				</para>
+				<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt> <command>ajf-solution exploded</command>
  ? [named=The name of the new AJF project (of type java.lang.String)]: <userinput>myExplodedProject</userinput>
  ? [Directory=ARG (of type java.lang.String)]: <userinput>C:/projects/explodedProject</userinput>
@@ -555,23 +569,23 @@ Wrote C:\/projects/explodedProject/myExplodedProject-lib/src/main/resources
 Wrote C:\/projects/explodedProject/myExplodedProject-lib/src/test/resources
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt>
 </screen>
-			<para>
-				You can now check the resources that has been generated. In
-				case of an
-				exploded ajf project you will find something like this :
-			</para>
-			<figure id="forge-explodedResources-screen.fig">
-				<title>Generated exploded Ajf project</title>
-				<mediaobject>
-					<imageobject>
-						<imagedata align="center"
-							fileref="images/forge/forge-explodedResources-screen.png" />
-					</imageobject>
-				</mediaobject>
-			</figure>
+				<para>
+					You can now check the resources that has been generated. In
+					case of an
+					exploded ajf project you will find something like this :
+				</para>
+				<figure id="forge-explodedResources-screen.fig">
+					<title>Generated exploded Ajf project</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata align="center"
+								fileref="images/forge/forge-explodedResources-screen.png" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</section>
 		</section>
 	</section>
-
 
 	<section id="deployOnTomcatSection">
 		<title>Deploy your generated web ajf application </title>
@@ -915,15 +929,49 @@ lutionException
 	<section>
 		<title>Troubleshooting</title>
 		<para>
-			TODO
+			Here is a short List of errors that could occured when using the
+			forge. You may found a few solutions to your problem here
 		</para>
+		<section>
+			<title>AJF Project generation Error</title>
+			<para>
+				You may encouter this error when launching the forge and trying
+				to use directly the forge plugin.
+			</para>
+			<screen>
+			
+START generating ajf project compacted
+Error occured during ajf web project generation : org.jboss.forge.project.ProjectModelException: 
+Could not create Maven project building request
+***ERROR*** AJF project generation process has thrown an Exception : java.lang.N
+ullPointerException
+			
+			</screen>
+
+			<para>
+				This Error is due to the fact that the forge tool has never had
+				it's
+				context attached.
+			</para>
+			<para>
+				If you encounter this error:
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>
+						Firstly, exit the forge tool and then relaunch it.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Secondly, try to
+						<link linkend="attachForgeContext">attach your forge's context</link>
+						before launching the AJF plugin again.
+					</para>
+				</listitem>
+			</itemizedlist>
+
+		</section>
 	</section>
-	<!-- <section> <title></title> <para> </para> <important> <para> </para> 
-		<para> <emphasis></emphasis> </para> <programlisting language="Xml" role="Xml"><![CDATA[ 
-		]]></programlisting> </important> <example> <title></title> <programlisting 
-		language="Java" role="Java"><![CDATA[ ]]></programlisting> <para> <emphasis>or</emphasis> 
-		</para> <programlisting language="Java" role="Java"><![CDATA[ ]]></programlisting> 
-		</example> <important> <para> </para> <itemizedlist> <listitem> <para> <emphasis>dlsm:ldmlsmdl</emphasis> 
-		</para> </listitem> </itemizedlist> </important> <warning> <para> </para> 
-		</warning> </section> -->
+
 </chapter>
