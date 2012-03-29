@@ -1,25 +1,18 @@
 package am.ajf.core.util;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.FileNotFoundException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.Map;
-
-import org.junit.Test;
-
-import am.ajf.forge.util.TemplateUtils;
-
+/**
+ * 
+ * Test a complete templating Test using FreeMarker. All the use of FreeMarker
+ * API is done in templateUtils. This whole test case is commented as for the
+ * moment FreeMarker make the forge plugin fail...
+ * 
+ * @author E019851
+ */
 public class TemlateUtilsTest {
 
-	private static final String FREEMARKER_TEMPLATE_NAME = "templateEmployee.ftl";
+	// private static final String FREEMARKER_TEMPLATE_NAME =
+	// "templateEmployee.ftl";
 
-	// /**
-	// * Test a complete templating Test using FreeMarker. All the use of
-	// * FreeMarker API is done in templateUtils
-	// *
-	// */
 	// @SuppressWarnings("rawtypes")
 	// @Test
 	// public void templateTest() {

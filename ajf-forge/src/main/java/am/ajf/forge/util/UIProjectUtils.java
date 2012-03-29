@@ -1,28 +1,20 @@
 package am.ajf.forge.util;
 
-import static am.ajf.forge.lib.ForgeConstants.AJF_CORE;
-import static am.ajf.forge.lib.ForgeConstants.AJF_INJECTION;
-import static am.ajf.forge.lib.ForgeConstants.AJF_PERSISTENCE;
-import static am.ajf.forge.lib.ForgeConstants.AJF_TESTING;
-import static am.ajf.forge.lib.ForgeConstants.AJF_WEB;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Model;
-import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.parser.JavaParser;
 import org.jboss.forge.parser.java.JavaClass;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.JavaSourceFacet;
+import org.jboss.forge.project.facets.ResourceFacet;
+
+import am.ajf.forge.lib.ForgeConstants;
 
 public class UIProjectUtils {
 
@@ -97,62 +89,25 @@ public class UIProjectUtils {
 	}
 
 	/**
-	 * Uses model resources files and sets the dependencies, properties,
-	 * profiles and the whole build sections to the generated project's pom.xml
-	 * file. AJF dependencies are taken from the ajfDependencies model xml file.
-	 * All the other pom settings (dependencies, profiles, build...) are taken
-	 * from the ui pom model file.
+	 * Extract the persistence.xml file into the Resource META-INF folder of the
+	 * current project
 	 * 
 	 * @param project
-	 * @param uiModelPomFile
-	 *            example ui pom.xml file, containing all maven settings such as
-	 *            external dependencies, profiles, build, plugins... (without
-	 *            AJF)
-	 * @param ajfDependenciesFiles
-	 *            sample pom.xml file containint all possible AJF dependencies
-	 * @throws Exception
+	 * @throws IOException
 	 */
-	public static void setUIPomFromFile(Project project, String uiModelPomFile,
-			String ajfDependenciesFiles, boolean isCompacted) throws Exception {
+	public static void extractPersistenceXmlFile(Project project)
+			throws IOException {
 
-		// Model Pom file corresponding to UI POM (without AJF deps)
-		Model uiModelPom = ProjectUtils.getPomFromFile(uiModelPomFile);
-		// Model Pom file containing all the ajf dependencies
-		Model ajfDepsPom = ProjectUtils.getPomFromFile(ajfDependenciesFiles);
+		ResourceFacet resFacet = project.getFacet(ResourceFacet.class);
 
-		// Get the current generated project's pom file
-		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
-		Model generatedPom = mavenCoreFacet.getPOM();
+		File resourceFolder = resFacet.getResourceFolder()
+				.getUnderlyingResourceObject();
 
-		// Set Properties only in compacted mode (when not compacted, the
-		// properties are set in parent project)
-		if (isCompacted)
-			generatedPom.setProperties(ajfDepsPom.getProperties());
+		File metaInfFolder = new File(resourceFolder.getAbsolutePath().concat(
+				"/META-INF"));
 
-		// Set Ajf Dependencies for web Project, using model file containing ajf
-		// deps
-		List<String> ajfDepsWeb = new ArrayList<String>();
-		ajfDepsWeb.add(AJF_WEB);
-		ajfDepsWeb.add(AJF_CORE);
-		ajfDepsWeb.add(AJF_INJECTION);
-		ajfDepsWeb.add(AJF_PERSISTENCE);
-		ajfDepsWeb.add(AJF_TESTING);
-		ProjectUtils.addAjfDependenciesToPom(ajfDepsWeb, ajfDependenciesFiles,
-				generatedPom);
+		unzipFile(ForgeConstants.PERSISTENCE_XML_ZIP, metaInfFolder);
 
-		// Set dependencies (other than AJF, specific for web project)
-		for (Dependency dep : uiModelPom.getDependencies()) {
-			generatedPom.getDependencies().add(dep);
-		}
-
-		// set Profiles for web project
-		generatedPom.setProfiles(uiModelPom.getProfiles());
-
-		// set build Plugins
-		// generatedPom.getBuild().setPlugins(resourcePom.getBuild().getPlugins());
-		generatedPom.setBuild(uiModelPom.getBuild());
-
-		mavenCoreFacet.setPOM(generatedPom);
 	}
 
 	/**

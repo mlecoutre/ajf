@@ -1,22 +1,10 @@
 package am.ajf.forge.core;
 
-import static am.ajf.forge.lib.ForgeConstants.AJF_CORE;
-import static am.ajf.forge.lib.ForgeConstants.AJF_DEPS_MODEL_FILE;
-import static am.ajf.forge.lib.ForgeConstants.AJF_INJECTION;
-import static am.ajf.forge.lib.ForgeConstants.AJF_MONITORING;
-import static am.ajf.forge.lib.ForgeConstants.AJF_PERSISTENCE;
-import static am.ajf.forge.lib.ForgeConstants.AJF_REMOTING;
-import static am.ajf.forge.lib.ForgeConstants.AJF_TESTING;
 import static am.ajf.forge.lib.ForgeConstants.META_INF_FOLDER_ZIP;
-import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
-
-import java.util.ArrayList;
-import java.util.List;
+import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_LIB;
 
 import javax.inject.Singleton;
 
-import org.apache.maven.model.Model;
-import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.DependencyFacet;
 import org.jboss.forge.project.facets.JavaSourceFacet;
@@ -38,14 +26,18 @@ public class LibProjectGeneration {
 	 * 
 	 * 
 	 * @param globalProjectName
+	 *            name of the global ajf solution
 	 * @param projectFinalName
+	 *            name of the current project final name
 	 * @param javaPackage
+	 *            name of the project's top level package name
 	 * @param projectFactory
+	 *            of ajf forge
 	 * @param projectType
+	 *            type of the current ajf project
 	 * @param dir
-	 * @param isCompact
-	 * @return
-	 * @throws Exception
+	 *            directory resource where to create the project
+	 * @return project
 	 */
 	public Project generateLibAjfProject(String globalProjectName,
 			String projectFinalName, String javaPackage,
@@ -60,24 +52,15 @@ public class LibProjectGeneration {
 			project = generateProject(globalProjectName, projectFinalName,
 					projectFactory, dir);
 
-			List<String> ajfDependencies = new ArrayList<String>();
+			// Set pom from example pom file
+			ProjectUtils.setPomFromModelFile(project, MODEL_POM_LIB);
 
-			ajfDependencies.add(AJF_CORE);
-			ajfDependencies.add(AJF_INJECTION);
-			ajfDependencies.add(AJF_PERSISTENCE);
-			ajfDependencies.add(AJF_REMOTING);
-			ajfDependencies.add(AJF_TESTING);
-			ajfDependencies.add(AJF_MONITORING);
+			// Set the Pom parent
+			ProjectUtils.setInternalPomParent(globalProjectName, project);
 
-			// Get the Pom
-			MavenCoreFacet mavenCoreFacet = project
-					.getFacet(MavenCoreFacet.class);
-			Model pom = mavenCoreFacet.getPOM();
-
-			ProjectUtils.addAjfDependenciesToPom(ajfDependencies,
-					AJF_DEPS_MODEL_FILE, pom);
-
-			mavenCoreFacet.setPOM(pom);
+			// Set project meta data in pom
+			ProjectUtils.setBasicProjectData(globalProjectName,
+					projectFinalName, project);
 
 		} catch (Exception e) {
 
@@ -124,12 +107,6 @@ public class LibProjectGeneration {
 
 		// Set the pom parent
 		ProjectUtils.setInternalPomParent(globalProjectName, project);
-
-		/*
-		 * Set dependencies
-		 */
-		ProjectUtils.addInternalDependency(globalProjectName, project,
-				PROJECT_TYPE_CONFIG);
 
 		/*
 		 * Extract META-INF/beans.xml to generated project

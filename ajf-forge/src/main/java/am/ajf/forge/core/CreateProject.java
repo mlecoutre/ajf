@@ -1,6 +1,7 @@
 package am.ajf.forge.core;
 
-import static am.ajf.forge.lib.ForgeConstants.AJF_DEPS_MODEL_FILE;
+import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_CONFIG;
+import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_EAR;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_COMPACT;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
@@ -9,17 +10,10 @@ import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_PARENT;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
-import static am.ajf.forge.lib.ForgeConstants.STANDARD_PARENT_ARTIFACTID;
-import static am.ajf.forge.lib.ForgeConstants.STANDARD_PARENT_GROUPID;
-import static am.ajf.forge.lib.ForgeConstants.STANDARD_PARENT_VERSION;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.maven.model.Model;
-import org.apache.maven.model.Parent;
-import org.apache.maven.model.Scm;
-import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.DependencyFacet;
 import org.jboss.forge.project.facets.MetadataFacet;
@@ -60,8 +54,9 @@ public class CreateProject {
 
 		if (PROJECT_TYPE_PARENT.equals(projectType)) {
 
-			project = generateProjectParent(globalProjectName, javaPackage,
-					projectFactory, projectFinalName, dir);
+			ParentProjectGeneration parentProjectgen = new ParentProjectGeneration();
+			project = parentProjectgen.generateProjectParent(globalProjectName,
+					javaPackage, projectFactory, projectFinalName, dir);
 
 		} else if (PROJECT_TYPE_CONFIG.equals(projectType)) {
 
@@ -84,7 +79,7 @@ public class CreateProject {
 
 			WebProjectGeneration uiProject = new WebProjectGeneration();
 
-			project = uiProject.generateWebAjfProject(globalProjectName,
+			project = uiProject.generateUIAjfProject(globalProjectName,
 					projectFinalName, javaPackage, projectFactory, projectType,
 					dir, false);
 
@@ -98,15 +93,15 @@ public class CreateProject {
 		} else if (PROJECT_TYPE_WS.equals(projectType)) {
 
 			WebProjectGeneration uiProject = new WebProjectGeneration();
-			project = uiProject.generateWebAjfProject(globalProjectName,
+			project = uiProject.generateWSAjfProject(globalProjectName,
 					projectFinalName, javaPackage, projectFactory, projectType,
-					dir, false);
+					dir);
 
 		} else if (PROJECT_TYPE_COMPACT.equals(projectType)) {
 
 			WebProjectGeneration uiProject = new WebProjectGeneration();
 
-			project = uiProject.generateWebAjfProject(globalProjectName,
+			project = uiProject.generateUIAjfProject(globalProjectName,
 					projectFinalName, javaPackage, projectFactory, projectType,
 					dir, true);
 
@@ -123,17 +118,6 @@ public class CreateProject {
 				.getFullyQualifiedName();
 
 		/*
-		 * Generate .project file of the project for it to be importable in
-		 * eclipse (Not necessary)
-		 */
-		// generateEclipseProjectFile(projectFinalName, projectRootDirectory);
-
-		/*
-		 * Generate the MAVEN PREFS file
-		 */
-		// generateMavenPrefsFile(projectRootDirectory);
-
-		/*
 		 * generate classPath file
 		 */
 		EclipseUtils.generateClassPathFile(projectRootDirectory, projectType);
@@ -147,35 +131,8 @@ public class CreateProject {
 
 	}
 
-	// /**
-	// * Generate the .project file needed to import the current project in
-	// * Eclipse
-	// *
-	// * @param projectFinalName
-	// * @param projectRootDirectory
-	// * @throws FactoryConfigurationError
-	// * @throws Exception
-	// */
-	// private void generateEclipseProjectFile(String projectFinalName,
-	// String projectRootDirectory) throws FactoryConfigurationError,
-	// Exception {
-	//
-	// try {
-	// EclipseUtils.generateEclipseProjectFile(projectFinalName,
-	// projectRootDirectory);
-	//
-	// } catch (Exception e) {
-	//
-	// // Exception should already be logged
-	// throw new Exception(
-	// "Error occured during the generation of the .Project file, which is needed to correctly import the project in Eclipse.",
-	// e);
-	//
-	// }
-	// }
-
 	/**
-	 * Construction of an PARENT core type project
+	 * Construction of an EAR core type project
 	 * 
 	 * @param globalProjectName
 	 * @param javaPackage
@@ -186,81 +143,16 @@ public class CreateProject {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	private Project generateProjectParent(String globalProjectName,
-			String javaPackage, ProjectFactory projectFactory,
-			String projectFinalName, DirectoryResource dir) throws Exception {
-
-		Project project;
-		project = projectFactory.createProject(dir, DependencyFacet.class,
-				MetadataFacet.class);
-
-		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
-				project);
-
-		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
-		packaging.setPackagingType(PackagingType.BASIC);
-
-		// Get the MavenFacet in order to grab the pom
-		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
-		Model pom = mavenCoreFacet.getPOM();
-
-		// Add the children modules
-		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_CONFIG);
-		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_CORE);
-		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_UI);
-		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_LIB);
-		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_EAR);
-
-		// Set am/parent
-		Parent parent = new Parent();
-		parent.setGroupId(STANDARD_PARENT_GROUPID);
-		parent.setArtifactId(STANDARD_PARENT_ARTIFACTID);
-		parent.setVersion(STANDARD_PARENT_VERSION);
-
-		pom.setParent(parent);
-
-		// Add properties
-		Model resourcePom = ProjectUtils.getPomFromFile(AJF_DEPS_MODEL_FILE);
-
-		// Set Properties
-		pom.setProperties(resourcePom.getProperties());
-
-		mavenCoreFacet.setPOM(pom);
-
-		// Set SCM Connection
-
-		Scm scm = new Scm();
-		scm.setConnection("scm:svn:http://web-svn-srv/repos/ITSWE/trunk/"
-				+ globalProjectName + "/" + projectFinalName);
-		scm.setDeveloperConnection("scm:svn:http://web-svn-srv/repos/ITSWE/trunk/"
-				+ globalProjectName + "/" + projectFinalName);
-		scm.setUrl("http://web-svn-viewer/listing.php?repname=ITSWE&amp;path=/trunk/"
-				+ globalProjectName + "/" + projectFinalName);
-		pom.setScm(scm);
-
-		mavenCoreFacet.setPOM(pom);
-
-		return project;
-	}
-
-	/**
-	 * Construction of an EAR core type project
-	 * 
-	 * @param globalProjectName
-	 * @param javaPackage
-	 * @param projectFactory
-	 * @param projectFinalName
-	 * @param dir
-	 * @return Project object corresponding to the generated project
-	 */
-	@SuppressWarnings("unchecked")
 	private Project generateProjectEar(String globalProjectName,
 			String javaPackage, ProjectFactory projectFactory,
-			String projectFinalName, DirectoryResource dir) {
+			String projectFinalName, DirectoryResource dir) throws Exception {
 		Project project;
 
 		project = projectFactory.createProject(dir, DependencyFacet.class,
 				MetadataFacet.class, ResourceFacet.class);
+
+		// Set pom from model
+		ProjectUtils.setPomFromModelFile(project, MODEL_POM_EAR);
 
 		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
 				project);
@@ -286,9 +178,13 @@ public class CreateProject {
 		 * Set dependencies
 		 */
 		ProjectUtils.addInternalDependency(globalProjectName, project,
+				PROJECT_TYPE_WS);
+		ProjectUtils.addInternalDependency(globalProjectName, project,
 				PROJECT_TYPE_UI);
 		ProjectUtils.addInternalDependency(globalProjectName, project,
 				PROJECT_TYPE_CORE);
+		ProjectUtils.addInternalDependency(globalProjectName, project,
+				PROJECT_TYPE_LIB);
 		ProjectUtils.addInternalDependency(globalProjectName, project,
 				PROJECT_TYPE_CONFIG);
 
@@ -304,17 +200,21 @@ public class CreateProject {
 	 * @param projectFinalName
 	 * @param dir
 	 * @return Project object corresponding to the generated project
+	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	private Project generateProjectConfig(String globalProjectName,
 			String javaPackage, ProjectFactory projectFactory,
-			String projectFinalName, DirectoryResource dir) {
+			String projectFinalName, DirectoryResource dir) throws Exception {
 
 		Project project;
 		System.out.println("Creating config project");
 
 		project = projectFactory.createProject(dir, DependencyFacet.class,
 				MetadataFacet.class, ResourceFacet.class);
+
+		// Set pom from model
+		ProjectUtils.setPomFromModelFile(project, MODEL_POM_CONFIG);
 
 		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
 				project);

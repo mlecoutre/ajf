@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+<!-- 	<parent>
+		<artifactId>explode-parent</artifactId>
+		<groupId>am.projects.explode</groupId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../explode-parent/pom.xml</relativePath>
+	</parent> -->
+
+	<artifactId>explode-core</artifactId>
+
+	<dependencies>
+	
+<!-- 		<dependency>
+			<groupId>am.projects.explode</groupId>
+			<artifactId>explode-config</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>am.projects.explode</groupId>
+			<artifactId>explode-lib</artifactId>
+		</dependency> -->
+
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-injection</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-persistence</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-remoting</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-monitoring</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-testing</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- Bean Validation API -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>1.0.0.GA</version>
+		</dependency>
+		<!-- Bean Validation IMPL -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.0.2.GA</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>jaxb-impl</artifactId>
+					<groupId>com.sun.xml.bind</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>jaxb-api</artifactId>
+					<groupId>javax.xml.bind</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<!--  JPA 2 API -->
+		<dependency>
+		  <groupId>javax.persistence</groupId>
+		  <artifactId>persistence-api</artifactId>
+		  <!-- 
+		  <version>1.0.2</version>
+		  -->
+		  <version>2.0</version>
+		</dependency>
+		<!--  JPA 2 IMPL -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>3.6.7.Final</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-core</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+				
+		<dependency>
+			<groupId>javaee</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>5</version>
+			<scope>provided</scope>
+		</dependency>
+
+	</dependencies>
+	
+</project>

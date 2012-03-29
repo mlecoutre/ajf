@@ -20,7 +20,6 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.project.Project;
-import org.jboss.forge.project.facets.DependencyFacet;
 import org.jboss.forge.project.facets.MetadataFacet;
 
 /**
@@ -44,17 +43,17 @@ public class ProjectUtils {
 
 		System.out.println("** START - Generate webapp directory");
 
-		File webInfPackagePath = new File(project.getProjectRoot()
+		File webAppDir = new File(project.getProjectRoot()
 				.getUnderlyingResourceObject().getAbsolutePath()
 				.concat(PROJECT_WEB_PATH));
 
-		if (!webInfPackagePath.exists()) {
-			webInfPackagePath.mkdirs();
+		if (!webAppDir.exists()) {
+			webAppDir.mkdirs();
 		}
 
 		System.out.println("** END - Generate webapp directory");
 
-		return webInfPackagePath;
+		return webAppDir;
 
 	}
 
@@ -72,17 +71,52 @@ public class ProjectUtils {
 	}
 
 	/**
-	 * Set basic project meta data : project name and repository dependency
+	 * Uses example resources pom files to set the generated project's pom file.
+	 * This method is particular for a UI ajf project as the 'isCompaced'
+	 * boolean is waited as input. Only a UI project can be compacted.
+	 * 
+	 * @param project
+	 *            current forge project
+	 * @param modelPomFile
+	 *            path of the resource example pom file
+	 * @param isCompacted
+	 *            true if the project is a compacted ajf project(can only be
+	 *            true for a UI project)
+	 * @throws Exception
+	 */
+	public static void setPomFromModelFile(Project project, String modelPomFile)
+			throws Exception {
+
+		System.out.println("** START - generating pom.xml from model...");
+
+		// Model Pom file corresponding to UI POM (without AJF deps)
+		Model uiModelPom = ProjectUtils.getPomFromFile(modelPomFile);
+
+		// Get the current generated project's pom file
+		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
+		Model generatedPom = mavenCoreFacet.getPOM();
+
+		generatedPom = uiModelPom.clone();
+
+		// set version
+		generatedPom.setVersion(START_PROJECT_MILESTONE);
+
+		mavenCoreFacet.setPOM(generatedPom);
+
+		System.out.println("** END - pom.xml generated...");
+	}
+
+	/**
+	 * Set basic project meta data : project group Id and Artifact Id
 	 * 
 	 * @param finalProjectName
 	 * @param javaPackage
 	 * @param project
 	 * @return
 	 */
-	public static DependencyFacet setBasicProjectData(String globalProjectName,
+	public static void setBasicProjectData(String globalProjectName,
 			String finalProjectName, Project project) {
 
-		// Set metadata
 		MetadataFacet meta = project.getFacet(MetadataFacet.class);
 
 		// group-ID
@@ -91,13 +125,6 @@ public class ProjectUtils {
 		// Artifact ID
 		meta.setProjectName(finalProjectName);
 
-		// Dependencies
-		DependencyFacet deps = project.getFacet(DependencyFacet.class);
-
-		// TODO add repository to generated project's pom.xml?
-		// deps.addRepository(KnownRepository.JBOSS_NEXUS);
-
-		return deps;
 	}
 
 	/**
@@ -120,17 +147,35 @@ public class ProjectUtils {
 	public static void addInternalDependency(String globalProjectName,
 			Project project, String dependencyProjectType) {
 
+		addInternalDependencyScoped(globalProjectName, project,
+				dependencyProjectType, null);
+
+	}
+
+	/**
+	 * Aims to add an inter dependence to the current ajf exploded project. The
+	 * possibility to set a scope is offered. Set scope to null if you don't
+	 * want to set any scope to the dependendy
+	 * 
+	 * @param globalProjectName
+	 * @param project
+	 * @param dependencyProjectType
+	 * @param scope
+	 */
+	public static void addInternalDependencyScoped(String globalProjectName,
+			Project project, String dependencyProjectType, String scope) {
+
 		String artifactId = globalProjectName + "-" + dependencyProjectType;
 
 		if (PROJECT_TYPE_UI.equals(dependencyProjectType)
 				|| PROJECT_TYPE_WS.equals(dependencyProjectType)) {
 			// In case it is internal dependency to UI or WS project, have to
 			// set the "war" type
-			addDependencyWithType(project, projectGroupId(globalProjectName),
-					artifactId, START_PROJECT_MILESTONE, "war");
-		} else {
 			addDependency(project, projectGroupId(globalProjectName),
-					artifactId, START_PROJECT_MILESTONE);
+					artifactId, START_PROJECT_MILESTONE, "war", scope);
+		} else {
+			addDependencyWithScope(project, projectGroupId(globalProjectName),
+					artifactId, START_PROJECT_MILESTONE, scope);
 
 		}
 
@@ -138,8 +183,11 @@ public class ProjectUtils {
 
 	/**
 	 * 
+	 * Return the pom object corresponing to the input resource model pom file
+	 * 
 	 * @param resourcePomFile
-	 * @return
+	 *            path of the resource file corresponding to a pom.xml file
+	 * @return Pom model object
 	 * @throws Exception
 	 */
 	public static Model getPomFromFile(String resourcePomFile) throws Exception {
@@ -154,7 +202,7 @@ public class ProjectUtils {
 
 		} catch (Exception e) {
 
-			String message = "Error occured while readim reource pom File :"
+			String message = "Error occured while reading resource pom File :"
 					.concat(resourcePomFile);
 
 			System.out.println("** ERROR : ".concat(message));
@@ -162,11 +210,6 @@ public class ProjectUtils {
 			throw new Exception(message, e);
 
 		}
-
-		// if (myPomFile.exists())
-		// myPomFile.delete();
-		//
-		// myPomFile = null;
 
 	}
 
@@ -178,25 +221,11 @@ public class ProjectUtils {
 	 * @param groupId
 	 * @param artifactId
 	 * @param version
-	 */
-	public static void addDependency(Project project, String groupId,
-			String artifactId, String version) {
-
-		addDependencyWithType(project, groupId, artifactId, version, null);
-
-	}
-
-	/**
-	 * Add a dependency to a projectw with the possibility to set to type to it
-	 * 
-	 * @param project
-	 * @param groupId
-	 * @param artifactId
-	 * @param version
+	 * @param scope
 	 * @param type
 	 */
-	private static void addDependencyWithType(Project project, String groupId,
-			String artifactId, String version, String type) {
+	public static void addDependency(Project project, String groupId,
+			String artifactId, String version, String scope, String type) {
 
 		// Get the MavenFacet in order to grab the pom
 		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
@@ -212,9 +241,73 @@ public class ProjectUtils {
 			dependency.setType(type);
 		}
 
+		if (null != scope) {
+			dependency.setScope(scope);
+		}
+
 		// Add the dependency to the pom
 		pom.addDependency(dependency);
 		mavenCoreFacet.setPOM(pom);
+
+	}
+
+	/**
+	 * Add a dependency to a project with the possibility to set to scope to it
+	 * 
+	 * @param project
+	 * @param groupId
+	 * @param artifactId
+	 * @param version
+	 * @param scope
+	 */
+	public static void addDependencyWithScope(Project project, String groupId,
+			String artifactId, String version, String scope) {
+
+		addDependency(project, groupId, artifactId, version, scope, null);
+
+	}
+
+	/**
+	 * Add a simple dependency to a project
+	 * 
+	 * @param project
+	 * @param groupId
+	 * @param artifactId
+	 * @param version
+	 */
+	public static void addSimpleDependency(Project project, String groupId,
+			String artifactId, String version) {
+
+		addDependency(project, groupId, artifactId, version, null, null);
+
+	}
+
+	/**
+	 * Add a dependency management to the pom.xml of the input project
+	 * 
+	 * @param project
+	 * @param groupId
+	 * @param artifactId
+	 * @param version
+	 * @param type
+	 */
+	public static void addManagementDependency(Project project, String groupId,
+			String artifactId, String version, String type) {
+
+		// Get the MavenFacet in order to grab the pom
+		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
+		Model pom = mavenCoreFacet.getPOM();
+
+		// Create the dependecy
+		Dependency dependency = new Dependency();
+		dependency.setGroupId(groupId);
+		dependency.setArtifactId(artifactId);
+		dependency.setVersion(version);
+
+		if (null != type && !type.isEmpty())
+			dependency.setType(type);
+
+		pom.getDependencyManagement().addDependency(dependency);
 
 	}
 
@@ -333,7 +426,6 @@ public class ProjectUtils {
 		System.out.println(pom.getArtifactId());
 
 	}
-
 
 	/**
 	 * 

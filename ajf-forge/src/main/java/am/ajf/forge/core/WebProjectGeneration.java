@@ -1,13 +1,15 @@
 package am.ajf.forge.core;
 
 import static am.ajf.forge.lib.ForgeConstants.*;
+import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_UI_COMPACT;
+import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_WS;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
-import static am.ajf.forge.lib.ForgeConstants.STANDARD_PARENT_ARTIFACTID;
-import static am.ajf.forge.lib.ForgeConstants.STANDARD_PARENT_GROUPID;
-import static am.ajf.forge.lib.ForgeConstants.STANDARD_PARENT_VERSION;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
 import static am.ajf.forge.lib.ForgeConstants.UI_MAIN_RESOURCES;
 import static am.ajf.forge.lib.ForgeConstants.UI_TEST_RESOURCES;
 import static am.ajf.forge.lib.ForgeConstants.WEBAPP_ZIP_RESOURCES;
+import static am.ajf.forge.lib.ForgeConstants.WEBAPP_ZIP_RESOURCES_WS;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,21 +33,81 @@ import am.ajf.forge.util.UIProjectUtils;
 public class WebProjectGeneration {
 
 	/**
-	 * Generate AJF WEB Project. The isCompact input param determine if this
-	 * current UI project will be part of an exploded AJF project (false) or a
-	 * compact ajf-project
+	 * Generate AJF WS WEB Project.
 	 * 
 	 * @param globalProjectName
+	 *            name of the global ajf solution
 	 * @param projectFinalName
+	 *            name of the current project final name
 	 * @param javaPackage
+	 *            name of the project's top level package name
 	 * @param projectFactory
+	 *            of ajf forge
 	 * @param projectType
+	 *            type of the current ajf project
 	 * @param dir
+	 *            directory resource where to create the project
+	 * @return project
+	 */
+	public Project generateWSAjfProject(String globalProjectName,
+			String projectFinalName, String javaPackage,
+			ProjectFactory projectFactory, String projectType,
+			DirectoryResource dir) {
+
+		Project project = null;
+
+		try {
+			/*
+			 * Generate Project
+			 */
+			project = generateProject(globalProjectName, projectFinalName,
+					projectFactory, dir, false);
+
+			extractWebResources(project, WEBAPP_ZIP_RESOURCES_WS);
+
+			ProjectUtils.setPomFromModelFile(project, MODEL_POM_WS);
+
+			// Set the Pom parent
+			ProjectUtils.setInternalPomParent(globalProjectName, project);
+
+			// Set project meta data in pom
+			ProjectUtils.setBasicProjectData(globalProjectName,
+					projectFinalName, project);
+
+		} catch (Exception e) {
+
+			System.err
+					.println("Error occured during ajf web-WS project generation : "
+							+ e.toString());
+		}
+
+		return project;
+
+	}
+
+	/**
+	 * Generate AJF UI WEB Project. The isCompact input boolean param determine
+	 * if this current UI project will be part of an exploded AJF project
+	 * (false) or a compact ajf-project
+	 * 
+	 * @param globalProjectName
+	 *            name of the global ajf solution
+	 * @param projectFinalName
+	 *            name of the current project final name
+	 * @param javaPackage
+	 *            name of the project's top level package name
+	 * @param projectFactory
+	 *            of ajf forge
+	 * @param projectType
+	 *            type of the current ajf project
+	 * @param dir
+	 *            directory resource where to create the project
 	 * @param isCompact
+	 *            true if the UI project is a Compacted AJF solution
 	 * @return project
 	 */
 
-	public Project generateWebAjfProject(String globalProjectName,
+	public Project generateUIAjfProject(String globalProjectName,
 			String projectFinalName, String javaPackage,
 			ProjectFactory projectFactory, String projectType,
 			DirectoryResource dir, boolean isCompact) {
@@ -58,43 +120,29 @@ public class WebProjectGeneration {
 			project = generateProject(globalProjectName, projectFinalName,
 					projectFactory, dir, isCompact);
 
-			if (!PROJECT_TYPE_WS.equals(projectType)) {
-				/*
-				 * WEB part (not for WS project)
-				 */
-				System.out.println("** START - WEB PART");
+			generateUIWebResources(javaPackage, project, isCompact);
 
-				/*
-				 * Create an empty java Managed Bean class
-				 */
-				UIProjectUtils.generateManagedBeanClass(javaPackage, project);
+			if (isCompact) {
+				ProjectUtils.setPomFromModelFile(project, MODEL_POM_UI_COMPACT);
 
-				// Create webapp/Webinf directories
-				File webAppDir = ProjectUtils.generateWebAppDirectory(project);
-				System.out.println("-- DEBUG : webappDir = "
-						+ webAppDir.getAbsolutePath());
+				// Extract the persistence.xml model file to the META-INF folder
+				// of the current project
+				UIProjectUtils.extractPersistenceXmlFile(project);
 
-				// Extract WebApp resources (from zip)
-				System.out.println("** START - Extracting web resources...");
-				UIProjectUtils.unzipFile(WEBAPP_ZIP_RESOURCES, webAppDir);
-				System.out.println("** END - Web resources extracted");
-
-				// Unzip Resources (main resources and test resources) to
-				// generated project project
-				extractResources(project);
-
-				System.out.println("** END - WEB PART");
+			} else {
+				ProjectUtils.setPomFromModelFile(project, MODEL_POM_UI);
+				// Set the Pom parent
+				ProjectUtils.setInternalPomParent(globalProjectName, project);
 			}
 
-			System.out.println("** START - generating pom.xml from model...");
-			UIProjectUtils.setUIPomFromFile(project, UI_MODEL_POM_FILE,
-					AJF_DEPS_MODEL_FILE, isCompact);
-			System.out.println("** END - pom.xml gebnerated...");
+			// Set project meta data in pom
+			ProjectUtils.setBasicProjectData(globalProjectName,
+					projectFinalName, project);
 
 		} catch (Exception e) {
 
 			System.err
-					.println("Error occured during ajf web project generation : "
+					.println("Error occured during ajf web-UI project generation : "
 							+ e.toString());
 		}
 
@@ -102,12 +150,74 @@ public class WebProjectGeneration {
 	}
 
 	/**
-	 * Generate the UI ajf i accordance with ajf rules. If the current UI
-	 * project is part of an exploded ajf project, the internal parent is set,
-	 * and the internal dependecies are set to it's pom.xml. If the current UI
-	 * project is a stand alone compacted project, only the standard parent will
-	 * be set to it's pom.xml. This is what the input boolean parameter
-	 * 'isCompact' used for.
+	 * Generate WebApp Directory with web resources. This must bne done only for
+	 * an AJF2 UI typed project
+	 * 
+	 * @param javaPackage
+	 *            top level java package name
+	 * @param project
+	 * @throws Exception
+	 * @Return WEPAPP directory
+	 */
+	private File generateUIWebResources(String javaPackage, Project project,
+			boolean isCompact) throws Exception {
+
+		System.out.println("** START - WEB PART");
+
+		/*
+		 * Create an empty java Managed Bean class
+		 */
+		UIProjectUtils.generateManagedBeanClass(javaPackage, project);
+
+		File webappDir = extractWebResources(project, WEBAPP_ZIP_RESOURCES);
+
+		if (isCompact) {
+			// Unzip empty beans.xml only for compacted UI project
+			File webinfDir = new File(webappDir.getAbsolutePath().concat(
+					"/WEB-INF"));
+
+			UIProjectUtils.unzipFile(BEANS_XML_ZIP, webinfDir);
+		}
+
+		// Unzip Resources (main resources and test resources) to
+		// generated project project
+		extractResources(project);
+
+		System.out.println("** END - WEB PART");
+
+		return webappDir;
+	}
+
+	/**
+	 * Extract webapp folder from resource zip file
+	 * 
+	 * @param project
+	 * @param webAppZipResource
+	 * @throws IOException
+	 */
+	private File extractWebResources(Project project, String webAppZipResource)
+			throws IOException {
+
+		// Create webapp/Webinf directories
+		File webAppDir = ProjectUtils.generateWebAppDirectory(project);
+		System.out.println("-- DEBUG : webappDir = "
+				+ webAppDir.getAbsolutePath());
+
+		// Extract WebApp resources (from zip)
+		System.out.println("** START - Extracting web resources...");
+		UIProjectUtils.unzipFile(webAppZipResource, webAppDir);
+		System.out.println("** END - Web resources extracted");
+
+		return webAppDir;
+	}
+
+	/**
+	 * Generate the web ajf in accordance with ajf rules. If the current web
+	 * project is part of an exploded ajf project, the internal parent, and the
+	 * inter-dependencies are set to it's pom.xml. If the current UI project is
+	 * a stand alone compacted project, only the standard parent will be set to
+	 * it's pom.xml. This is what the input boolean parameter 'isCompact' used
+	 * for.
 	 * 
 	 * @param globalProjectName
 	 * @param projectFinalName
@@ -126,10 +236,6 @@ public class WebProjectGeneration {
 				DependencyFacet.class, MetadataFacet.class,
 				JavaSourceFacet.class, ResourceFacet.class);
 
-		// Set project meta data in pom
-		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
-				project);
-
 		// Set project packaging
 		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
 		packaging.setPackagingType(PackagingType.WAR);
@@ -140,32 +246,38 @@ public class WebProjectGeneration {
 		// This part is done only when an exploded ajf project is beeing
 		// generated
 		if (!isCompact) {
+
 			// Set the pom parent
 			ProjectUtils.setInternalPomParent(globalProjectName, project);
-			/*
-			 * Set internal dependencies linked to other project of the
-			 * AJF-solution
-			 */
-			ProjectUtils.addInternalDependency(globalProjectName, project,
-					PROJECT_TYPE_CONFIG);
-			ProjectUtils.addInternalDependency(globalProjectName, project,
-					PROJECT_TYPE_CORE);
 
-		} else {
+			// Set internal dependencies linked to other project of the
+			// AJF-solution
+			ProjectUtils.addInternalDependencyScoped(globalProjectName,
+					project, PROJECT_TYPE_CONFIG, "runtime");
 
-			// Set the pom parent
-			ProjectUtils.setPomParent(STANDARD_PARENT_GROUPID,
-					STANDARD_PARENT_ARTIFACTID, STANDARD_PARENT_VERSION,
-					project);
+			ProjectUtils.addInternalDependency(globalProjectName, project,
+					PROJECT_TYPE_LIB);
+
+			ProjectUtils.addInternalDependencyScoped(globalProjectName,
+					project, PROJECT_TYPE_CORE, "runtime");
 
 		}
+
+		// else {
+		//
+		// // Set the starndard pom parent
+		// ProjectUtils.setPomParent(STANDARD_PARENT_GROUPID,
+		// STANDARD_PARENT_ARTIFACTID, STANDARD_PARENT_VERSION,
+		// project);
+		//
+		// }
+
 		return project;
 	}
 
 	/**
-	 * Extract from ZIP Files, the resources for the generated project. Main
-	 * resources and Test resources will be extracted. Zip files names are set
-	 * in the forgeConstants class
+	 * Extract from ZIP Files, the resources for the generated project: Main
+	 * resources and Test resources
 	 * 
 	 * @param project
 	 * @param resourceScope

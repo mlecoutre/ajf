@@ -1,16 +1,31 @@
 package am.ajf.forge.util;
 
-import javax.inject.Singleton;
+//import java.io.File;
+//import java.io.IOException;
+//import java.io.Writer;
+//import java.net.URISyntaxException;
+//import java.net.URL;
+//import java.util.HashMap;
+//import java.util.Map;
+//
+//import javax.inject.Singleton;
+//
+//import freemarker.cache.FileTemplateLoader;
+//import freemarker.template.Configuration;
+//import freemarker.template.Template;
+//import freemarker.template.TemplateException;
+
+//import static am.ajf.forge.lib.ForgeConstants.*;
 
 /**
- * Html Utilities (based on FreeMarker)
+ * Html Utilities (based on FreeMarker) For the moment totally commented as
+ * there is a conflict between free marker and jboss forge
  * 
  * @author E019851
  * 
  */
-@Singleton
 public class TemplateUtils {
-
+	//
 	// private Configuration cfg;// = new Configuration(
 	//
 	// /**

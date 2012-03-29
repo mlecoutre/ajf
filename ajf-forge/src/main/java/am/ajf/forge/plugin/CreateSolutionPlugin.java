@@ -27,7 +27,6 @@ import org.jboss.forge.resources.FileResource;
 import org.jboss.forge.resources.Resource;
 import org.jboss.forge.resources.ResourceException;
 import org.jboss.forge.shell.Shell;
-import org.jboss.forge.shell.ShellColor;
 import org.jboss.forge.shell.ShellMessages;
 import org.jboss.forge.shell.plugins.Alias;
 import org.jboss.forge.shell.plugins.Command;

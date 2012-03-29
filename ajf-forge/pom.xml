@@ -41,8 +41,8 @@
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
-	<!-- <dependency> <groupId>am.ajf</groupId> <artifactId>ajf-injection</artifactId> 
-		<version>${ajfversion}</version> </dependency> -->
+		<!-- <dependency> <groupId>am.ajf</groupId> <artifactId>ajf-injection</artifactId> 
+			<version>${ajfversion}</version> </dependency> -->
 		<dependency>
 			<groupId>org.jboss.forge</groupId>
 			<artifactId>forge-shell-api</artifactId>
@@ -68,10 +68,6 @@
 			<artifactId>junit</artifactId>
 			<version>4.5</version>
 		</dependency>
-	<!-- <dependency> <groupId>org.freemarker</groupId> <artifactId>freemarker</artifactId> 
-		<version>[2.3.18,2.4)</version> </dependency> -->
-	<!-- <dependency> <groupId>org.apache.commons</groupId> <artifactId>commons-io</artifactId> 
-		<version>1.3.2</version> </dependency> -->
 		<dependency>
 			<groupId>javax.enterprise</groupId>
 			<artifactId>cdi-api</artifactId>
@@ -87,6 +83,11 @@
 			<artifactId>forge-shell</artifactId>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- FREE MARKER - Does not work with jboss forge yet -->
+		<!-- <dependency> <groupId>org.freemarker</groupId> <artifactId>freemarker</artifactId> 
+			<version>2.3.19</version> </dependency> -->
+
 	</dependencies>
 	<repositories>
 		<repository>
