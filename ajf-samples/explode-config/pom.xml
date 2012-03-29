@@ -10,5 +10,7 @@
   </parent>
 
   <artifactId>explode-config</artifactId>
+  <name>explode-config</name>
+  <description></description>
   
 </project>

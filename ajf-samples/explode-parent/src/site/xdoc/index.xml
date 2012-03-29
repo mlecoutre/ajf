@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+ <properties>
+  <title>Welcome to the Project Generated Website</title>
+ </properties>
+ <body>
+  <section name="Welcome">
+   <p>
+   	This Website provide informations on the current project build. You can use the left
+   	navigation to have details on each modules.
+   </p>
+   <p>
+   	The following aggregated report are also available :   	
+   </p>
+   <ul>
+     <li>Aggregated javadocs : <a href="apidocs/index.html">javadocs</a></li>
+     <li>Aggregated sources : <a href="xref/index.html">sources</a></li>
+   </ul>  
+   </section>
+ </body>
+</document>
