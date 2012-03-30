@@ -59,8 +59,13 @@ public class CoreProjectGeneration {
 			project = generateProject(globalProjectName, projectFinalName,
 					projectFactory, dir);
 
-			// Set pom from example pom file
-			ProjectUtils.setPomFromModelFile(project, MODEL_POM_CORE);
+			/*
+			 * Set internal
+			 */
+			ProjectUtils.addInternalDependencyScoped(globalProjectName,
+					project, PROJECT_TYPE_CONFIG, "runtime");
+			ProjectUtils.addInternalDependency(globalProjectName, project,
+					PROJECT_TYPE_LIB);
 
 			// Set the Pom parent
 			ProjectUtils.setInternalPomParent(globalProjectName, project);
@@ -101,6 +106,9 @@ public class CoreProjectGeneration {
 				DependencyFacet.class, MetadataFacet.class,
 				JavaSourceFacet.class, ResourceFacet.class);
 
+		// Set pom from example pom file
+		ProjectUtils.setPomFromModelFile(project, MODEL_POM_CORE);
+
 		// Set project meta data in pom
 		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
 				project);
@@ -114,14 +122,6 @@ public class CoreProjectGeneration {
 
 		// Set the pom parent
 		ProjectUtils.setInternalPomParent(globalProjectName, project);
-
-		/*
-		 * Set dependencies
-		 */
-		ProjectUtils.addInternalDependencyScoped(globalProjectName, project,
-				PROJECT_TYPE_CONFIG, "runtime");
-		ProjectUtils.addInternalDependency(globalProjectName, project,
-				PROJECT_TYPE_LIB);
 
 		/*
 		 * Extract META-INF/beans.xml to generated project

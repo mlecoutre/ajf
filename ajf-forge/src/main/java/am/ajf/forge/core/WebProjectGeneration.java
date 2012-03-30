@@ -1,12 +1,12 @@
 package am.ajf.forge.core;
 
-import static am.ajf.forge.lib.ForgeConstants.BEANS_XML_ZIP;
 import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_UI;
 import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_UI_COMPACT;
 import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_WS;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
+import static am.ajf.forge.lib.ForgeConstants.SITE_FOLDER;
 import static am.ajf.forge.lib.ForgeConstants.UI_MAIN_RESOURCES;
 import static am.ajf.forge.lib.ForgeConstants.UI_TEST_RESOURCES;
 import static am.ajf.forge.lib.ForgeConstants.WEBAPP_ZIP_RESOURCES;
@@ -71,9 +71,7 @@ public class WebProjectGeneration {
 			 * Generate Project
 			 */
 			project = generateProject(globalProjectName, projectFinalName,
-					projectFactory, dir, false);
-
-			extractWebResources(project, WEBAPP_ZIP_RESOURCES_WS);
+					projectFactory, dir, false, WEBAPP_ZIP_RESOURCES_WS);
 
 			ProjectUtils.setPomFromModelFile(project, MODEL_POM_WS);
 
@@ -83,6 +81,11 @@ public class WebProjectGeneration {
 			// Set project meta data in pom
 			ProjectUtils.setBasicProjectData(globalProjectName,
 					projectFinalName, project);
+
+			// Site
+			ExtractionUtils.unzipFile(SITE_FOLDER, new File(project
+					.getProjectRoot().getUnderlyingResourceObject()
+					.getAbsolutePath().concat("/src")));
 
 		} catch (Exception e) {
 
@@ -127,20 +130,24 @@ public class WebProjectGeneration {
 			/*
 			 * Generate Project
 			 */
-			project = generateProject(globalProjectName, projectFinalName,
-					projectFactory, dir, isCompact);
+			if (isCompact) {
+				project = generateProject(globalProjectName, projectFinalName,
+						projectFactory, dir, isCompact, MODEL_POM_UI_COMPACT);
+			} else {
+				project = generateProject(globalProjectName, projectFinalName,
+						projectFactory, dir, isCompact, MODEL_POM_UI);
 
+			}
+
+			extractWebResources(project, WEBAPP_ZIP_RESOURCES);
 			generateUIWebResources(javaPackage, project, isCompact);
 
 			if (isCompact) {
-				ProjectUtils.setPomFromModelFile(project, MODEL_POM_UI_COMPACT);
-
 				// Extract the persistence.xml model file to the META-INF folder
 				// of the current project
 				ExtractionUtils.extractPersistenceXmlFile(project);
 
 			} else {
-				ProjectUtils.setPomFromModelFile(project, MODEL_POM_UI);
 				// Set the Pom parent
 				ProjectUtils.setInternalPomParent(globalProjectName, project);
 			}
@@ -148,6 +155,11 @@ public class WebProjectGeneration {
 			// Set project meta data in pom
 			ProjectUtils.setBasicProjectData(globalProjectName,
 					projectFinalName, project);
+
+			// Site
+			ExtractionUtils.unzipFile(SITE_FOLDER, new File(project
+					.getProjectRoot().getUnderlyingResourceObject()
+					.getAbsolutePath().concat("/src")));
 
 		} catch (Exception e) {
 
@@ -180,14 +192,6 @@ public class WebProjectGeneration {
 		UIProjectUtils.generateManagedBeanClass(javaPackage, project);
 
 		File webappDir = extractWebResources(project, WEBAPP_ZIP_RESOURCES);
-
-		if (isCompact) {
-			// Unzip empty beans.xml only for compacted UI project
-			File webinfDir = new File(webappDir.getAbsolutePath().concat(
-					"/WEB-INF"));
-
-			ExtractionUtils.unzipFile(BEANS_XML_ZIP, webinfDir);
-		}
 
 		// Unzip Resources (main resources and test resources) to
 		// generated project project
@@ -235,16 +239,20 @@ public class WebProjectGeneration {
 	 * @param dir
 	 * @param isCompact
 	 * @return Project
+	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	private Project generateProject(String globalProjectName,
 			String projectFinalName, ProjectFactory projectFactory,
-			DirectoryResource dir, boolean isCompact) {
+			DirectoryResource dir, boolean isCompact, String modelPomFile)
+			throws Exception {
 
 		// Create Project
 		Project project = projectFactory.createProject(dir,
 				DependencyFacet.class, MetadataFacet.class,
 				JavaSourceFacet.class, ResourceFacet.class);
+
+		ProjectUtils.setPomFromModelFile(project, modelPomFile);
 
 		// Set project packaging
 		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
