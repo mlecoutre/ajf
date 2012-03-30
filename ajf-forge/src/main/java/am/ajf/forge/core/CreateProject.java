@@ -125,9 +125,9 @@ public class CreateProject {
 		/*
 		 * End log
 		 */
-		System.out.println("Project".concat(globalProjectName + "-"
+		System.out.println("** DEBUG :".concat(globalProjectName + "-"
 				+ projectType)
-				+ " created");
+				+ " OK");
 
 	}
 

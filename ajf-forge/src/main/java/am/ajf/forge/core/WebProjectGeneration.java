@@ -1,6 +1,7 @@
 package am.ajf.forge.core;
 
-import static am.ajf.forge.lib.ForgeConstants.*;
+import static am.ajf.forge.lib.ForgeConstants.BEANS_XML_ZIP;
+import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_UI;
 import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_UI_COMPACT;
 import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_WS;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
@@ -26,9 +27,18 @@ import org.jboss.forge.project.packaging.PackagingType;
 import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
+import am.ajf.forge.util.ExtractionUtils;
 import am.ajf.forge.util.ProjectUtils;
 import am.ajf.forge.util.UIProjectUtils;
 
+/**
+ * Generate a web ajf2 project. This class can be used for a WS typed project or
+ * an UI typed project. The UI project can be part of an exploded solution, or a
+ * compacted war AJF2 project.
+ * 
+ * @author E019851
+ * 
+ */
 @Singleton
 public class WebProjectGeneration {
 
@@ -127,7 +137,7 @@ public class WebProjectGeneration {
 
 				// Extract the persistence.xml model file to the META-INF folder
 				// of the current project
-				UIProjectUtils.extractPersistenceXmlFile(project);
+				ExtractionUtils.extractPersistenceXmlFile(project);
 
 			} else {
 				ProjectUtils.setPomFromModelFile(project, MODEL_POM_UI);
@@ -176,7 +186,7 @@ public class WebProjectGeneration {
 			File webinfDir = new File(webappDir.getAbsolutePath().concat(
 					"/WEB-INF"));
 
-			UIProjectUtils.unzipFile(BEANS_XML_ZIP, webinfDir);
+			ExtractionUtils.unzipFile(BEANS_XML_ZIP, webinfDir);
 		}
 
 		// Unzip Resources (main resources and test resources) to
@@ -199,13 +209,13 @@ public class WebProjectGeneration {
 			throws IOException {
 
 		// Create webapp/Webinf directories
-		File webAppDir = ProjectUtils.generateWebAppDirectory(project);
+		File webAppDir = UIProjectUtils.generateWebAppDirectory(project);
 		System.out.println("-- DEBUG : webappDir = "
 				+ webAppDir.getAbsolutePath());
 
 		// Extract WebApp resources (from zip)
 		System.out.println("** START - Extracting web resources...");
-		UIProjectUtils.unzipFile(webAppZipResource, webAppDir);
+		ExtractionUtils.unzipFile(webAppZipResource, webAppDir);
 		System.out.println("** END - Web resources extracted");
 
 		return webAppDir;
@@ -295,14 +305,14 @@ public class WebProjectGeneration {
 				.getUnderlyingResourceObject();
 		System.out.println("Test Resource directory : "
 				+ resourceFolder.getAbsolutePath());
-		UIProjectUtils.unzipFile(UI_TEST_RESOURCES, resourceFolder);
+		ExtractionUtils.unzipFile(UI_TEST_RESOURCES, resourceFolder);
 
 		// TEST RESOURCES
 		resourceFolder = resourceFacet.getResourceFolder()
 				.getUnderlyingResourceObject();
 		System.out.println("Main Resource directory : "
 				+ resourceFolder.getAbsolutePath());
-		UIProjectUtils.unzipFile(UI_MAIN_RESOURCES, resourceFolder);
+		ExtractionUtils.unzipFile(UI_MAIN_RESOURCES, resourceFolder);
 
 		System.out.println("** END - resources extracted");
 

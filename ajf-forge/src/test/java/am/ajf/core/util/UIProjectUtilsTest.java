@@ -1,65 +1,26 @@
 package am.ajf.core.util;
 
-import static am.ajf.forge.lib.ForgeConstants.UI_MAIN_RESOURCES;
-import static am.ajf.forge.lib.ForgeConstants.UI_TEST_RESOURCES;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.jboss.forge.parser.java.JavaClass;
 import org.junit.Test;
 
 import am.ajf.forge.util.UIProjectUtils;
 
 public class UIProjectUtilsTest {
 
-	private static File myTempDir;
-
-	@BeforeClass
-	public static void init() {
-		myTempDir = new File(FileUtils.getTempDirectoryPath().concat(
-				"/UIProjectUtils"));
-		if (!myTempDir.exists()) {
-
-			myTempDir.mkdirs();
-
-		}
-
-		System.out.println("**INFO : Temp dir for test suite: "
-				+ myTempDir.getAbsolutePath());
-
-	}
-
-	@AfterClass
-	public static void clean() {
-
-		try {
-			FileUtils.deleteDirectory(myTempDir);
-		} catch (IOException e) {
-			System.out
-					.println("ERROR occured when deleting temprary directory : "
-							+ myTempDir.getAbsolutePath());
-		}
-
-	}
-
 	@Test
-	public void unzipWebResourceTest() throws IOException {
+	public void testCreateJavaClass() {
 
-		boolean isSucceed = false;
-		isSucceed = UIProjectUtils.unzipFile(UI_MAIN_RESOURCES, myTempDir);
+		JavaClass javaClass = UIProjectUtils.createjavaManagedBeanClass(
+				"am.test.packlage", "myClassname");
 
-		assertTrue(isSucceed);
+		assertNotNull("Generated Java class should not be null", javaClass);
+		assertTrue("Generated Java class's name should not be null",
+				null != javaClass.getName());
+		assertTrue("Generated Java class should not be empty", !javaClass
+				.getName().isEmpty());
 
-		isSucceed = false;
-		isSucceed = UIProjectUtils.unzipFile(UI_TEST_RESOURCES, myTempDir);
-
-		assertTrue(isSucceed);
+		javaClass = null;
 	}
-
-
-
 }

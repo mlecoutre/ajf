@@ -15,8 +15,8 @@ import org.jboss.forge.project.packaging.PackagingType;
 import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
+import am.ajf.forge.util.ExtractionUtils;
 import am.ajf.forge.util.ProjectUtils;
-import am.ajf.forge.util.UIProjectUtils;
 
 @Singleton
 public class LibProjectGeneration {
@@ -112,7 +112,7 @@ public class LibProjectGeneration {
 		 * Extract META-INF/beans.xml to generated project
 		 */
 		ResourceFacet rsf = project.getFacet(ResourceFacet.class);
-		UIProjectUtils.unzipFile(META_INF_FOLDER_ZIP, rsf.getResourceFolder()
+		ExtractionUtils.unzipFile(META_INF_FOLDER_ZIP, rsf.getResourceFolder()
 				.getUnderlyingResourceObject());
 
 		return project;

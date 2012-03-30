@@ -1,6 +1,5 @@
 package am.ajf.forge.plugin;
 
-import static am.ajf.forge.lib.ForgeConstants.PROJECT_GROUPID_PREFIX;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_COMPACT;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
@@ -9,17 +8,13 @@ import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_PARENT;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
-import static am.ajf.forge.lib.ForgeConstants.START_PROJECT_MILESTONE;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.apache.maven.model.Model;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.project.services.ResourceFactory;
 import org.jboss.forge.resources.DirectoryResource;
@@ -40,7 +35,6 @@ import org.jboss.forge.shell.util.ResourceUtil;
 
 import am.ajf.forge.core.CreateProject;
 import am.ajf.forge.lib.ForgeConstants;
-import am.ajf.forge.util.ProjectUtils;
 
 /**
  * 
@@ -291,9 +285,11 @@ public class CreateSolutionPlugin implements Plugin {
 		/*
 		 * Final Log
 		 */
-		shell.println();
+
 		ShellMessages.success(out, "Project : " + projectFinalName
 				+ " created.");
+
+		shell.println();
 
 	}
 
@@ -523,54 +519,56 @@ public class CreateSolutionPlugin implements Plugin {
 
 		ShellMessages.warn(out, "This is an experimental command...");
 		try {
-			String projectFinalName = name + "-" + "ui";
-
-			File projectDirecory = new File(projectFolder.concat("/").concat(
-					projectFinalName));
-
-			ShellMessages.info(out,
-					"Creating project in " + projectDirecory.getAbsolutePath());
-			if (!projectDirecory.exists()) {
-				ShellMessages.info(out, "Create project dir :"
-						+ projectDirecory.mkdirs());
-			}
-
-			File pomFile = new File(projectDirecory.getAbsolutePath().concat(
-					"/pom.xml"));
-			ShellMessages.info(out,
-					"Creating pomFile : " + pomFile.createNewFile());
-
-			ProjectUtils.copyPomFile("initial-pom.xml", pomFile);
-
-			System.out.println("copy input stream done");
-
-			// Create project directories
-			// FileUtils.openInputStream(pomFile);
-			FileInputStream fis = new FileInputStream(pomFile);
-			Model pom = new MavenXpp3Reader().read(fis);
-
-			pom.setArtifactId(projectFinalName);
-			pom.setGroupId(PROJECT_GROUPID_PREFIX);
-			pom.setVersion(START_PROJECT_MILESTONE);
-
-			/*
-			 * Create folders
-			 */
-			File srcFolder = new File(projectDirecory.getAbsolutePath().concat(
-					"/src"));
-
-			System.out.println("** DEBUG create src folder : "
-					+ srcFolder.mkdirs());
-
-			File mainJavaFolder = new File(srcFolder.getAbsolutePath().concat(
-					"/main/java"));
-			System.out.println("** DEBUG create src/main/java : "
-					+ mainJavaFolder.mkdirs());
-
-			File mainResourceFolder = new File(srcFolder.getAbsolutePath()
-					.concat("/main/resources"));
-			System.out.println("** DEBUG create src/main/resource : "
-					+ mainResourceFolder.mkdirs());
+			// String projectFinalName = name + "-" + "ui";
+			//
+			// File projectDirecory = new File(projectFolder.concat("/").concat(
+			// projectFinalName));
+			//
+			// ShellMessages.info(out,
+			// "Creating project in " + projectDirecory.getAbsolutePath());
+			// if (!projectDirecory.exists()) {
+			// ShellMessages.info(out, "Create project dir :"
+			// + projectDirecory.mkdirs());
+			// }
+			//
+			// File pomFile = new File(projectDirecory.getAbsolutePath().concat(
+			// "/pom.xml"));
+			// ShellMessages.info(out,
+			// "Creating pomFile : " + pomFile.createNewFile());
+			//
+			// ProjectUtils.copyPomFile("initial-pom.xml", pomFile);
+			//
+			// System.out.println("copy input stream done");
+			//
+			// // Create project directories
+			// // FileUtils.openInputStream(pomFile);
+			// FileInputStream fis = new FileInputStream(pomFile);
+			// Model pom = new MavenXpp3Reader().read(fis);
+			//
+			// pom.setArtifactId(projectFinalName);
+			// pom.setGroupId(PROJECT_GROUPID_PREFIX);
+			// pom.setVersion(START_PROJECT_MILESTONE);
+			//
+			// /*
+			// * Create folders
+			// */
+			// File srcFolder = new
+			// File(projectDirecory.getAbsolutePath().concat(
+			// "/src"));
+			//
+			// System.out.println("** DEBUG create src folder : "
+			// + srcFolder.mkdirs());
+			//
+			// File mainJavaFolder = new
+			// File(srcFolder.getAbsolutePath().concat(
+			// "/main/java"));
+			// System.out.println("** DEBUG create src/main/java : "
+			// + mainJavaFolder.mkdirs());
+			//
+			// File mainResourceFolder = new File(srcFolder.getAbsolutePath()
+			// .concat("/main/resources"));
+			// System.out.println("** DEBUG create src/main/resource : "
+			// + mainResourceFolder.mkdirs());
 
 			ShellMessages.success(out, "Done");
 

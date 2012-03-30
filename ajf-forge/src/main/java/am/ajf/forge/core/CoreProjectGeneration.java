@@ -1,8 +1,9 @@
 package am.ajf.forge.core;
 
-import static am.ajf.forge.lib.ForgeConstants.*;
+import static am.ajf.forge.lib.ForgeConstants.META_INF_FOLDER_ZIP;
 import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_CORE;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
 
 import javax.inject.Singleton;
 
@@ -16,8 +17,8 @@ import org.jboss.forge.project.packaging.PackagingType;
 import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
+import am.ajf.forge.util.ExtractionUtils;
 import am.ajf.forge.util.ProjectUtils;
-import am.ajf.forge.util.UIProjectUtils;
 
 /**
  * 
@@ -126,7 +127,7 @@ public class CoreProjectGeneration {
 		 * Extract META-INF/beans.xml to generated project
 		 */
 		ResourceFacet rsf = project.getFacet(ResourceFacet.class);
-		UIProjectUtils.unzipFile(META_INF_FOLDER_ZIP, rsf.getResourceFolder()
+		ExtractionUtils.unzipFile(META_INF_FOLDER_ZIP, rsf.getResourceFolder()
 				.getUnderlyingResourceObject());
 
 		return project;

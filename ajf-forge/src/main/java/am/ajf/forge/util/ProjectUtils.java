@@ -4,11 +4,8 @@ import static am.ajf.forge.lib.ForgeConstants.PROJECT_GROUPID_PREFIX;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_PARENT;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
-import static am.ajf.forge.lib.ForgeConstants.PROJECT_WEB_PATH;
 import static am.ajf.forge.lib.ForgeConstants.START_PROJECT_MILESTONE;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
@@ -17,45 +14,19 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.apache.maven.model.io.xpp3.MavenXpp3Writer;
 import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.MetadataFacet;
 
 /**
  * This utility class implements some methods that deals with the project
- * definition. Such as maven pom manipulation etc.
+ * definition. Such as maven pom manipulation
  * 
  * @author E019851
  * 
  */
 
 public class ProjectUtils {
-
-	/**
-	 * Create an src/main/webapp/WEB-INF package for the input project
-	 * 
-	 * 
-	 * @param project
-	 * @return File corresponding to webApp
-	 */
-	public static File generateWebAppDirectory(Project project) {
-
-		System.out.println("** START - Generate webapp directory");
-
-		File webAppDir = new File(project.getProjectRoot()
-				.getUnderlyingResourceObject().getAbsolutePath()
-				.concat(PROJECT_WEB_PATH));
-
-		if (!webAppDir.exists()) {
-			webAppDir.mkdirs();
-		}
-
-		System.out.println("** END - Generate webapp directory");
-
-		return webAppDir;
-
-	}
 
 	/**
 	 * Return the group ID of the procject. Project group id, suffixed by the
@@ -408,24 +379,24 @@ public class ProjectUtils {
 
 	}
 
-	public static void copyPomFile(String resourcePomFilename,
-			File destinationDir) throws Exception {
-
-		// InputStream is = ProjectUtils.class.getClassLoader()
-		// .getResourceAsStream(resourcePomFilename);
-		// FileUtils.copyInputStreamToFile(is, destinationFile);
-		Model pom = getPomFromFile(resourcePomFilename);
-		// Model pom2 = new MavenXpp3Reader().read(destinationFile);
-
-		FileOutputStream fos = new FileOutputStream(destinationDir);
-		System.out.println("stream opened");
-		new MavenXpp3Writer().write(fos, pom);
-
-		fos.close();
-		fos = null;
-		System.out.println(pom.getArtifactId());
-
-	}
+	// public static void copyPomFile(String resourcePomFilename,
+	// File destinationDir) throws Exception {
+	//
+	// // InputStream is = ProjectUtils.class.getClassLoader()
+	// // .getResourceAsStream(resourcePomFilename);
+	// // FileUtils.copyInputStreamToFile(is, destinationFile);
+	// Model pom = getPomFromFile(resourcePomFilename);
+	// // Model pom2 = new MavenXpp3Reader().read(destinationFile);
+	//
+	// FileOutputStream fos = new FileOutputStream(destinationDir);
+	// System.out.println("stream opened");
+	// new MavenXpp3Writer().write(fos, pom);
+	//
+	// fos.close();
+	// fos = null;
+	// System.out.println(pom.getArtifactId());
+	//
+	// }
 
 	/**
 	 * 
