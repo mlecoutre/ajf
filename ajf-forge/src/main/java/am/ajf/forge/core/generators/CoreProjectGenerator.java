@@ -24,6 +24,7 @@ import am.ajf.forge.util.ExtractionUtils;
 import am.ajf.forge.util.ProjectUtils;
 
 /**
+ * AJF2 Core project generator.
  * 
  * @author E019851
  * 
@@ -56,15 +57,12 @@ public class CoreProjectGenerator {
 
 		Project project = null;
 		try {
-			/*
-			 * Generate Project
-			 */
+
+			// Generate Project
 			project = generateProject(globalProjectName, projectFinalName,
 					projectFactory, dir);
 
-			/*
-			 * Set internal
-			 */
+			// Set inter dependencies
 			ProjectUtils.addInternalDependencyScoped(globalProjectName,
 					project, PROJECT_TYPE_CONFIG, "runtime");
 			ProjectUtils.addInternalDependency(globalProjectName, project,
@@ -131,9 +129,7 @@ public class CoreProjectGenerator {
 		// Set the pom parent
 		ProjectUtils.setInternalPomParent(globalProjectName, project);
 
-		/*
-		 * Extract META-INF/beans.xml to generated project
-		 */
+		// Extract META-INF/beans.xml to generated project
 		ResourceFacet rsf = project.getFacet(ResourceFacet.class);
 		ExtractionUtils.unzipFile(META_INF_FOLDER_ZIP, rsf.getResourceFolder()
 				.getUnderlyingResourceObject());

@@ -12,6 +12,8 @@ import static am.ajf.forge.lib.ForgeConstants.START_PROJECT_MILESTONE;
 
 import java.io.File;
 
+import javax.inject.Singleton;
+
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Scm;
 import org.jboss.forge.maven.MavenCoreFacet;
@@ -26,6 +28,13 @@ import org.jboss.forge.resources.DirectoryResource;
 import am.ajf.forge.util.ExtractionUtils;
 import am.ajf.forge.util.ProjectUtils;
 
+/**
+ * AJF2 Parent project generator. (parent of the current solution)
+ * 
+ * @author E019851
+ * 
+ */
+@Singleton
 public class ParentProjectGenerator {
 
 	/**

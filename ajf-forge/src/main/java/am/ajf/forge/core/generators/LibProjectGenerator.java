@@ -21,6 +21,12 @@ import org.jboss.forge.resources.DirectoryResource;
 import am.ajf.forge.util.ExtractionUtils;
 import am.ajf.forge.util.ProjectUtils;
 
+/**
+ * AJF2 Lib project generator.
+ * 
+ * @author E019851
+ * 
+ */
 @Singleton
 public class LibProjectGenerator {
 

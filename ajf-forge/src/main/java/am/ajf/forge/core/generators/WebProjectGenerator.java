@@ -32,7 +32,7 @@ import am.ajf.forge.util.ProjectUtils;
 import am.ajf.forge.util.UIProjectUtils;
 
 /**
- * Generate a web ajf2 project. This class can be used for a WS typed project or
+ * AJF2 web project generator. This class can be used for a WS typed project or
  * an UI typed project. The UI project can be part of an exploded solution, or a
  * compacted war AJF2 project.
  * 

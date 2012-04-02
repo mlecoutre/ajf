@@ -9,6 +9,8 @@ import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
 
 import java.io.File;
 
+import javax.inject.Singleton;
+
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.DependencyFacet;
 import org.jboss.forge.project.facets.MetadataFacet;
@@ -20,6 +22,13 @@ import org.jboss.forge.resources.DirectoryResource;
 
 import am.ajf.forge.util.ProjectUtils;
 
+/**
+ * AJF2 Ear project generator.
+ * 
+ * @author E019851
+ * 
+ */
+@Singleton
 public class EarProjectGenerator {
 
 	/**
