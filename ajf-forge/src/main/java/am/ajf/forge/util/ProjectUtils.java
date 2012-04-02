@@ -60,14 +60,14 @@ public class ProjectUtils {
 
 		System.out.println("** START - generating pom.xml from model...");
 
-		// Model Pom file corresponding to UI POM (without AJF deps)
-		Model uiModelPom = ProjectUtils.getPomFromFile(modelPomFile);
+		// Model Pom file
+		Model modelPom = ProjectUtils.getPomFromFile(modelPomFile);
 
 		// Get the current generated project's pom file
 		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
 		Model generatedPom = mavenCoreFacet.getPOM();
 
-		generatedPom = uiModelPom.clone();
+		generatedPom = modelPom.clone();
 
 		// set version
 		generatedPom.setVersion(START_PROJECT_MILESTONE);

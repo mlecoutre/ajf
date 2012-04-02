@@ -1,7 +1,10 @@
-package am.ajf.forge.core;
+package am.ajf.forge.core.generators;
 
 import static am.ajf.forge.lib.ForgeConstants.META_INF_FOLDER_ZIP;
 import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_LIB;
+import static am.ajf.forge.lib.ForgeConstants.SITE_FOLDER;
+
+import java.io.File;
 
 import javax.inject.Singleton;
 
@@ -19,7 +22,7 @@ import am.ajf.forge.util.ExtractionUtils;
 import am.ajf.forge.util.ProjectUtils;
 
 @Singleton
-public class LibProjectGeneration {
+public class LibProjectGenerator {
 
 	/**
 	 * Create AJF core project structure, with corresponding AJF dependencies
@@ -61,6 +64,11 @@ public class LibProjectGeneration {
 			// Set project meta data in pom
 			ProjectUtils.setBasicProjectData(globalProjectName,
 					projectFinalName, project);
+
+			// Site
+			ExtractionUtils.unzipFile(SITE_FOLDER, new File(project
+					.getProjectRoot().getUnderlyingResourceObject()
+					.getAbsolutePath().concat("/src")));
 
 		} catch (Exception e) {
 

@@ -1,4 +1,4 @@
-package am.ajf.forge.core;
+package am.ajf.forge.core.generators;
 
 import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_UI;
 import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_UI_COMPACT;
@@ -40,7 +40,7 @@ import am.ajf.forge.util.UIProjectUtils;
  * 
  */
 @Singleton
-public class WebProjectGeneration {
+public class WebProjectGenerator {
 
 	/**
 	 * Generate AJF WS WEB Project.
@@ -71,9 +71,9 @@ public class WebProjectGeneration {
 			 * Generate Project
 			 */
 			project = generateProject(globalProjectName, projectFinalName,
-					projectFactory, dir, false, WEBAPP_ZIP_RESOURCES_WS);
+					projectFactory, dir, false, MODEL_POM_WS);
 
-			ProjectUtils.setPomFromModelFile(project, MODEL_POM_WS);
+			extractWebResources(project, WEBAPP_ZIP_RESOURCES_WS);
 
 			// Set the Pom parent
 			ProjectUtils.setInternalPomParent(globalProjectName, project);

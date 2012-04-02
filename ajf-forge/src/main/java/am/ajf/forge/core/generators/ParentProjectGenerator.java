@@ -1,4 +1,4 @@
-package am.ajf.forge.core;
+package am.ajf.forge.core.generators;
 
 import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_PARENT;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
@@ -7,7 +7,10 @@ import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_EAR;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
+import static am.ajf.forge.lib.ForgeConstants.SITE_FOLDER;
 import static am.ajf.forge.lib.ForgeConstants.START_PROJECT_MILESTONE;
+
+import java.io.File;
 
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Scm;
@@ -20,9 +23,10 @@ import org.jboss.forge.project.packaging.PackagingType;
 import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
+import am.ajf.forge.util.ExtractionUtils;
 import am.ajf.forge.util.ProjectUtils;
 
-public class ParentProjectGeneration {
+public class ParentProjectGenerator {
 
 	/**
 	 * Construction of a PARENT type project
@@ -113,6 +117,11 @@ public class ParentProjectGeneration {
 
 		// Validate the pom to the current project
 		mavenCoreFacet.setPOM(pom);
+
+		// Site
+		ExtractionUtils.unzipFile(SITE_FOLDER, new File(project
+				.getProjectRoot().getUnderlyingResourceObject()
+				.getAbsolutePath().concat("/src")));
 
 		return project;
 	}
