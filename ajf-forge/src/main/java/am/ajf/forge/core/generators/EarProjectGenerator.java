@@ -11,6 +11,8 @@ import java.io.File;
 
 import javax.inject.Singleton;
 
+import org.apache.maven.model.Model;
+import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.DependencyFacet;
 import org.jboss.forge.project.facets.MetadataFacet;
@@ -59,9 +61,7 @@ public class EarProjectGenerator {
 		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
 		packaging.setPackagingType(PackagingType.JAR);
 
-		/*
-		 * Remove the Resource/Test folder of ear project
-		 */
+		// Remove the Resource/Test folder of ear project
 		String resourceTestPath = project.getFacet(ResourceFacet.class)
 				.getTestResourceFolder().getParent().getFullyQualifiedName();
 		File resourceTestFolder = new File(resourceTestPath);
@@ -69,14 +69,10 @@ public class EarProjectGenerator {
 			resourceTestFolder.delete();
 		}
 
-		/*
-		 * Set the Pom parent
-		 */
+		// Set the Pom parent
 		ProjectUtils.setInternalPomParent(globalProjectName, project);
 
-		/*
-		 * Set dependencies
-		 */
+		// Set inter-dependencies
 		ProjectUtils.addInternalDependency(globalProjectName, project,
 				PROJECT_TYPE_WS);
 		ProjectUtils.addInternalDependency(globalProjectName, project,
@@ -88,7 +84,15 @@ public class EarProjectGenerator {
 		ProjectUtils.addInternalDependency(globalProjectName, project,
 				PROJECT_TYPE_CONFIG);
 
+		// Configure Ear maven plugin, Web Modules
+		MavenCoreFacet mavenFacet = project.getFacet(MavenCoreFacet.class);
+		Model pom = mavenFacet.getPOM();
+		pom.addProperty("project.ws",
+				projectFinalName.concat("-").concat(PROJECT_TYPE_WS));
+		pom.addProperty("project.ui",
+				projectFinalName.concat("-").concat(PROJECT_TYPE_UI));
+		mavenFacet.setPOM(pom);
+
 		return project;
 	}
-
 }

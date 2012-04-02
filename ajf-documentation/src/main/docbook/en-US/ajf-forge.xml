@@ -341,8 +341,12 @@
 					project.
 				</para>
 				<note>
-					<para>Entering the value &apos;exit&apos; for the project name OR
-						the project directory will allow you to escape the process !
+					<para>Entering
+						the value &apos;exit&apos; for the project name OR
+						the project
+						directory will allow you to
+						<link linkend="escapeForgePrompt">escape the process</link>
+						!
 					</para>
 					<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt><command>ajf-solution</command>
@@ -624,6 +628,17 @@ Wrote C:\/projects/explodedProject/myExplodedProject-lib/src/test/resources
 				</imageobject>
 			</mediaobject>
 		</figure>
+		<warning>
+			<title>Deploying exploded solution</title>
+			<para>
+				Be carefull when deploying an exploded solution. You first
+				have to
+				<link linkend="fixDepsResolError">'clean install' the parentProject</link>
+				to avoid
+				<link linkend="depsResolError">dependencies resolution error</link>
+				.
+			</para>
+		</warning>
 		<note>
 			<para>
 				You can also launch this maven command directly from
@@ -781,6 +796,17 @@ Wrote C:\/projects/explodedProject/myExplodedProject-lib/src/test/resources
 					</mediaobject>
 				</figure>
 			</para>
+			<warning>
+				<title>Deploying exploded solution</title>
+				<para>
+					Be carefull when deploying an exploded solution. You first
+					have to
+					<link linkend="fixDepsResolError">'clean install' the parentProject</link>
+					to avoid
+					<link linkend="depsResolError">dependencies resolution error</link>
+					.
+				</para>
+			</warning>
 			<para>
 				After that, you&apos;ll be able to run it via the
 				<emphasis>run</emphasis>
@@ -796,6 +822,72 @@ Wrote C:\/projects/explodedProject/myExplodedProject-lib/src/test/resources
 				<emphasis>myApplication</emphasis>
 				-ui
 			</para>
+
+		</section>
+	</section>
+	<section>
+		<title>Troubleshooting</title>
+		<para>
+			Here is a short List of errors that could occured when using the
+			forge. You may found a few solutions to your problem here
+		</para>
+		<section>
+			<title>AJF Project generation Error</title>
+			<para>
+				You may encouter this error when launching the forge and trying
+				to use directly the forge plugin.
+			</para>
+			<screen id="mavenBuildError">
+			
+START generating ajf project compacted
+Error occured during ajf web project generation : org.jboss.forge.project.ProjectModelException: 
+Could not create Maven project building request
+***ERROR*** AJF project generation process has thrown an Exception : java.lang.N
+ullPointerException
+			
+			</screen>
+
+			<para>
+				This Error is due to the fact that the forge tool has never had
+				it's
+				context attached.
+			</para>
+			<para>
+				If you encounter this error:
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>
+						Firstly, exit the forge tool and then relaunch it.
+					</para>
+				</listitem>
+				<listitem>
+					<para>
+						Secondly, try to
+						<link linkend="attachForgeContext">attach your forge's context</link>
+						before launching the AJF plugin again.
+					</para>
+				</listitem>
+			</itemizedlist>
+
+			<important>
+				<title>Re launch the Forge Shell !</title>
+				<para>
+					Once this error has occured, the forge engine is broken. Don't
+					forget to
+					relaunch to forge and immediately attach it to the
+					ajf-forge
+					context.
+					Ideally, start the forge once your shell is
+					situated in the
+					ajf forge contect directory.
+				</para>
+			</important>
+
+		</section>
+
+		<section>
+			<title>Error when deploying AJF exploded on embedded tomcat</title>
 			<important>
 				<title>Particularity for exploded projects</title>
 				<para>
@@ -808,9 +900,9 @@ Wrote C:\/projects/explodedProject/myExplodedProject-lib/src/test/resources
 					and
 					<emphasis>myApplication-config</emphasis>
 					projects. If you launch directly the deployment on tomcat via the
-					maven plugin, you may encounter the following error :
+					maven plugin, you may encounter the kind of following error :
 
-					<screen>
+					<screen id="depsResolError">
 []INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
@@ -847,30 +939,22 @@ lutionException
 				<para>
 
 				</para>
-				<para>
+				<para id="fixDepsResolError">
 					To fix this, you have to :
 				</para>
 				<para>
 
 				</para>
-				<calloutlist>
-					<callout arearefs="audit-1">
-						<para>
-							Run a maven
-							<emphasis>clean install</emphasis>
-							on the LIB project :
-							<emphasis>myApplication-lib</emphasis>
-						</para>
-					</callout>
-					<callout arearefs="audit-2">
+				<itemizedlist>
+					<listitem>
 						<para>
 							Run a maven
 							<emphasis>clean install</emphasis>
 							on the PARENT project :
 							<emphasis>myApplication-parent</emphasis>
 						</para>
-					</callout>
-				</calloutlist>
+					</listitem>
+				</itemizedlist>
 				<para>
 
 				</para>
@@ -885,13 +969,10 @@ lutionException
 					following
 					command:
 					<screen>
-<prompt>C:/(...)/myApplication-lib&gt;</prompt><command>mvn clean install -P JEE5_PROFILE</command>
 <prompt>C:/(...)/myApplication-parent&gt;</prompt><command>mvn clean install -P JEE5_PROFILE</command>
      </screen>
 				</para>
-				<para>
 
-				</para>
 				<para>
 					Or you can do it directly in Eclipse, by right clicking on the
 					project and doing
@@ -924,54 +1005,34 @@ lutionException
 					</note>
 				</para>
 			</important>
+
 		</section>
 	</section>
-	<section>
-		<title>Troubleshooting</title>
+	<section id="escapeForgePrompt">
+		<title>How do I escapte the prompted menu ?</title>
 		<para>
-			Here is a short List of errors that could occured when using the
-			forge. You may found a few solutions to your problem here
+			It may happens that you are locked in the prompted menu, and
+			that you
+			want to cancel the project generation.
+			Don't panic, the "exit"
+			keyword is here for you
 		</para>
-		<section>
-			<title>AJF Project generation Error</title>
-			<para>
-				You may encouter this error when launching the forge and trying
-				to use directly the forge plugin.
-			</para>
-			<screen>
-			
-START generating ajf project compacted
-Error occured during ajf web project generation : org.jboss.forge.project.ProjectModelException: 
-Could not create Maven project building request
-***ERROR*** AJF project generation process has thrown an Exception : java.lang.N
-ullPointerException
-			
-			</screen>
 
-			<para>
-				This Error is due to the fact that the forge tool has never had
-				it's
-				context attached.
-			</para>
-			<para>
-				If you encounter this error:
-			</para>
-			<itemizedlist>
-				<listitem>
-					<para>
-						Firstly, exit the forge tool and then relaunch it.
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						Secondly, try to
-						<link linkend="attachForgeContext">attach your forge's context</link>
-						before launching the AJF plugin again.
-					</para>
-				</listitem>
-			</itemizedlist>
+		<screen>
+	
+[ajf-forge-context] ajf-forge-context $ ajf-solution
+Which type of AJF project ?
 
-		</section>
+  1 - [Compacted ajf solution]
+  2 - [Exploded ajf solution]
+
+ ? Choose an option by typing the number of the selection: 1
+ ? Project Name : <userinput>exit</userinput>
+***INFO*** bye bye !
+[ajf-forge-context] ajf-forge-context $
+	
+		</screen>
+
 	</section>
 
 </chapter>

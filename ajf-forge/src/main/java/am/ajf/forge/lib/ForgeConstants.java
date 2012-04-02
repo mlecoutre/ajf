@@ -45,8 +45,7 @@ public class ForgeConstants {
 	public static final String UI_TEST_RESOURCES = "webResources/UIResourcesTest.zip";
 	public static final String META_INF_FOLDER_ZIP = "META-INF.zip";
 	public static final String PERSISTENCE_XML_ZIP = "persistence.zip";
-	// public static final String BEANS_XML_ZIP = "beans.xml.zip";
-	public static final String SITE_FOLDER = "webResources/site.zip";
+	public static final String SITE_FOLDER = "site.zip";
 
 	/*
 	 * Resources xml file

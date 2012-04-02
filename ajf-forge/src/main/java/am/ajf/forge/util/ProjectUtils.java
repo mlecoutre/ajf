@@ -143,7 +143,7 @@ public class ProjectUtils {
 			// In case it is internal dependency to UI or WS project, have to
 			// set the "war" type
 			addDependency(project, projectGroupId(globalProjectName),
-					artifactId, START_PROJECT_MILESTONE, "war", scope);
+					artifactId, START_PROJECT_MILESTONE, scope, "war");
 		} else {
 			addDependencyWithScope(project, projectGroupId(globalProjectName),
 					artifactId, START_PROJECT_MILESTONE, scope);

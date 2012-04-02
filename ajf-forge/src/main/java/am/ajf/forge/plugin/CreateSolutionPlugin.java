@@ -142,7 +142,7 @@ public class CreateSolutionPlugin implements Plugin {
 	@Command("exploded")
 	public void createAjfSolutionExploded(
 			@Option(name = "named", description = "The name of the new AJF project", required = true) final String name,
-			@Option(name = "Directory", required = true) final String folderName,
+			@Option(name = "Directory", required = true) String folderName,
 			final PipeOut out) {
 
 		// Check project directory
@@ -206,7 +206,7 @@ public class CreateSolutionPlugin implements Plugin {
 	@Command("compacted")
 	public void createAjfSolutionCompacted(
 			@Option(name = "named", description = "The name of the new AJF project", required = true) final String name,
-			@Option(name = "Directory", required = true) final String folderName,
+			@Option(name = "Directory", required = true) String folderName,
 			final PipeOut out) {
 
 		// Check project directory
@@ -278,7 +278,6 @@ public class CreateSolutionPlugin implements Plugin {
 
 		// Call the CreateProject class (out of the Plugin)
 		CreateProject createProject = new CreateProject();
-
 		createProject.createAjfProject(globalProjectName, javaPackage, dir,
 				projectFactory, projectType, projectFinalName);
 
@@ -442,7 +441,7 @@ public class CreateSolutionPlugin implements Plugin {
 	 * will be noticed.
 	 * 
 	 * @param projectDirectory
-	 * @return
+	 * @return boolean
 	 */
 	private boolean checkProjectDirectoryConsistency(String projectDirectory) {
 
@@ -459,7 +458,6 @@ public class CreateSolutionPlugin implements Plugin {
 
 		} else if ("exit".equals(projectDirectory)) {
 			// way of escaping the loop
-
 			return true;
 
 		} else if (!projectDirectory.contains(":")) {
