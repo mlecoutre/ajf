@@ -11,6 +11,8 @@
 	</parent>
 
 	<artifactId>explode-lib</artifactId>
+	<name>explode-lib</name>
+  	<description></description>
 
 	<dependencies>
 

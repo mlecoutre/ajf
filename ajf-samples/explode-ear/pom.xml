@@ -13,6 +13,7 @@
 	<artifactId>explode-ear</artifactId>
 	<name>explode-ear</name>
 	<packaging>ear</packaging>
+	<description></description>
 
 	<dependencies>
 		<dependency>

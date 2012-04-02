@@ -13,6 +13,7 @@
 	<artifactId>explode-ui</artifactId>
 	<name>explode-ui</name>
 	<packaging>war</packaging>
+	<description></description>
 
 	<dependencies>
 	

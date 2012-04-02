@@ -13,6 +13,7 @@
 	<artifactId>explode-ws</artifactId>
 	<name>explode-ws</name>
 	<packaging>war</packaging>
+	<description></description>
 
 	<dependencies>
 		<dependency>
@@ -283,7 +284,7 @@
 							</dependency>
 						</dependencies>
 						<configuration>
-							<port>8080</port>
+							<port>8081</port>
 							<contextFile>src/test/resources/tomcat_context.xml</contextFile>
 							<warFile>target/${project.artifactId}.war</warFile>
 							<path>/${project.artifactId}</path>

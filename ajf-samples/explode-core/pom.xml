@@ -11,6 +11,8 @@
 	</parent>
 
 	<artifactId>explode-core</artifactId>
+	<name>explode-core</name>
+  	<description></description>
 
 	<dependencies>
 	
