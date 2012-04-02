@@ -32,6 +32,18 @@
   <menu name="Documentation">
       <item name="Home" href="index.html" />
   </menu>
+  
+   <menu name="Configuration Module">
+   <item name="explode-config" href="../explode-config/index.html" />
+   </menu>
+  
+   <menu name="Project Modules">
+  	<item name="explode-lib" href="../explode-lib/index.html" />
+    <item name="explode-core" href="../explode-core/index.html" />
+    <item name="explode-ui" href="../explode-ui/index.html" />
+    <item name="explode-ws" href="../explode-ws/index.html" />
+    <item name="explode-ear" href="../explode-ear/index.html" />    
+  </menu>
 
   <menu ref="reports"/>
 
