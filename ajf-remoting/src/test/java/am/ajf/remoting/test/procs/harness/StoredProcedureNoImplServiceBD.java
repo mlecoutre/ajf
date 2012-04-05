@@ -13,9 +13,12 @@ public interface StoredProcedureNoImplServiceBD {
 	List<ModelSp> findAllModels();
 	
 	@StoredProcedure(name="ZZTESTWITHPARAM")
-	List<ModelSp> findAllModelsByName(@In("name") String name);
+	List<ModelSp> findAllModelsByName(@In("pname") String name);
 	
 	@StoredProcedure(name="ZZTESTONEWITHPARAM")
 	ModelSp findOneModelByName(String name);
+	
+	@StoredProcedure(name="ZZTESTOUTWITHRESULT")
+	FindModelResult findModelByNameWithStatus(@In("pname") String name);
 	
 }

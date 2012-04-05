@@ -21,8 +21,8 @@ public class SimpleFieldNamesMapper extends EditableMapper implements Mapper {
 			logger.warn("Mapping impossible, error populating the bean : "+getEntity().getName(), e);
 		} catch (InvocationTargetException e) {
 			logger.warn("Mapping impossible, error populating the bean : "+getEntity().getName(), e);
-		} catch (Exception e) {
-			logger.warn("Mapping impossible, error instanciating the bean : "+getEntity().getName(), e);
+		//} catch (Exception e) {
+		//	logger.warn("Mapping impossible, error instanciating the bean : "+getEntity().getName(), e);
 		}
 		return obj;
 	}

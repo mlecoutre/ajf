@@ -7,7 +7,27 @@
       <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
     </encoder>
   </appender>
-	
+  
+  <logger name="am.ajf.remoting" level="trace" additivity="false">
+  	<appender-ref ref="STDOUT" />
+  </logger>
+  
+  <logger name="bitronix.tm" level="warn" additivity="false">
+  	<appender-ref ref="STDOUT" />
+  </logger>
+
+  <logger name="org.apache.commons.beanutils" level="info" additivity="false">
+  	<appender-ref ref="STDOUT" />
+  </logger>
+
+  <logger name="org.apache.commons.beanutils.BeanUtils" level="debug" additivity="false">
+  	<appender-ref ref="STDOUT" />
+  </logger>
+  
+  <logger name="org.apache.commons.beanutils.PropertyUtils" level="debug" additivity="false">
+  	<appender-ref ref="STDOUT" />
+  </logger>
+
   <logger name="org.hibernate" level="warn" additivity="false">
   	<appender-ref ref="STDOUT" />
   </logger>

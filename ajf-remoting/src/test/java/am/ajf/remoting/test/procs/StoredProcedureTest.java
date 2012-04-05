@@ -16,15 +16,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import am.ajf.injection.AuditDataProducer;
-import am.ajf.injection.CacheInterceptor;
-import am.ajf.injection.CacheProducer;
-import am.ajf.injection.ConfigurationProducer;
-import am.ajf.injection.LoggerProducer;
-import am.ajf.injection.MonitoringInterceptor;
-import am.ajf.injection.PropertyProducer;
 import am.ajf.remoting.procs.impl.StoredProcedureHelper;
 import am.ajf.remoting.procs.impl.StoredProcedureImplHandler;
+import am.ajf.remoting.test.procs.harness.FindModelResult;
 import am.ajf.remoting.test.procs.harness.ModelSp;
 import am.ajf.remoting.test.procs.harness.StoredProcedureNoImplServiceBD;
 import am.ajf.remoting.test.procs.helper.DBHelper;
@@ -39,17 +33,9 @@ public class StoredProcedureTest {
 	public static JavaArchive createTestArchive() {
 		return ShrinkWrap
 				.create(JavaArchive.class, "test.jar")
-				.addPackages(true, "am.ajf.core", "am.ajf.injection")
 				.addClasses(StoredProcedureNoImplServiceBD.class)
 				.addClasses(StoredProcedureImplHandler.class)
 				.addClasses(StoredProcedureHelper.class)
-				.addClasses(AuditDataProducer.class)
-				.addClasses(LoggerProducer.class)
-				.addClasses(CacheProducer.class)
-				.addClasses(PropertyProducer.class)
-				.addClasses(ConfigurationProducer.class)
-				.addClasses(MonitoringInterceptor.class)
-				.addClasses(CacheInterceptor.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,
 						ArchivePaths.create("beans.xml"));
 	}
@@ -70,17 +56,24 @@ public class StoredProcedureTest {
 						 "  DECLARE result CURSOR FOR SELECT id, name FROM model;\n"+
 					     "  OPEN result;\n"+
 						 " END",
-				 "CREATE PROCEDURE ZZTESTWITHPARAM(pName VARCHAR(50))\n"+
+				 "CREATE PROCEDURE ZZTESTWITHPARAM(IN PNAME VARCHAR(50))\n"+
 						 " MODIFIES SQL DATA DYNAMIC RESULT SETS 1\n"+
 						 " BEGIN ATOMIC\n"+
 						 "  DECLARE result CURSOR FOR SELECT id, name FROM model m WHERE m.name = pName;\n"+
 						 "   OPEN result;\n"+
 						 " END",
-				 "CREATE PROCEDURE ZZTESTONEWITHPARAM(pName VARCHAR(50))\n"+
+				 "CREATE PROCEDURE ZZTESTONEWITHPARAM(IN PNAME VARCHAR(50))\n"+
 						 " MODIFIES SQL DATA DYNAMIC RESULT SETS 1\n"+
 						 " BEGIN ATOMIC\n"+
 					 	 "  DECLARE result CURSOR FOR SELECT id, name FROM model m WHERE m.name = pName;\n"+
 					 	 "  OPEN result;\n"+
+						 " END",
+				 "CREATE PROCEDURE ZZTESTOUTWITHRESULT(IN PNAME VARCHAR(50), OUT STATUS VARCHAR(50))\n"+
+						 " MODIFIES SQL DATA DYNAMIC RESULT SETS 1\n"+
+						 " BEGIN ATOMIC\n"+
+					 	 "  DECLARE result CURSOR FOR SELECT id, name FROM model m WHERE m.name = pName;\n"+
+					 	 "  OPEN result;\n"+
+						 "  SET STATUS = 'OK';"+					 	 
 						 " END"
 		);                 		        
 	}
@@ -90,7 +83,8 @@ public class StoredProcedureTest {
 		DBHelper.executeSQLInTransaction(
 				"DROP PROCEDURE IF EXISTS ZZTESTNOPARAM",
 				"DROP PROCEDURE IF EXISTS ZZTESTONEWITHPARAM",
-				"DROP PROCEDURE IF EXISTS ZZTESTWITHPARAM"
+				"DROP PROCEDURE IF EXISTS ZZTESTWITHPARAM",
+				"DROP PROCEDURE IF EXISTS ZZTESTOUTWITHRESULT"
 		);
 		DBHelper.executeSQLInTransaction("drop table model");
 	}
@@ -116,5 +110,15 @@ public class StoredProcedureTest {
 		Assert.assertNotNull(res);
 		Assert.assertEquals("nicolas", res.getName());		
 	}	
+	
+	@Test
+	public void testStoredProcedureOutParamsWithResultSet() {	        
+		FindModelResult res = storedProcedureNoImpl.findModelByNameWithStatus("nicolas");
+		Assert.assertNotNull(res);
+		Assert.assertEquals("OK", res.getStatus());
+		Assert.assertNotNull(res.getResult());
+		Assert.assertEquals(1, res.getResult().size());
+		Assert.assertEquals("nicolas", res.getResult().get(0).getName());		
+	}
 	
 }
