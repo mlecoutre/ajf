@@ -8,7 +8,7 @@
 		<groupId>am.parent</groupId>
 		<version>2.0.7</version>
 	</parent>
-	
+
 	<groupId>am.projects.explode</groupId>
 	<artifactId>explode-parent</artifactId>
 	<name>explode</name>
@@ -19,6 +19,7 @@
 	<properties>
 		<ajfversion>2.1.0</ajfversion>
 		<openwebbeansVersion>1.1.3</openwebbeansVersion>
+		<slf4j.version>1.6.4</slf4j.version>
 	</properties>
 
 	<scm>
@@ -95,17 +96,56 @@
 				<artifactId>ajf-testing</artifactId>
 				<version>${ajfversion}</version>
 			</dependency>
+
+			<!-- the logger abstraction -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
+			<!-- loggers adapters -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>log4j-over-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jul-to-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
+			<!-- effective logger impl -->
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>1.0.1</version>
+			</dependency>
+
+			<!-- End : Logging dependencies -->
+
+
 		</dependencies>
 	</dependencyManagement>
 
+ 
 	<modules>
 		<module>../explode-config</module>
-		<module>../explode-lib</module>
-		<module>../explode-core</module>
+		<module>../explode-lib</module> 
+	 	<module>../explode-core</module>
 		<module>../explode-ui</module>
-		<module>../explode-ws</module>
-		<module>../explode-ear</module>
+	 	<module>../explode-ws</module>
+		<module>../explode-ear</module> 
 	</modules>
+
 
 	<build>
 

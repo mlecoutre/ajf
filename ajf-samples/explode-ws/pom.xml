@@ -67,26 +67,24 @@
 			<version>10.8.2.2</version>
 			<scope>test</scope>
 		</dependency>
-
+		
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>0.9.24</version>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-jcdi_1.0_spec</artifactId>
+			<version>1.0</version>	
+			<scope>provided</scope>	
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>log4j-over-slf4j</artifactId>
-			<version>1.6.1</version>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-atinject_1.0_spec</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>1.6.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.1</version>
+		    <groupId>org.apache.geronimo.specs</groupId>
+		    <artifactId>geronimo-interceptor_1.1_spec</artifactId>
+		    <version>1.0</version>
+		    <scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -212,31 +210,46 @@
 								<artifactId>geronimo-ejb_3.0_spec</artifactId>
 								<version>1.0</version>
 							</dependency>
-							<dependency>
-								<groupId>ch.qos.logback</groupId>
-								<artifactId>logback-classic</artifactId>
-								<version>0.9.24</version>
-							</dependency>
+							
 							<dependency>
 								<groupId>commons-logging</groupId>
 								<artifactId>commons-logging</artifactId>
 								<version>1.1.1</version>
 							</dependency>
-							<dependency>
-								<groupId>org.slf4j</groupId>
-								<artifactId>log4j-over-slf4j</artifactId>
-								<version>1.6.1</version>
-							</dependency>
-							<dependency>
-								<groupId>org.slf4j</groupId>
-								<artifactId>jcl-over-slf4j</artifactId>
-								<version>1.6.1</version>
-							</dependency>
+							
+								<!-- the logger abstraction -->
 							<dependency>
 								<groupId>org.slf4j</groupId>
 								<artifactId>slf4j-api</artifactId>
-								<version>1.6.1</version>
+								<version>${slf4j.version}</version>
 							</dependency>
+
+							<!-- loggers adapters -->
+							<dependency>
+								<groupId>org.slf4j</groupId>
+								<artifactId>log4j-over-slf4j</artifactId>
+								<version>${slf4j.version}</version>
+							</dependency>
+
+							<dependency>
+								<groupId>org.slf4j</groupId>
+								<artifactId>jcl-over-slf4j</artifactId>
+								<version>${slf4j.version}</version>
+							</dependency>
+
+							<dependency>
+								<groupId>org.slf4j</groupId>
+								<artifactId>jul-to-slf4j</artifactId>
+								<version>${slf4j.version}</version>
+							</dependency>
+
+							<!-- effective logger impl -->
+							<dependency>
+								<groupId>ch.qos.logback</groupId>
+								<artifactId>logback-classic</artifactId>
+								<version>1.0.1</version>
+							</dependency>
+														
 							<dependency>
 								<groupId>org.apache.openwebbeans</groupId>
 								<artifactId>openwebbeans-impl</artifactId>

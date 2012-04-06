@@ -3,6 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
+	
 	<parent>
 		<artifactId>explode-parent</artifactId>
 		<groupId>am.projects.explode</groupId>
@@ -16,7 +17,7 @@
 	<description></description>
 
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>am.projects.explode</groupId>
 			<artifactId>explode-config</artifactId>
@@ -26,7 +27,7 @@
 			<groupId>am.projects.explode</groupId>
 			<artifactId>explode-lib</artifactId>
 		</dependency>
-			<dependency>
+		<dependency>
 			<groupId>am.projects.explode</groupId>
 			<artifactId>explode-core</artifactId>
 			<scope>runtime</scope>
@@ -70,24 +71,22 @@
 		</dependency>
 
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>0.9.24</version>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-jcdi_1.0_spec</artifactId>
+			<version>1.0</version>	
+			<scope>provided</scope>	
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>log4j-over-slf4j</artifactId>
-			<version>1.6.1</version>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-atinject_1.0_spec</artifactId>
+			<version>1.0</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>1.6.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.1</version>
+		    <groupId>org.apache.geronimo.specs</groupId>
+		    <artifactId>geronimo-interceptor_1.1_spec</artifactId>
+		    <version>1.0</version>
+		    <scope>provided</scope>
 		</dependency>
 
 		<dependency>
@@ -156,13 +155,13 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 			<version>1.0.0.GA</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-core</artifactId>
@@ -172,8 +171,8 @@
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-web</artifactId>
 			<version>1.2.0</version>
-		</dependency>		
-		
+		</dependency>
+
 		<dependency>
 			<groupId>javaee</groupId>
 			<artifactId>javaee-api</artifactId>
@@ -188,7 +187,7 @@
 	</build>
 
 	<profiles>
-	
+
 		<profile>
 			<id>TOMCAT7</id>
 
@@ -262,30 +261,45 @@
 								<version>1.0</version>
 							</dependency>
 							<dependency>
-								<groupId>ch.qos.logback</groupId>
-								<artifactId>logback-classic</artifactId>
-								<version>0.9.24</version>
-							</dependency>
-							<dependency>
 								<groupId>commons-logging</groupId>
 								<artifactId>commons-logging</artifactId>
 								<version>1.1.1</version>
 							</dependency>
-							<dependency>
-								<groupId>org.slf4j</groupId>
-								<artifactId>log4j-over-slf4j</artifactId>
-								<version>1.6.1</version>
-							</dependency>
-							<dependency>
-								<groupId>org.slf4j</groupId>
-								<artifactId>jcl-over-slf4j</artifactId>
-								<version>1.6.1</version>
-							</dependency>
+
+							<!-- the logger abstraction -->
 							<dependency>
 								<groupId>org.slf4j</groupId>
 								<artifactId>slf4j-api</artifactId>
-								<version>1.6.1</version>
+								<version>${slf4j.version}</version>
 							</dependency>
+
+							<!-- loggers adapters -->
+							<dependency>
+								<groupId>org.slf4j</groupId>
+								<artifactId>log4j-over-slf4j</artifactId>
+								<version>${slf4j.version}</version>
+							</dependency>
+
+							<dependency>
+								<groupId>org.slf4j</groupId>
+								<artifactId>jcl-over-slf4j</artifactId>
+								<version>${slf4j.version}</version>
+							</dependency>
+
+							<dependency>
+								<groupId>org.slf4j</groupId>
+								<artifactId>jul-to-slf4j</artifactId>
+								<version>${slf4j.version}</version>
+							</dependency>
+
+							<!-- effective logger impl -->
+							<dependency>
+								<groupId>ch.qos.logback</groupId>
+								<artifactId>logback-classic</artifactId>
+								<version>1.0.1</version>
+							</dependency>
+
+							<!-- End : Logging dependencies -->
 							<dependency>
 								<groupId>org.apache.openwebbeans</groupId>
 								<artifactId>openwebbeans-impl</artifactId>
@@ -376,7 +390,7 @@
 					<artifactId>el-api</artifactId>
 					<version>2.2</version>
 				</dependency>
-				
+
 				<dependency>
 					<groupId>org.apache.geronimo.specs</groupId>
 					<artifactId>geronimo-jcdi_1.0_spec</artifactId>
@@ -395,7 +409,7 @@
 					<version>1.0</version>
 					<scope>provided</scope>
 				</dependency>
-				
+
 				<dependency>
 					<groupId>org.apache.openwebbeans</groupId>
 					<artifactId>openwebbeans-ee</artifactId>
@@ -426,27 +440,16 @@
 					<version>${openwebbeansVersion}</version>
 					<scope>runtime</scope>
 				</dependency>
-				<!-- 
-				<dependency>
-					<groupId>org.scannotation</groupId>
-					<artifactId>scannotation</artifactId>
-					<version>1.0.3</version>
-					<scope>runtime</scope>
-				</dependency>
-				-->
-				<!-- 
-				<dependency>
-					<groupId>javassist</groupId>
-					<artifactId>javassist</artifactId>
-					<version>3.12.1.GA</version>
-				</dependency>
-				-->
+				<!-- <dependency> <groupId>org.scannotation</groupId> <artifactId>scannotation</artifactId> 
+					<version>1.0.3</version> <scope>runtime</scope> </dependency> -->
+				<!-- <dependency> <groupId>javassist</groupId> <artifactId>javassist</artifactId> 
+					<version>3.12.1.GA</version> </dependency> -->
 			</dependencies>
 
 			<build>
 
 				<plugins>
-									 
+
 					<plugin>
 						<groupId>com.google.code.maven-config-processor-plugin</groupId>
 						<artifactId>maven-config-processor-plugin</artifactId>
@@ -473,7 +476,7 @@
 							</execution>
 						</executions>
 					</plugin>
-														
+
 					<plugin>
 						<artifactId>maven-war-plugin</artifactId>
 						<configuration>
