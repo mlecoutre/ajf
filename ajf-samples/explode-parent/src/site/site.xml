@@ -34,16 +34,23 @@
   </menu>
   
    <menu name="Configuration Module">
-   <item name="explode-config" href="../explode-config/index.html" />
+   	<item name="explode-config" href="../explode-config/index.html" />
    </menu>
   
-   <menu name="Project Modules">
+  <menu name="Project Core">
   	<item name="explode-lib" href="../explode-lib/index.html" />
     <item name="explode-core" href="../explode-core/index.html" />
+  </menu>
+  
+   <menu name="Project Modules">
     <item name="explode-ui" href="../explode-ui/index.html" />
     <item name="explode-ws" href="../explode-ws/index.html" />
-    <item name="explode-ear" href="../explode-ear/index.html" />    
+    <item name="explode-ejb" href="../explode-ejb/index.html" />
   </menu>
+  
+  <menu name="Applications">
+      <item name="explode-ear" href="../explode-ear/index.html" />
+      </menu>
 
   <menu ref="reports"/>
 
