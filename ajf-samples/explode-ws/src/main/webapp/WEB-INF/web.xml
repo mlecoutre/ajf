@@ -10,6 +10,16 @@
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 	
+	<servlet>
+		<display-name>TestServlet</display-name>
+		<servlet-name>TestServlet</servlet-name>
+		<servlet-class>foo.web.TestServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>TestServlet</servlet-name>
+		<url-pattern>/TestServlet</url-pattern>
+	</servlet-mapping>
+	
 	<!-- SAMPLE DATA SOURCE 
 	<resource-ref>
 		<res-ref-name>jdbc/SHOWCASE_DS</res-ref-name>
