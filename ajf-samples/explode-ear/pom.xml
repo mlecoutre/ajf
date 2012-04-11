@@ -28,6 +28,11 @@
 		</dependency>
 		<dependency>
 			<groupId>am.projects.explode</groupId>
+			<artifactId>explode-ejb</artifactId>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>am.projects.explode</groupId>
 			<artifactId>explode-core</artifactId>
 		</dependency>
 		<dependency>
@@ -79,6 +84,13 @@
 							<bundleDir>/</bundleDir>
 							<bundleFileName>explode-ui.war</bundleFileName>
 						</webModule>
+						
+						<ejbModule>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>explode-ejb</artifactId>
+							<bundleDir>/</bundleDir>
+							<bundleFileName>explode-ejb.jar</bundleFileName>
+						</ejbModule>
 
 					</modules>
 					<archive>
