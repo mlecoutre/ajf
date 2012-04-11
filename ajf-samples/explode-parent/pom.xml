@@ -49,6 +49,12 @@
 			</dependency>
 			<dependency>
 				<groupId>am.projects.explode</groupId>
+				<artifactId>explode-ejb</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+			<dependency>
+				<groupId>am.projects.explode</groupId>
 				<artifactId>explode-ui</artifactId>
 				<version>${project.version}</version>
 				<type>war</type>
@@ -143,6 +149,7 @@
 	 	<module>../explode-core</module>
 		<module>../explode-ui</module>
 	 	<module>../explode-ws</module>
+		<module>../explode-ejb</module>
 		<module>../explode-ear</module> 
 	</modules>
 
