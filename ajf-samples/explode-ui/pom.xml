@@ -101,12 +101,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.apache.openwebbeans</groupId>
 			<artifactId>openwebbeans-resource</artifactId>
 			<version>${openwebbeansVersion}</version>
 			<scope>runtime</scope>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.apache.openwebbeans</groupId>
 			<artifactId>openwebbeans-jsf</artifactId>
@@ -410,7 +410,7 @@
 					<scope>provided</scope>
 				</dependency>
 
-				<dependency>
+				<!-- <dependency>
 					<groupId>org.apache.openwebbeans</groupId>
 					<artifactId>openwebbeans-ee</artifactId>
 					<version>${openwebbeansVersion}</version>
@@ -427,7 +427,8 @@
 					<artifactId>openwebbeans-ejb</artifactId>
 					<version>${openwebbeansVersion}</version>
 					<scope>runtime</scope>
-				</dependency>
+				</dependency> -->
+
 				<dependency>
 					<groupId>org.apache.openwebbeans</groupId>
 					<artifactId>openwebbeans-el10</artifactId>
@@ -522,6 +523,7 @@
 			</build>
 
 		</profile>
+	
 	</profiles>
 
 </project>
