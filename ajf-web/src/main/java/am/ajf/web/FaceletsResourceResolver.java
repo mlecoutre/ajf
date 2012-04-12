@@ -1,7 +1,9 @@
 package am.ajf.web;
 
+import am.ajf.core.logger.LoggerFactory;
 import java.net.URL;
 import javax.faces.view.facelets.ResourceResolver;
+import org.slf4j.Logger;
 
 /**
  * Allow to resolve resources such xhtml files in JAR You need to declare the
@@ -20,9 +22,10 @@ import javax.faces.view.facelets.ResourceResolver;
  */
 public class FaceletsResourceResolver extends ResourceResolver {
 
-	private static final String META_INF_RESOURCES = "/META-INF/resources";
+	private static final String EXT_RESOURCES = "/ext/";
 	private final ResourceResolver parent;
-	private final String basePath;
+
+	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
 	 * Constructor call by JSF2
@@ -32,19 +35,19 @@ public class FaceletsResourceResolver extends ResourceResolver {
 	 */
 	public FaceletsResourceResolver(ResourceResolver parent) {
 		this.parent = parent;
-		this.basePath = META_INF_RESOURCES;
 	}
 
 	@Override
 	public URL resolveUrl(String path) {
-		// Resolves from WAR, default behaviour
-		URL url = parent.resolveUrl(path);
-
-		if (url == null) {
-			url = getClass().getResource(basePath + path); // Resolves from JAR.
+		logger.trace("FaceletsResourceResolver:" + path);
+		if ((path != null) && path.startsWith(EXT_RESOURCES)) {
+			final String resource = path.substring(EXT_RESOURCES.length()); // remove
+																			// '/'
+			final URL url = getClass().getClassLoader().getResource(resource);
+			return url;
+		} else {
+			return parent.resolveUrl(path);
 		}
-
-		return url;
 	}
 
 }
