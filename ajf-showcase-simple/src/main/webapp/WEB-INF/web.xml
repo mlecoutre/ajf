@@ -24,8 +24,11 @@
 		<param-value>com.sun.el.ExpressionFactoryImpl</param-value>
 	</context-param>
 
-
-
+	<!-- allow to search xhtml resources in jars -->
+	<context-param>
+		<param-name>javax.faces.FACELETS_RESOURCE_RESOLVER</param-name>
+		<param-value>am.ajf.web.FaceletsResourceResolver</param-value>
+	</context-param>
 
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -60,15 +63,15 @@
 
 	<error-page>
 		<error-code>403</error-code>
-		<location>/ajf/errors/accessDenied.jsf</location>
+		<location>/ext/errors/accessDenied.jsf</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
-		<location>/ajf/errors/accessDenied.jsf</location>
+		<location>/ext/errors/accessDenied.jsf</location>
 	</error-page>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/ajf/errors/notFound.jsf</location>
+		<location>/ext/errors/notFound.jsf</location>
 	</error-page>
 
 	<resource-ref>
