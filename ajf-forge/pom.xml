@@ -5,12 +5,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>am.ajf</groupId>
 	<artifactId>ajf-forge</artifactId>
-	<version>2.1.0-SNAPSHOT</version>
+	<version>2.1.1-SNAPSHOT</version>
 	<properties>
 		<ajfversion>2.1.0-SNAPSHOT</ajfversion>
 		<slf4j.version>1.6.4</slf4j.version>
 		<forge.api.version>1.0.0.Final</forge.api.version>
 	</properties>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -40,9 +41,25 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
 	<dependencies>
-		<!-- <dependency> <groupId>am.ajf</groupId> <artifactId>ajf-injection</artifactId> 
-			<version>${ajfversion}</version> </dependency> -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.5</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.annotation</groupId>
+			<artifactId>jboss-annotations-api_1.1_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- jboss forge stuff -->
 		<dependency>
 			<groupId>org.jboss.forge</groupId>
 			<artifactId>forge-shell-api</artifactId>
@@ -64,31 +81,48 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.5</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.enterprise</groupId>
-			<artifactId>cdi-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.spec.javax.annotation</groupId>
-			<artifactId>jboss-annotations-api_1.1_spec</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.jboss.forge</groupId>
 			<artifactId>forge-shell</artifactId>
 			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>slf4j-api</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
-		<!-- FREE MARKER - Does not work with jboss forge yet -->
-		<!-- <dependency> <groupId>org.freemarker</groupId> <artifactId>freemarker</artifactId> 
-			<version>2.3.19</version> </dependency> -->
+		<!-- Templating engine Velocity -->
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>1.7</version>
+		</dependency>
 
+		<!-- FREE MARKER -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<version>2.3.19</version>
+		</dependency>
+
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.4</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.0.1</version>
+		</dependency>
 	</dependencies>
+
 	<repositories>
 		<repository>
 			<id>JBOSS_NEXUS</id>
@@ -99,6 +133,7 @@
 			<url>http://web-maven-repo/nexus/content/groups/public</url>
 		</repository>
 	</repositories>
+
 	<build>
 		<finalName>ajfForgePlugin</finalName>
 		<plugins>
@@ -111,19 +146,9 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-			<plugin>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>1.4</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration></configuration>
-					</execution>
-				</executions>
-			</plugin>
+			<!-- <plugin> <artifactId>maven-shade-plugin</artifactId> <version>1.4</version> 
+				<executions> <execution> <phase>package</phase> <goals> <goal>shade</goal> 
+				</goals> <configuration></configuration> </execution> </executions> </plugin> -->
 		</plugins>
 	</build>
 </project>

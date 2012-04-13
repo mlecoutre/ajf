@@ -6,6 +6,7 @@ import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
+import static am.ajf.forge.lib.ForgeConstants.SITE_FOLDER;
 
 import java.io.File;
 
@@ -22,6 +23,7 @@ import org.jboss.forge.project.packaging.PackagingType;
 import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
+import am.ajf.forge.util.ExtractionUtils;
 import am.ajf.forge.util.ProjectUtils;
 
 /**
@@ -92,6 +94,15 @@ public class EarProjectGenerator {
 		pom.addProperty("project.ui",
 				projectFinalName.concat("-").concat(PROJECT_TYPE_UI));
 		mavenFacet.setPOM(pom);
+
+		// Site
+		ExtractionUtils.unzipFile(SITE_FOLDER, new File(project
+				.getProjectRoot().getUnderlyingResourceObject()
+				.getAbsolutePath().concat("/src")));
+
+		// Generate site.xml file
+		ProjectUtils.generateSiteXmlFile(project, globalProjectName, false,
+				false);
 
 		return project;
 	}

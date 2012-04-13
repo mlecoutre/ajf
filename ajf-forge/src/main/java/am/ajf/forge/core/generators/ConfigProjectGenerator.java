@@ -88,6 +88,10 @@ public class ConfigProjectGenerator {
 				.getProjectRoot().getUnderlyingResourceObject()
 				.getAbsolutePath().concat("/src")));
 
+		// Generate site.xml file
+		ProjectUtils.generateSiteXmlFile(project, globalProjectName, false,
+				false);
+
 		return project;
 	}
 

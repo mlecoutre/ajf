@@ -60,6 +60,16 @@ public class ForgeConstants {
 	public static final String MODEL_POM_LIB = "exploded-poms/pom-lib.xml";
 
 	/*
+	 * Velocity
+	 */
+	public static final String SITE_XML_VELOCITY_TEMPLATE = "site.xml.vm";
+	//variable of the template:
+	public static final String VELOCITY_VAR_APPLINAME = "appliName";
+	public static final String VELOCITY_VAR_ISREPORT = "isReports";
+	public static final String VELOCITY_VAR_ISPARENT = "isParentProject";
+	
+	
+	/*
 	 * FreeMarker
 	 */
 	public static final String DEFAULT_TEMPLATES_DIRECTORY = "/FreeMarkerTemplate";

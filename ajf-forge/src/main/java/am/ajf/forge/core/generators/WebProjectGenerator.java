@@ -87,6 +87,10 @@ public class WebProjectGenerator {
 					.getProjectRoot().getUnderlyingResourceObject()
 					.getAbsolutePath().concat("/src")));
 
+			// Generate site.xml file
+			ProjectUtils.generateSiteXmlFile(project, globalProjectName, true,
+					false);
+
 		} catch (Exception e) {
 
 			System.err

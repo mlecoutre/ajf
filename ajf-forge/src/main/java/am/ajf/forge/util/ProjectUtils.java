@@ -4,8 +4,13 @@ import static am.ajf.forge.lib.ForgeConstants.PROJECT_GROUPID_PREFIX;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_PARENT;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
+import static am.ajf.forge.lib.ForgeConstants.SITE_XML_VELOCITY_TEMPLATE;
 import static am.ajf.forge.lib.ForgeConstants.START_PROJECT_MILESTONE;
+import static am.ajf.forge.lib.ForgeConstants.VELOCITY_VAR_APPLINAME;
+import static am.ajf.forge.lib.ForgeConstants.VELOCITY_VAR_ISPARENT;
+import static am.ajf.forge.lib.ForgeConstants.VELOCITY_VAR_ISREPORT;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
@@ -14,6 +19,7 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.apache.velocity.VelocityContext;
 import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.MetadataFacet;
@@ -379,25 +385,6 @@ public class ProjectUtils {
 
 	}
 
-	// public static void copyPomFile(String resourcePomFilename,
-	// File destinationDir) throws Exception {
-	//
-	// // InputStream is = ProjectUtils.class.getClassLoader()
-	// // .getResourceAsStream(resourcePomFilename);
-	// // FileUtils.copyInputStreamToFile(is, destinationFile);
-	// Model pom = getPomFromFile(resourcePomFilename);
-	// // Model pom2 = new MavenXpp3Reader().read(destinationFile);
-	//
-	// FileOutputStream fos = new FileOutputStream(destinationDir);
-	// System.out.println("stream opened");
-	// new MavenXpp3Writer().write(fos, pom);
-	//
-	// fos.close();
-	// fos = null;
-	// System.out.println(pom.getArtifactId());
-	//
-	// }
-
 	/**
 	 * 
 	 * Set all AJF dependencies to the input pom.xml, corresponding to input ajf
@@ -438,5 +425,49 @@ public class ProjectUtils {
 			throw e;
 
 		}
+	}
+
+	/**
+	 * Generates a site.xml file in the /src/site folder of the input project.
+	 * Boolean isReports and isParent inputs, allows to make some special part
+	 * of the site.xml template, depending on the project type
+	 * 
+	 * @param project
+	 * @param applicationName
+	 *            general application name (without ajf suffixe such as ui,
+	 *            ws...)
+	 * @param isReports
+	 *            true if the 'Report' part of the site.xml file need to appear
+	 * @param isParentProject
+	 *            flag in case of a parent project, a dynamic part of the
+	 *            site.xml (different menus) has to be created
+	 * @throws Exception
+	 */
+	public static void generateSiteXmlFile(Project project,
+			String applicationName, boolean isReports, boolean isParentProject)
+			throws Exception {
+
+		// Site.xml file
+		File siteXmlFile = new File(project.getProjectRoot()
+				.getUnderlyingResourceObject().getAbsolutePath()
+				.concat("/src/site/site.xml"));
+
+		System.out.println("**DEBUG : siteXmlFile = "
+				+ siteXmlFile.getAbsolutePath());
+
+		// use velocity to generate file
+		VelocityBuilder velocityBuilder = new VelocityBuilder();
+		VelocityContext context = velocityBuilder.getContext();
+
+		context.put(VELOCITY_VAR_APPLINAME, applicationName);
+
+		// Allow to makes some part of the template file appear or not,
+		// dependending on input booleans
+		context.put(VELOCITY_VAR_ISREPORT, isReports);
+		context.put(VELOCITY_VAR_ISPARENT, isParentProject);
+
+		velocityBuilder.merge(SITE_XML_VELOCITY_TEMPLATE,
+				siteXmlFile.getAbsolutePath());
+
 	}
 }

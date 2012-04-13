@@ -132,6 +132,10 @@ public class ParentProjectGenerator {
 				.getProjectRoot().getUnderlyingResourceObject()
 				.getAbsolutePath().concat("/src")));
 
+		// Generate site.xml file
+		ProjectUtils
+				.generateSiteXmlFile(project, globalProjectName, true, true);
+
 		return project;
 	}
 
