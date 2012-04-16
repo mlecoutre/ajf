@@ -13,9 +13,9 @@
 	</parent>
 	
 	<scm>
-		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-skin-default-2.1.0</connection>
-		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-skin-default-2.1.0</developerConnection>
-		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/tags/ajf-skin-default-2.1.0?repname=ITSWE&path=/ajf/trunk/ajf-skin-default/]]></url>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-skin-default</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-skin-default</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-skin-default/]]></url>
 	</scm>
-	<version>2.1.0</version>
+	<version>2.1.1-SNAPSHOT</version>
 </project>
