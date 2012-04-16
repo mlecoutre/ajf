@@ -1,8 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>ajf-skin-default</artifactId>
+  <version>2.1.1</version>
 	
 	<name>ajf-skin-default</name>
 	<description>Default Skin for AJF2</description>
@@ -12,4 +12,10 @@
 		<artifactId>ajf-parent</artifactId>
 		<version>2.1.1-SNAPSHOT</version>
 	</parent>
+
+  <scm>
+    <connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-skin-default-2.1.1</connection>
+    <developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/tags/ajf-skin-default-2.1.1</developerConnection>
+    <url>http://web-svn-viewer/listing.php?repname=ITSWE&amp;path=/ajf/tags/ajf-skin-default-2.1.1?repname=ITSWE&amp;path=/ajf/trunk/ajf-parent/ajf-skin-default/</url>
+  </scm>
 </project>
