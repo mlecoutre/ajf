@@ -5,12 +5,12 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
-
+	
 	<ul>
-		<li><h:outputLink id="linkFAQ" value="FAQ.html">
+		<li><h:outputLink id="linkFAQ" value="/${request.contextPath}/shared/faq.xhtml">
 				<h:outputText value="#{m['menu.faq']}" />
 			</h:outputLink></li>
-		<li><h:outputLink id="linkContact" value="contacts.html">
+		<li><h:outputLink id="linkContact" value="/${request.contextPath}/shared/contacts.xhtml">
 				<h:outputText value="#{m['menu.contact']}" />
 			</h:outputLink></li>
 		<li><h:outputLink id="linkHelp" target="_blank"

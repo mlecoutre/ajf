@@ -1,8 +1,15 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>am.ajf</groupId>
-  <artifactId>ajf-skin-default</artifactId>
-  <version>2.1.1-SNAPSHOT</version>
-  <name>ajf-skin-default</name>
-  <description>Default Skin</description>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>ajf-skin-default</artifactId>
+	
+	<name>ajf-skin-default</name>
+	<description>Default Skin for AJF2</description>
+
+	<parent>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-parent</artifactId>
+		<version>2.1.1-SNAPSHOT</version>
+	</parent>
 </project>
