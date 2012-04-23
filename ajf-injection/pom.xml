@@ -29,6 +29,13 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<!-- Not used directly but used by ViewScope in ajf-web -->
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.faces</artifactId>
+			<version>2.1.6</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<!-- AJF testing dependency -->
 		
