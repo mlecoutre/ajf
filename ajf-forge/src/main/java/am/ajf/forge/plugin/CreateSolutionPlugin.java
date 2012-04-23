@@ -1,6 +1,6 @@
 package am.ajf.forge.plugin;
 
-import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_COMPACT;
+import static am.ajf.forge.lib.ForgeConstants.*;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_EAR;
@@ -171,8 +171,11 @@ public class CreateSolutionPlugin implements Plugin {
 					generateAjfProject(name, folderName, PROJECT_TYPE_UI, out);
 					generateAjfProject(name, folderName, PROJECT_TYPE_CONFIG,
 							out);
-					generateAjfProject(name, folderName, PROJECT_TYPE_WS, out);
 					generateAjfProject(name, folderName, PROJECT_TYPE_LIB, out);
+
+					// TODO:optional
+					generateAjfProject(name, folderName, PROJECT_TYPE_WS, out);
+					generateAjfProject(name, folderName, PROJECT_TYPE_EJB, out);
 
 					/*
 					 * FINAL LOG

@@ -27,10 +27,17 @@
 		<appender-ref ref="STDOUT" />
 	</logger>
 
-	<logger name="org" level="WARN" additivity="false">
+	<logger name="org" level="info" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
-	<logger name="ch" level="WARN" additivity="false">
+	<logger name="ch" level="info" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
+
+	<logger name="a.a.f.util.VelocitySlf4JLogSystem" level="info"
+		additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+
 </configuration>

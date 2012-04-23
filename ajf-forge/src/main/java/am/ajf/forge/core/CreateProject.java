@@ -1,6 +1,6 @@
 package am.ajf.forge.core;
 
-import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_COMPACT;
+import static am.ajf.forge.lib.ForgeConstants.*;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_EAR;
@@ -16,6 +16,7 @@ import org.jboss.forge.resources.DirectoryResource;
 import am.ajf.forge.core.generators.ConfigProjectGenerator;
 import am.ajf.forge.core.generators.CoreProjectGenerator;
 import am.ajf.forge.core.generators.EarProjectGenerator;
+import am.ajf.forge.core.generators.EjbProjectGenerator;
 import am.ajf.forge.core.generators.LibProjectGenerator;
 import am.ajf.forge.core.generators.ParentProjectGenerator;
 import am.ajf.forge.core.generators.WebProjectGenerator;
@@ -92,6 +93,13 @@ public class CreateProject {
 
 			WebProjectGenerator uiProject = new WebProjectGenerator();
 			project = uiProject.generateWSAjfProject(globalProjectName,
+					projectFinalName, javaPackage, projectFactory, projectType,
+					dir);
+
+		} else if (PROJECT_TYPE_EJB.equals(projectType)) {
+
+			EjbProjectGenerator ejbProject = new EjbProjectGenerator();
+			project = ejbProject.generateEjbAjfProject(globalProjectName,
 					projectFinalName, javaPackage, projectFactory, projectType,
 					dir);
 

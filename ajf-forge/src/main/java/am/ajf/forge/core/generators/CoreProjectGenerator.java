@@ -50,6 +50,7 @@ public class CoreProjectGenerator {
 	 *            directory resource where to create the project
 	 * @return project
 	 */
+	@SuppressWarnings("unchecked")
 	public Project generateCoreAjfProject(String globalProjectName,
 			String projectFinalName, String javaPackage,
 			ProjectFactory projectFactory, String projectType,
@@ -58,9 +59,25 @@ public class CoreProjectGenerator {
 		Project project = null;
 		try {
 
-			// Generate Project
-			project = generateProject(globalProjectName, projectFinalName,
-					projectFactory, dir);
+			// Create Project
+			project = projectFactory.createProject(dir, DependencyFacet.class,
+					MetadataFacet.class, JavaSourceFacet.class,
+					ResourceFacet.class);
+
+			// Set pom from example pom file
+			ProjectUtils.setPomFromModelFile(project, MODEL_POM_CORE);
+
+			// Set project packaging
+			PackagingFacet packaging = project.getFacet(PackagingFacet.class);
+			packaging.setPackagingType(PackagingType.JAR);
+
+			// Set name of the project
+			packaging.setFinalName(projectFinalName);
+
+			// Extract META-INF/beans.xml to generated project
+			ResourceFacet rsf = project.getFacet(ResourceFacet.class);
+			ExtractionUtils.unzipFile(META_INF_FOLDER_ZIP, rsf
+					.getResourceFolder().getUnderlyingResourceObject());
 
 			// Set inter dependencies
 			ProjectUtils.addInternalDependencyScoped(globalProjectName,
@@ -95,49 +112,4 @@ public class CoreProjectGenerator {
 		return project;
 	}
 
-	/**
-	 * Generate the CORE ajf project in accordance with ajf rules.
-	 * 
-	 * @param globalProjectName
-	 * @param projectFinalName
-	 * @param projectFactory
-	 * @param dir
-	 * @param isCompact
-	 * @return Project
-	 * @throws Exception
-	 */
-	@SuppressWarnings("unchecked")
-	private Project generateProject(String globalProjectName,
-			String projectFinalName, ProjectFactory projectFactory,
-			DirectoryResource dir) throws Exception {
-
-		// Create Project
-		Project project = projectFactory.createProject(dir,
-				DependencyFacet.class, MetadataFacet.class,
-				JavaSourceFacet.class, ResourceFacet.class);
-
-		// Set pom from example pom file
-		ProjectUtils.setPomFromModelFile(project, MODEL_POM_CORE);
-
-		// Set project meta data in pom
-		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
-				project);
-
-		// Set project packaging
-		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
-		packaging.setPackagingType(PackagingType.JAR);
-
-		// Set name of the project
-		packaging.setFinalName(projectFinalName);
-
-		// Set the pom parent
-		ProjectUtils.setInternalPomParent(globalProjectName, project);
-
-		// Extract META-INF/beans.xml to generated project
-		ResourceFacet rsf = project.getFacet(ResourceFacet.class);
-		ExtractionUtils.unzipFile(META_INF_FOLDER_ZIP, rsf.getResourceFolder()
-				.getUnderlyingResourceObject());
-
-		return project;
-	}
 }

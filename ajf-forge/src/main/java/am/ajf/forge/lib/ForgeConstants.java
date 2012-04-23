@@ -19,6 +19,7 @@ public class ForgeConstants {
 	public static final String PROJECT_TYPE_UI = "ui";
 	public static final String PROJECT_TYPE_LIB = "lib";
 	public static final String PROJECT_TYPE_CONFIG = "config";
+	public static final String PROJECT_TYPE_EJB = "ejb";
 	public static final String PROJECT_TYPE_COMPACT = "compacted";
 
 	/*
@@ -58,17 +59,17 @@ public class ForgeConstants {
 	public static final String MODEL_POM_PARENT = "exploded-poms/pom-parent.xml";
 	public static final String MODEL_POM_EAR = "exploded-poms/pom-ear.xml";
 	public static final String MODEL_POM_LIB = "exploded-poms/pom-lib.xml";
+	public static final String MODEL_POM_EJB = "exploded-poms/pom-ejb.xml";
 
 	/*
 	 * Velocity
 	 */
 	public static final String SITE_XML_VELOCITY_TEMPLATE = "site.xml.vm";
-	//variable of the template:
+	// variable of the template:
 	public static final String VELOCITY_VAR_APPLINAME = "appliName";
 	public static final String VELOCITY_VAR_ISREPORT = "isReports";
 	public static final String VELOCITY_VAR_ISPARENT = "isParentProject";
-	
-	
+
 	/*
 	 * FreeMarker
 	 */
