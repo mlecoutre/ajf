@@ -63,15 +63,15 @@
 
 	<error-page>
 		<error-code>403</error-code>
-		<location>/ext/errors/accessDenied.jsf</location>
+		<location>/ajf/errors/accessDenied.jsf</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
-		<location>/ext/errors/accessDenied.jsf</location>
+		<location>/ajf/errors/accessDenied.jsf</location>
 	</error-page>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/ext/errors/notFound.jsf</location>
+		<location>/ajf/errors/notFound.jsf</location>
 	</error-page>
 
 	<resource-ref>
