@@ -4,6 +4,7 @@ import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_PARENT;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_EAR;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_EJB;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
@@ -90,6 +91,9 @@ public class ParentProjectGenerator {
 		ProjectUtils.addManagementDependency(project, projectGroupId,
 				globalProjectName + "-" + PROJECT_TYPE_WS,
 				START_PROJECT_MILESTONE, "war");
+		ProjectUtils.addManagementDependency(project, projectGroupId,
+				globalProjectName + "-" + PROJECT_TYPE_EJB,
+				START_PROJECT_MILESTONE, "ejb");
 
 		// Get the MavenFacet in order to grab the pom
 		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
@@ -102,16 +106,7 @@ public class ParentProjectGenerator {
 		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_UI);
 		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_WS);
 		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_EAR);
-
-		// Set standard am parent
-		// Parent parent = new Parent();
-		// parent.setGroupId(STANDARD_PARENT_GROUPID);
-		// parent.setArtifactId(STANDARD_PARENT_ARTIFACTID);
-		// parent.setVersion(STANDARD_PARENT_VERSION);
-
-		// pom.setParent(parent);
-
-		mavenCoreFacet.setPOM(pom);
+		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_EJB);
 
 		// Set SCM Connection
 
@@ -122,9 +117,8 @@ public class ParentProjectGenerator {
 				+ globalProjectName + "/" + projectFinalName);
 		scm.setUrl("http://web-svn-viewer/listing.php?repname=ITSWE&amp;path=/trunk/"
 				+ globalProjectName + "/" + projectFinalName);
-		pom.setScm(scm);
 
-		// Validate the pom to the current project
+		pom.setScm(scm);
 		mavenCoreFacet.setPOM(pom);
 
 		// Site

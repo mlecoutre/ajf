@@ -1,9 +1,10 @@
 package am.ajf.forge.plugin;
 
-import static am.ajf.forge.lib.ForgeConstants.*;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_COMPACT;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_EAR;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_EJB;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_PARENT;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;

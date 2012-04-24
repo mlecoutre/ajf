@@ -58,7 +58,7 @@ public class ProjectUtilsTest {
 	//
 	// for (Dependency dep : pom.getDependencies()) {
 	//
-	// System.out.println("Found dependency : " + dep.getArtifactId());
+	// System.out.println("Found dependency : " + dep.getA/rtifactId());
 	//
 	// }
 	//
@@ -66,4 +66,5 @@ public class ProjectUtilsTest {
 	// pom.getDependencies().size() == 4);
 	//
 	// }
+
 }

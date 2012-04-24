@@ -63,14 +63,6 @@ public class EarProjectGenerator {
 		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
 		packaging.setPackagingType(PackagingType.JAR);
 
-		// Remove the Resource/Test folder of ear project
-		String resourceTestPath = project.getFacet(ResourceFacet.class)
-				.getTestResourceFolder().getParent().getFullyQualifiedName();
-		File resourceTestFolder = new File(resourceTestPath);
-		if (resourceTestFolder.exists()) {
-			resourceTestFolder.delete();
-		}
-
 		// Set the Pom parent
 		ProjectUtils.setInternalPomParent(globalProjectName, project);
 

@@ -12,10 +12,6 @@
 
 	<dependencies>
 
-		<!-- <dependency> <groupId>am.projects.explode</groupId> <artifactId>explode-config</artifactId> 
-			<scope>runtime</scope> </dependency> <dependency> <groupId>am.projects.explode</groupId> 
-			<artifactId>explode-lib</artifactId> </dependency> <dependency> <groupId>am.projects.explode</groupId> 
-			<artifactId>explode-core</artifactId> <scope>runtime</scope> </dependency> -->
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-web</artifactId>
@@ -46,6 +42,13 @@
 			<artifactId>ajf-testing</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-skin-default</artifactId>
+			<version>${ajf.skin.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
@@ -53,57 +56,52 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>0.9.24</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>log4j-over-slf4j</artifactId>
-			<version>1.6.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>1.6.1</version>
-		</dependency>
+
+		<!-- the logger abstraction -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.6.1</version>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<!-- loggers adapters -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.openwebbeans</groupId>
-			<artifactId>openwebbeans-impl</artifactId>
-			<version>${openwebbeansVersion}</version>
-			<scope>runtime</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>scannotation</artifactId>
-					<groupId>net.sf.scannotation</groupId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
+
+		<!-- effective logger impl -->
 		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+		<!-- End : Logging dependencies -->
+
+		<!-- open web beans common between was7 and tomcat7 -->
+		<dependency>
+			<artifactId>openwebbeans-impl</artifactId>
 			<groupId>org.apache.openwebbeans</groupId>
-			<artifactId>openwebbeans-resource</artifactId>
 			<version>${openwebbeansVersion}</version>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.openwebbeans</groupId>
 			<artifactId>openwebbeans-jsf</artifactId>
 			<version>${openwebbeansVersion}</version>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.openwebbeans</groupId>
 			<artifactId>openwebbeans-web</artifactId>
 			<version>${openwebbeansVersion}</version>
-			<scope>runtime</scope>
 		</dependency>
+		<!-- END OPEN WEB BEANS -->
 
 		<dependency>
 			<groupId>org.glassfish</groupId>
@@ -330,6 +328,17 @@
 								<artifactId>javassist</artifactId>
 								<version>3.12.1.GA</version>
 							</dependency>
+							<!-- Mail Service -->
+							<dependency>
+								<groupId>javax.mail</groupId>
+								<artifactId>javax.mail-api</artifactId>
+								<version>1.4.4</version>
+							</dependency>
+							<dependency>
+								<groupId>javax.mail</groupId>
+								<artifactId>mail</artifactId>
+								<version>1.4.4</version>
+							</dependency>
 							<dependency>
 								<groupId>org.hibernate</groupId>
 								<artifactId>hibernate-validator</artifactId>
@@ -385,61 +394,60 @@
 					<groupId>org.apache.geronimo.specs</groupId>
 					<artifactId>geronimo-jcdi_1.0_spec</artifactId>
 					<version>1.0</version>
-					<scope>provided</scope>
+					<scope>compile</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.geronimo.specs</groupId>
 					<artifactId>geronimo-atinject_1.0_spec</artifactId>
 					<version>1.0</version>
-					<scope>provided</scope>
+					<scope>compile</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.geronimo.specs</groupId>
 					<artifactId>geronimo-interceptor_1.1_spec</artifactId>
 					<version>1.0</version>
-					<scope>provided</scope>
+					<scope>compile</scope>
 				</dependency>
 
 				<dependency>
 					<groupId>org.apache.openwebbeans</groupId>
 					<artifactId>openwebbeans-ee</artifactId>
 					<version>${openwebbeansVersion}</version>
-					<scope>runtime</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.openwebbeans</groupId>
 					<artifactId>openwebbeans-ee-common</artifactId>
 					<version>${openwebbeansVersion}</version>
-					<scope>runtime</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.openwebbeans</groupId>
 					<artifactId>openwebbeans-ejb</artifactId>
 					<version>${openwebbeansVersion}</version>
-					<scope>runtime</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.openwebbeans</groupId>
 					<artifactId>openwebbeans-el10</artifactId>
 					<version>${openwebbeansVersion}</version>
-					<scope>runtime</scope>
 				</dependency>
 				<dependency>
 					<groupId>org.apache.openwebbeans</groupId>
 					<artifactId>openwebbeans-spi</artifactId>
 					<version>${openwebbeansVersion}</version>
-					<scope>runtime</scope>
 				</dependency>
-				<!-- <dependency> <groupId>org.scannotation</groupId> <artifactId>scannotation</artifactId> 
-					<version>1.0.3</version> <scope>runtime</scope> </dependency> -->
-				<!-- <dependency> <groupId>javassist</groupId> <artifactId>javassist</artifactId> 
-					<version>3.12.1.GA</version> </dependency> -->
+				<dependency>
+					<groupId>org.scannotation</groupId>
+					<artifactId>scannotation</artifactId>
+					<version>1.0.3</version>
+				</dependency>
+				<dependency>
+					<groupId>javassist</groupId>
+					<artifactId>javassist</artifactId>
+					<version>3.12.1.GA</version>
+				</dependency>
 			</dependencies>
 
 			<build>
-
 				<plugins>
-
 					<plugin>
 						<groupId>com.google.code.maven-config-processor-plugin</groupId>
 						<artifactId>maven-config-processor-plugin</artifactId>
@@ -472,27 +480,12 @@
 						<configuration>
 							<warName>${project.artifactId}</warName>
 							<webXml>${project.build.directory}/web.xml</webXml>
-							<packagingIncludes>
-								WEB-INF/lib/jsf*.jar,
-								WEB-INF/lib/jsp*.jar,
-								WEB-INF/lib/el*.jar,
-								WEB-INF/lib/javax.faces*.jar,
-								WEB-INF/lib/primefaces*.jar,
-								WEB-INF/lib/aristo*.jar,
-								WEB-INF/lib/jstl*.jar,
-								WEB-INF/lib/openwebbeans-*.jar,
-								WEB-INF/lib/shiro-*.jar,
-								WEB-INF/lib/ajf-web*.jar,
-								**/*.xml,
-								**/*.properties,
-								**/*.ini,
-								**/*.class,
-								**/*.jpg,
-								**/*.png,
-								**/*.css,
-								**/*.js*,
-								**/*.*html
-							</packagingIncludes>
+							<!-- <packagingIncludes> WEB-INF/lib/jsf*.jar, WEB-INF/lib/jsp*.jar, 
+								WEB-INF/lib/el*.jar, WEB-INF/lib/javax.faces*.jar, WEB-INF/lib/primefaces*.jar, 
+								WEB-INF/lib/aristo*.jar, WEB-INF/lib/jstl*.jar, WEB-INF/lib/openwebbeans-*.jar, 
+								WEB-INF/lib/shiro-*.jar, WEB-INF/lib/ajf-web*.jar, **/*.xml, **/*.properties, 
+								**/*.ini, **/*.class, **/*.jpg, **/*.png, **/*.css, **/*.js*, **/*.*html 
+								</packagingIncludes> -->
 							<archive>
 								<addMavenDescriptor>true</addMavenDescriptor>
 								<manifest>

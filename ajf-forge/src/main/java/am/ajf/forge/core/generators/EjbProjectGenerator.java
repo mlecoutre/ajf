@@ -1,9 +1,11 @@
 package am.ajf.forge.core.generators;
 
-import static am.ajf.forge.lib.ForgeConstants.*;
+import static am.ajf.forge.lib.ForgeConstants.META_INF_FOLDER_ZIP;
 import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_EJB;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
+import static am.ajf.forge.lib.ForgeConstants.SITE_FOLDER;
 
 import java.io.File;
 
@@ -50,14 +52,6 @@ public class EjbProjectGenerator {
 		project = projectFactory
 				.createProject(dir, DependencyFacet.class, MetadataFacet.class,
 						JavaSourceFacet.class, ResourceFacet.class);
-
-		// Remove the Test folder of the project
-		String resourceTestPath = project.getFacet(ResourceFacet.class)
-				.getTestResourceFolder().getParent().getFullyQualifiedName();
-		File resourceTestFolder = new File(resourceTestPath);
-		if (resourceTestFolder.exists()) {
-			resourceTestFolder.delete();
-		}
 
 		// Set pom from example pom file
 		ProjectUtils.setPomFromModelFile(project, MODEL_POM_EJB);
