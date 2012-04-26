@@ -1,3 +1,4 @@
 am.ajf.remoting.procs.impl.StoredProcedureImplHandler
+am.ajf.remoting.ejb.impl.RemoteEJBImplHandler
 
 
