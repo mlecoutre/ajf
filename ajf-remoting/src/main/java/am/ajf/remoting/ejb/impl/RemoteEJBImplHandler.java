@@ -1,10 +1,7 @@
 package am.ajf.remoting.ejb.impl;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
-
-import javax.rmi.PortableRemoteObject;
 
 import javassist.CannotCompileException;
 import javassist.ClassPool;
@@ -12,7 +9,6 @@ import javassist.CtClass;
 import javassist.CtMethod;
 import javassist.NotFoundException;
 
-import org.objectweb.asm.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,10 +17,7 @@ import am.ajf.injection.ClassGenerationException;
 import am.ajf.injection.api.ImplementationHandler;
 import am.ajf.remoting.AnnotationHelper;
 import am.ajf.remoting.ConfigurationException;
-import am.ajf.remoting.SimpleFieldNamesMapper;
 import am.ajf.remoting.ejb.annotation.RemoteEJB;
-import am.ajf.remoting.procs.annotation.In;
-import am.ajf.remoting.procs.annotation.StoredProcedure;
 
 
 public class RemoteEJBImplHandler implements ImplementationHandler {
@@ -98,8 +91,7 @@ public class RemoteEJBImplHandler implements ImplementationHandler {
 	public StringBuilder generateBodyFor(Method method) throws ClassNotFoundException, NotFoundException, CannotCompileException, ConfigurationException {		
 		//Retrieve the parameters needed to launch the stored procedure 		
 		Object[] annotations = method.getAnnotations();
-		RemoteEJB remoteEJB = (RemoteEJB)annotations[0];
-		Object[][] pAnnotations = method.getParameterAnnotations();
+		RemoteEJB remoteEJB = (RemoteEJB)annotations[0];		
 		Object[] pTypes = method.getParameterTypes();
 		String jndi = AnnotationHelper.getJndiInfo(method);		
 						
