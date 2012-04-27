@@ -43,7 +43,7 @@ import am.ajf.forge.lib.ForgeConstants;
  * 
  */
 @Alias("ajf-solution")
-@Help("Create a new AJF solution in selected directory.")
+@Help("Create a new AJF2 java solution")
 public class CreateSolutionPlugin implements Plugin {
 
 	@Inject
@@ -62,19 +62,28 @@ public class CreateSolutionPlugin implements Plugin {
 	 * him chose which kind of AJF-Solutin he wants to generate
 	 * 
 	 * @param projectType
+	 *            'c' for compacted ajf project and 'e' for exploded ajf
+	 *            solution
+	 * @param isWs
+	 *            flag to generated the WS ajf component project (only for
+	 *            exploded solution)
+	 * @param isEjb
+	 *            flag to generated the EJB ajf component project (only for
+	 *            exploded solution)
 	 * @param out
 	 */
-
 	@DefaultCommand
 	public void createAjfSolution(
-			@Option(name = "projectType", description = "S: Simple AJF project; C:Complex AJF project split in different projects (parent, ui, core...)", required = false) String projectType,
+			@Option(name = "projectType", description = "C: Compacted web AJF project; E:Exploded AJF solution composed)", required = false) String projectType,
+			@Option(name = "WS", description = "Set flag to generate WS component ajf project", flagOnly = true, required = false) boolean isWs,
+			@Option(name = "EJB", description = "Set flag to generate EJB component ajf project", flagOnly = true, required = false) boolean isEjb,
 			final PipeOut out) {
 
 		String AJF_PROJECT_TYPE_SIMPLE = "Compacted ajf solution";
 		String AJF_PROJECT_TYPE_COMPLEX = "Exploded ajf solution";
 
 		/*
-		 * if user does not fill in the otion, he will be prompted of which ajf
+		 * Prompt choice for Wich AJF solution type to generate
 		 */
 		if (null == projectType) {
 
@@ -90,37 +99,70 @@ public class CreateSolutionPlugin implements Plugin {
 
 		}
 
-		if (AJF_PROJECT_TYPE_SIMPLE.equals(projectType)) {
+		// The user could have entered "c" as project type for compacted
+		// solution
+		if (AJF_PROJECT_TYPE_SIMPLE.equals(projectType)
+				|| "c".equals(projectType.toLowerCase())) {
 
-			String projectName = promptForProjectName();
+			boolean doWeContinue = validateCompactedProject(isWs, isEjb, out);
 
-			if ("exit".equals(projectName)) {
-				ShellMessages.info(out, "bye bye !");
-			} else {
-				String projectDirectory = promptProjectDirectory("Project directory (empty is current directory) :");
-				if (!"exit".equals(projectDirectory)) {
-					isProjectDirFlag = true;
-					createAjfSolutionCompacted(projectName, projectDirectory,
-							out);
-				} else {
+			if (doWeContinue) {
+
+				/*
+				 * Case of generating a compact ajf solution
+				 */
+				String projectName = promptForProjectName();
+
+				// the keyword "exit" is always used to exit the prompt loop
+				if ("exit".equals(projectName)) {
 					ShellMessages.info(out, "bye bye !");
+
+				} else {
+					String projectDirectory = promptProjectDirectory("Project directory (empty is current directory) :");
+					if (!"exit".equals(projectDirectory)) {
+
+						isProjectDirFlag = true;
+						// Call the compact project generation method
+						createAjfSolutionCompacted(projectName,
+								projectDirectory, out);
+					} else {
+						ShellMessages.info(out, "bye bye !");
+					}
 				}
+
 			}
+			// The user could have entered "e" as project type for exploded
+			// solution
+		} else if (AJF_PROJECT_TYPE_COMPLEX.equals(projectType)
+				|| "e".equals(projectType.toLowerCase())) {
 
-		} else if (AJF_PROJECT_TYPE_COMPLEX.equals(projectType)) {
+			boolean doWeContinue = validateAjfProjectToUser(isWs, isEjb);
 
-			String projectName = promptForProjectName();
+			if (doWeContinue) {
 
-			if ("exit".equals(projectName)) {
-				ShellMessages.info(out, "bye bye !");
-			} else {
-				String projectDirectory = promptProjectDirectory("Project directory (empty is current directory) :");
-				if (!"exit".equals(projectDirectory)) {
-					isProjectDirFlag = true;
-					createAjfSolutionExploded(projectName, projectDirectory,
-							out);
-				} else {
+				/*
+				 * Case of generating an exploded ajf solution
+				 */
+				String projectName = promptForProjectName();
+
+				// Possibility to exit the prompt loop
+				if ("exit".equals(projectName)) {
 					ShellMessages.info(out, "bye bye !");
+				} else {
+
+					String projectDirectory = promptProjectDirectory("Project directory (empty is current directory) :");
+
+					if (!"exit".equals(projectDirectory)) {
+
+						isProjectDirFlag = true;
+
+						// Call the exploded project generation method
+						createAjfSolutionExploded(projectName,
+								projectDirectory, isWs, isEjb, out);
+
+					} else {
+						ShellMessages.info(out, "bye bye !");
+					}
 				}
 			}
 
@@ -134,37 +176,45 @@ public class CreateSolutionPlugin implements Plugin {
 	}
 
 	/**
-	 * Creation of a 'complex ajf-solution' composed of different project types
+	 * Generation of an exploded ajf solution
 	 * 
 	 * @param name
+	 *            the project to generate
 	 * @param folderName
+	 *            where to generate project
+	 * @param isWs
+	 *            flag to generate the project-ws component
+	 * @param isEjb
+	 *            flag to generate the project-ejb component
 	 * @param out
 	 */
 	@Command("exploded")
 	public void createAjfSolutionExploded(
 			@Option(name = "named", description = "The name of the new AJF project", required = true) final String name,
-			@Option(name = "Directory", required = true) String folderName,
+			@Option(name = "Directory", description = "Directory where to generate project", required = true) String folderName,
+			@Option(name = "WS", description = "Optional: if a project-ws has to be generated", flagOnly = true, required = false) boolean isWs,
+			@Option(name = "EJB", description = "Optional: if a project-ejb has to be generated", flagOnly = true, required = false) boolean isEjb,
 			final PipeOut out) {
 
 		// Check project directory
 		if (isProjectDirFlag || checkProjectDirectoryConsistency(folderName)) {
 
+			// let the user escape the prompt loop
 			if ("exit".equals(folderName) || "exit".equals(name)) {
 				ShellMessages.info(out, "bye bye !");
+
 			} else {
 
-				/*
-				 * START LOG
-				 */
 				ShellMessages.info(
 						out,
 						"Creating the AJF exploded solution".concat(name)
 								.concat(" in the directory : ")
 								.concat(folderName));
-
 				try {
 
-					// Generate the list of different ajf project type
+					/*
+					 * Generate the list of different ajf project type
+					 */
 					generateAjfProject(name, folderName, PROJECT_TYPE_PARENT,
 							out);
 					generateAjfProject(name, folderName, PROJECT_TYPE_EAR, out);
@@ -174,13 +224,14 @@ public class CreateSolutionPlugin implements Plugin {
 							out);
 					generateAjfProject(name, folderName, PROJECT_TYPE_LIB, out);
 
-					// TODO:optional
-					generateAjfProject(name, folderName, PROJECT_TYPE_WS, out);
-					generateAjfProject(name, folderName, PROJECT_TYPE_EJB, out);
+					// Optional projects ws and ejb
+					if (isWs)
+						generateAjfProject(name, folderName, PROJECT_TYPE_WS,
+								out);
+					if (isEjb)
+						generateAjfProject(name, folderName, PROJECT_TYPE_EJB,
+								out);
 
-					/*
-					 * FINAL LOG
-					 */
 					ShellMessages.info(out, "AJF solution done.[" + folderName
 							+ "]");
 
@@ -200,17 +251,18 @@ public class CreateSolutionPlugin implements Plugin {
 	}
 
 	/**
-	 * Creation of an AJF compact project
+	 * Creation of an AJF compact project (UI typed project)
 	 * 
 	 * @param name
+	 *            of the generated project
 	 * @param folderName
+	 *            where to generate the project
 	 * @param out
 	 */
-
 	@Command("compacted")
 	public void createAjfSolutionCompacted(
 			@Option(name = "named", description = "The name of the new AJF project", required = true) final String name,
-			@Option(name = "Directory", required = true) String folderName,
+			@Option(name = "Directory", description = "Directory where to generate project", required = true) String folderName,
 			final PipeOut out) {
 
 		// Check project directory
@@ -219,16 +271,11 @@ public class CreateSolutionPlugin implements Plugin {
 			if ("exit".equals(folderName) || "exit".equals(name)) {
 				ShellMessages.info(out, "bye bye !");
 			} else {
-
-				/*
-				 * START LOG
-				 */
 				ShellMessages.info(
 						out,
 						"Creating the AJF compacted solution".concat(name)
 								.concat(" in the directory : ")
 								.concat(folderName));
-
 				try {
 					generateAjfProject(name, folderName, PROJECT_TYPE_COMPACT,
 							out);
@@ -247,12 +294,79 @@ public class CreateSolutionPlugin implements Plugin {
 	}
 
 	/**
-	 * generate the AJF solution corresponding to the input 'ProjectType'
+	 * In case of a compacted ajf solution. WS or EJB component must not be set.
+	 * In case they are set, the user is prompted with warning, with possibity
+	 * to stop the generation process
+	 * 
+	 * @param isWs
+	 * @param isEjb
+	 * @param out
+	 * @return booelan true if we can process the generation
+	 */
+	private boolean validateCompactedProject(boolean isWs, boolean isEjb,
+			final PipeOut out) {
+		// flag for error
+		boolean doWeContinue = true;
+
+		// WS or AJB component can't be set for compacted project
+		if (isEjb || isWs) {
+			doWeContinue = shell
+					.promptBoolean(
+							"WARNING : flag for EJB or WS project generation will not take effect in a compacted ajf project. Do you wish to continue ?",
+							true);
+			if (!doWeContinue) {
+				ShellMessages.info(out,
+						"The ajf-solution generation will be stopped.");
+			}
+		}
+		return doWeContinue;
+	}
+
+	/**
+	 * Prompt the user for validation of wich of EJB or WS component will be
+	 * generated whith his ajf solution
+	 * 
+	 * @param isWs
+	 * @param isEjb
+	 * @return
+	 */
+	private boolean validateAjfProjectToUser(boolean isWs, boolean isEjb) {
+		boolean doWeContinue = true;
+
+		if (isEjb && isWs) {
+
+			doWeContinue = shell
+					.promptBoolean(
+							"You are about to create an exploded AJF solution with WS and EJB Component. Continue ?",
+							true);
+		} else {
+
+			if (isEjb)
+				doWeContinue = shell
+						.promptBoolean(
+								"You are about to create an exploded AJF solution with EJB Component. Continue ?",
+								true);
+
+			if (isWs)
+				doWeContinue = shell
+						.promptBoolean(
+								"You are about to create an exploded AJF solution with WS Component. Continue ?",
+								true);
+
+		}
+		return doWeContinue;
+	}
+
+	/**
+	 * Generate the AJF solution corresponding to the input 'ProjectType'
 	 * architecture
 	 * 
 	 * @param globalProjectName
-	 * @param folderName
+	 *            name of the global solution
+	 * @param projectFolder
+	 *            where to create the ajf project
 	 * @param projectType
+	 *            type of the ajf project to create (i.e: 'ui')
 	 * @param out
 	 * @throws Exception
 	 */
@@ -270,14 +384,21 @@ public class CreateSolutionPlugin implements Plugin {
 			projectFinalName = globalProjectName + "-" + projectType;
 		}
 
+		// generate project complet path
 		String projectCompletePath = projectFolder + "/" + projectFinalName;
-		File file = new File(projectCompletePath);
 
+		// Create the java file from the path
+		File projectDirectoryFile = new File(projectCompletePath);
+
+		// Create the Resource from the project file (needed for Forge api)
 		Resource<?> projectResource = shell.getCurrentDirectory().createFrom(
-				file);
+				projectDirectoryFile);
+
+		// Generated directory resource for project to be generated by forge api
 		DirectoryResource dir = prepareDirectoryResource(projectFinalName,
 				projectResource, out);
 
+		// Java package that will be used to generate java class
 		String javaPackage = "am." + globalProjectName.replace("-", ".");
 
 		// Call the CreateProject class (out of the Plugin)
@@ -285,15 +406,117 @@ public class CreateSolutionPlugin implements Plugin {
 		createProject.createAjfProject(globalProjectName, javaPackage, dir,
 				projectFactory, projectType, projectFinalName);
 
-		/*
-		 * Final Log
-		 */
-
 		ShellMessages.success(out, "Project : " + projectFinalName
 				+ " created.");
 
 		shell.println();
 
+	}
+
+	/**
+	 * Return a correct directory for the generated project
+	 * 
+	 * @param shellPromptMessage
+	 * @return projectDirectory
+	 */
+	private String promptProjectDirectory(String shellPromptMessage) {
+
+		boolean isCorrectDirectory = false;
+		String projectDirectory = null;
+
+		while (isCorrectDirectory == false) {
+			// Loop on project directory prompt message until directory is
+			// correct (or 'exit')
+			projectDirectory = shell.prompt(shellPromptMessage);
+			isCorrectDirectory = checkProjectDirectoryConsistency(projectDirectory);
+
+		}
+
+		return projectDirectory;
+	}
+
+	/**
+	 * Loop until user enter a project name.
+	 * 
+	 * @return projectName
+	 */
+	private String promptForProjectName() {
+		String projectName = shell.prompt("Project Name :");
+		while (null == projectName || projectName.isEmpty()) {
+			projectName = shell.prompt("Project Name :");
+		}
+		return projectName;
+	}
+
+	/**
+	 * Validate that the input directory (in which the project is to be
+	 * generated) is a correct directory. If it is empty, the current shell
+	 * directory is used. Elseway the directory is checked by an attempt of
+	 * creating it. If the directory uses a wrong drives (or another error) this
+	 * will be noticed.
+	 * 
+	 * @param projectDirectory
+	 * @return boolean
+	 */
+	private boolean checkProjectDirectoryConsistency(String projectDirectory) {
+
+		ShellMessages.info(shell, "Checking project directory...");
+
+		File myFile;
+		boolean isCorrectDirectory = false;
+		// If input project directory not set, use the current directory of
+		// the shell
+		if (null == projectDirectory || projectDirectory.isEmpty()) {
+
+			projectDirectory = shell.getCurrentDirectory()
+					.getUnderlyingResourceObject().getAbsolutePath();
+
+		} else if ("exit".equals(projectDirectory)) {
+			// way of escaping the loop
+			return true;
+
+		} else if (!projectDirectory.contains(":")) {
+			// In case the hard drive is not specified, create a
+			// subFolder in the current shell directory
+			projectDirectory = shell.getCurrentDirectory()
+					.getUnderlyingResourceObject().getAbsolutePath()
+					.concat("/").concat(projectDirectory);
+
+		}
+
+		// Attempt of creating the project directory to see if an error occured
+		myFile = new File(projectDirectory);
+		boolean isCreated = myFile.mkdirs();
+		if (!myFile.exists()) {
+			if (!isCreated) {
+				// if not correct, escape the loop and prompt error
+				ShellMessages.error(shell,
+						"Entered directory is not correct ! Please try Again");
+				return false;
+			}
+		}
+
+		// Ask user validation of the project directory
+		List<String> options = new ArrayList<String>();
+		options.add("Yes, let's do this !");
+		options.add("No, change directory.");
+		int choice = shell.promptChoice(
+				"Are you sure to generate AJF project in :"
+						.concat(projectDirectory), options);
+
+		if (choice == 0) {
+			// If choice "Yes" is selected
+			isCorrectDirectory = true;
+		} else {
+			// If "No" choice selected, we delete the previously created project
+			// directory
+			if (myFile.exists()) {
+				myFile.delete();
+			}
+			isCorrectDirectory = false;
+		}
+
+		return isCorrectDirectory;
 	}
 
 	/**
@@ -309,6 +532,8 @@ public class CreateSolutionPlugin implements Plugin {
 	private DirectoryResource prepareDirectoryResource(
 			final String projectname, Resource<?> projectFolder,
 			final PipeOut out) {
+
+		// This code is duplicated form jboss forge "new-project" plugin
 
 		DirectoryResource dir = null;
 
@@ -401,182 +626,4 @@ public class CreateSolutionPlugin implements Plugin {
 		return dir;
 	}
 
-	/**
-	 * Return a correct directory for the generated project
-	 * 
-	 * @param shellPromptMessage
-	 * @return projectDirectory
-	 */
-	private String promptProjectDirectory(String shellPromptMessage) {
-
-		boolean isCorrectDirectory = false;
-		String projectDirectory = null;
-
-		while (isCorrectDirectory == false) {
-			// Loop on project directory prompt message until directory is
-			// correct (or 'exit')
-			projectDirectory = shell.prompt(shellPromptMessage);
-			isCorrectDirectory = checkProjectDirectoryConsistency(projectDirectory);
-
-		}
-
-		return projectDirectory;
-	}
-
-	/**
-	 * Loop until user enter a project name.
-	 * 
-	 * 
-	 * @return
-	 */
-	private String promptForProjectName() {
-		String projectName = shell.prompt("Project Name :");
-		while (null == projectName || projectName.isEmpty()) {
-			projectName = shell.prompt("Project Name :");
-		}
-		return projectName;
-	}
-
-	/**
-	 * Validate that the input directory (in which the project is to be
-	 * generated) is a correct directory. If it is empty, the current shell
-	 * directory is used. Elseway the directory is checked by an attempt of
-	 * creating it. If the directory uses a wrong drives (or another error) this
-	 * will be noticed.
-	 * 
-	 * @param projectDirectory
-	 * @return boolean
-	 */
-	private boolean checkProjectDirectoryConsistency(String projectDirectory) {
-
-		ShellMessages.info(shell, "Checking project directory...");
-
-		File myFile;
-		boolean isCorrectDirectory = false;
-		// If input project directory not set, use the current directory of
-		// the shell
-		if (null == projectDirectory || projectDirectory.isEmpty()) {
-
-			projectDirectory = shell.getCurrentDirectory()
-					.getUnderlyingResourceObject().getAbsolutePath();
-
-		} else if ("exit".equals(projectDirectory)) {
-			// way of escaping the loop
-			return true;
-
-		} else if (!projectDirectory.contains(":")) {
-			// In case the hard drive is not specified, create a
-			// subFolder in the current shell directory
-			projectDirectory = shell.getCurrentDirectory()
-					.getUnderlyingResourceObject().getAbsolutePath()
-					.concat("/").concat(projectDirectory);
-
-		}
-
-		myFile = new File(projectDirectory);
-		boolean isCreated = myFile.mkdirs();
-		if (!myFile.exists()) {
-			if (!isCreated) {
-				ShellMessages.error(shell,
-						"Entered directory is not correct ! Please try Again");
-				return false;
-			}
-		}
-
-		/*
-		 * Ask user validation of the project directory
-		 */
-		List<String> options = new ArrayList<String>();
-		options.add("Yes, let's do this !");
-		options.add("No, change directory.");
-		int choice = shell.promptChoice(
-				"Are you sure to generate AJF project in :"
-						.concat(projectDirectory), options);
-
-		if (choice == 0) {
-			// If choice "Yes" is selected
-			isCorrectDirectory = true;
-		} else {
-			if (myFile.exists()) {
-				myFile.delete();
-			}
-		}
-
-		return isCorrectDirectory;
-	}
-
-	/**
-	 * Temporary command to be completed. Generate project resources without
-	 * using forge-shell-api (not finished yet)
-	 * 
-	 * @param name
-	 * @param projectFolder
-	 * @param out
-	 */
-	// @Command("compacted2")
-	public void createAjfSolutionCompacted2(
-			@Option(name = "named", description = "The name of the new AJF project", required = true) final String name,
-			@Option(name = "Directory", required = true) final String projectFolder,
-			final PipeOut out) {
-
-		ShellMessages.warn(out, "This is an experimental command...");
-		try {
-			// String projectFinalName = name + "-" + "ui";
-			//
-			// File projectDirecory = new File(projectFolder.concat("/").concat(
-			// projectFinalName));
-			//
-			// ShellMessages.info(out,
-			// "Creating project in " + projectDirecory.getAbsolutePath());
-			// if (!projectDirecory.exists()) {
-			// ShellMessages.info(out, "Create project dir :"
-			// + projectDirecory.mkdirs());
-			// }
-			//
-			// File pomFile = new File(projectDirecory.getAbsolutePath().concat(
-			// "/pom.xml"));
-			// ShellMessages.info(out,
-			// "Creating pomFile : " + pomFile.createNewFile());
-			//
-			// ProjectUtils.copyPomFile("initial-pom.xml", pomFile);
-			//
-			// System.out.println("copy input stream done");
-			//
-			// // Create project directories
-			// // FileUtils.openInputStream(pomFile);
-			// FileInputStream fis = new FileInputStream(pomFile);
-			// Model pom = new MavenXpp3Reader().read(fis);
-			//
-			// pom.setArtifactId(projectFinalName);
-			// pom.setGroupId(PROJECT_GROUPID_PREFIX);
-			// pom.setVersion(START_PROJECT_MILESTONE);
-			//
-			// /*
-			// * Create folders
-			// */
-			// File srcFolder = new
-			// File(projectDirecory.getAbsolutePath().concat(
-			// "/src"));
-			//
-			// System.out.println("** DEBUG create src folder : "
-			// + srcFolder.mkdirs());
-			//
-			// File mainJavaFolder = new
-			// File(srcFolder.getAbsolutePath().concat(
-			// "/main/java"));
-			// System.out.println("** DEBUG create src/main/java : "
-			// + mainJavaFolder.mkdirs());
-			//
-			// File mainResourceFolder = new File(srcFolder.getAbsolutePath()
-			// .concat("/main/resources"));
-			// System.out.println("** DEBUG create src/main/resource : "
-			// + mainResourceFolder.mkdirs());
-
-			ShellMessages.success(out, "Done");
-
-		} catch (Exception e) {
-			ShellMessages.error(out, "Error occured : " + e.toString());
-		}
-
-	}
 }
