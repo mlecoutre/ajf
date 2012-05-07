@@ -280,8 +280,9 @@
 <?ajfProjectTypes compacted&quot; AJF project is a mono-web project. It can be used to make a simple web application (a stand alone ui application). The &quot;exploded&quot; AJF project will be composed of several project types (core, ws, ui, config, lib). This kind of project is suitable for more complex applications. For more details, see the <link linkend="norms">
  >AJF-Norms chapter.</link>?>
 			<para>
-				Both of the two options will work pretty much the same way. Two
-				inputs will be prompted :
+				Both of the two options work pretty much the same way. Two
+				inputs
+				will be prompted :
 				<itemizedlist>
 					<listitem>
 						<para>
@@ -469,6 +470,7 @@ plication/web/controllers/ExempleMBean.java
 					will be prompted for a project name and a project folder. The
 					process is precisely the same as for the
 					<link linkend="compactedGenerationSection"> compacted project generation. </link>
+					except that there will be a little more logs:
 				</para>
 				<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt> <command>ajf-solution exploded</command>
@@ -485,21 +487,109 @@ Are you sure to generate AJF project in :C:/projects/explodedProject
 : C:/projects/explodedProject
 ** DEBUG  :C:\/projects/explodedProject/myExplodedProject-parent
 START generating ajf project parent
-ProjectmyExplodedProject-parent created
-
+** START - generating pom.xml from model...
+** END - pom.xml generated...
+**DEBUG : siteXmlFile = C:\projects\explodedProject\myExplodedProject-parent\src
+\site\site.xml
+11:17:11.133 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Initializing V
+elocity, Calling init()...
+11:17:11.149 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Starting Apach
+e Velocity v1.7 (compiled: 2010-11-19 12:14:37)
+11:17:11.149 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Default Proper
+ties File: org\apache\velocity\runtime\defaults\velocity.properties
+11:17:11.165 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - ResourceLoader
+ instantiated: org.apache.velocity.runtime.resource.loader.ClasspathResourceLoad
+er
+11:17:11.196 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - ResourceCache:
+ initialized (class org.apache.velocity.runtime.resource.ResourceCacheImpl) with
+ class java.util.Collections$SynchronizedMap cache map.
+11:17:11.196 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Loaded System
+Directive: org.apache.velocity.runtime.directive.Stop
+11:17:11.211 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Loaded System
+Directive: org.apache.velocity.runtime.directive.Define
+11:17:11.211 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Loaded System
+Directive: org.apache.velocity.runtime.directive.Break
+11:17:11.211 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Loaded System
+Directive: org.apache.velocity.runtime.directive.Evaluate
+11:17:11.211 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Loaded System
+Directive: org.apache.velocity.runtime.directive.Literal
+11:17:11.211 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Loaded System
+Directive: org.apache.velocity.runtime.directive.Macro
+11:17:11.211 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Loaded System
+Directive: org.apache.velocity.runtime.directive.Parse
+11:17:11.211 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Loaded System
+Directive: org.apache.velocity.runtime.directive.Include
+11:17:11.227 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Loaded System
+Directive: org.apache.velocity.runtime.directive.Foreach
+11:17:11.321 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Created '20' p
+arsers.
+11:17:11.336 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Velocimacro :
+"velocimacro.library" is not set.  Trying default library: VM_global_library.vm
+11:17:11.336 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Could not load
+ resource 'VM_global_library.vm' from ResourceLoader org.apache.velocity.runtime
+.resource.loader.ClasspathResourceLoader: ClasspathResourceLoader Error: cannot
+find resource VM_global_library.vm
+11:17:11.336 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Velocimacro :
+Default library not found.
+11:17:11.336 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Velocimacro :
+allowInline = true : VMs can be defined inline in templates
+11:17:11.336 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Velocimacro :
+allowInlineToOverride = false : VMs defined inline may NOT replace previous VM d
+efinitions
+11:17:11.336 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Velocimacro :
+allowInlineLocal = false : VMs defined inline will be global in scope if allowed
+.
+11:17:11.336 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Velocimacro :
+autoload off : VM system will not automatically reload global library macros
+11:17:11.352 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - ResourceManage
+r : found site.xml.vm with loader org.apache.velocity.runtime.resource.loader.Cl
+asspathResourceLoader
+11:17:11.367 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Null reference
+ [template 'site.xml.vm', line 13, column 15] : ${project.name} cannot be resolv
+ed.
+** DEBUG :myExplodedProject-parent OK
 ***SUCCESS*** Project : myExplodedProject-parent created.
+
 ** DEBUG  :C:\/projects/explodedProject/myExplodedProject-ear
 START generating ajf project ear
-ProjectmyExplodedProject-ear created
-
+** START - generating pom.xml from model...
+** END - pom.xml generated...
+**DEBUG : siteXmlFile = C:\projects\explodedProject\myExplodedProject-ear\src\si
+te\site.xml
+11:17:11.711 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - ResourceManage
+r : found site.xml.vm with loader org.apache.velocity.runtime.resource.loader.Cl
+asspathResourceLoader
+11:17:11.711 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Null reference
+ [template 'site.xml.vm', line 13, column 15] : ${project.name} cannot be resolv
+ed.
+** DEBUG :myExplodedProject-ear OK
 ***SUCCESS*** Project : myExplodedProject-ear created.
+
 ** DEBUG  :C:\/projects/explodedProject/myExplodedProject-core
 START generating ajf project core
-ProjectmyExplodedProject-core created
-
+** START - generating pom.xml from model...
+** END - pom.xml generated...
+**DEBUG : siteXmlFile = C:\projects\explodedProject\myExplodedProject-core\src\s
+ite\site.xml
+11:17:11.976 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - ResourceManage
+r : found site.xml.vm with loader org.apache.velocity.runtime.resource.loader.Cl
+asspathResourceLoader
+11:17:11.976 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Null reference
+ [template 'site.xml.vm', line 13, column 15] : ${project.name} cannot be resolv
+ed.
+** DEBUG :myExplodedProject-core OK
 ***SUCCESS*** Project : myExplodedProject-core created.
+
 ** DEBUG  :C:\/projects/explodedProject/myExplodedProject-ui
 START generating ajf project ui
+** START - generating pom.xml from model...
+** END - pom.xml generated...
+** START - Generate webapp directory
+** END - Generate webapp directory
+-- DEBUG : webappDir = C:\projects\explodedProject\myExplodedProject-ui\src\main
+\webapp
+** START - Extracting web resources...
+** END - Web resources extracted
 ** START - WEB PART
 ** DEBUG : START generating java class for UI
 **DEBUG : END Java class MBean generated.
@@ -516,31 +606,42 @@ Main Resource directory : C:\projects\explodedProject\myExplodedProject-ui\src\m
 ain\resources
 ** END - resources extracted
 ** END - WEB PART
-** START - generating pom.xml from model...
-** END - pom.xml gebnerated...
-ProjectmyExplodedProject-ui created
-
+** DEBUG :myExplodedProject-ui OK
 ***SUCCESS*** Project : myExplodedProject-ui created.
+
 ** DEBUG  :C:\/projects/explodedProject/myExplodedProject-config
 START generating ajf project config
-Creating config project
---&gt; Config resource path : C:\/projects/explodedProject/myExplodedProject-config
-/src/main/resources
-ProjectmyExplodedProject-config created
-
-***SUCCESS*** Project : myExplodedProject-config created.
-** DEBUG  :C:\/projects/explodedProject/myExplodedProject-ws
-START generating ajf project ws
+Creating config project...
 ** START - generating pom.xml from model...
-** END - pom.xml gebnerated...
-ProjectmyExplodedProject-ws created
+** END - pom.xml generated...
+**DEBUG: Config resource directory : C:\/projects/explodedProject/myExplodedProj
+ect-config/src/main/resources
+**DEBUG : siteXmlFile = C:\projects\explodedProject\myExplodedProject-config\src
+\site\site.xml
+11:17:17.437 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - ResourceManage
+r : found site.xml.vm with loader org.apache.velocity.runtime.resource.loader.Cl
+asspathResourceLoader
+11:17:17.437 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Null reference
+ [template 'site.xml.vm', line 13, column 15] : ${project.name} cannot be resolv
+ed.
+** DEBUG :myExplodedProject-config OK
+***SUCCESS*** Project : myExplodedProject-config created.
 
-***SUCCESS*** Project : myExplodedProject-ws created.
 ** DEBUG  :C:\/projects/explodedProject/myExplodedProject-lib
 START generating ajf project lib
-ProjectmyExplodedProject-lib created
-
+** START - generating pom.xml from model...
+** END - pom.xml generated...
+**DEBUG : siteXmlFile = C:\projects\explodedProject\myExplodedProject-lib\src\si
+te\site.xml
+11:17:17.656 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - ResourceManage
+r : found site.xml.vm with loader org.apache.velocity.runtime.resource.loader.Cl
+asspathResourceLoader
+11:17:17.656 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Null reference
+ [template 'site.xml.vm', line 13, column 15] : ${project.name} cannot be resolv
+ed.
+** DEBUG :myExplodedProject-lib OK
 ***SUCCESS*** Project : myExplodedProject-lib created.
+
 ***INFO*** AJF solution done.[C:/projects/explodedProject]
 Wrote C:\/projects/explodedProject/myExplodedProject-parent/pom.xml
 Wrote C:\/projects/explodedProject/myExplodedProject-ear/pom.xml
@@ -561,11 +662,6 @@ dedProject/web/controllers/ExempleMBean.java
 Wrote C:\/projects/explodedProject/myExplodedProject-config/pom.xml
 Wrote C:\/projects/explodedProject/myExplodedProject-config/src/main/resources
 Wrote C:\/projects/explodedProject/myExplodedProject-config/src/test/resources
-Wrote C:\/projects/explodedProject/myExplodedProject-ws/pom.xml
-Wrote C:\/projects/explodedProject/myExplodedProject-ws/src/main/java
-Wrote C:\/projects/explodedProject/myExplodedProject-ws/src/test/java
-Wrote C:\/projects/explodedProject/myExplodedProject-ws/src/main/resources
-Wrote C:\/projects/explodedProject/myExplodedProject-ws/src/test/resources
 Wrote C:\/projects/explodedProject/myExplodedProject-lib/pom.xml
 Wrote C:\/projects/explodedProject/myExplodedProject-lib/src/main/java
 Wrote C:\/projects/explodedProject/myExplodedProject-lib/src/test/java
@@ -589,6 +685,87 @@ Wrote C:\/projects/explodedProject/myExplodedProject-lib/src/test/resources
 				</figure>
 			</section>
 		</section>
+	</section>
+
+	<section id="ejbAndWsProject">
+		<title>WS and EJB projects</title>
+		<para>Please note that by default, during an exploded ajf solution
+			generation,
+			none of the WS or EJB component projects will be
+			generated. If you
+			want to create them, you have to manually ask for it
+			in the plugin start command.
+		</para>
+		<para>For example, if you want to generate an exploded AJF2 solution,
+			with an EJB component project, you have to set the following command:
+		</para>
+		<screen>
+<prompt>[ajf-forge-context] ajf-forge-context $</prompt><command>ajf-solution --EJB</command>
+		</screen>
+		<para>OR, if you want to skip the first prompt choice menu:</para>
+		<screen>
+<prompt>[ajf-forge-context] ajf-forge-context $</prompt><command>ajf-solution exploded --EJB</command>
+		</screen>
+		<para>Then, you can use the plugin exactly the same way than before.
+			Only one confirmation question will be prompted for you, in order to
+			validate the generation of one component or another (WS
+			and/or EJB)
+		</para>
+		<para>For example, let's generate an AJF2 exploded solution with both
+			WS and EJB component project:
+		</para>
+		<screen>
+<prompt>[ajf-forge-context] ajf-forge-context $</prompt><userinput>ajf-solution --WS --EJB</userinput>
+Which type of AJF project ?
+
+  1 - [Compacted ajf solution]
+  2 - [Exploded ajf solution]
+
+ ? Choose an option by typing the number of the selection: <userinput>2</userinput>
+ ? You are about to create an exploded AJF solution with WS and EJB Component. C
+ontinue ? [Y/n] <userinput>y</userinput>
+ ? Project Name : <userinput>myProjectName</userinput>
+ (...)
+ ***INFO*** AJF solution done.[C:/projects/explodedProject]
+Wrote C:\/projects/explodedProject/myProjectName-parent/pom.xml
+Wrote C:\/projects/explodedProject/myProjectName-ear/pom.xml
+Wrote C:\/projects/explodedProject/myProjectName-ear/src/main/resources
+Wrote C:\/projects/explodedProject/myProjectName-ear/src/test/resources
+Wrote C:\/projects/explodedProject/myProjectName-core/pom.xml
+Wrote C:\/projects/explodedProject/myProjectName-core/src/main/java
+Wrote C:\/projects/explodedProject/myProjectName-core/src/test/java
+Wrote C:\/projects/explodedProject/myProjectName-core/src/main/resources
+Wrote C:\/projects/explodedProject/myProjectName-core/src/test/resources
+Wrote C:\/projects/explodedProject/myProjectName-ui/pom.xml
+Wrote C:\/projects/explodedProject/myProjectName-ui/src/main/java
+Wrote C:\/projects/explodedProject/myProjectName-ui/src/test/java
+Wrote C:\/projects/explodedProject/myProjectName-ui/src/main/resources
+Wrote C:\/projects/explodedProject/myProjectName-ui/src/test/resources
+Wrote C:\/projects/explodedProject/myProjectName-ui/src/main/java/am/myProjectNa
+me/web/controllers/ExempleMBean.java
+Wrote C:\/projects/explodedProject/myProjectName-config/pom.xml
+Wrote C:\/projects/explodedProject/myProjectName-config/src/main/resources
+Wrote C:\/projects/explodedProject/myProjectName-config/src/test/resources
+Wrote C:\/projects/explodedProject/myProjectName-lib/pom.xml
+Wrote C:\/projects/explodedProject/myProjectName-lib/src/main/java
+Wrote C:\/projects/explodedProject/myProjectName-lib/src/test/java
+Wrote C:\/projects/explodedProject/myProjectName-lib/src/main/resources
+Wrote C:\/projects/explodedProject/myProjectName-lib/src/test/resources
+Wrote C:\/projects/explodedProject/myProjectName-ws/pom.xml
+Wrote C:\/projects/explodedProject/myProjectName-ws/src/main/java
+Wrote C:\/projects/explodedProject/myProjectName-ws/src/test/java
+Wrote C:\/projects/explodedProject/myProjectName-ws/src/main/resources
+Wrote C:\/projects/explodedProject/myProjectName-ws/src/test/resources
+Wrote C:\/projects/explodedProject/myProjectName-ejb/pom.xml
+Wrote C:\/projects/explodedProject/myProjectName-ejb/src/main/java
+Wrote C:\/projects/explodedProject/myProjectName-ejb/src/test/java
+Wrote C:\/projects/explodedProject/myProjectName-ejb/src/main/resources
+Wrote C:\/projects/explodedProject/myProjectName-ejb/src/test/resources
+</screen>
+		<para>
+			You can notice that the EJB and WS component projects have been
+			generated.
+		</para>
 	</section>
 
 	<section id="deployOnTomcatSection">
@@ -1033,6 +1210,23 @@ Which type of AJF project ?
 	
 		</screen>
 
+	</section>
+
+	<section id="madatoryComponentsProblem">
+		<title>I don't have WS and/or EJB component project in my exploded
+			AJF2 solution
+		</title>
+		<para>
+			WS and EJB component projects are mandatory for an AJF2 exploded
+			solution. Therefore, they are not generated by default in the
+			exploded generation process.
+		</para>
+		<para>
+			Don't be scared ! You can ask for them when generating your AJF2
+			solution, by doing
+			<link linkend="ejbAndWsProject">this</link>
+			.
+		</para>
 	</section>
 
 </chapter>
