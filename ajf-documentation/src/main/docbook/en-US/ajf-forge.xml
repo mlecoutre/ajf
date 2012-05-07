@@ -1213,7 +1213,7 @@ Which type of AJF project ?
 	</section>
 
 	<section id="madatoryComponentsProblem">
-		<title>I don't have WS and/or EJB component project in my exploded
+		<title>I can't find any WS and/or EJB component project in my exploded
 			AJF2 solution
 		</title>
 		<para>
