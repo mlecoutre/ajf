@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
+<section id="remoting-ejb">
+	<title>Remote EJB</title>
+	<para>
+		The remote EJB module will wrap your service to a remote ejb session
+		and call the corresponding method on the remote EJB.  
+	</para>
+		<example>
+		<title />
+		<programlisting language="Java" role="Java"><![CDATA[
+@Remote(jndi = "url/ejb_remote_remotingejb")
+public interface MyRemoteEJBServiceBD extends EjbRemote {}
+				]]></programlisting>
+		<para>
+			or
+		</para>
+		<programlisting language="Java" role="Java"><![CDATA[
+@Remote(jndi = "url/ejb_remote_remotingejb")
+public interface MyRemoteEJBServiceBD {
+	
+	@RemoteEJB
+	public String resWithParams(int p1, int p2);
+	
+}				]]></programlisting>							
+	</example>
+	<para>
+		The <parameter>@Remote</parameter> annotation hold the jndi link to the remote
+		EJB and need to be a fully qualified url. Here is an example for a WebSphere
+		remote EJB :
+	</para>
+	<itemizedlist>
+		<listitem>
+			<para>
+				iiop://localhost:2809/ejb/RemoteEAR/RemoteEJB\\.jar/RemotingEJBRemote#am\\.ajf\\.remoting\\.test\\.ejb\\.harness\\.RemotingEjbRemote
+			</para>
+		</listitem>
+	</itemizedlist>
+	<para>
+		This url will call the ejb <classname>am.ajf.remoting.test.ejb.harness.RemotingEjbRemote</classname>
+		on the server <classname>localhost</classname> on port <emphasis>2809</emphasis>
+		in the application <emphasis>RemoteEAR</emphasis> on submodule <emphasis>RemoteEJB.jar</emphasis>
+	</para>
+	<para>
+		If you want to map all the methods of your remote EJB, it is recommended
+		to extends the remote interface as done in the first sample.
+	</para>		
+	<para>
+		If your remote EJB contain a lot of methods and you are only interested
+		in some of them, you can define the <emphasis>exact</emphasis> signature
+		of the method in your service and annotated it with <parameter>@RemoteEJB</parameter>		
+	</para>
+</section>

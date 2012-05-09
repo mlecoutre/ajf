@@ -9,4 +9,5 @@
 	</para>
 	<xi:include href="ajf-remoting-introduction.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 	<xi:include href="ajf-remoting-storedprocedures.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
+	<xi:include href="ajf-remoting-ejb.xml" xmlns:xi="http://www.w3.org/2001/XInclude"/>
 </chapter>
