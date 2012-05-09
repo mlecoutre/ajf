@@ -30,16 +30,31 @@ public class CreateProject {
 	 * config, ear, ui...)
 	 * 
 	 * @param globalProjectName
+	 *            name of the global AJF2 solution
 	 * @param javaPackage
-	 * @param projectFolder
+	 *            top level java package of the project
+	 * @param dir
+	 *            DirectoryResource of the project
 	 * @param projectFactory
+	 *            of jboss forge api
 	 * @param projectType
+	 *            type of the ajf project beeing generated according to AJF2
+	 *            norms (ui, lib, parent....)
 	 * @param projectFinalName
+	 *            corresponds to the Java ajf2 curent project name
+	 * @param isWs
+	 *            used to distinct case when optinal WS component is generated
+	 *            or not within the current AJF2 solution
+	 * 
+	 * @param isEjb
+	 *            used to distinct case when optinal EJB component is generated
+	 *            or not within the current AJF2 solution
 	 * @throws Exception
 	 */
 	public void createAjfProject(String globalProjectName, String javaPackage,
 			DirectoryResource dir, ProjectFactory projectFactory,
-			String projectType, String projectFinalName) throws Exception {
+			String projectType, String projectFinalName, boolean isWs,
+			boolean isEjb) throws Exception {
 
 		System.out.println("START generating ajf project " + projectType);
 
@@ -52,7 +67,8 @@ public class CreateProject {
 
 			ParentProjectGenerator parentProjectgen = new ParentProjectGenerator();
 			project = parentProjectgen.generateProjectParent(globalProjectName,
-					javaPackage, projectFactory, projectFinalName, dir);
+					javaPackage, projectFactory, projectFinalName, dir, isWs,
+					isEjb);
 
 		} else if (PROJECT_TYPE_CONFIG.equals(projectType)) {
 
@@ -65,7 +81,8 @@ public class CreateProject {
 
 			EarProjectGenerator earProjectGenerator = new EarProjectGenerator();
 			project = earProjectGenerator.generateProjectEar(globalProjectName,
-					javaPackage, projectFactory, projectFinalName, dir);
+					javaPackage, projectFactory, projectFinalName, dir, isWs,
+					isEjb);
 
 		} else if (PROJECT_TYPE_CORE.equals(projectType)) {
 

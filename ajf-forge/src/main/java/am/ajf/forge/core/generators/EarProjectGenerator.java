@@ -3,6 +3,7 @@ package am.ajf.forge.core.generators;
 import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_EAR;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CONFIG;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_EJB;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
@@ -49,7 +50,8 @@ public class EarProjectGenerator {
 	@SuppressWarnings("unchecked")
 	public Project generateProjectEar(String globalProjectName,
 			String javaPackage, ProjectFactory projectFactory,
-			String projectFinalName, DirectoryResource dir) throws Exception {
+			String projectFinalName, DirectoryResource dir, boolean isWs,
+			boolean isEjb) throws Exception {
 		Project project;
 
 		project = projectFactory.createProject(dir, DependencyFacet.class,
@@ -67,8 +69,13 @@ public class EarProjectGenerator {
 		ProjectUtils.setInternalPomParent(globalProjectName, project);
 
 		// Set inter-dependencies
-		ProjectUtils.addInternalDependency(globalProjectName, project,
-				PROJECT_TYPE_WS);
+		if (isWs)
+			ProjectUtils.addInternalDependency(globalProjectName, project,
+					PROJECT_TYPE_WS);
+		if (isEjb)
+			ProjectUtils.addInternalDependency(globalProjectName, project,
+					PROJECT_TYPE_EJB);
+
 		ProjectUtils.addInternalDependency(globalProjectName, project,
 				PROJECT_TYPE_UI);
 		ProjectUtils.addInternalDependency(globalProjectName, project,

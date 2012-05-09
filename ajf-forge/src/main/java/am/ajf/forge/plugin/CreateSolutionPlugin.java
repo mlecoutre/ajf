@@ -216,21 +216,25 @@ public class CreateSolutionPlugin implements Plugin {
 					 * Generate the list of different ajf project type
 					 */
 					generateAjfProject(name, folderName, PROJECT_TYPE_PARENT,
-							out);
-					generateAjfProject(name, folderName, PROJECT_TYPE_EAR, out);
-					generateAjfProject(name, folderName, PROJECT_TYPE_CORE, out);
-					generateAjfProject(name, folderName, PROJECT_TYPE_UI, out);
+							isWs, isEjb, out);
+					generateAjfProject(name, folderName, PROJECT_TYPE_EAR,
+							isWs, isEjb, out);
+					generateAjfProject(name, folderName, PROJECT_TYPE_CORE,
+							isWs, isEjb, out);
+					generateAjfProject(name, folderName, PROJECT_TYPE_UI, isWs,
+							isEjb, out);
 					generateAjfProject(name, folderName, PROJECT_TYPE_CONFIG,
-							out);
-					generateAjfProject(name, folderName, PROJECT_TYPE_LIB, out);
+							isWs, isEjb, out);
+					generateAjfProject(name, folderName, PROJECT_TYPE_LIB,
+							isWs, isEjb, out);
 
 					// Optional projects ws and ejb
 					if (isWs)
 						generateAjfProject(name, folderName, PROJECT_TYPE_WS,
-								out);
+								isWs, isEjb, out);
 					if (isEjb)
 						generateAjfProject(name, folderName, PROJECT_TYPE_EJB,
-								out);
+								isWs, isEjb, out);
 
 					ShellMessages.info(out, "AJF solution done.[" + folderName
 							+ "]");
@@ -278,7 +282,7 @@ public class CreateSolutionPlugin implements Plugin {
 								.concat(folderName));
 				try {
 					generateAjfProject(name, folderName, PROJECT_TYPE_COMPACT,
-							out);
+							false, false, out);
 
 				} catch (Exception e) {
 					// print on the shell the exception thrown
@@ -367,12 +371,22 @@ public class CreateSolutionPlugin implements Plugin {
 	 *            where to create the ajf project
 	 * @param projectType
 	 *            type of the ajf project to create (i.e: 'ui')
+	 * 
+	 * @param isWs
+	 *            true if the user asked for the generation of a WS component
+	 *            project within the exploded ajf2 solution
+	 * 
+	 * @param isEjb
+	 *            true if the user asked for the generation of a EJB component
+	 *            project within the exploded ajf2 solution
+	 * 
 	 * @param out
+	 * 
 	 * @throws Exception
 	 */
 	private void generateAjfProject(final String globalProjectName,
-			String projectFolder, String projectType, PipeOut out)
-			throws Exception {
+			String projectFolder, String projectType, boolean isWs,
+			boolean isEjb, PipeOut out) throws Exception {
 
 		// Setting the project name
 		String projectFinalName;
@@ -404,7 +418,7 @@ public class CreateSolutionPlugin implements Plugin {
 		// Call the CreateProject class (out of the Plugin)
 		CreateProject createProject = new CreateProject();
 		createProject.createAjfProject(globalProjectName, javaPackage, dir,
-				projectFactory, projectType, projectFinalName);
+				projectFactory, projectType, projectFinalName, isWs, isEjb);
 
 		ShellMessages.success(out, "Project : " + projectFinalName
 				+ " created.");
@@ -412,6 +426,14 @@ public class CreateSolutionPlugin implements Plugin {
 		shell.println();
 
 	}
+
+	// private void generateAjfProjectParent(final String globalProjectName,
+	// String projectFolder, String projectType, boolean isWs,
+	// boolean isEjb, PipeOut out) {
+	//
+	// String projectFinalName = globalProjectName + "-" + projectType;
+	//
+	// }
 
 	/**
 	 * Return a correct directory for the generated project

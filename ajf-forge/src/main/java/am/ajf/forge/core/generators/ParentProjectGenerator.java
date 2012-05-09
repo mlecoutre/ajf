@@ -58,7 +58,8 @@ public class ParentProjectGenerator {
 	@SuppressWarnings("unchecked")
 	public Project generateProjectParent(String globalProjectName,
 			String javaPackage, ProjectFactory projectFactory,
-			String projectFinalName, DirectoryResource dir) throws Exception {
+			String projectFinalName, DirectoryResource dir, boolean isWs,
+			boolean isEjb) throws Exception {
 
 		Project project;
 		project = projectFactory.createProject(dir, DependencyFacet.class,
@@ -88,12 +89,14 @@ public class ParentProjectGenerator {
 		ProjectUtils.addManagementDependency(project, projectGroupId,
 				globalProjectName + "-" + PROJECT_TYPE_UI,
 				START_PROJECT_MILESTONE, "war");
-		ProjectUtils.addManagementDependency(project, projectGroupId,
-				globalProjectName + "-" + PROJECT_TYPE_WS,
-				START_PROJECT_MILESTONE, "war");
-		ProjectUtils.addManagementDependency(project, projectGroupId,
-				globalProjectName + "-" + PROJECT_TYPE_EJB,
-				START_PROJECT_MILESTONE, "ejb");
+		if (isWs)
+			ProjectUtils.addManagementDependency(project, projectGroupId,
+					globalProjectName + "-" + PROJECT_TYPE_WS,
+					START_PROJECT_MILESTONE, "war");
+		if (isEjb)
+			ProjectUtils.addManagementDependency(project, projectGroupId,
+					globalProjectName + "-" + PROJECT_TYPE_EJB,
+					START_PROJECT_MILESTONE, "ejb");
 
 		// Get the MavenFacet in order to grab the pom
 		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
@@ -104,9 +107,13 @@ public class ParentProjectGenerator {
 		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_LIB);
 		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_CORE);
 		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_UI);
-		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_WS);
 		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_EAR);
-		pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_EJB);
+
+		if (isWs)
+			pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_WS);
+
+		if (isEjb)
+			pom.addModule("../" + globalProjectName + "-" + PROJECT_TYPE_EJB);
 
 		// Set SCM Connection
 

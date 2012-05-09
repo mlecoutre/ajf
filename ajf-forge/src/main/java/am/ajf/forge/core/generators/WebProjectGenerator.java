@@ -123,7 +123,6 @@ public class WebProjectGenerator {
 	 *            true if the UI project is a Compacted AJF solution
 	 * @return project
 	 */
-
 	public Project generateUIAjfProject(String globalProjectName,
 			String projectFinalName, String javaPackage,
 			ProjectFactory projectFactory, String projectType,
@@ -284,15 +283,6 @@ public class WebProjectGenerator {
 					project, PROJECT_TYPE_CORE, "runtime");
 
 		}
-
-		// else {
-		//
-		// // Set the starndard pom parent
-		// ProjectUtils.setPomParent(STANDARD_PARENT_GROUPID,
-		// STANDARD_PARENT_ARTIFACTID, STANDARD_PARENT_VERSION,
-		// project);
-		//
-		// }
 
 		return project;
 	}
