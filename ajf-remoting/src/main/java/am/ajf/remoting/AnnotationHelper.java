@@ -6,8 +6,9 @@ import am.ajf.remoting.Remote;
 
 public class AnnotationHelper {
 	
-	public static String getJndiInfo(Method method) throws ConfigurationException {
-		Remote remote = method.getDeclaringClass().getAnnotation(Remote.class);
+	public static String getJndiInfo(Method method, Class<?> interfaceClass) throws ConfigurationException {
+		//Remote remote = method.getDeclaringClass().getAnnotation(Remote.class);
+		Remote remote = interfaceClass.getAnnotation(Remote.class);
 		if (method.isAnnotationPresent(Remote.class)) {
 			remote = method.getAnnotation(Remote.class);
 		}

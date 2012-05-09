@@ -63,7 +63,7 @@ public class StoredProcedureImplHandler implements ImplementationHandler {
 				//TODO handle overloading
 				CtMethod ctmethod = declaringClass.getDeclaredMethod(method.getName());			
 				CtMethod newCtm = new CtMethod(ctmethod, cc, null);
-				StringBuffer methodBody = generateBodyFor(method);
+				StringBuffer methodBody = generateBodyFor(method, interfaceClass);
 				logger.trace("Method ("+method.getName()+") generated :\n" + methodBody.toString());				
 				newCtm.setBody(methodBody.toString());
 				cc.addMethod(newCtm);			
@@ -95,13 +95,13 @@ public class StoredProcedureImplHandler implements ImplementationHandler {
 	 * @throws CannotCompileException
 	 * @throws ConfigurationException
 	 */
-	public StringBuffer generateBodyFor(Method method) throws ClassNotFoundException, NotFoundException, CannotCompileException, ConfigurationException {		
+	public StringBuffer generateBodyFor(Method method, Class<?> interfaceClass) throws ClassNotFoundException, NotFoundException, CannotCompileException, ConfigurationException {		
 		//Retrieve the parameters needed to launch the stored procedure 		
 		Object[] annotations = method.getAnnotations();
 		StoredProcedure storedProcedure = (StoredProcedure)annotations[0];
 		Object[][] pAnnotations = method.getParameterAnnotations();
 		Object[] pTypes = method.getParameterTypes();
-		String jndi = AnnotationHelper.getJndiInfo(method);
+		String jndi = AnnotationHelper.getJndiInfo(method, interfaceClass);
 		
 		//Compute the informations on the result based on its type
 		ResultInfo rInfo = new ResultInfo(method.getReturnType(), method.getGenericReturnType());				

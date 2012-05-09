@@ -1,6 +1,7 @@
 package am.ajf.remoting.ejb.impl;
 
 import java.util.Properties;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -8,10 +9,16 @@ import javax.naming.NamingException;
 
 public class RemoteEJBHelper {
 	
-	// 1 is SUN
-	// 2 is IBM
-	// 0 is undefined 
-	private static int containerType = 0; 
+	private static final String IC_FACTORY_IBM = "com.ibm.websphere.naming.WsnInitialContextFactory";
+	private static final String IC_FACTORY_SUN = "com.sun.jndi.cosnaming.CNCtxFactory";
+	private static final String SYS_PROP_JAVA_VM_VENDOR = "java.vm.vendor";
+	private static final String VENDOR_IBM_CORPORATION = "IBM Corporation";
+	private static final String VENDOR_SUN_MICROSYSTEMS_INC = "Sun Microsystems Inc.";
+
+	//This should be automagically initialized on the first get call.
+	private static String namingFactory;
+	
+	private static ConcurrentHashMap<String, String> localJndiCache = new ConcurrentHashMap<String, String>();
 	
 	//Sample configurations that can be used for Unit tests
 	//properties.put("java.naming.factory.initial","bitronix.tm.jndi.BitronixInitialContextFactory");		
@@ -30,25 +37,36 @@ public class RemoteEJBHelper {
 	 * Contacts the differents JNDI servers to get the ref to the EJB remote.
 	 * TODO : Caching of lookups !
 	 * 
-	 * @param host : jndi name of the host url 
-	 * @param jndi : remote jndi name of the EJB
+	 * @param jndi : jndi name of the host url concat with the remote ejb jndi 
 	 * @return
 	 * @throws NamingException
 	 */
-	public static Object getEJBRef(String host, String jndi) throws NamingException {		
+	public static Object getEJBRef(String jndi) throws NamingException {		
 			//retrieve info from the local jndi tree
-			Context ctxLocal = new InitialContext();
-			String hostURL = (String) ctxLocal.lookup(host);
+			//we cache the result indefinitely as the local jndi tree
+			//can only change if the server is restarted
+			String remoteJndi = localJndiCache.get(jndi);
+			if (remoteJndi == null) {
+				Context ctxLocal = new InitialContext();
+				remoteJndi = (String) ctxLocal.lookup(jndi);
+				localJndiCache.put(jndi, remoteJndi);
+			}
+			
+			//look for the "/" after the "iiop://" 
+			int splitIndex = remoteJndi.indexOf("/", 8); 
+			String host = remoteJndi.substring(0, splitIndex);
+			String ejbJndi = remoteJndi.substring(splitIndex+1);
+			
 			
 			//connect to the distant jndi tree (this will take more time)
 			Properties properties = new Properties();		
 			properties.put(Context.INITIAL_CONTEXT_FACTORY, getNamingFactory());		
-	        properties.put(Context.PROVIDER_URL, hostURL);
+	        properties.put(Context.PROVIDER_URL, host);
 		
 			Context ctx = new InitialContext(properties);
 			
 			//Get the ref to the remote EJB instance			
-			Object nRemoteObj = ctx.lookup(jndi);
+			Object nRemoteObj = ctx.lookup(ejbJndi);
 			
 			return nRemoteObj;
 	}
@@ -57,23 +75,29 @@ public class RemoteEJBHelper {
 	 * Choose the naming factory based on the JVM vendor.
 	 * The application server name and version should not matter.
 	 *  
-	 * @return
+	 * @return initial context factory class name
 	 */
-	private static String getNamingFactory() {
-		if (containerType == 0) {
-			if ("Sun Microsystems Inc.".equals(System.getProperty("java.vm.vendor"))) {
-				containerType = 1;
-			} else if ("IBM Corporation".equals(System.getProperty("java.vm.vendor"))) {
-				containerType = 2;
+	public static String getNamingFactory() {
+		if (namingFactory == null) {
+			if (VENDOR_SUN_MICROSYSTEMS_INC.equals(System.getProperty(SYS_PROP_JAVA_VM_VENDOR))) {
+				namingFactory = IC_FACTORY_SUN;
+			} else if (VENDOR_IBM_CORPORATION.equals(System.getProperty(SYS_PROP_JAVA_VM_VENDOR))) {
+				namingFactory = IC_FACTORY_IBM;
 			}
 		}
-		
-		switch (containerType) {
-			case 1 : return "com.sun.jndi.cosnaming.CNCtxFactory";
-			case 2 : return "com.ibm.websphere.naming.WsnInitialContextFactory";
-			default : throw new UnsupportedOperationException("EJB remoting only work on SUN and IBM JREs");
-		}
+		return namingFactory;		
 	}
-	
+
+	/** 
+	 * Force the naming factory to use for remote call.
+	 * The naming factory should not be set manually unless :
+	 * a) You unit test the framework
+	 * b) the autodetection is not working on your use case.
+	 * 
+	 * @param namingFactory
+	 */
+	public static void setNamingFactory(String namingFactory) {
+		RemoteEJBHelper.namingFactory = namingFactory;
+	}
 
 }

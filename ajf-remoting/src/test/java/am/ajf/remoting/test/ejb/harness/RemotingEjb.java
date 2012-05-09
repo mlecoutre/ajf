@@ -1,9 +1,17 @@
 package am.ajf.remoting.test.ejb.harness;
 
+import javax.ejb.Stateless;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Stateless
 public class RemotingEjb implements RemotingEjbRemote {
 
+	private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	public void emptyRes() {
-		System.out.println("empty res !");
+		logger.info("empty res !");
 	}
 
 	@Override

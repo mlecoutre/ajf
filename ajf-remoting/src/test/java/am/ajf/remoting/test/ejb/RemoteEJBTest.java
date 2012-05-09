@@ -27,15 +27,18 @@ import am.ajf.remoting.ejb.impl.RemoteEJBHelper;
 import am.ajf.remoting.ejb.impl.RemoteEJBImplHandler;
 import am.ajf.remoting.test.ejb.harness.Model;
 import am.ajf.remoting.test.ejb.harness.RemoteEJBServiceBD;
+import am.ajf.remoting.test.ejb.harness.RemoteEJBWithAnnotationServiceBD;
 import am.ajf.remoting.test.ejb.harness.RemotingEjb;
 import am.ajf.remoting.test.ejb.harness.RemotingEjbRemote;
 
-@Ignore
 @RunWith(Arquillian.class)
 public class RemoteEJBTest {
 	
 	@Inject
 	public RemoteEJBServiceBD service;
+	
+	@Inject
+	public RemoteEJBWithAnnotationServiceBD serviceWithAnnotation;
 	
 	
 	@Deployment
@@ -48,6 +51,7 @@ public class RemoteEJBTest {
 				.addClasses(RemoteEJBImplHandler.class)				
 				.addClasses(RemoteEJBHelper.class)
 				.addClasses(RemoteEJBServiceBD.class)
+				.addClasses(RemoteEJBWithAnnotationServiceBD.class)
 				.addClasses(Model.class)
 				.addAsManifestResource(EmptyAsset.INSTANCE,
 						ArchivePaths.create("beans.xml"));
@@ -56,6 +60,7 @@ public class RemoteEJBTest {
 	@Before
 	public void setUp() throws NamingException, MalformedURLException {
 		System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "am.ajf.remoting.test.ejb.helper.RemotingEJBInitialContextFactory");
+		RemoteEJBHelper.setNamingFactory("am.ajf.remoting.test.ejb.helper.RemotingEJBInitialContextFactory");
 	}
 	
 	@Test
@@ -79,8 +84,15 @@ public class RemoteEJBTest {
 	}
 	
 	@Test
-	public void testSimpleEJBCall2ParamsWithRes(int p1, int p2) {
+	public void testSimpleEJBCall2ParamsWithRes() {
 		String res = service.resWithParam(1, 2);
+		Assert.assertNotNull(res);
+		Assert.assertEquals("res(1,2)", res);
+	}
+	
+	@Test
+	public void testSimpleEJBCall2ParamsWithResOnServiceWithAnnotation() {
+		String res = serviceWithAnnotation.resWithParam(1, 2);
 		Assert.assertNotNull(res);
 		Assert.assertEquals("res(1,2)", res);
 	}

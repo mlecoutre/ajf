@@ -10,6 +10,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME) 
 @Target({ElementType.METHOD})
 public @interface RemoteEJB {
-   String value(); // remote jndi lookup name
-   Class<?> name(); // EJB class name
+  
 }

@@ -1,6 +1,9 @@
 package am.ajf.remoting.test.ejb.harness;
 
+import javax.ejb.Remote;
 
+
+@Remote
 public interface RemotingEjbRemote {
 
 	public void emptyRes();

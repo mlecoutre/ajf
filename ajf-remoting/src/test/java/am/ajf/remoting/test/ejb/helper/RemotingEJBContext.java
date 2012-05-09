@@ -11,6 +11,9 @@ import javax.naming.NameParser;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import am.ajf.remoting.test.ejb.harness.RemotingEjb;
 import bitronix.tm.jndi.BitronixContext;
 import bitronix.tm.jndi.BitronixInitialContextFactory;
@@ -24,6 +27,7 @@ import bitronix.tm.jndi.BitronixInitialContextFactory;
 public class RemotingEJBContext implements Context {	
 
 	private BitronixContext delegate;
+	private final transient Logger logger = LoggerFactory.getLogger(this.getClass()); 
 	
 	public RemotingEJBContext() {
 		delegate = new BitronixContext();
@@ -42,11 +46,12 @@ public class RemotingEJBContext implements Context {
 	 * Add here all the jndi entry you wants.
 	 */
 	public Object lookup(String s) throws NamingException {
-		if ("url/host".equals(s)) {
-			String localURL = "iiop://localhost";
-			System.out.println(localURL);
+		if ("url/ejb_remote_remotingejb".equals(s)) {
+			String localURL = "iiop://localhost:2809/ejb/RemoteEAR/RemoteEJB\\.jar/RemotingEJBRemote#am\\.ajf\\.remoting\\.test\\.ejb\\.harness\\.RemotingEjbRemote";
+			logger.info("Mocked jndi : "+localURL);
 			return localURL;
-		} else if ("ejb/RemotingEJB".equals(s)) {
+		} else if ("ejb/RemoteEAR/RemoteEJB\\.jar/RemotingEJBRemote#am\\.ajf\\.remoting\\.test\\.ejb\\.harness\\.RemotingEjbRemote".equals(s)) {
+			logger.info("Mocked jndi : manual instance of object=>RemotingEjb()");
 			return new RemotingEjb();
 		}
 		return delegate.lookup(s);
