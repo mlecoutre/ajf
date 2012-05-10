@@ -1,4 +1,4 @@
-package foo.core.services;
+package foo.beans;
 
 import javax.inject.Inject;
 

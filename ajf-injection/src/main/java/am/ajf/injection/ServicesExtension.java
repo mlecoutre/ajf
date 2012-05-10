@@ -1,6 +1,8 @@
 package am.ajf.injection;
 
+import java.awt.Container;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -10,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.AnnotatedMethod;
@@ -29,6 +33,7 @@ import am.ajf.core.beans.BeansManager;
 import am.ajf.core.beans.ExtendedBeanDeclaration;
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.utils.ClassUtils;
+import am.ajf.core.utils.ContainerSupport;
 import am.ajf.injection.ImplementationsRepository.MalformedServiceException;
 import am.ajf.injection.ImplementationsRepository.NotInitializedException;
 import am.ajf.injection.annotation.ErrorHandled;
@@ -36,7 +41,9 @@ import am.ajf.injection.annotation.Monitored;
 import am.ajf.injection.api.ImplementationHandler;
 import am.ajf.injection.internal.BeanImpl;
 import am.ajf.injection.internal.ConfiguredBeanImpl;
+import am.ajf.injection.internal.EjbBeanImpl;
 import am.ajf.injection.internal.EnrichableAnnotatedTypeWrapper;
+import am.ajf.injection.internal.ServiceBeanImpl;
 import am.ajf.injection.utils.OWBBeanFactory;
 
 public class ServicesExtension implements Extension {
@@ -46,6 +53,8 @@ public class ServicesExtension implements Extension {
 	
 	private ImplementationsRepository serviceRepository;
 	private ImplementationHandlersRepository serviceHandlerRepository;
+	
+	private Set<Class<?>> ejbList;
 	
 	private Set<Class<?>> beansSet;
 	
@@ -73,20 +82,19 @@ public class ServicesExtension implements Extension {
 		serviceHandlerRepository = new ImplementationHandlersRepository();
 		
 		beansSet = new HashSet<Class<?>>();
+		ejbList = new HashSet<Class<?>>();
 		
 		try {
 			Set<Class<?>> declared = BeansManager.getBeans();
-			if ((null != declared) && (!declared.isEmpty())) {
-				for (Iterator<Class<?>> iterator = declared.iterator(); iterator
-						.hasNext();) {
-					Class<?> declaredBean = (Class<?>) iterator.next();
-					beansSet.add(declaredBean);
-					
+			if (null != declared) {
+				for (Class<?> declaredBean : declared) {					
+					beansSet.add(declaredBean);					
 				}
 			}
 		} catch (Exception e) {
+			issues.add(e);
 			logger.error("Exception throwed while loading the non-annotated beans.", e);
-		}
+		} finally {}
 	}
 
 	public void afterBeanDiscovery(@Observes AfterBeanDiscovery abd,
@@ -168,6 +176,10 @@ public class ServicesExtension implements Extension {
 				}
 			}
 			// serviceRepository.completeScan();
+			
+			//process ejbs
+			processEJBs(beanManager, abd);
+			
 		} catch (NotInitializedException e) {
 			issues.add(e);
 		} catch (MalformedServiceException e) {
@@ -186,13 +198,37 @@ public class ServicesExtension implements Extension {
 			issues.add(e);
 		} catch (ClassGenerationException e) {
 			issues.add(e);
-		}
+		}		
 
 		// Add the issues
 		for (Throwable t : issues) {
 			abd.addDefinitionError(t);
 		}
-		logger.trace("AJF CDI extension 'ServicesExtension'.");
+		logger.trace("AJF CDI extension 'ServicesExtension' loading done.");
+	}
+	
+	/**
+	 * Manual adding of the EJBs with the custom EJB Bean 
+	 * 
+	 * @param beanManager
+	 * @param abd
+	 * @throws InvocationTargetException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws IllegalArgumentException 
+	 * @throws NoSuchMethodException 
+	 * @throws SecurityException 
+	 */
+	private void processEJBs(BeanManager beanManager, AfterBeanDiscovery abd) throws IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException {
+		Constructor<?> constructor = EjbBeanImpl.class.getConstructor(InjectionTarget.class, Class.class);
+						
+		for (Class<?> ejb : ejbList) {
+			AnnotatedType<?> at = beanManager.createAnnotatedType(ejb);
+			InjectionTarget<?> it = beanManager
+					.createInjectionTarget(at);
+			Bean<?> bean = (Bean<?>) constructor.newInstance(it, ejb);
+			abd.addBean(bean);
+		}		
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -258,6 +294,18 @@ public class ServicesExtension implements Extension {
 		}
 	}
 
+	/**
+	 * This method process all the class scanned by CDI and do the following :
+	 * - look for manual declaration of bean, and if found veto the automatic bean impl
+	 * - add the @Monitored annotation on all services and policies
+	 * - add the @Errorhandled for each policy, service and web bean class
+	 * - veto and register the ejbs founds for further manual processing
+	 * - register the ajf extension ImplementationHandler founds
+	 * - register each class to the ImplementationRepository for further processing
+	 * 
+	 * @param pat
+	 * @param beanManager
+	 */
 	@SuppressWarnings("unchecked")
 	public <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> pat,
 			BeanManager beanManager) {
@@ -427,8 +475,17 @@ public class ServicesExtension implements Extension {
 			
 		} catch (ClassNotFoundException e) {
 			logger.error("Error loading the interface.", e);
+			issues.add(e);
 		}
-
+		
+		// process EJBs class (differ processing to AfterBeanDiscovery)
+		if (ContainerSupport.isEJBSupported()) {
+			if (javaClass.isAnnotationPresent(Stateless.class) || 
+				javaClass.isAnnotationPresent(Stateful.class)) {
+				ejbList.add(javaClass);
+				pat.veto();
+			}
+		}
 		try {
 			Class<?> cus = annotatedType.getJavaClass();
 			if (serviceHandlerRepository.isHandler(cus)) {
