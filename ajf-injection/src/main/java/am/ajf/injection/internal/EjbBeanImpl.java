@@ -7,7 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.ejb.Local;
-import javax.enterprise.context.ApplicationScoped;
+import javax.ejb.Remote;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Default;
@@ -27,7 +28,8 @@ public class EjbBeanImpl<T> implements Bean<T> {
 	private static final Logger logger = LoggerFactory.getLogger(EjbBeanImpl.class);
 	
 	private InjectionTarget<T> it;	
-	private Class<?> interfaceClass;	
+	private Class<?> interfaceClass;
+	private boolean isLocal;
 	
 	public EjbBeanImpl(InjectionTarget<T> it, Class<?> beanClass) {
 		this.it = it;
@@ -36,6 +38,11 @@ public class EjbBeanImpl<T> implements Bean<T> {
 		for (Class<?> in : interfaces) {
 			if (in.isAnnotationPresent(Local.class)) {
 				this.interfaceClass = in;
+				this.isLocal = true;
+			}
+			if (in.isAnnotationPresent(Remote.class)) {
+				this.interfaceClass = in;
+				this.isLocal = false;
 			}
 		}				
 	}
@@ -46,7 +53,13 @@ public class EjbBeanImpl<T> implements Bean<T> {
 		try {			
 			InitialContext ic = new InitialContext();
 			//This is WAS7 specifics TODO make it better !
-			T instance = (T) ic.lookup("ejblocal:"+interfaceClass.getName());
+			//http://publib.boulder.ibm.com/infocenter/dmndhelp/v7r0mx/index.jsp?topic=%2Fcom.ibm.websphere.wps.doc%2Fdoc%2Fcadm_slsbjndi.html
+			T instance = null;
+			if (isLocal) {
+				instance = (T) ic.lookup("ejblocal:"+interfaceClass.getName());
+			} else {
+				instance = (T) ic.lookup(interfaceClass.getName());
+			}
 			it.inject(instance, ctx);
 	        it.postConstruct(instance);
 	        return instance;
@@ -91,7 +104,7 @@ public class EjbBeanImpl<T> implements Bean<T> {
 
 	@Override
 	public Class<? extends Annotation> getScope() {		
-		return ApplicationScoped.class;
+		return Dependent.class;
 	}
 
 	@Override

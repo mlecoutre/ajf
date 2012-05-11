@@ -205,14 +205,7 @@ public class StoredProcedureHelper {
 		
 		buffer.append("CALL ").append(name).append("(");
 		
-		if (parametersAreNamed) {
-			/*
-			buffer.append(generateInNames(nbInParams, params));
-			if (nbInParams != 0 && nbInParams*2 < params.length) {
-				buffer.append(",");
-			}
-			buffer.append(generateOutNames(nbInParams, params));
-			*/
+		if (parametersAreNamed) {			
 			buffer.append(generateQuestionMarks(params.length/2));
 		} else {
 			buffer.append(generateQuestionMarks(nbInParams));
@@ -235,48 +228,6 @@ public class StoredProcedureHelper {
 				buffer.append("?");
 			} else {
 				buffer.append(",?");
-			}
-		}
-		return buffer.toString();
-	}
-	
-	/**
-	 * Generate the in params names.
-	 * The params array contain the (names, value) couple so, we need
-	 * to only get the odd values.
-	 * 
-	 * @param nbIn
-	 * @param params
-	 * @return
-	 */
-	private static String generateInNames(int nbIn, Object[] params) {
-		StringBuffer buffer = new StringBuffer();
-		for (int i=0 ; i < nbIn*2 ; i = i + 2) {
-			if (i==0) {
-				buffer.append(":").append((String) params[i]);
-			} else {
-				buffer.append(",:").append((String) params[i]);
-			}
-		}
-		return buffer.toString();
-	}
-	
-	/**
-	 * Generate the out params marker, starting on nbIn mark.
-	 * Be careful because the out parameters actually start at nbIn*2, since
-	 * the params array contain (name, value) for IN and (name, value) for OUT
-	 * 
-	 * @param nbIn
-	 * @param params
-	 * @return
-	 */
-	private static String generateOutNames(int nbIn, Object[] params) {
-		StringBuffer buffer = new StringBuffer();
-		for (int i=nbIn*2 ; i < params.length ; i = i + 2) {	
-			if (i == nbIn*2) {
-				buffer.append(":").append((String) params[i]);
-			} else {
-				buffer.append(",:").append((String) params[i]);
 			}
 		}
 		return buffer.toString();
