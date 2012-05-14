@@ -20,6 +20,12 @@ body {
 	height: 590px;
 }
 
+loading-status{
+	position: absolute;
+	
+	
+}
+
 h1,h2,h3,h4,h5,h6 {
 	font-size: 100%;
 	font-weight: normal;
@@ -291,7 +297,7 @@ a:active,a:focus {
 .nav-menu {
 	float: right;
 	font-size: 8pt;
-	margin-right: 15px;
+	margin-right: 26px;
 	margin-top: 10px;
 	vertical-align: middle;
 	text-align:right;
@@ -305,14 +311,14 @@ a:active,a:focus {
 }
 
 .nav-menu li {
-	float: left;
+	float: right;
 	margin: 0 0.15em;
 	padding: 0px 7px;
-	border-left: 1px solid white;
+	border-right: 1px solid white;
 }
 
 .nav-menu li:first-child {
-	border-left: 0px solid white;
+	border-right: 0px solid white;
 }
 
 .nav-menu a {
