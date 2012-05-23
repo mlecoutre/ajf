@@ -117,6 +117,61 @@ public class CrudTest {
 		Assert.assertEquals(1, models.size());				
 	}
 	
+	@Test
+	public void testSimplePageWithArgs() {
+		for (int i=0 ; i < 10 ; i++) {
+			crudService.save(new ModelCrud("Matthieu"));
+		}		
+		crudService.save(new ModelCrud("Nicolas"));
+		crudService.save(new ModelCrud("Vincent"));								
+		
+		List<ModelCrud> models = crudService.page(ModelCrud.FIND_BY_NAME,0 , 10, "Matthieu");
+		
+		Assert.assertNotNull(models);
+		Assert.assertEquals(10, models.size());				
+	}
+	
+	@Test
+	public void testMiddlePageWithArgs() {
+		for (int i=0 ; i < 10 ; i++) {
+			crudService.save(new ModelCrud("Matthieu"));
+		}		
+		crudService.save(new ModelCrud("Nicolas"));
+		crudService.save(new ModelCrud("Vincent"));								
+		
+		List<ModelCrud> models = crudService.page(ModelCrud.FIND_BY_NAME, 4, 2, "Matthieu");
+		
+		Assert.assertNotNull(models);
+		Assert.assertEquals(2, models.size());				
+	}
+	
+	@Test
+	public void testLastPageWithArgs() {
+		for (int i=0 ; i < 10 ; i++) {
+			crudService.save(new ModelCrud("Matthieu"));
+		}		
+		crudService.save(new ModelCrud("Nicolas"));
+		crudService.save(new ModelCrud("Vincent"));								
+		
+		List<ModelCrud> models = crudService.page(ModelCrud.FIND_BY_NAME, 8, 5, "Matthieu");
+		
+		Assert.assertNotNull(models);
+		Assert.assertEquals(2, models.size());				
+	}
+	
+	@Test
+	public void testCountWithArgs() {
+		for (int i=0 ; i < 10 ; i++) {
+			crudService.save(new ModelCrud("Matthieu"));
+		}		
+		crudService.save(new ModelCrud("Nicolas"));
+		crudService.save(new ModelCrud("Vincent"));								
+		
+		long size = crudService.count(ModelCrud.COUNT_BY_NAME, "Matthieu");
+				
+		Assert.assertEquals(10, size);				
+	}
+	
 	
 	@Test
 	public void testFetch() {
@@ -129,7 +184,7 @@ public class CrudTest {
 		
 		Assert.assertNotNull(model);
 		Assert.assertEquals("Matthieu", model.getName());				
-	}
+	}	
 	
 	
 	@Test

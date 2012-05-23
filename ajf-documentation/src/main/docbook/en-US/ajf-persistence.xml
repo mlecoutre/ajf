@@ -211,7 +211,9 @@ public interface SimpleCrudServiceBD extends CrudServiceBD<ModelCrud, Long> {
 			<programlisting language="Java" role="Java"><![CDATA[
 public interface CrudServiceBD<E,P> {
     
-  	List<E> find(String queryName, Object... params); 
+  	List<E> find(String queryName, Object... params);
+	List<E> page(String queryName, int firstResult, int maxNbResults, Object... params);
+	long count(String queryName, Object... params);  	 
    	E save(E entity);
    	boolean remove(E entity);        
    	boolean delete(P pk);
@@ -228,8 +230,33 @@ public interface CrudServiceBD<E,P> {
 					<listitem>
 						<para>
 							Launch the Named Query specified as the first parameter on the
-							Model object specified as the first Generic of the CudDbService interface.
+							Model object specified as the first Generic of the CrudDbService interface.
 							In our example it was Model1.
+							The following parameters are the parameters of the named query (if needed)
+							in order.							 
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>page</term>
+					<listitem>
+						<para>
+							Launch the Named Query specified as the first parameter on the
+							Model object specified as the first Generic of the CrudDbService interface
+							and retrieve only <varname>maxNbResults</varname> results starting on 
+							the object number : <varname>firstResult</varname>. 							
+							The following parameters are the parameters of the named query (if needed)
+							in order.							 
+						</para>
+					</listitem>
+				</varlistentry>
+				<varlistentry>
+					<term>count</term>
+					<listitem>
+						<para>
+							Launch the Named Query specified as the first parameter on the
+							Model object specified as the first Generic of the CrudDbService interface.
+							This query need to be a count query that return a unique object of type <classname>long</classname>.
 							The following parameters are the parameters of the named query (if needed)
 							in order.							 
 						</para>

@@ -23,6 +23,26 @@ public class BasicImplCrudDbService {
 		}
 		return q.getResultList();
 	}
+	
+	public static List<?> page(EntityManager em, String queryName, int startPosition, int maxNbResult, Object... params) {
+		Query q = em.createNamedQuery(queryName);
+		q.setFirstResult(startPosition);
+		q.setMaxResults(maxNbResult);
+		
+		for (int i = 0 ; i < params.length ; i++) {
+			q.setParameter(i+1, params[i]);
+		}
+		return q.getResultList();
+	}
+	
+	public static long count(EntityManager em, String queryName, Object... params) {
+		Query q = em.createNamedQuery(queryName);				
+		
+		for (int i = 0 ; i < params.length ; i++) {
+			q.setParameter(i+1, params[i]);
+		}
+		return (Long) q.getSingleResult();
+	}
 
 	public static Object save(boolean manageTransaction, EntityManager em, Object entity) {
 		boolean transActive = false;

@@ -23,6 +23,28 @@ public interface CrudServiceBD<E,P> {
 	List<E> find(String queryName, Object... params);
 	
 	/**
+	 * Launch the selected NamedQuery on <E> with parameters and
+	 * paginate the results.
+	 *  
+	 * @param queryName the namedQuery name
+	 * @param firstResult the index of the first result to fetch
+	 * @param maxNbResults the maximum number of results to fetch
+	 * @param params the optional parameters of the NamedQuery
+	 * @return
+	 */
+	List<E> page(String queryName, int firstResult, int maxNbResults, Object... params);
+	
+	/**
+	 * Launch the selected NamedQuery on <E> with parameters and
+	 * and return the nb of results.
+	 *  
+	 * @param queryName the namedQuery name 
+	 * @param params the optional parameters of the NamedQuery
+	 * @return
+	 */
+	long count(String queryName, Object... params);
+	
+	/**
 	 * Save the entity in the database and return the
 	 * result of this operation.
 	 * The returned entity is always attached.

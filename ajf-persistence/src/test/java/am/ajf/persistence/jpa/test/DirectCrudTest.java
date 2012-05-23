@@ -115,6 +115,33 @@ public class DirectCrudTest {
 	}
 	
 	@Test
+	public void testMiddlePageWithArgs() {
+		for (int i=0 ; i < 10 ; i++) {
+			crudService.save(new ModelCrud("Matthieu"));
+		}		
+		crudService.save(new ModelCrud("Nicolas"));
+		crudService.save(new ModelCrud("Vincent"));								
+		
+		List<ModelCrud> models = crudService.page(ModelCrud.FIND_BY_NAME, 4, 2, "Matthieu");
+		
+		Assert.assertNotNull(models);
+		Assert.assertEquals(2, models.size());				
+	}
+	
+	@Test
+	public void testCountWithArgs() {
+		for (int i=0 ; i < 10 ; i++) {
+			crudService.save(new ModelCrud("Matthieu"));
+		}		
+		crudService.save(new ModelCrud("Nicolas"));
+		crudService.save(new ModelCrud("Vincent"));								
+		
+		long size = crudService.count(ModelCrud.COUNT_BY_NAME, "Matthieu");
+				
+		Assert.assertEquals(10, size);				
+	}
+	
+	@Test
 	public void testFetch() {
 		ModelCrud model1 = crudService.save(new ModelCrud("Matthieu"));
 		Long id = model1.getId();

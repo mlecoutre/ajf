@@ -16,31 +16,41 @@ import am.ajf.persistence.jpa.api.CrudServiceBD;
  */
 @Alternative
 public class DummyCrudService<E, P>  implements CrudServiceBD<E, P>{
-	
-	
+		
+	@Override
+	public long count(String queryName, Object... params) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public List<E> page(String queryName, int firstResult, int maxNbResults,
+			Object... params) {
+		throw new UnsupportedOperationException();		
+	}
+
 	@Override
 	public List<E> find(String queryName, Object... params) {		
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public E save(E entity) {		
-		return null;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public boolean remove(E entity) { 
-		return false;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public boolean delete(P pk) {
-		return false;
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public E fetch(P pk) {
-		return null;
+		throw new UnsupportedOperationException();
 	}
 		   
 	 

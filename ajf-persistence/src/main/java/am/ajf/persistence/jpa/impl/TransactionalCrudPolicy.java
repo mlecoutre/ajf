@@ -29,6 +29,17 @@ public class TransactionalCrudPolicy<E, P> implements CrudBD<E, P> {
 	public List<E> find(String queryName, Object... params) {		
 		return (List<E>) BasicImplCrudDbService.find(em, queryName, params);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override	
+	public List<E> page(String queryName, int firstResult, int maxNbResults, Object... params) {		
+		return (List<E>) BasicImplCrudDbService.page(em, queryName, firstResult, maxNbResults, params);
+	}
+		
+	@Override	
+	public long count(String queryName, Object... params) {		
+		return BasicImplCrudDbService.count(em, queryName, params);
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override	

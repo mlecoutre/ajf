@@ -133,6 +133,33 @@ public class PolicyCrudTest {
 	}
 	
 	@Test
+	public void testMiddlePageWithArgs() throws Throwable {
+		for (int i=0 ; i < 10 ; i++) {
+			crudPolicy.save(new ModelCrud("Matthieu"));
+		}		
+		crudPolicy.save(new ModelCrud("Nicolas"));
+		crudPolicy.save(new ModelCrud("Vincent"));								
+		
+		List<ModelCrud> models = crudPolicy.page(ModelCrud.FIND_BY_NAME, 4, 2, "Matthieu");
+		
+		Assert.assertNotNull(models);
+		Assert.assertEquals(2, models.size());				
+	}
+	
+	@Test
+	public void testCountWithArgs() throws Throwable {
+		for (int i=0 ; i < 10 ; i++) {
+			crudPolicy.save(new ModelCrud("Matthieu"));
+		}		
+		crudPolicy.save(new ModelCrud("Nicolas"));
+		crudPolicy.save(new ModelCrud("Vincent"));								
+		
+		long size = crudPolicy.count(ModelCrud.COUNT_BY_NAME, "Matthieu");
+				
+		Assert.assertEquals(10, size);				
+	}
+	
+	@Test
 	public void testFetch() throws Throwable {
 		ModelCrud model1 = crudPolicy.save(new ModelCrud("Matthieu"));
 		Long id = model1.getId();

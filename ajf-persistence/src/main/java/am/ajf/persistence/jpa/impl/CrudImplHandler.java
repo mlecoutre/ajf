@@ -31,7 +31,9 @@ public class CrudImplHandler extends AbstractPersistenceImplHandler
 								implements ImplementationHandler {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CrudImplHandler.class);
-	private static final String FIND_METHOD = "find"; 
+	private static final String FIND_METHOD = "find";
+	private static final String PAGE_METHOD = "page";
+	private static final String COUNT_METHOD = "count";
 	private static final String SAVE_METHOD = "save";
 	private static final String REMOVE_METHOD = "remove";
 	private static final String DELETE_METHOD = "delete";
@@ -115,6 +117,10 @@ public class CrudImplHandler extends AbstractPersistenceImplHandler
 		
 		if (FIND_METHOD.equals(method.getName())) {			
 			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.find(em, $1, $2);\n");		
+		} else if (PAGE_METHOD.equals(method.getName())) {			
+			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.page(em, $1, $2, $3, $4);\n"); 
+		} else if (COUNT_METHOD.equals(method.getName())) {			
+			body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.count(em, $1, $2);\n");
 		} else if (SAVE_METHOD.equals(method.getName())) {
 			if (transactionType.equals(TransactionType.JTA)) {
 				body.append("  return am.ajf.persistence.jpa.impl.BasicImplCrudDbService.save(false, em, $1);\n");
