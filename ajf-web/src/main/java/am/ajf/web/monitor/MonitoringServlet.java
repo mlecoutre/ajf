@@ -136,7 +136,7 @@ public class MonitoringServlet extends HttpServlet {
 
 		String param = config
 				.getInitParameter(MONITORING_SERVLET_CLASS_PARAMETER);
-		if ((null == param) || (param.trim().isEmpty())) {
+		if ((null != param) && (!param.trim().isEmpty())) {
 			try {
 				Class.forName(param);
 				className = param;
