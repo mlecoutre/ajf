@@ -74,5 +74,6 @@ public class ForgeConstants {
 	 * FreeMarker
 	 */
 	public static final String DEFAULT_TEMPLATES_DIRECTORY = "/FreeMarkerTemplate";
+	public static final String DEFAULT_TEMPLATES_DIRECTORY_ZIP = "FreeMarkerTemplate.zip";
 
 }

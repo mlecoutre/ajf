@@ -154,7 +154,6 @@ public class VelocityBuilderTest {
 		VelocityContext context = velocityBuilder.getContext();
 
 		context.put("appliName", appliname);
-
 		context.put("isReports", isReports);
 		context.put("isParentProject", isParentProject);
 

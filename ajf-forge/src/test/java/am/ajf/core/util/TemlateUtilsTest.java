@@ -2,15 +2,25 @@ package am.ajf.core.util;
 
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
+import am.ajf.forge.core.CrudGeneration;
 import am.ajf.forge.util.TemplateUtils;
+import freemarker.template.SimpleNumber;
+import freemarker.template.SimpleSequence;
 import freemarker.template.Template;
+import freemarker.template.TemplateMethodModel;
+import freemarker.template.TemplateModel;
+import freemarker.template.TemplateModelException;
+import freemarker.template.TemplateSequenceModel;
 
 /**
  * 
@@ -101,6 +111,74 @@ public class TemlateUtilsTest {
 
 		// Find the a template in the project resources
 		templateUtils.getTemplate("nonExistingTemplate.ftl");
+
+	}
+
+	// @SuppressWarnings("unchecked")
+	// @Test
+	// public void javaClassMBeanTemplate() throws Exception {
+	//
+	// TemplateUtils templateUtils = new TemplateUtils();
+	// System.out.println("template utils instanciated.");
+	//
+	// // Find the a template in the project resources
+	// Template myTemplate = templateUtils.getTemplate("classJava.ftl");
+	// System.out.println("template".concat("classJava.ftl").concat(
+	// " located."));
+	//
+	// // Generate an my data model data model
+	// Map root = new HashMap();
+	//
+	// Map function = new HashMap();
+	// function.put("MbeanName", "myGeneratedManagedBean");
+	//
+	// SimpleSequence uts = new SimpleSequence();
+	//
+	// Map ut1 = new HashMap();
+	// ut1.put("methodName", "displayMethod");
+	// ut1.put("returnType", "void");
+	//
+	// Map ut2 = new HashMap();
+	// ut2.put("methodName", "deleteMethod");
+	// ut2.put("returnType", "void");
+	//
+	// uts.add(ut1);
+	// uts.add(ut2);
+	//
+	// function.put("UTs", uts);
+	//
+	// root.put("function", function);
+	//
+	// // merge data model and the template in the logs
+	// Writer out = new OutputStreamWriter(System.out);
+	// templateUtils.mergeDataModelWithTemplate(root, myTemplate, out);
+	//
+	// }
+
+	@Test
+	public void testBuildCrudManagedBean() throws Exception {
+
+		CrudGeneration projectManagement = new CrudGeneration();
+
+		File myFile = new File("C:/myGeneratedBean.java");
+		if (!myFile.exists())
+			myFile.createNewFile();
+
+		projectManagement.buildCrudManagedBean(myFile, "myGeneratedBean",
+				"Employee", "am.ajf.web.controllers.test");
+
+	}
+
+	@Test
+	public void testBuildCrudXhtml() throws Exception {
+
+		CrudGeneration projectManagement = new CrudGeneration();
+
+		File myFile = new File("C:/myCrudXhtml.xhtml");
+		if (!myFile.exists())
+			myFile.createNewFile();
+
+		projectManagement.buildCrudXhtml(myFile, "myGeneratedBean", "Employee");
 
 	}
 }

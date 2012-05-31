@@ -1,14 +1,17 @@
 package am.ajf.forge.util;
 
-import static am.ajf.forge.lib.ForgeConstants.DEFAULT_TEMPLATES_DIRECTORY;
+import static am.ajf.forge.lib.ForgeConstants.DEFAULT_TEMPLATES_DIRECTORY_ZIP;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.inject.Singleton;
+
+import org.apache.commons.io.FileUtils;
 
 import freemarker.cache.FileTemplateLoader;
 import freemarker.template.Configuration;
@@ -22,6 +25,7 @@ import freemarker.template.TemplateException;
  * @author E019851
  * 
  */
+@Singleton
 public class TemplateUtils {
 
 	private Configuration cfg;// = new Configuration(
@@ -66,12 +70,12 @@ public class TemplateUtils {
 		if (null == cfg)
 			cfg = new Configuration();
 
+		File templateDirectoryFile = null;
 		try {
 
 			// If no directory path is set as input (empty), the default
 			// template directory will be used (Resource path of the context
 			// class loader
-			File templateDirectoryFile;
 			if ("".equals(templateDirectoryPath)
 					|| templateDirectoryPath.isEmpty()) {
 
@@ -82,12 +86,12 @@ public class TemplateUtils {
 				templateDirectoryFile = new File(templateDirectoryPath);
 			}
 
-			// Log the directory containing the Templates
-			System.out.println("templateDirectory: "
-					+ templateDirectoryFile.getAbsolutePath());
 			// Create the template loader
 			FileTemplateLoader templateLoader = new FileTemplateLoader(
 					templateDirectoryFile);
+
+			// FileUtils.forceDelete(templateDirectoryFile);
+			templateDirectoryFile = null;
 			// Set the template loader to the current configuration;
 			cfg.setTemplateLoader(templateLoader);
 
@@ -95,6 +99,15 @@ public class TemplateUtils {
 
 			String message = "Error occured in the HTML Utils constructor";
 			System.out.println(message.concat(": " + e.toString()));
+
+			// Remove templateDirectoryFile which is a temp directory
+			if (null != templateDirectoryFile) {
+
+				if (templateDirectoryFile.exists())
+					FileUtils.forceDelete(templateDirectoryFile);
+
+				templateDirectoryFile = null;
+			}
 			throw e;
 		}
 
@@ -114,23 +127,14 @@ public class TemplateUtils {
 		// ClassLoader cls = Thread.currentThread().getContextClassLoader();
 		// URL url = cls.getResource(DEFAULT_TEMPLATES_DIRECTORY);
 
-		// URL url =
-		// TemplateUtils.class.getResource(DEFAULT_TEMPLATES_DIRECTORY);
-		URL url = TemplateUtils.class.getResource(DEFAULT_TEMPLATES_DIRECTORY);
-		if (null == url) {
+		File templateDirectory = new File(FileUtils.getTempDirectoryPath()
+				.concat("/FreeMarkerTemplatesTmp"));
 
-			String errorMessage = "Unable to find the resource directory "
-					.concat(DEFAULT_TEMPLATES_DIRECTORY);
-			System.out.println(errorMessage);
-			throw new Exception(errorMessage);
+		// System.out.println("**DEBUG - Template TempDirectory : "
+		// + templateDirectory.getAbsolutePath());
 
-		}
-
-		File templateDirectory = new File(url.toURI());
-
-		// log directory for verification
-		System.out.println("template directory : "
-				+ templateDirectory.getAbsolutePath());
+		ExtractionUtils.unzipFile(DEFAULT_TEMPLATES_DIRECTORY_ZIP,
+				templateDirectory);
 
 		return templateDirectory;
 	}
