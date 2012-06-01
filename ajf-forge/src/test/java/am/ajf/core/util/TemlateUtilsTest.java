@@ -1,26 +1,20 @@
 package am.ajf.core.util;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
+import org.jboss.forge.parser.java.JavaSource;
+import org.jboss.forge.project.services.ResourceFactory;
+import org.jboss.forge.resources.java.JavaResource;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import am.ajf.forge.core.CrudGeneration;
+import am.ajf.forge.util.JavaUtils;
 import am.ajf.forge.util.TemplateUtils;
-import freemarker.template.SimpleNumber;
-import freemarker.template.SimpleSequence;
-import freemarker.template.Template;
-import freemarker.template.TemplateMethodModel;
-import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
-import freemarker.template.TemplateSequenceModel;
 
 /**
  * 
@@ -32,53 +26,7 @@ import freemarker.template.TemplateSequenceModel;
  */
 public class TemlateUtilsTest {
 
-	private static final String FREEMARKER_TEMPLATE_NAME = "templateEmployee.ftl";
-
-	@SuppressWarnings("rawtypes")
-	@Test
-	public void templateTest() {
-
-		System.out.println("** START templateTest");
-		boolean hasErrorOcccured = false;
-
-		try {
-
-			// Instanciate TemplateUtils and freeMarker with default template
-			// dir
-			// (in resource)
-			TemplateUtils templateUtils = new TemplateUtils();
-			System.out.println("template utils instanciated.");
-
-			// Find the a template in the project resources
-			Template myTemplate = templateUtils
-					.getTemplate(FREEMARKER_TEMPLATE_NAME);
-			System.out.println("template".concat(FREEMARKER_TEMPLATE_NAME)
-					.concat(" located."));
-
-			// Generate an Employee data model
-			Map myDataModel = templateUtils.createEmployeeDataModel();
-			System.out.println("employeeDataModel generated.");
-
-			// merge data model and the template in the logs
-			Writer out = new OutputStreamWriter(System.out);
-			templateUtils.mergeDataModelWithTemplate(myDataModel, myTemplate,
-					out);
-
-		} catch (Exception e) {
-
-			System.out.println("Error occured during templateTest : ".concat(e
-					.toString()));
-			hasErrorOcccured = true;
-
-		}
-
-		// The condition of success of this test is that no Exception should be
-		// thrown
-		assertTrue("No exception should occured", !hasErrorOcccured);
-
-		System.out.println("** END templateTest");
-
-	}
+	private static List<String> myAttributes;
 
 	/**
 	 * Test of the fail execution of Templating throw FreeMarker when the
@@ -155,20 +103,30 @@ public class TemlateUtilsTest {
 	//
 	// }
 
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testBuildCrudManagedBean() throws Exception {
 
 		CrudGeneration projectManagement = new CrudGeneration();
 
+		/*
+		 * OutputFile
+		 */
 		File myFile = new File("C:/myGeneratedBean.java");
-		if (!myFile.exists())
-			myFile.createNewFile();
+		if (myFile.exists())
+			FileUtils.forceDelete(myFile);
 
-		projectManagement.buildCrudManagedBean(myFile, "myGeneratedBean",
-				"Employee", "am.ajf.web.controllers.test");
+		myFile.createNewFile();
+
+		Map dataModel = projectManagement.buildDataModel("voila",
+				"myGeneratedBean", "Person", myAttributes,
+				"am.ajf.web.controllers.test");
+
+		projectManagement.buildCrudManagedBean(myFile, dataModel);
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Test
 	public void testBuildCrudXhtml() throws Exception {
 
@@ -178,7 +136,29 @@ public class TemlateUtilsTest {
 		if (!myFile.exists())
 			myFile.createNewFile();
 
-		projectManagement.buildCrudXhtml(myFile, "myGeneratedBean", "Employee");
+		Map dataModel = projectManagement.buildDataModel("voila",
+				"myGeneratedBean", "Person", myAttributes,
+				"am.ajf.web.controllers.test");
+
+		projectManagement.buildCrudXhtml(myFile, dataModel);
 
 	}
+
+	@SuppressWarnings("rawtypes")
+	@BeforeClass
+	public static void init() throws Exception {
+		/*
+		 * Retrieve AttributeList of resources Java model Class
+		 */
+		File javaClass = new File(TemlateUtilsTest.class.getClassLoader()
+				.getResource("Person.java").toURI());
+		ResourceFactory factory = new ResourceFactory();
+		JavaSource javaSource = new JavaResource(factory, javaClass)
+				.getJavaSource();
+
+		JavaUtils javaUtils = new JavaUtils();
+		myAttributes = javaUtils.retrieveAttributeList(javaSource);
+
+	}
+
 }

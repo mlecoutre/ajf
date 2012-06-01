@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.inject.Singleton;
 
 import am.ajf.forge.util.TemplateUtils;
+import freemarker.template.SimpleSequence;
 import freemarker.template.Template;
 import freemarker.template.TemplateMethodModel;
 import freemarker.template.TemplateModelException;
@@ -23,22 +24,6 @@ public class CrudGeneration {
 
 	TemplateUtils templateUtils;
 
-	public void generateCRUD(File file, String functionName, String entityName,
-			String javaPackage) {
-
-		// try {
-		// FileOutputStream fos = new FileOutputStream(file);
-		// Writer writer = new OutputStreamWriter(fos);
-		//
-		// buildCrudManagedBean(functionName, entityName, javaPackage, writer);
-		//
-		// } catch (FileNotFoundException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-
-	}
-
 	/**
 	 * Generate a Managed Bean java class according to the FreeMarker template
 	 * corresponding to the input functionName, entityName and java package
@@ -49,9 +34,9 @@ public class CrudGeneration {
 	 * @param javaPackage
 	 * @throws Exception
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void buildCrudManagedBean(File managedBeanFile, String functionName,
-			String entityName, String javaPackage) throws Exception {
+	@SuppressWarnings("rawtypes")
+	public void buildCrudManagedBean(File managedBeanFile, Map dataModelMap)
+			throws Exception {
 
 		try {
 
@@ -60,27 +45,16 @@ public class CrudGeneration {
 
 			Template myTemplate = loadTemplate(CRUD_MBEAN_TEMPLATE);
 
-			// Generate an my data model data model
-			Map root = new HashMap();
-
-			Map function = new HashMap();
-			function.put("MbeanName", functionName);
-			function.put("entityName", entityName);
-			function.put("package", javaPackage);
-
-			root.put("function", function);
-
 			// merge data model and the template in the logs
 			// Writer out = new OutputStreamWriter(System.out);
-			templateUtils.mergeDataModelWithTemplate(root, myTemplate, writer);
+			templateUtils.mergeDataModelWithTemplate(dataModelMap, myTemplate,
+					writer);
 
 		} catch (Exception e) {
 
 			e.printStackTrace();
 			throw e;
-
 		}
-
 	}
 
 	/**
@@ -91,8 +65,8 @@ public class CrudGeneration {
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void buildCrudXhtml(File xhtmlFile, String functionName,
-			String entityName) throws Exception {
+	public void buildCrudXhtml(File xhtmlFile, Map dataModelMap)
+			throws Exception {
 
 		try {
 			FileOutputStream fos = new FileOutputStream(xhtmlFile);
@@ -100,27 +74,57 @@ public class CrudGeneration {
 
 			Template myTemplate = loadTemplate(CRUD_XHTML_TEMPLATE);
 
-			// Generate an my data model data model
-			Map root = new HashMap();
-			Map function = new HashMap();
-			function.put("MbeanName", functionName.substring(0, 1)
-					.toLowerCase().concat(functionName.substring(1)));
-			function.put("entityName", entityName);
-
-			root.put("function", function);
-			root.put("setToEl", new TransformToEL());
+			// add setToEl to data Model (only needed for building xhtmlFile)
+			dataModelMap.put("setToEl", new TransformToEL());
 
 			// merge data model and the template in the logs
 			// Writer out = new OutputStreamWriter(System.out);
-			templateUtils.mergeDataModelWithTemplate(root, myTemplate, writer);
+			templateUtils.mergeDataModelWithTemplate(dataModelMap, myTemplate,
+					writer);
 
 		} catch (Exception e) {
 
 			System.err.println("Error occured in buildCrudXhtml : ");
 			e.printStackTrace();
 			throw e;
-
 		}
+	}
+
+	/**
+	 * 
+	 * @param globalProjectName
+	 * @param functionName
+	 * @param entityName
+	 * @param entityAttributes
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Map buildDataModel(String globalProjectName, String functionName,
+			String entityName, List<String> entityAttributes, String javaPackage) {
+
+		// Generate an my data model
+		Map root = new HashMap();
+
+		root.put("projectGlobalName", globalProjectName);
+
+		Map function = new HashMap();
+		function.put("MbeanName", functionName);
+		function.put("package", javaPackage);
+		// function.put("entityName", entityName);
+		Map entity = new HashMap();
+		entity.put("name", entityName);
+
+		SimpleSequence attributeSequence = new SimpleSequence();
+		for (String attribute : entityAttributes) {
+			attributeSequence.add(attribute);
+		}
+		entity.put("attributes", attributeSequence);
+
+		function.put("entity", entity);
+
+		root.put("function", function);
+
+		return root;
 
 	}
 
@@ -156,11 +160,11 @@ class TransformToEL implements TemplateMethodModel {
 		}
 
 		String returnValue = String.valueOf(args.get(0));
-
-		int i;
-		for (i = 2; i == args.size(); i++) {
+		int i = 2;
+		for (i = 2; i <= args.size(); i++) {
 			returnValue = returnValue + "." + args.get(i - 1);
 		}
+
 		return "#{".concat(returnValue).concat("}");
 	}
 }

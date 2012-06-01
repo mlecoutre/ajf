@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import am.ajf.core.services.exceptions.BusinessLayerException;
+import am.ajf.${projectGlobalName}.model.${function.entity.name};
 
 
 @Named
@@ -36,8 +37,8 @@ public class ${function.MbeanName <#-- The name of Managed Bean class -->} imple
 			.getLogger(${function.MbeanName}.class);
 			
 	//TODO this are initial values to be modified
-	private String createValue;
-	private List<String> dataList;
+	private ${function.entity.name} newData;
+	private List<${function.entity.name}> dataList;
 
 	/**
 	 * constructor 
@@ -51,25 +52,32 @@ public class ${function.MbeanName <#-- The name of Managed Bean class -->} imple
 	@PostConstruct
 	public void init() {
 	
+				<#--TODO
+				
+				${function.entity.name} data1 = new ${function.entity.name}();
+				
+				<#list function.entity.attributes as att>
+					
+					data1.set${att}(null);
+				</#list>
+	
 				//Load initial example data list
 				dataList = new ArrayList<String>();
-				dataList.add("${function.entityName}1");
-				dataList.add("${function.entityName}2");
-				dataList.add("${function.entityName}3");
-				dataList.add("${function.entityName}4");
-				dataList.add("${function.entityName}5");
+				dataList.add(data1);
+				-->
+				
 				
 			
 	}
 
 
-<#assign listUT = "list${function.entityName}"> <#-- generate listEntity UT name -->
-<#assign createUT = "create${function.entityName}"> <#-- generate createEntity UT name -->
-<#assign updateUT = "update${function.entityName}"> <#-- generate updateEntity UT name -->
-<#assign deleteUT = "delete${function.entityName}"> <#-- generate deleteEntity UT name -->
+<#assign listUT = "list${function.entity.name}"> <#-- generate listEntity UT name -->
+<#assign createUT = "create${function.entity.name}"> <#-- generate createEntity UT name -->
+<#assign updateUT = "update${function.entity.name}"> <#-- generate updateEntity UT name -->
+<#assign deleteUT = "delete${function.entity.name}"> <#-- generate deleteEntity UT name -->
 
 	/**
-	 * UT method for listing ${function.entityName}
+	 * UT method for listing ${function.entity.name}
 	 * 
 	 * @param 
 	 * @return 
@@ -93,7 +101,7 @@ public class ${function.MbeanName <#-- The name of Managed Bean class -->} imple
 	}
 	
    /**
-	 * UT method to create ${function.entityName}
+	 * UT method to create ${function.entity.name}
 	 * 
 	 * @param 
 	 * @return 
@@ -108,6 +116,8 @@ public class ${function.MbeanName <#-- The name of Managed Bean class -->} imple
 		//try {
 			
 			//TODO here is your UT ${createUT} business code
+			dataList.add(newData);
+			
 
 		//} catch (BusinessLayerException e) {
 
@@ -117,7 +127,7 @@ public class ${function.MbeanName <#-- The name of Managed Bean class -->} imple
 	}
 	
    /**
-	 * UT method to update ${function.entityName}
+	 * UT method to update ${function.entity.name}
 	 * 
 	 * @param 
 	 * @return 
@@ -141,7 +151,7 @@ public class ${function.MbeanName <#-- The name of Managed Bean class -->} imple
 	}
 	
    /**
-	 * UT method to delete ${function.entityName}
+	 * UT method to delete ${function.entity.name}
 	 * 
 	 * @param 
 	 * @return 
@@ -175,16 +185,16 @@ public class ${function.MbeanName <#-- The name of Managed Bean class -->} imple
 		this.selectedItems = selectedItems;
 	}
 	
-	public String getCreateValue() {
-		return createValue;
+	public ${function.entity.name} getNewData() {
+		return  newData;
 	}
-	public void setCreateValue(String createValue) {
-		this.createValue = createValue;
+	public void setNewData(${function.entity.name} newData) {
+		this.newData = newData;
 	}
-	public List<String> getDataList() {
+	public List<${function.entity.name}> getDataList() {
 		return dataList;
 	}
-	public void setDataList(List<String> dataList){
+	public void setDataList(List<${function.entity.name}> dataList){
 		this.dataList = dataList;
 	}
 		 
