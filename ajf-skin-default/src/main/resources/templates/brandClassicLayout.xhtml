@@ -6,9 +6,16 @@
 <h:head>
 	<base href="http://${request.serverName}:${request.serverPort}${request.contextPath}/" />
 
-	<h:outputStylesheet library="css" name="custom.css" />
+
 	<h:outputStylesheet library="brand/css" name="style.css" />
 	<h:outputStylesheet library="brand/css" name="ajf.css" />
+
+	<h:outputText
+		value="&lt;!--[if lte IE 8]&gt;&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;javax.faces.resource/ie8.css.jsf?ln=brand/css&quot;/&gt;&lt;![endif]--&gt;"
+		escape="false" />
+
+	<h:outputStylesheet library="css" name="custom.css" />
+	<h:outputScript library="js" name="custom.js" />
 	<title><ui:insert name="applicationTitle">
 			<h:outputText value="#{m['application.title']}" />
 		</ui:insert></title>
@@ -26,16 +33,15 @@
 				<ui:include src="/shared/title.xhtml" />
 			</div>
 			<!-- Right PART -->
-			<div class="rightPartHeader">
+			<div class="rightPartHeader2">
 				<h:form id="nav_menu">
 					<div class="nav-menu">
 						<ui:include src="navmenu.xhtml" />
 					</div>
 				</h:form>
 
-
 				<div class="classicMenuHeader">
-					<h:form id="menuBar">
+					<h:form id="menu">
 						<ui:include src="/shared/menu.xhtml" />
 					</h:form>
 				</div>

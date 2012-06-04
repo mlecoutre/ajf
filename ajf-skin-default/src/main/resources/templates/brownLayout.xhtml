@@ -1,0 +1,78 @@
+<!DOCTYPE html >
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta charset="UTF-8" />
+	<base href="http://${request.serverName}:${request.serverPort}${request.contextPath}/" />
+
+
+	<h:outputStylesheet library="brand/css" name="style.css" />
+	<h:outputStylesheet library="brand/css" name="ajf.css" />
+	<h:outputStylesheet library="brand/css" name="brownLayout.css" />
+	<h:outputStylesheet library="css" name="custom.css" />
+	<title><ui:insert name="applicationTitle">
+			<h:outputText value="#{m['application.title']}" />
+		</ui:insert></title>
+</h:head>
+
+<h:body>
+
+	<header>
+		<section class="header-left">
+			<h:graphicImage library="brand/images" name="arcelorMittalLogoWhite.png" class="logo" />
+
+			<ui:include src="/shared/title.xhtml" />
+
+			<aside class="login-info">
+				<div class="greetings">
+
+					<b>Welcome <a href="#"> <h:outputText value="#{securityMBean.username}" /></a>
+					</b>
+				</div>
+				<div style="height: 25%; width: 100%; float: top; text-align: right;">
+					<div style="height: 50%;">
+						<div style="text-align: right; float: right; overflow: hidden; min-width: 135px; max-width: 190px;"
+							id="organisation-div">
+
+							<a id="stu-4130">ArcelorMittal FCE</a>
+							<h:graphicImage library="brand/images" name="down.gif" style="cursor: pointer;" class="image-menu " />
+						</div>
+						<div style="text-align: right; float: right;">Organisation :</div>
+					</div>
+				</div>
+			</aside>
+		</section>
+		<aside class="header-right">
+			<nav>
+				<h:form id="nav_menu">
+					<ui:include src="navmenu.xhtml" />
+				</h:form>
+			</nav>
+		</aside>
+	</header>
+
+	<div id="body" class="body">
+		<div class="x-tab-panel steelTab">
+			<div class="x-panel-bwrap">
+				<div id="bodyContent" class=" x-panel divoverflow x-panel-noborder x-hide-display"
+					style="width: auto; min-height: 713px;">
+
+					<h:form>
+						<p:growl id="growl" showDetail="true" autoUpdate="true" globalOnly="true" sticky="false" />
+					</h:form>
+
+					<div class="x-tab-panel-body x-tab-panel-body-top" style="width: auto; height: auto; min-height: 747px;">
+						<ui:insert name="content" />
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<footer>
+		<div class="top"></div>
+		<div class="bottom">©ArcelorMittal - 07/05/2012 - Version XI - Legal</div>
+	</footer>
+</h:body>
+</html>

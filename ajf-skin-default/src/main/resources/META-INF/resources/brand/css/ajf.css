@@ -67,7 +67,7 @@
 
 .classicTitle {
 	top: 160px;
-	width: 200px;
+	width: 110px;
 	float: left;
 	padding-top: 42px;
 	padding-left: 150px;
@@ -78,7 +78,11 @@
 	float: right;
 }
 
-.welcomeNavMenu {
+.menuHeader {
+	float: right;
+	margin-right: 25px;
+	position: relative;
+	top: 10px;
 	
 }
 
@@ -86,8 +90,8 @@
 	float: right;
 	margin-right: 25px;
 	position: relative;
-	top: 40px;
-	right: -300px;
+	top: 10px;
+	
 }
 
 .classicMenuHeader {
