@@ -2,7 +2,6 @@ package am.ajf.core.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -13,6 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import am.ajf.forge.core.CrudGeneration;
+import am.ajf.forge.lib.EntityDTO;
 import am.ajf.forge.util.JavaUtils;
 import am.ajf.forge.util.TemplateUtils;
 
@@ -26,7 +26,7 @@ import am.ajf.forge.util.TemplateUtils;
  */
 public class TemlateUtilsTest {
 
-	private static List<String> myAttributes;
+	static EntityDTO entityDto = new EntityDTO();
 
 	/**
 	 * Test of the fail execution of Templating throw FreeMarker when the
@@ -119,8 +119,9 @@ public class TemlateUtilsTest {
 		myFile.createNewFile();
 
 		Map dataModel = projectManagement.buildDataModel("voila",
-				"myGeneratedBean", "Person", myAttributes,
-				"am.ajf.web.controllers.test");
+				"myGeneratedBean", "Person",
+				entityDto.getEntityAttributeList(),
+				"am.ajf.web.controllers.test", entityDto.getEntityLibPackage());
 
 		projectManagement.buildCrudManagedBean(myFile, dataModel);
 
@@ -137,8 +138,9 @@ public class TemlateUtilsTest {
 			myFile.createNewFile();
 
 		Map dataModel = projectManagement.buildDataModel("voila",
-				"myGeneratedBean", "Person", myAttributes,
-				"am.ajf.web.controllers.test");
+				"myGeneratedBean", "Person",
+				entityDto.getEntityAttributeList(),
+				"am.ajf.web.controllers.test", entityDto.getEntityLibPackage());
 
 		projectManagement.buildCrudXhtml(myFile, dataModel);
 
@@ -157,7 +159,10 @@ public class TemlateUtilsTest {
 				.getJavaSource();
 
 		JavaUtils javaUtils = new JavaUtils();
-		myAttributes = javaUtils.retrieveAttributeList(javaSource);
+		entityDto.setEntityAttributeList(javaUtils
+				.retrieveAttributeList(javaSource));
+
+		entityDto.setEntityLibPackage("am.ajf.myProject.lib.model");
 
 	}
 

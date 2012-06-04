@@ -17,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import am.ajf.core.services.exceptions.BusinessLayerException;
-import am.ajf.${projectGlobalName}.model.${function.entity.name};
+import ${function.entity.libPackage}.${function.entity.name};
 
 
 @Named

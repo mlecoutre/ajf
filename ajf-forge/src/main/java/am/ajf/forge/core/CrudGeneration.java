@@ -26,7 +26,7 @@ public class CrudGeneration {
 
 	/**
 	 * Generate a Managed Bean java class according to the FreeMarker template
-	 * corresponding to the input functionName, entityName and java package
+	 * corresponding to the input data model
 	 * 
 	 * @param managedBeanFile
 	 * @param functionName
@@ -58,6 +58,8 @@ public class CrudGeneration {
 	}
 
 	/**
+	 * Build the CRUD xhmtl corresponding to input data model, and the
+	 * freemarker template. The xhtml file is also set as input
 	 * 
 	 * @param xhtmlFile
 	 * @param functionName
@@ -92,15 +94,20 @@ public class CrudGeneration {
 
 	/**
 	 * 
+	 * Generate the common part of the data model
+	 * 
 	 * @param globalProjectName
 	 * @param functionName
 	 * @param entityName
 	 * @param entityAttributes
+	 * @param javaPackage
+	 * @param entityLibPackage
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map buildDataModel(String globalProjectName, String functionName,
-			String entityName, List<String> entityAttributes, String javaPackage) {
+			String entityName, List<String> entityAttributes,
+			String javaPackage, String entityLibPackage) {
 
 		// Generate an my data model
 		Map root = new HashMap();
@@ -113,6 +120,7 @@ public class CrudGeneration {
 		// function.put("entityName", entityName);
 		Map entity = new HashMap();
 		entity.put("name", entityName);
+		entity.put("libPackage", entityLibPackage);
 
 		SimpleSequence attributeSequence = new SimpleSequence();
 		for (String attribute : entityAttributes) {
