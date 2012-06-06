@@ -25,7 +25,7 @@ import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
 import am.ajf.forge.util.ExtractionUtils;
-import am.ajf.forge.util.ProjectUtils;
+import am.ajf.forge.util.ProjectHelper;
 
 /**
  * AJF2 Ear project generator.
@@ -35,6 +35,8 @@ import am.ajf.forge.util.ProjectUtils;
  */
 @Singleton
 public class EarProjectGenerator {
+
+	private ProjectHelper projectUtils = new ProjectHelper();
 
 	/**
 	 * Construction of an EAR core type project
@@ -58,31 +60,31 @@ public class EarProjectGenerator {
 				MetadataFacet.class, ResourceFacet.class);
 
 		// Set pom from model
-		ProjectUtils.setPomFromModelFile(project, MODEL_POM_EAR);
+		projectUtils.setPomFromModelFile(project, MODEL_POM_EAR);
 
-		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
+		projectUtils.setBasicProjectData(globalProjectName, projectFinalName,
 				project);
 		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
 		packaging.setPackagingType(PackagingType.JAR);
 
 		// Set the Pom parent
-		ProjectUtils.setInternalPomParent(globalProjectName, project);
+		projectUtils.setInternalPomParent(globalProjectName, project);
 
 		// Set inter-dependencies
 		if (isWs)
-			ProjectUtils.addInternalDependency(globalProjectName, project,
+			projectUtils.addInternalDependency(globalProjectName, project,
 					PROJECT_TYPE_WS);
 		if (isEjb)
-			ProjectUtils.addInternalDependency(globalProjectName, project,
+			projectUtils.addInternalDependency(globalProjectName, project,
 					PROJECT_TYPE_EJB);
 
-		ProjectUtils.addInternalDependency(globalProjectName, project,
+		projectUtils.addInternalDependency(globalProjectName, project,
 				PROJECT_TYPE_UI);
-		ProjectUtils.addInternalDependency(globalProjectName, project,
+		projectUtils.addInternalDependency(globalProjectName, project,
 				PROJECT_TYPE_CORE);
-		ProjectUtils.addInternalDependency(globalProjectName, project,
+		projectUtils.addInternalDependency(globalProjectName, project,
 				PROJECT_TYPE_LIB);
-		ProjectUtils.addInternalDependency(globalProjectName, project,
+		projectUtils.addInternalDependency(globalProjectName, project,
 				PROJECT_TYPE_CONFIG);
 
 		// Configure Ear maven plugin, Web Modules
@@ -100,7 +102,7 @@ public class EarProjectGenerator {
 				.getAbsolutePath().concat("/src")));
 
 		// Generate site.xml file
-		ProjectUtils.generateSiteXmlFile(project, globalProjectName, false,
+		projectUtils.generateSiteXmlFile(project, globalProjectName, false,
 				false);
 
 		return project;

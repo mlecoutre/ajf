@@ -21,7 +21,7 @@ import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
 import am.ajf.forge.util.ExtractionUtils;
-import am.ajf.forge.util.ProjectUtils;
+import am.ajf.forge.util.ProjectHelper;
 
 /**
  * AJF2 Core project generator.
@@ -31,6 +31,8 @@ import am.ajf.forge.util.ProjectUtils;
  */
 @Singleton
 public class CoreProjectGenerator {
+
+	private ProjectHelper projectUtils = new ProjectHelper();
 
 	/**
 	 * Create AJF core project structure, with corresponding AJF dependencies
@@ -65,7 +67,7 @@ public class CoreProjectGenerator {
 					ResourceFacet.class);
 
 			// Set pom from example pom file
-			ProjectUtils.setPomFromModelFile(project, MODEL_POM_CORE);
+			projectUtils.setPomFromModelFile(project, MODEL_POM_CORE);
 
 			// Set project packaging
 			PackagingFacet packaging = project.getFacet(PackagingFacet.class);
@@ -80,16 +82,16 @@ public class CoreProjectGenerator {
 					.getResourceFolder().getUnderlyingResourceObject());
 
 			// Set inter dependencies
-			ProjectUtils.addInternalDependencyScoped(globalProjectName,
+			projectUtils.addInternalDependencyScoped(globalProjectName,
 					project, PROJECT_TYPE_CONFIG, "runtime");
-			ProjectUtils.addInternalDependency(globalProjectName, project,
+			projectUtils.addInternalDependency(globalProjectName, project,
 					PROJECT_TYPE_LIB);
 
 			// Set the Pom parent
-			ProjectUtils.setInternalPomParent(globalProjectName, project);
+			projectUtils.setInternalPomParent(globalProjectName, project);
 
 			// Set project meta data in pom
-			ProjectUtils.setBasicProjectData(globalProjectName,
+			projectUtils.setBasicProjectData(globalProjectName,
 					projectFinalName, project);
 
 			// Site
@@ -98,7 +100,7 @@ public class CoreProjectGenerator {
 					.getAbsolutePath().concat("/src")));
 
 			// Generate site.xml file
-			ProjectUtils.generateSiteXmlFile(project, globalProjectName, true,
+			projectUtils.generateSiteXmlFile(project, globalProjectName, true,
 					false);
 
 		} catch (Exception e) {

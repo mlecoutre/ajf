@@ -27,7 +27,7 @@ import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
 import am.ajf.forge.util.ExtractionUtils;
-import am.ajf.forge.util.ProjectUtils;
+import am.ajf.forge.util.ProjectHelper;
 
 /**
  * AJF2 Parent project generator. (parent of the current solution)
@@ -37,6 +37,8 @@ import am.ajf.forge.util.ProjectUtils;
  */
 @Singleton
 public class ParentProjectGenerator {
+
+	private ProjectHelper projectUtils = new ProjectHelper();
 
 	/**
 	 * Construction of a PARENT type project
@@ -66,35 +68,35 @@ public class ParentProjectGenerator {
 				MetadataFacet.class);
 
 		// Set pom from example pom file
-		ProjectUtils.setPomFromModelFile(project, MODEL_POM_PARENT);
+		projectUtils.setPomFromModelFile(project, MODEL_POM_PARENT);
 
 		// Set project meta data
-		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
+		projectUtils.setBasicProjectData(globalProjectName, projectFinalName,
 				project);
 
 		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
 		packaging.setPackagingType(PackagingType.BASIC);
 
-		String projectGroupId = ProjectUtils.projectGroupId(globalProjectName);
+		String projectGroupId = projectUtils.projectGroupId(globalProjectName);
 
-		ProjectUtils.addManagementDependency(project, projectGroupId,
+		projectUtils.addManagementDependency(project, projectGroupId,
 				globalProjectName + "-" + PROJECT_TYPE_CONFIG,
 				START_PROJECT_MILESTONE, null);
-		ProjectUtils.addManagementDependency(project, projectGroupId,
+		projectUtils.addManagementDependency(project, projectGroupId,
 				globalProjectName + "-" + PROJECT_TYPE_LIB,
 				START_PROJECT_MILESTONE, null);
-		ProjectUtils.addManagementDependency(project, projectGroupId,
+		projectUtils.addManagementDependency(project, projectGroupId,
 				globalProjectName + "-" + PROJECT_TYPE_CORE,
 				START_PROJECT_MILESTONE, null);
-		ProjectUtils.addManagementDependency(project, projectGroupId,
+		projectUtils.addManagementDependency(project, projectGroupId,
 				globalProjectName + "-" + PROJECT_TYPE_UI,
 				START_PROJECT_MILESTONE, "war");
 		if (isWs)
-			ProjectUtils.addManagementDependency(project, projectGroupId,
+			projectUtils.addManagementDependency(project, projectGroupId,
 					globalProjectName + "-" + PROJECT_TYPE_WS,
 					START_PROJECT_MILESTONE, "war");
 		if (isEjb)
-			ProjectUtils.addManagementDependency(project, projectGroupId,
+			projectUtils.addManagementDependency(project, projectGroupId,
 					globalProjectName + "-" + PROJECT_TYPE_EJB,
 					START_PROJECT_MILESTONE, "ejb");
 
@@ -134,7 +136,7 @@ public class ParentProjectGenerator {
 				.getAbsolutePath().concat("/src")));
 
 		// Generate site.xml file
-		ProjectUtils
+		projectUtils
 				.generateSiteXmlFile(project, globalProjectName, true, true);
 
 		return project;

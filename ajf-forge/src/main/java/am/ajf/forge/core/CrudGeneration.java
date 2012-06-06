@@ -10,6 +10,8 @@ import java.util.Map;
 
 import javax.inject.Singleton;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 import am.ajf.forge.util.TemplateUtils;
 import freemarker.template.SimpleSequence;
 import freemarker.template.Template;
@@ -21,8 +23,13 @@ public class CrudGeneration {
 
 	private static final String CRUD_MBEAN_TEMPLATE = "CrudMBean.ftl";
 	private static final String CRUD_XHTML_TEMPLATE = "CrudXhtml.ftl";
+	private static final String CRUD_BUSINESS_DELEGATE_TEMPLATE = "BusinessDelegate.ftl";
 
 	TemplateUtils templateUtils;
+
+	public CrudGeneration() {
+		super();
+	}
 
 	/**
 	 * Generate a Managed Bean java class according to the FreeMarker template
@@ -93,6 +100,59 @@ public class CrudGeneration {
 	}
 
 	/**
+	 * Build the function BD interface corresponding to template and inputs
+	 * 
+	 * @param file
+	 * @param libBusinessPackage
+	 * @param functionName
+	 * @param uts
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void buildBusinessDelegateInterface(File file,
+			String libBusinessPackage, String functionName, List<String> uts)
+			throws Exception {
+
+		try {
+			FileOutputStream fos = new FileOutputStream(file);
+			Writer writer = new OutputStreamWriter(fos);
+
+			Template myTemplate = loadTemplate(CRUD_BUSINESS_DELEGATE_TEMPLATE);
+
+			Map dataModelMap = new HashMap();
+
+			// package that contain the BD interfaces in the lib project
+			dataModelMap.put("libBusinessPackage", libBusinessPackage);
+			dataModelMap.put("unCapitalizeFirst", new UnCapitalizeFirst());
+			dataModelMap.put("capitalizeFirst", new CapitalizeFirst());
+
+			// function beeing generated
+			Map function = new HashMap();
+			function.put("name", functionName);
+
+			// UT List
+			SimpleSequence utSequence = new SimpleSequence();
+			for (String ut : uts) {
+				utSequence.add(ut);
+			}
+			function.put("UTs", utSequence);
+
+			dataModelMap.put("function", function);
+
+			templateUtils.mergeDataModelWithTemplate(dataModelMap, myTemplate,
+					writer);
+
+		} catch (Exception e) {
+
+			System.err
+					.println("Error occured in buildBusinessDelegateInterface : ");
+			e.printStackTrace();
+			throw e;
+		}
+
+	}
+
+	/**
 	 * 
 	 * Generate the common part of the data model
 	 * 
@@ -129,6 +189,7 @@ public class CrudGeneration {
 		entity.put("attributes", attributeSequence);
 
 		function.put("entity", entity);
+		function.put("capitalizeFirst", new CapitalizeFirst());
 
 		root.put("function", function);
 
@@ -174,5 +235,29 @@ class TransformToEL implements TemplateMethodModel {
 		}
 
 		return "#{".concat(returnValue).concat("}");
+	}
+}
+
+class CapitalizeFirst implements TemplateMethodModel {
+
+	@SuppressWarnings("rawtypes")
+	public String exec(List args) throws TemplateModelException {
+		if (args.size() != 1) {
+			throw new TemplateModelException("Wrong arguments");
+		}
+		return WordUtils.capitalize((String) args.get(0));
+
+	}
+}
+
+class UnCapitalizeFirst implements TemplateMethodModel {
+
+	@SuppressWarnings("rawtypes")
+	public String exec(List args) throws TemplateModelException {
+		if (args.size() != 1) {
+			throw new TemplateModelException("Wrong arguments");
+		}
+		return WordUtils.uncapitalize((String) args.get(0));
+
 	}
 }

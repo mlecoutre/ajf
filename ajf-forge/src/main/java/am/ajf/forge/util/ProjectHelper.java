@@ -15,6 +15,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
+import javax.inject.Singleton;
+
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
@@ -23,6 +25,13 @@ import org.apache.velocity.VelocityContext;
 import org.jboss.forge.maven.MavenCoreFacet;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.MetadataFacet;
+import org.jboss.forge.project.services.ProjectFactory;
+import org.jboss.forge.project.services.ResourceFactory;
+import org.jboss.forge.resources.DirectoryResource;
+import org.jboss.forge.shell.ShellMessages;
+import org.jboss.forge.shell.plugins.PipeOut;
+
+import am.ajf.forge.lib.ForgeConstants;
 
 /**
  * This utility class implements some methods that deals with the project
@@ -32,7 +41,8 @@ import org.jboss.forge.project.facets.MetadataFacet;
  * 
  */
 
-public class ProjectUtils {
+@Singleton
+public class ProjectHelper {
 
 	/**
 	 * Return the group ID of the procject. Project group id, suffixed by the
@@ -41,7 +51,7 @@ public class ProjectUtils {
 	 * @param globalProjectName
 	 * @return
 	 */
-	public static String projectGroupId(String globalProjectName) {
+	public String projectGroupId(String globalProjectName) {
 
 		return PROJECT_GROUPID_PREFIX.concat("." + globalProjectName);
 
@@ -61,13 +71,13 @@ public class ProjectUtils {
 	 *            true for a UI project)
 	 * @throws Exception
 	 */
-	public static void setPomFromModelFile(Project project, String modelPomFile)
+	public void setPomFromModelFile(Project project, String modelPomFile)
 			throws Exception {
 
 		System.out.println("** START - generating pom.xml from model...");
 
 		// Model Pom file
-		Model modelPom = ProjectUtils.getPomFromFile(modelPomFile);
+		Model modelPom = getPomFromFile(modelPomFile);
 
 		// Get the current generated project's pom file
 		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
@@ -91,7 +101,7 @@ public class ProjectUtils {
 	 * @param project
 	 * @return
 	 */
-	public static void setBasicProjectData(String globalProjectName,
+	public void setBasicProjectData(String globalProjectName,
 			String finalProjectName, Project project) {
 
 		MetadataFacet meta = project.getFacet(MetadataFacet.class);
@@ -121,7 +131,7 @@ public class ProjectUtils {
 	 * @param dependencyProjectType
 	 *            : project type of the internal project dependency.
 	 */
-	public static void addInternalDependency(String globalProjectName,
+	public void addInternalDependency(String globalProjectName,
 			Project project, String dependencyProjectType) {
 
 		addInternalDependencyScoped(globalProjectName, project,
@@ -139,7 +149,7 @@ public class ProjectUtils {
 	 * @param dependencyProjectType
 	 * @param scope
 	 */
-	public static void addInternalDependencyScoped(String globalProjectName,
+	public void addInternalDependencyScoped(String globalProjectName,
 			Project project, String dependencyProjectType, String scope) {
 
 		String artifactId = globalProjectName + "-" + dependencyProjectType;
@@ -167,11 +177,11 @@ public class ProjectUtils {
 	 * @return Pom model object
 	 * @throws Exception
 	 */
-	public static Model getPomFromFile(String resourcePomFile) throws Exception {
+	public Model getPomFromFile(String resourcePomFile) throws Exception {
 
 		try {
 
-			InputStream pomModelIs = ProjectUtils.class.getClassLoader()
+			InputStream pomModelIs = ProjectHelper.class.getClassLoader()
 					.getResourceAsStream(resourcePomFile);
 			Model pom = new Model();
 			pom = new MavenXpp3Reader().read(pomModelIs);
@@ -201,7 +211,7 @@ public class ProjectUtils {
 	 * @param scope
 	 * @param type
 	 */
-	public static void addDependency(Project project, String groupId,
+	public void addDependency(Project project, String groupId,
 			String artifactId, String version, String scope, String type) {
 
 		// Get the MavenFacet in order to grab the pom
@@ -237,7 +247,7 @@ public class ProjectUtils {
 	 * @param version
 	 * @param scope
 	 */
-	public static void addDependencyWithScope(Project project, String groupId,
+	public void addDependencyWithScope(Project project, String groupId,
 			String artifactId, String version, String scope) {
 
 		addDependency(project, groupId, artifactId, version, scope, null);
@@ -252,7 +262,7 @@ public class ProjectUtils {
 	 * @param artifactId
 	 * @param version
 	 */
-	public static void addSimpleDependency(Project project, String groupId,
+	public void addSimpleDependency(Project project, String groupId,
 			String artifactId, String version) {
 
 		addDependency(project, groupId, artifactId, version, null, null);
@@ -268,7 +278,7 @@ public class ProjectUtils {
 	 * @param version
 	 * @param type
 	 */
-	public static void addManagementDependency(Project project, String groupId,
+	public void addManagementDependency(Project project, String groupId,
 			String artifactId, String version, String type) {
 
 		// Get the MavenFacet in order to grab the pom
@@ -295,7 +305,7 @@ public class ProjectUtils {
 	 * @param propertyName
 	 * @param propertyValue
 	 */
-	public static void addPomProperty(Project project, String propertyName,
+	public void addPomProperty(Project project, String propertyName,
 			String propertyValue) {
 
 		MavenCoreFacet mavenCoreFacet = project.getFacet(MavenCoreFacet.class);
@@ -317,8 +327,7 @@ public class ProjectUtils {
 	 * @param globalProjectName
 	 * @param project
 	 */
-	public static void setInternalPomParent(String globalProjectName,
-			Project project) {
+	public void setInternalPomParent(String globalProjectName, Project project) {
 
 		String parentGroupId = projectGroupId(globalProjectName);
 		String parentArtifactId = globalProjectName + "-" + PROJECT_TYPE_PARENT;
@@ -343,8 +352,8 @@ public class ProjectUtils {
 	 * @param parentVersion
 	 * @param project
 	 */
-	public static void setPomParent(String parentGroupId,
-			String parentArtifactId, String parentVersion, Project project) {
+	public void setPomParent(String parentGroupId, String parentArtifactId,
+			String parentVersion, Project project) {
 
 		setPomParentWithPath(parentGroupId, parentArtifactId, parentVersion,
 				null, project);
@@ -362,7 +371,7 @@ public class ProjectUtils {
 	 * @param parentRelativPath
 	 * @param project
 	 */
-	private static void setPomParentWithPath(String parentGroupId,
+	private void setPomParentWithPath(String parentGroupId,
 			String parentArtifactId, String parentVersion,
 			String parentRelativPath, Project project) {
 
@@ -395,12 +404,12 @@ public class ProjectUtils {
 	 * @param pom
 	 * @throws Exception
 	 */
-	public static void addAjfDependenciesToPom(
+	public void addAjfDependenciesToPom(
 			List<String> ajfDependenciesArtifactIds, String sourceFileName,
 			Model pom) throws Exception {
 
 		try {
-			InputStream mavenDepsIs = ProjectUtils.class.getClassLoader()
+			InputStream mavenDepsIs = ProjectHelper.class.getClassLoader()
 					.getResourceAsStream(sourceFileName);
 
 			Model ajfDepsModel = new MavenXpp3Reader().read(mavenDepsIs);
@@ -443,9 +452,8 @@ public class ProjectUtils {
 	 *            site.xml (different menus) has to be created
 	 * @throws Exception
 	 */
-	public static void generateSiteXmlFile(Project project,
-			String applicationName, boolean isReports, boolean isParentProject)
-			throws Exception {
+	public void generateSiteXmlFile(Project project, String applicationName,
+			boolean isReports, boolean isParentProject) throws Exception {
 
 		// Site.xml file
 		File siteXmlFile = new File(project.getProjectRoot()
@@ -469,5 +477,64 @@ public class ProjectUtils {
 		velocityBuilder.merge(SITE_XML_VELOCITY_TEMPLATE,
 				siteXmlFile.getAbsolutePath());
 
+	}
+
+	/**
+	 * Retrieve the project (as a forge Project object) contained in the same
+	 * exploded ajf solution than the input project.
+	 * 
+	 * @param project
+	 *            intial forge project from the global ajf solution
+	 * @param projectFactory
+	 * @param resourceFactory
+	 * @param initialProjectType
+	 *            ajf project suffixe of the initial Project set as input
+	 * @param newProjectType
+	 *            ajf project suffixe that you want to retrieve from the
+	 *            solution. (i.e: "lib" if you want to retrive the
+	 *            "projectName"-lib) * @param out
+	 * @return Project
+	 * @throws Exception
+	 */
+	public Project locateProjectFromSolution(Project project,
+			ProjectFactory projectFactory, ResourceFactory resourceFactory,
+			String initialProjectType, String newProjectType, PipeOut out)
+			throws Exception {
+		/*
+		 * Locate the LIB project from the expoded AJF Solution
+		 */
+		File uiProjectFile = project.getProjectRoot()
+				.getUnderlyingResourceObject();
+
+		File libProjectFile = new File(uiProjectFile
+				.getParent()
+				.concat("/")
+				.concat(uiProjectFile.getName())
+				.replace(ForgeConstants.PROJECT_TYPE_UI,
+						ForgeConstants.PROJECT_TYPE_LIB));
+
+		// Check if the lib project directory does exist
+		if (!libProjectFile.exists()) {
+			throw new Exception(
+					"The project "
+							+ libProjectFile.getName()
+							+ " does not exist. Please check that you are in an exploded ajf solution");
+		}
+
+		// Load the lib project in the Project forge object
+		Project libProject = projectFactory
+				.findProject((DirectoryResource) resourceFactory
+						.getResourceFrom(libProjectFile));
+
+		uiProjectFile = null;
+		libProjectFile = null;
+		out.println();
+		ShellMessages.info(out,
+				"Project lib of your AJF solution has been loaded :"
+						+ libProject.getProjectRoot()
+								.getUnderlyingResourceObject()
+								.getAbsolutePath());
+
+		return libProject;
 	}
 }

@@ -13,7 +13,7 @@
 	<ui:define name="content">
 	
 	<h:form id="form">
-	<p:fieldset id="searchPanelID" legend="Create ${function.entity.name}" toggleable="true">
+		<p:panel id="searchPanelID" header="Create ${function.entity.name}" toggleable="true">
 				
 		<p:panelGrid style="margin-bottom:2px;width:100%;" cellpadding="2">
 
@@ -26,15 +26,20 @@
 			</p:column>
 			
 			<p:column>
-				<p:inputText
-					value="${setToEl(beanName,"newData",att)}"/>
+				<p:inputText id="${att}"
+					value="${setToEl(beanName,"newData",att)}">
+					<f:ajax execute="${att}" event="blur" render="${att}-error" />
+				</p:inputText>
+				<h:panelGroup>
+					<p:message id="${att}-error" for="${att}" />
+				</h:panelGroup>
 			</p:column>
 		</p:row>
 		</#list>
 		<p:row>
-			<p:column colspan="4" style="text-align:right;">
+			<p:column colspan="4">
 				<center>
-					<p:commandButton value="Add"
+					<p:commandButton value="Add ${function.entity.name}"
 						actionListener="${setToEl(beanName,addUT)}"
 						update=":form:iPnl">
 					</p:commandButton>
@@ -42,7 +47,7 @@
 			</p:column>
 		</p:row>
 		</p:panelGrid>
-	</p:fieldset>
+	</p:panel>
 		
 	
 	<p:panel id="iPnl"
@@ -52,21 +57,19 @@
 				<p:dataTable id="infosTbl" var="info"
 					value="${setToEl(beanName,"dataList")}" paginator="true"
 					rows="10" resizableColumns="true" liveScroll="true"
-					scrollWidth="1148"
+					scrollWidth="1148" rowKey="${setToEl("info",function.entity.attributes[0])<#-- The first attribute is used as id -->}"
 					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 					selection="${setToEl(beanName,"selectedItems")}" style="align:left;">
-			
-					<#-- TODO : DataModel must be correct for selection -->
-					<p:column selectionMode="multiple" style="width:18px" />
+					
+					<f:facet name="header">  
+            				RadioButton Based Selection  
+     				</f:facet>
 
-					<#-- <p:column sortBy="${setToEl("info")}"
-						filterBy="${setToEl("info")}"> -->
-						
+					<p:column selectionMode="multiple" style="width:18px" />
+							
 					<#list function.entity.attributes as att>
-					<p:column>
-						<f:facet name="header">
-							<h:outputText value="${setToEl("info",att)}" />
-						</f:facet> 
+					<p:column headerText="${att}">
+							${setToEl("info",att)}
 					</p:column>
 					</#list>
 					
@@ -74,7 +77,7 @@
 						<#assign deleteUT = "delete${function.entity.name}">
 						<p:commandButton value="Delete"
 							actionListener="${setToEl(beanName,deleteUT)}"
-							update=":form:iPnl" image="ui-icon-arrowrefresh-1-e">
+							update=":form:iPnl" icon="ui-icon-trash">
 						</p:commandButton>
 					</f:facet>
 					

@@ -7,16 +7,18 @@ import org.apache.maven.model.Model;
 import org.apache.maven.model.Profile;
 import org.junit.Test;
 
-import am.ajf.forge.util.ProjectUtils;
+import am.ajf.forge.util.ProjectHelper;
 
 public class ProjectUtilsTest {
+
+	private ProjectHelper projectUtils = new ProjectHelper();
 
 	@Test
 	public void testGetPomFromFile() throws Exception {
 
 		String profileToFindInPom = "TOMCAT7";
 
-		Model pom = ProjectUtils.getPomFromFile(MODEL_POM_UI);
+		Model pom = projectUtils.getPomFromFile(MODEL_POM_UI);
 
 		Profile myProfile = null;
 		for (Profile profile : pom.getProfiles()) {
@@ -38,7 +40,7 @@ public class ProjectUtilsTest {
 	@Test(expected = Exception.class)
 	public void testGetPomFromFileFail() throws Exception {
 
-		ProjectUtils.getPomFromFile("non-existing-file");
+		projectUtils.getPomFromFile("non-existing-file");
 	}
 
 	// @Test

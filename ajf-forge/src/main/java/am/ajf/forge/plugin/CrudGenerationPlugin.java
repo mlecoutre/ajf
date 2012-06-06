@@ -18,7 +18,6 @@ import org.jboss.forge.project.facets.JavaSourceFacet;
 import org.jboss.forge.project.facets.WebResourceFacet;
 import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.project.services.ResourceFactory;
-import org.jboss.forge.resources.DirectoryResource;
 import org.jboss.forge.shell.Shell;
 import org.jboss.forge.shell.ShellColor;
 import org.jboss.forge.shell.ShellMessages;
@@ -31,9 +30,11 @@ import org.jboss.forge.shell.plugins.PipeOut;
 import org.jboss.forge.shell.plugins.Plugin;
 
 import am.ajf.forge.core.CrudGeneration;
+import am.ajf.forge.exception.EscapeForgePromptException;
 import am.ajf.forge.lib.EntityDTO;
 import am.ajf.forge.lib.ForgeConstants;
 import am.ajf.forge.util.JavaUtils;
+import am.ajf.forge.util.ProjectHelper;
 
 /**
  * 
@@ -56,12 +57,18 @@ public class CrudGenerationPlugin implements Plugin {
 	@Inject
 	private Shell shell;
 
-	CrudGeneration projectManagement = new CrudGeneration();
+	@Inject
+	CrudGeneration projectManagement;
+
+	@Inject
+	ProjectHelper projectHelper;
+
 	JavaUtils javaUtils = new JavaUtils();
 
 	@DefaultCommand
 	public void show(final PipeOut out) {
 
+		// TODO default command interface
 		if (null != project) {
 			MavenCoreFacet mavenFacet = project.getFacet(MavenCoreFacet.class);
 			Model pom = mavenFacet.getPOM();
@@ -79,14 +86,17 @@ public class CrudGenerationPlugin implements Plugin {
 	@Command("AddCrudFonction")
 	public void createCrudFunction(
 			@Option(required = true, name = "function name", shortName = "ft", description = " name of the function p+") String function,
-			@Option(required = true, name = "EntityName", shortName = "ent", description = " Name of the entity that you want to manage through this function (i.e : Employee),"
-					+ " this must correspond to the Model java class") String entityName,
+			@Option(required = true, name = "EntityName", shortName = "ent", description = " Name of the entity (i.e : Employee),"
+					+ " this must correspond to the java class model") String entityName,
 			final PipeOut out) {
 
 		try {
 			// debug mode
 			shell.setVerbose(true);
 
+			/*
+			 * PREPARATION FOR GENERATION
+			 */
 			// get the global project Name (without any suffixe)
 			String ajfSolutionGlobalName = project.getProjectRoot().getName()
 					.replace("-ui", "");
@@ -102,12 +112,7 @@ public class CrudGenerationPlugin implements Plugin {
 								function.replaceAll("MBean", ""));
 			}
 
-			// Retrieve the Attributes of the input entity
-			EntityDTO entityDto = retrieveAttributeList(ajfSolutionGlobalName,
-					entityName, out);
-
 			JavaSourceFacet javaFacet = project.getFacet(JavaSourceFacet.class);
-
 			// Which package where to create managedBean class
 			String managedBeanPackage = shell.prompt(
 					"Which package for Managed Bean ?",
@@ -117,6 +122,24 @@ public class CrudGenerationPlugin implements Plugin {
 			if ("exit".equals(managedBeanPackage.toLowerCase()))
 				return;
 
+			// Retrieve the lib component project from the UI (in which we
+			// should be)
+			Project libProject = projectHelper.locateProjectFromSolution(
+					project, projectFactory, resourceFactory,
+					ForgeConstants.PROJECT_TYPE_UI,
+					ForgeConstants.PROJECT_TYPE_LIB, out);
+			// Java facet of the lib project
+			JavaSourceFacet libJavaFacet = libProject
+					.getFacet(JavaSourceFacet.class);
+
+			/*
+			 * GENERATION
+			 */
+
+			// Retrieve the Attributes of the input entity
+			EntityDTO entityDto = retrieveAttributeList(ajfSolutionGlobalName,
+					libJavaFacet, entityName, out);
+
 			// Generate managed bean for CRUD
 			generateManagedBean(function, entityName, ajfSolutionGlobalName,
 					entityDto, managedBeanPackage, javaFacet, out);
@@ -125,8 +148,20 @@ public class CrudGenerationPlugin implements Plugin {
 			generateXhtml(function, entityName, out, ajfSolutionGlobalName,
 					entityDto, managedBeanPackage);
 
-			// END
-			ShellMessages.info(out, "CRUD generated for function:" + function);
+			// generate Business Delegate interface for policy
+			generateBDInterface(function, out, ajfSolutionGlobalName,
+					libProject, libJavaFacet, entityName);
+
+			/*
+			 * END
+			 */
+			ShellMessages.success(out, "CRUD generated for function:"
+					+ function);
+
+		} catch (EscapeForgePromptException esc) {
+
+			shell.print(ShellColor.RED, "***BYE BYE***");
+			return;
 
 		} catch (Exception e) {
 
@@ -140,7 +175,117 @@ public class CrudGenerationPlugin implements Plugin {
 	}
 
 	/**
-	 * Generate XHTML file related to the CRUD associated to inputs
+	 * 
+	 * @param function
+	 * @param out
+	 * @param ajfSolutionGlobalName
+	 * @param libProject
+	 * @param libJavaFacet
+	 * @throws Exception
+	 */
+	private void generateBDInterface(String function, final PipeOut out,
+			String ajfSolutionGlobalName, Project libProject,
+			JavaSourceFacet libJavaFacet, String entityName) throws Exception {
+
+		ShellMessages.info(out, "Start generating business delegate interface");
+
+		File libSrcFolder = libJavaFacet.getSourceFolder()
+				.getUnderlyingResourceObject();
+
+		// lib package containing BD interfaces
+		String libBDpackage = ajfSolutionGlobalName.toLowerCase().concat(
+				"/lib/business");
+		File libBusinessFolder = new File(libSrcFolder.getAbsolutePath()
+				.concat("/").concat(libBDpackage));
+		boolean foundLibBDPackage = libBusinessFolder.exists();
+
+		// Loop until found package
+		while (!foundLibBDPackage) {
+
+			if (!libBusinessFolder.exists()) {
+
+				// error message
+				ShellMessages.error(out,
+						"the package ".concat(libBDpackage.replace("/", "."))
+								.concat("does not exist !"));
+
+				// Ask user to create this new package
+				if (shell.promptBoolean(
+						"Do you want to create this new Package for BDs ?",
+						false)) {
+
+					System.out.println("Create package : "
+							+ libBusinessFolder.mkdirs());
+
+				} else {
+
+					// Prompt user for package containing BD
+					libBDpackage = shell.prompt(
+							"Sub package of the "
+									+ libProject.getProjectRoot().getName()
+									+ " that contains the BD interfaces ?",
+							ajfSolutionGlobalName.toLowerCase()
+									.concat("/lib/business").replace("/", "."))
+							.replace(".", "/");
+
+					// physiscal folder corresponding to input
+					libBusinessFolder = new File(libSrcFolder.getAbsolutePath()
+							.concat("/").concat(libBDpackage));
+				}
+
+			} else if ("exit".equals(libBDpackage.toLowerCase())) {
+				// Exit prompt loop
+				throw new EscapeForgePromptException();
+
+			} else {
+				// Go on
+				foundLibBDPackage = true;
+				System.out.println("Lib business package folder : "
+						+ libBusinessFolder.getAbsolutePath());
+			}
+		}
+
+		// Create function BD interface
+		File functionBdFile = new File(libBusinessFolder.getAbsolutePath()
+				.concat("/" + WordUtils.capitalize(function) + "BD.java"));
+
+		// IF File already exist and user does not want to overwrite it ->
+		// Escape
+		if (functionBdFile.exists()
+				&& !shell
+						.promptBoolean("File "
+								.concat(functionBdFile.getName())
+								.concat(" already exists. Do you want to overWrite ? "))) {
+
+			ShellMessages.info(out, "Stopping the generation process...");
+			throw new EscapeForgePromptException();
+
+		} else if (!functionBdFile.exists()) {
+
+			// if file does not exist, we create it
+			System.out.println("Creation of ".concat(functionBdFile.getName()
+					+ " : " + functionBdFile.createNewFile()));
+		} else {
+
+			// TODO update mode
+		}
+
+		// TODO This list will be entered by user (manually for the moment)
+		List<String> uts = new ArrayList<String>();
+		uts.add("list" + WordUtils.capitalize(entityName));
+		uts.add("add" + WordUtils.capitalize(entityName));
+		uts.add("update" + WordUtils.capitalize(entityName));
+		uts.add("delete" + WordUtils.capitalize(entityName));
+
+		projectManagement.buildBusinessDelegateInterface(functionBdFile,
+				libBDpackage.replace("/", "."), function, uts);
+
+		out.println();
+	}
+
+	/**
+	 * Generate XHTML file for web interface related to the CRUD associated to
+	 * inputs. Uses the freemarker template
 	 * 
 	 * @param function
 	 * @param entityName
@@ -152,10 +297,15 @@ public class CrudGenerationPlugin implements Plugin {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
-	protected void generateXhtml(String function, String entityName,
+	protected boolean generateXhtml(String function, String entityName,
 			final PipeOut out, String ajfSolutionGlobalName,
 			EntityDTO entityDto, String managedBeanPackage) throws IOException,
 			Exception {
+
+		ShellMessages.info(
+				out,
+				"Start generating xhtml file for function : ".concat(WordUtils
+						.uncapitalize(function) + ".xhtml"));
 		/*
 		 * Xhtml File Creation
 		 */
@@ -172,10 +322,13 @@ public class CrudGenerationPlugin implements Plugin {
 
 		webAppDirectory = null;
 
+		System.out.println("File path : " + myXhtmlFile.getAbsolutePath());
+
 		// Creation of the xhtml physical file
 		if (!myXhtmlFile.exists()) {
 			myXhtmlFile.getParentFile().mkdirs();
-			myXhtmlFile.createNewFile();
+			System.out.println("Physical file creation : ".concat(String
+					.valueOf(myXhtmlFile.createNewFile())));
 		}
 
 		// Generate the xhtml CRUD file
@@ -185,15 +338,18 @@ public class CrudGenerationPlugin implements Plugin {
 				entityDto.getEntityAttributeList(), managedBeanPackage,
 				entityDto.getEntityLibPackage().replace("/", "."));
 
-		ShellMessages.info(out,
-				"Start generating xhtml CRUD file for ".concat(entityName)
-						.concat(" : ").concat(myXhtmlFile.getAbsolutePath()));
+		System.out.println("Data model Map generated.");
 
 		// launch the generation
 		projectManagement.buildCrudXhtml(myXhtmlFile, dataModelMap);
 
+		System.out.println("Managed bean generation done.");
+		out.println();
+
 		dataModelMap = null;
 		webAppDirectory = null;
+
+		return true;
 	}
 
 	/**
@@ -201,8 +357,11 @@ public class CrudGenerationPlugin implements Plugin {
 	 * using a FreeMarker template
 	 * 
 	 * @param function
+	 *            for crud
 	 * @param entityName
+	 *            that is managed in Crud
 	 * @param ajfSolutionGlobalName
+	 *            name of ajf solution
 	 * @param entityAttributes
 	 * @param managedBeanPackage
 	 * @param javaFacet
@@ -216,6 +375,8 @@ public class CrudGenerationPlugin implements Plugin {
 			String managedBeanPackage, JavaSourceFacet javaFacet,
 			final PipeOut out) throws Exception {
 
+		ShellMessages.info(out, "Start generating ManagedBean class "
+				+ function + ".java");
 		/*
 		 * Managed Bean creation
 		 */
@@ -228,9 +389,6 @@ public class CrudGenerationPlugin implements Plugin {
 		File javaSrcFolder = javaFacet.getSourceFolder()
 				.getUnderlyingResourceObject();
 
-		out.print(ShellColor.MAGENTA,
-				"Java src folder : " + javaSrcFolder.getAbsolutePath() + "\n");
-
 		// Managed bean class java file
 		File managedBeanClassFile = new File(javaSrcFolder.getAbsolutePath()
 				.concat("/").concat(managedBeanPackage.replace(".", "/"))
@@ -239,8 +397,8 @@ public class CrudGenerationPlugin implements Plugin {
 		// Create directory if needed
 		managedBeanClassFile.getParentFile().mkdirs();
 		if (!managedBeanClassFile.exists())
-			ShellMessages.info(out, "Creation of ManagedBean class " + function
-					+ " : " + managedBeanClassFile.createNewFile());
+			System.out.println("Physical file creation : "
+					+ managedBeanClassFile.createNewFile());
 
 		// Build data model for FreeMarker templates
 		Map dataModelMap = projectManagement.buildDataModel(
@@ -248,10 +406,14 @@ public class CrudGenerationPlugin implements Plugin {
 				javaUtils.capitalizeDatas(entityDto.getEntityAttributeList()),
 				managedBeanPackage,
 				entityDto.getEntityLibPackage().replace("/", "."));
+		System.out.println("Data model Map generated.");
 
 		// Call the crud managed bean java class generation
 		projectManagement.buildCrudManagedBean(managedBeanClassFile,
 				dataModelMap);
+
+		System.out.println("Managed bean generation done.");
+		out.println();
 
 		dataModelMap = null;
 		managedBeanClassFile = null;
@@ -268,6 +430,10 @@ public class CrudGenerationPlugin implements Plugin {
 	 * getter or setter in the model)
 	 * 
 	 * @param ajfSolutionGlobalName
+	 * @param libJavaFacet
+	 *            JavaSourceFacet corresponding to the lib component project of
+	 *            the global exploded ajf solution lib component project of the
+	 *            same ajf exploded solution
 	 * @param entityName
 	 * @param out
 	 * @return List<String> attributes list corresponding to Entity Model
@@ -275,55 +441,24 @@ public class CrudGenerationPlugin implements Plugin {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	protected EntityDTO retrieveAttributeList(String ajfSolutionGlobalName,
-			String entityName, PipeOut out) throws Exception {
-		/*
-		 * Locate the LIB project from the expoded AJF Solution
-		 */
-		File uiProjectFile = project.getProjectRoot()
-				.getUnderlyingResourceObject();
-		File libProjectFile = new File(uiProjectFile
-				.getParent()
-				.concat("/")
-				.concat(uiProjectFile.getName())
-				.replace(ForgeConstants.PROJECT_TYPE_UI,
-						ForgeConstants.PROJECT_TYPE_LIB));
+			JavaSourceFacet libJavaFacet, String entityName, PipeOut out)
+			throws Exception {
 
-		// Check if the lib project directory does exist
-		if (!libProjectFile.exists()) {
-			throw new Exception(
-					"The project "
-							+ libProjectFile.getName()
-							+ " does not exist. Please check that you are in an exploded ajf solution");
-		}
-
-		// Load the lib project in the Project forge object
-		Project libProject = projectFactory
-				.findProject((DirectoryResource) resourceFactory
-						.getResourceFrom(libProjectFile));
-
-		uiProjectFile = null;
-		libProjectFile = null;
-		out.println();
-		ShellMessages.info(out,
-				"Project lib of your AJF solution has been loaded :"
-						+ libProject.getProjectRoot()
-								.getUnderlyingResourceObject()
-								.getAbsolutePath());
 		/*
 		 * Locate EntityModel
 		 */
-		JavaSourceFacet libJavaFacet = libProject
-				.getFacet(JavaSourceFacet.class);
+
 		// File libSrcFolder = libJavaFacet.getSourceFolder()
 		// .getUnderlyingResourceObject();
+
 		JavaSource modelJavaResource = null;
 
 		// Instanciate the output object
 		EntityDTO entityDto = new EntityDTO();
 
 		// Path of the supposed model (default value)
-		String entityPackage = "am/ajf/".concat(
-				ajfSolutionGlobalName.toLowerCase()).concat("/lib/model");
+		String entityPackage = ajfSolutionGlobalName.toLowerCase().concat(
+				"/lib/model");
 		String entityModelPath = entityPackage.concat("/").concat(
 				WordUtils.capitalize(entityName) + ".java");
 
@@ -358,7 +493,7 @@ public class CrudGenerationPlugin implements Plugin {
 					// of ajf solution
 					entityPackage = shell
 							.prompt("Sub-package of the Project-lib containing the Model class ",
-									entityPackage);
+									entityPackage.replace("/", "."));
 
 					// Prompt for model name
 					entityName = shell.prompt("Model class name",
@@ -370,7 +505,10 @@ public class CrudGenerationPlugin implements Plugin {
 				} else {
 					entityModelPath = null;
 					// TODO what to do now ? generate a model ?
-					throw ex;
+
+					shell.println();
+					shell.print("Stopping the CRUD generation process...");
+					throw new EscapeForgePromptException();
 				}
 			}
 		}
@@ -381,13 +519,12 @@ public class CrudGenerationPlugin implements Plugin {
 				.retrieveAttributeList(modelJavaResource);
 
 		// Ask user if he wants to keep this attribute in the CRUD
+		out.println();
 		ShellMessages.info(
 				out,
 				"Entity model ".concat(entityName)
 						.concat(" contains " + entityAttributes.size())
 						.concat(" attributes :"));
-
-		out.println();
 
 		entityDto.setEntityAttributeList(new ArrayList<String>());
 		for (String att : entityAttributes) {

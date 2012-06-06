@@ -30,7 +30,7 @@ public class ${function.MbeanName <#-- The name of Managed Bean class -->} imple
 	private static final long serialVersionUID = 1L;
 
 	//selection values in table
-	private Collection<SelectItem> selectedItems;
+	private ${function.entity.name}[] selectedItems;
 
 	// Logger
 	private transient static Logger log = LoggerFactory
@@ -44,37 +44,23 @@ public class ${function.MbeanName <#-- The name of Managed Bean class -->} imple
 	 * constructor 
 	 */
 	public ${function.MbeanName}() {
-
 		super();
 	}
 	
 	
 	@PostConstruct
 	public void init() {
-	
-				<#--TODO
-				
-				${function.entity.name} data1 = new ${function.entity.name}();
-				
-				<#list function.entity.attributes as att>
-					
-					data1.set${att}(null);
-				</#list>
-	
-				//Load initial example data list
-				dataList = new ArrayList<String>();
-				dataList.add(data1);
-				-->
-				
-				
-			
+		log.debug("Initialization");
+		newData = new ${function.entity.name}();
+		dataList = new ArrayList<${function.entity.name}>();
+
 	}
 
-
-<#assign listUT = "list${function.entity.name}"> <#-- generate listEntity UT name -->
-<#assign createUT = "create${function.entity.name}"> <#-- generate createEntity UT name -->
-<#assign updateUT = "update${function.entity.name}"> <#-- generate updateEntity UT name -->
-<#assign deleteUT = "delete${function.entity.name}"> <#-- generate deleteEntity UT name -->
+<#-- generate UT names as variable -->
+<#assign listUT = "list${function.entity.name}"> 
+<#assign createUT = "create${function.entity.name}">
+<#assign updateUT = "update${function.entity.name}">
+<#assign deleteUT = "delete${function.entity.name}">
 
 	/**
 	 * UT method for listing ${function.entity.name}
@@ -84,20 +70,24 @@ public class ${function.MbeanName <#-- The name of Managed Bean class -->} imple
 	 */
 	public void  ${listUT}() {
 
-		log.debug("Start of ${listUT}... ");
-
-		FacesContext message = javax.faces.context.FacesContext
-				.getCurrentInstance();
+		try {
+			log.debug("Start of ${listUT}... ");
 		
-		//try {
+			//Print here an info message on screen
+			FacesContext message = javax.faces.context.FacesContext
+				.getCurrentInstance();
+			message.addMessage(null, new FacesMessage("Listing ${function.entity.name}"));
+						
+			//TODO here is your UT ${listUT} code
 			
-			//TODO here is your UT ${listUT} business code
 
 		//} catch (BusinessLayerException e) {
 
 			//TODO manage error
 
-		//}
+		} catch(Exception e){
+			log.error("Error Occured in ${listUT}.",e);
+		}
 	}
 	
    /**
@@ -108,22 +98,32 @@ public class ${function.MbeanName <#-- The name of Managed Bean class -->} imple
 	 */
 	public void ${createUT}() {
 
-		log.debug("Start of ${createUT}... ");
-
-		FacesContext message = javax.faces.context.FacesContext
-				.getCurrentInstance();
+		try {
+			log.debug("Start of ${createUT}... ");
 		
-		//try {
+			//Print here an info message on screen
+			FacesContext message = javax.faces.context.FacesContext
+				.getCurrentInstance();
+			message.addMessage(null, new FacesMessage("Creating ${function.entity.name}"));
 			
-			//TODO here is your UT ${createUT} business code
-			dataList.add(newData);
-			
+			//TODO here is your UT ${createUT} code
+			${function.entity.name} new${function.entity.name} = new ${function.entity.name}();
+		
+		<#list function.entity.attributes as att>
+			<#assign uAtt = "${function.capitalizeFirst(att)}"/>
+			new${function.entity.name}.set${uAtt}(newData.get${uAtt}());
+		</#list>
+		
+		dataList.add(new${function.entity.name});
+		
 
 		//} catch (BusinessLayerException e) {
 
 			//TODO manage error
 
-		//}
+		} catch(Exception e){
+			log.error("Error Occured in ${createUT}.",e);
+		}
 	}
 	
    /**
@@ -134,20 +134,23 @@ public class ${function.MbeanName <#-- The name of Managed Bean class -->} imple
 	 */
 	public void ${updateUT}() {
 
-		log.debug("Start of ${updateUT}... ");
-
-		FacesContext message = javax.faces.context.FacesContext
-				.getCurrentInstance();
+		try {
+			log.debug("Start of ${updateUT}... ");
 		
-		//try {
+			//Print here an info message on screen
+			FacesContext message = javax.faces.context.FacesContext
+				.getCurrentInstance();
+			message.addMessage(null, new FacesMessage("Updating ${function.entity.name}"));
 			
-			//TODO here is your UT ${updateUT} business code
+			//TODO here is your UT ${updateUT} code
 
-	   //} catch (BusinessLayerException e) {
+		//} catch (BusinessLayerException e) {
 
 			//TODO manage error
 
-		//}
+		} catch(Exception e){
+			log.error("Error Occured in ${updateUT}.",e);		
+		}
 	}
 	
    /**
@@ -158,30 +161,39 @@ public class ${function.MbeanName <#-- The name of Managed Bean class -->} imple
 	 */
 	public void ${deleteUT}() {
 
-		log.debug("Start of ${deleteUT}... ");
-
-		FacesContext message = javax.faces.context.FacesContext
-				.getCurrentInstance();
+		try {
+			log.debug("Start of ${deleteUT}... ");
 		
-		//try {
-			
-			//TODO here is your UT ${deleteUT} business code
+			//Print here an info message on screen
+			FacesContext message = javax.faces.context.FacesContext
+				.getCurrentInstance();
+			message.addMessage(null, new FacesMessage("Deleting ${function.entity.name}"));
+
+			//Delete selected elements from List
+			int i;
+			for (i = 0; i <= selectedItems.length - 1; i++) {
+				dataList.remove(selectedItems[i]);
+			}
+				
+			//TODO here is your UT ${deleteUT} code
 
 		//} catch (BusinessLayerException e) {
 
 			//TODO manage error
 
-		//}
+		} catch(Exception e){
+			log.error("Error Occured in ${deleteUT}.",e);		
+		}
 	}
 	
 	/*
 	 * Accessors
 	 */
-	 public Collection<SelectItem> getSelectedItems() {
+	 public ${function.entity.name}[] getSelectedItems() {
 		return selectedItems;
 	}
 
-	public void setSelectedItems(Collection<SelectItem> selectedItems) {
+	public void setSelectedItems(${function.entity.name}[] selectedItems) {
 		this.selectedItems = selectedItems;
 	}
 	

@@ -19,7 +19,7 @@ import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
 import am.ajf.forge.util.ExtractionUtils;
-import am.ajf.forge.util.ProjectUtils;
+import am.ajf.forge.util.ProjectHelper;
 
 /**
  * AJF2 Lib project generator.
@@ -29,6 +29,8 @@ import am.ajf.forge.util.ProjectUtils;
  */
 @Singleton
 public class LibProjectGenerator {
+
+	private ProjectHelper projectUtils = new ProjectHelper();
 
 	/**
 	 * Create AJF core project structure, with corresponding AJF dependencies
@@ -62,13 +64,13 @@ public class LibProjectGenerator {
 					projectFactory, dir);
 
 			// Set pom from example pom file
-			ProjectUtils.setPomFromModelFile(project, MODEL_POM_LIB);
+			projectUtils.setPomFromModelFile(project, MODEL_POM_LIB);
 
 			// Set the Pom parent
-			ProjectUtils.setInternalPomParent(globalProjectName, project);
+			projectUtils.setInternalPomParent(globalProjectName, project);
 
 			// Set project meta data in pom
-			ProjectUtils.setBasicProjectData(globalProjectName,
+			projectUtils.setBasicProjectData(globalProjectName,
 					projectFinalName, project);
 
 			// Site
@@ -77,7 +79,7 @@ public class LibProjectGenerator {
 					.getAbsolutePath().concat("/src")));
 
 			// Generate site.xml file
-			ProjectUtils.generateSiteXmlFile(project, globalProjectName, true,
+			projectUtils.generateSiteXmlFile(project, globalProjectName, true,
 					false);
 
 		} catch (Exception e) {
@@ -113,7 +115,7 @@ public class LibProjectGenerator {
 				JavaSourceFacet.class, ResourceFacet.class);
 
 		// Set project meta data in pom
-		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
+		projectUtils.setBasicProjectData(globalProjectName, projectFinalName,
 				project);
 
 		// Set project packaging
@@ -124,7 +126,7 @@ public class LibProjectGenerator {
 		packaging.setFinalName(projectFinalName);
 
 		// Set the pom parent
-		ProjectUtils.setInternalPomParent(globalProjectName, project);
+		projectUtils.setInternalPomParent(globalProjectName, project);
 
 		/*
 		 * Extract META-INF/beans.xml to generated project

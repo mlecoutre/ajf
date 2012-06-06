@@ -18,9 +18,11 @@ import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
 import am.ajf.forge.util.ExtractionUtils;
-import am.ajf.forge.util.ProjectUtils;
+import am.ajf.forge.util.ProjectHelper;
 
 public class EjbProjectGenerator {
+
+	private ProjectHelper projectUtils = new ProjectHelper();
 
 	/**
 	 * Create AJF Ejb project structure, with corresponding AJF dependencies
@@ -54,14 +56,14 @@ public class EjbProjectGenerator {
 						JavaSourceFacet.class, ResourceFacet.class);
 
 		// Set pom from example pom file
-		ProjectUtils.setPomFromModelFile(project, MODEL_POM_EJB);
+		projectUtils.setPomFromModelFile(project, MODEL_POM_EJB);
 
 		// Set project meta data in pom
-		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
+		projectUtils.setBasicProjectData(globalProjectName, projectFinalName,
 				project);
 
 		// Set the pom parent
-		ProjectUtils.setInternalPomParent(globalProjectName, project);
+		projectUtils.setInternalPomParent(globalProjectName, project);
 
 		// Extract META-INF/beans.xml to generated project
 		ResourceFacet rsf = project.getFacet(ResourceFacet.class);
@@ -69,11 +71,11 @@ public class EjbProjectGenerator {
 				.getUnderlyingResourceObject());
 
 		// Internal dependencies
-		ProjectUtils.addInternalDependency(globalProjectName, project,
+		projectUtils.addInternalDependency(globalProjectName, project,
 				PROJECT_TYPE_LIB);
-		ProjectUtils.addInternalDependency(globalProjectName, project,
+		projectUtils.addInternalDependency(globalProjectName, project,
 				PROJECT_TYPE_CORE);
-		ProjectUtils.addInternalDependencyScoped(globalProjectName, project,
+		projectUtils.addInternalDependencyScoped(globalProjectName, project,
 				PROJECT_TYPE_CONFIG, "runtime");
 
 		// Site
@@ -82,7 +84,7 @@ public class EjbProjectGenerator {
 				.getAbsolutePath().concat("/src")));
 
 		// Generate site.xml file
-		ProjectUtils.generateSiteXmlFile(project, globalProjectName, true,
+		projectUtils.generateSiteXmlFile(project, globalProjectName, true,
 				false);
 
 		return project;

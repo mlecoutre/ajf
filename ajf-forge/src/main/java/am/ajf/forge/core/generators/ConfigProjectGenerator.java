@@ -18,7 +18,7 @@ import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
 import am.ajf.forge.util.ExtractionUtils;
-import am.ajf.forge.util.ProjectUtils;
+import am.ajf.forge.util.ProjectHelper;
 
 /**
  * AJF2 Config project generator.
@@ -28,6 +28,8 @@ import am.ajf.forge.util.ProjectUtils;
  */
 @Singleton
 public class ConfigProjectGenerator {
+
+	private ProjectHelper projectUtils = new ProjectHelper();
 
 	/**
 	 * Construction of an AJF Config type project
@@ -52,10 +54,10 @@ public class ConfigProjectGenerator {
 				MetadataFacet.class, ResourceFacet.class);
 
 		// Set pom from model
-		ProjectUtils.setPomFromModelFile(project, MODEL_POM_CONFIG);
+		projectUtils.setPomFromModelFile(project, MODEL_POM_CONFIG);
 
 		// Set project meta data
-		ProjectUtils.setBasicProjectData(globalProjectName, projectFinalName,
+		projectUtils.setBasicProjectData(globalProjectName, projectFinalName,
 				project);
 
 		// Set packaging
@@ -81,7 +83,7 @@ public class ConfigProjectGenerator {
 		/*
 		 * Set the Pom parent
 		 */
-		ProjectUtils.setInternalPomParent(globalProjectName, project);
+		projectUtils.setInternalPomParent(globalProjectName, project);
 
 		// Site
 		ExtractionUtils.unzipFile(SITE_FOLDER, new File(project
@@ -89,7 +91,7 @@ public class ConfigProjectGenerator {
 				.getAbsolutePath().concat("/src")));
 
 		// Generate site.xml file
-		ProjectUtils.generateSiteXmlFile(project, globalProjectName, false,
+		projectUtils.generateSiteXmlFile(project, globalProjectName, false,
 				false);
 
 		return project;

@@ -28,8 +28,8 @@ import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
 import am.ajf.forge.util.ExtractionUtils;
-import am.ajf.forge.util.ProjectUtils;
 import am.ajf.forge.util.UIProjectUtils;
+import am.ajf.forge.util.ProjectHelper;
 
 /**
  * AJF2 web project generator. This class can be used for a WS typed project or
@@ -41,6 +41,8 @@ import am.ajf.forge.util.UIProjectUtils;
  */
 @Singleton
 public class WebProjectGenerator {
+
+	private ProjectHelper projectUtils = new ProjectHelper();
 
 	/**
 	 * Generate AJF WS WEB Project.
@@ -76,10 +78,10 @@ public class WebProjectGenerator {
 			extractWebResources(project, WEBAPP_ZIP_RESOURCES_WS);
 
 			// Set the Pom parent
-			ProjectUtils.setInternalPomParent(globalProjectName, project);
+			projectUtils.setInternalPomParent(globalProjectName, project);
 
 			// Set project meta data in pom
-			ProjectUtils.setBasicProjectData(globalProjectName,
+			projectUtils.setBasicProjectData(globalProjectName,
 					projectFinalName, project);
 
 			// Site
@@ -88,7 +90,7 @@ public class WebProjectGenerator {
 					.getAbsolutePath().concat("/src")));
 
 			// Generate site.xml file
-			ProjectUtils.generateSiteXmlFile(project, globalProjectName, true,
+			projectUtils.generateSiteXmlFile(project, globalProjectName, true,
 					false);
 
 		} catch (Exception e) {
@@ -152,11 +154,11 @@ public class WebProjectGenerator {
 
 			} else {
 				// Set the Pom parent
-				ProjectUtils.setInternalPomParent(globalProjectName, project);
+				projectUtils.setInternalPomParent(globalProjectName, project);
 			}
 
 			// Set project meta data in pom
-			ProjectUtils.setBasicProjectData(globalProjectName,
+			projectUtils.setBasicProjectData(globalProjectName,
 					projectFinalName, project);
 
 			// Site
@@ -255,7 +257,7 @@ public class WebProjectGenerator {
 				DependencyFacet.class, MetadataFacet.class,
 				JavaSourceFacet.class, ResourceFacet.class);
 
-		ProjectUtils.setPomFromModelFile(project, modelPomFile);
+		projectUtils.setPomFromModelFile(project, modelPomFile);
 
 		// Set project packaging
 		PackagingFacet packaging = project.getFacet(PackagingFacet.class);
@@ -269,17 +271,17 @@ public class WebProjectGenerator {
 		if (!isCompact) {
 
 			// Set the pom parent
-			ProjectUtils.setInternalPomParent(globalProjectName, project);
+			projectUtils.setInternalPomParent(globalProjectName, project);
 
 			// Set internal dependencies linked to other project of the
 			// AJF-solution
-			ProjectUtils.addInternalDependencyScoped(globalProjectName,
+			projectUtils.addInternalDependencyScoped(globalProjectName,
 					project, PROJECT_TYPE_CONFIG, "runtime");
 
-			ProjectUtils.addInternalDependency(globalProjectName, project,
+			projectUtils.addInternalDependency(globalProjectName, project,
 					PROJECT_TYPE_LIB);
 
-			ProjectUtils.addInternalDependencyScoped(globalProjectName,
+			projectUtils.addInternalDependencyScoped(globalProjectName,
 					project, PROJECT_TYPE_CORE, "runtime");
 
 		}
