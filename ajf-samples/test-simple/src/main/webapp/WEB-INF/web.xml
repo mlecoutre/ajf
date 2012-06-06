@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<display-name>TEST SIMPLE</display-name>
+
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+
+	<servlet>
+		<servlet-name>RestServlet</servlet-name>
+
+		<!-- <servlet-class> org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher 
+			</servlet-class> <init-param> <param-name>javax.ws.rs.Application</param-name> 
+			<param-value>am.ajf.web.RestApplication</param-value> </init-param> <init-param> 
+			<param-name>resteasy.servlet.mapping.prefix</param-name> <param-value>/services</param-value> 
+			</init-param> -->
+
+		<servlet-class>org.apache.wink.server.internal.servlet.RestServlet</servlet-class>
+		<!-- <init-param> <param-name>applicationConfigLocation</param-name> <param-value>/WEB-INF/application</param-value> 
+			</init-param> -->
+		<init-param>
+			<param-name>javax.ws.rs.Application</param-name>
+			<param-value>am.ajf.web.RestApplication</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>TestServlet</servlet-name>
+		<servlet-class>am.ajf.web.servlets.TestServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>ForwardServlet</servlet-name>
+		<servlet-class>am.ajf.web.servlets.ForwardServlet</servlet-class>
+	</servlet>		
+	<servlet>
+		<servlet-name>MonitoringServlet</servlet-name>
+		<servlet-class>am.ajf.web.servlets.MonitoringServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>SendMailServlet</servlet-name>
+		<servlet-class>am.ajf.web.servlets.SendMailServlet</servlet-class>
+	</servlet>		
+	<servlet-mapping>
+		<servlet-name>RestServlet</servlet-name>
+		<url-pattern>/services/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ForwardServlet</servlet-name>
+		<url-pattern>/ForwardServlet</url-pattern>
+		<url-pattern>/forward</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>TestServlet</servlet-name>
+		<url-pattern>/TestServlet</url-pattern>
+		<url-pattern>/test</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>MonitoringServlet</servlet-name>
+		<url-pattern>/MonitoringServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>SendMailServlet</servlet-name>
+		<url-pattern>/SendMailServlet</url-pattern>
+	</servlet-mapping>
+	<!-- 
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>TomcatRealm</realm-name>		
+	</login-config>
+	-->
+	
+	<login-config>
+ 		<auth-method>FORM</auth-method>
+ 		<realm-name>TomcatRealm</realm-name>
+ 		<form-login-config>
+   			<form-login-page>/login.jsp</form-login-page>
+   			<form-error-page>/error_login.jsp</form-error-page>
+ 		</form-login-config>
+	</login-config>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>AdminPages</web-resource-name>
+			<url-pattern>/services/*</url-pattern>
+			<url-pattern>/index.jsp</url-pattern>
+			<url-pattern>/test</url-pattern>
+			<url-pattern>/TestServlet</url-pattern>
+			<url-pattern>/securized.jsp</url-pattern>
+			<http-method>GET</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>IT-User</role-name>
+		</auth-constraint>
+		<!-- 
+		<user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint>
+		-->
+	</security-constraint>
+	
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>SecurizedPage</web-resource-name>
+			<url-pattern>/securizedIndex.jsp</url-pattern>
+			<http-method>GET</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>IT-User</role-name>
+		</auth-constraint>
+		<!-- 
+		<user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint>
+		-->
+	</security-constraint>
+		
+	<security-role>
+		<role-name>IT-User</role-name>
+	</security-role>
+	<security-role>
+		<role-name>ALL-GG-WAS_Moniteurs_WAS</role-name>
+	</security-role>
+	
+	<resource-ref>
+	  <res-ref-name>
+	    mail/Session
+	  </res-ref-name>
+	  <res-type>
+	    javax.mail.Session
+	  </res-type>
+	  <res-auth>
+	    Container
+	  </res-auth>
+	</resource-ref>
+	
+</web-app>
