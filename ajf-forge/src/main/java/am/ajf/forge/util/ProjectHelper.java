@@ -31,8 +31,6 @@ import org.jboss.forge.resources.DirectoryResource;
 import org.jboss.forge.shell.ShellMessages;
 import org.jboss.forge.shell.plugins.PipeOut;
 
-import am.ajf.forge.lib.ForgeConstants;
-
 /**
  * This utility class implements some methods that deals with the project
  * definition. Such as maven pom manipulation
@@ -503,38 +501,36 @@ public class ProjectHelper {
 		/*
 		 * Locate the LIB project from the expoded AJF Solution
 		 */
-		File uiProjectFile = project.getProjectRoot()
+		File projectFile = project.getProjectRoot()
 				.getUnderlyingResourceObject();
 
-		File libProjectFile = new File(uiProjectFile
-				.getParent()
-				.concat("/")
-				.concat(uiProjectFile.getName())
-				.replace(ForgeConstants.PROJECT_TYPE_UI,
-						ForgeConstants.PROJECT_TYPE_LIB));
+		File newProjectFile = new File(projectFile.getParent().concat("/")
+				.concat(projectFile.getName())
+				.replace(initialProjectType, newProjectType));
 
 		// Check if the lib project directory does exist
-		if (!libProjectFile.exists()) {
+		if (!newProjectFile.exists()) {
 			throw new Exception(
 					"The project "
-							+ libProjectFile.getName()
+							+ newProjectFile.getName()
 							+ " does not exist. Please check that you are in an exploded ajf solution");
 		}
 
-		// Load the lib project in the Project forge object
-		Project libProject = projectFactory
+		// Load the new project in the Project forge object
+		Project newProject = projectFactory
 				.findProject((DirectoryResource) resourceFactory
-						.getResourceFrom(libProjectFile));
+						.getResourceFrom(newProjectFile));
 
-		uiProjectFile = null;
-		libProjectFile = null;
+		projectFile = null;
+
 		out.println();
-		ShellMessages.info(out,
-				"Project lib of your AJF solution has been loaded :"
-						+ libProject.getProjectRoot()
-								.getUnderlyingResourceObject()
-								.getAbsolutePath());
+		ShellMessages.info(out, "Project "
+				+ newProjectFile.getName()
+				+ " of your AJF solution has been loaded :"
+				+ newProject.getProjectRoot().getUnderlyingResourceObject()
+						.getAbsolutePath());
+		newProjectFile = null;
 
-		return libProject;
+		return newProject;
 	}
 }

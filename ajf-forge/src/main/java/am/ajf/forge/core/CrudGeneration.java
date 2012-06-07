@@ -24,6 +24,7 @@ public class CrudGeneration {
 	private static final String CRUD_MBEAN_TEMPLATE = "CrudMBean.ftl";
 	private static final String CRUD_XHTML_TEMPLATE = "CrudXhtml.ftl";
 	private static final String CRUD_BUSINESS_DELEGATE_TEMPLATE = "BusinessDelegate.ftl";
+	private static final String CRUD_BUSINESS_POLICY_TEMPLATE = "Policy.ftl";
 
 	TemplateUtils templateUtils;
 
@@ -110,8 +111,8 @@ public class CrudGeneration {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void buildBusinessDelegateInterface(File file,
-			String libBusinessPackage, String functionName, List<String> uts)
-			throws Exception {
+			String libBusinessPackage, String functionName, List<String> uts,
+			String dtoPackage) throws Exception {
 
 		try {
 			FileOutputStream fos = new FileOutputStream(file);
@@ -123,6 +124,7 @@ public class CrudGeneration {
 
 			// package that contain the BD interfaces in the lib project
 			dataModelMap.put("libBusinessPackage", libBusinessPackage);
+			dataModelMap.put("libDtoPackage", dtoPackage);
 			dataModelMap.put("unCapitalizeFirst", new UnCapitalizeFirst());
 			dataModelMap.put("capitalizeFirst", new CapitalizeFirst());
 
@@ -153,8 +155,65 @@ public class CrudGeneration {
 	}
 
 	/**
+	 * Build a pollicy template java class
 	 * 
-	 * Generate the common part of the data model
+	 * @param policyFile
+	 * @param functionName
+	 * @param uts
+	 * @param libBusinessPackage
+	 * @param dtoPackage
+	 * @param corePolicyPackage
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void buildPolicy(File policyFile, String functionName,
+			List<String> uts, String libBusinessPackage, String dtoPackage,
+			String corePolicyPackage) throws Exception {
+
+		try {
+			FileOutputStream fos = new FileOutputStream(policyFile);
+			Writer writer = new OutputStreamWriter(fos);
+
+			Template myTemplate = loadTemplate(CRUD_BUSINESS_POLICY_TEMPLATE);
+
+			Map dataModelMap = new HashMap();
+
+			// package that contain the BD interfaces in the lib project
+			dataModelMap.put("corePolicyPackage", corePolicyPackage);
+			dataModelMap.put("libBusinessPackage", libBusinessPackage);
+			dataModelMap.put("libBusinessDtoPackage", dtoPackage);
+			dataModelMap.put("unCapitalizeFirst", new UnCapitalizeFirst());
+			dataModelMap.put("capitalizeFirst", new CapitalizeFirst());
+
+			// function beeing generated
+			Map function = new HashMap();
+			function.put("name", functionName);
+
+			// UT List
+			SimpleSequence utSequence = new SimpleSequence();
+			for (String ut : uts) {
+				utSequence.add(ut);
+			}
+			function.put("UTs", utSequence);
+			dataModelMap.put("function", function);
+
+			templateUtils.mergeDataModelWithTemplate(dataModelMap, myTemplate,
+					writer);
+
+		} catch (Exception e) {
+
+			System.err
+					.println("Error occured in buildBusinessDelegateInterface : ");
+			e.printStackTrace();
+			throw e;
+		}
+
+	}
+
+	/**
+	 * 
+	 * Generate the common part of the data model. This data model is commun to
+	 * diffrent templates, that's why it is isolated
 	 * 
 	 * @param globalProjectName
 	 * @param functionName
@@ -162,7 +221,7 @@ public class CrudGeneration {
 	 * @param entityAttributes
 	 * @param javaPackage
 	 * @param entityLibPackage
-	 * @return
+	 * @return Map data model
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map buildDataModel(String globalProjectName, String functionName,

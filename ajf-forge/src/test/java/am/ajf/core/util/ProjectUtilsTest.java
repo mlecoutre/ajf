@@ -3,8 +3,13 @@ package am.ajf.core.util;
 import static am.ajf.forge.lib.ForgeConstants.MODEL_POM_UI;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.Serializable;
+
+import org.apache.commons.lang.WordUtils;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Profile;
+import org.jboss.forge.parser.JavaParser;
+import org.jboss.forge.parser.java.JavaClass;
 import org.junit.Test;
 
 import am.ajf.forge.util.ProjectHelper;
@@ -43,6 +48,20 @@ public class ProjectUtilsTest {
 		projectUtils.getPomFromFile("non-existing-file");
 	}
 
+	@Test
+	public void testGenerateJavaClass() {
+
+		JavaClass javaclass = JavaParser.create(JavaClass.class)
+				.setPackage("test.voila.voila").setName("Voila").getOrigin();
+
+		javaclass.addField().setPrivate().setFinal(true).setStatic(true)
+				.setName("serialVersionUID").setLiteralInitializer("1L");
+
+		javaclass.addInterface(Serializable.class);
+
+		System.out.println(javaclass.toString());
+
+	}
 	// @Test
 	// public void setAjfDependenciesFromFileTest() throws Exception {
 	//

@@ -11,7 +11,7 @@ import org.jboss.forge.parser.java.Member;
 import org.jboss.forge.parser.java.impl.MethodImpl;
 
 @Singleton
-public class JavaUtils {
+public class JavaHelper {
 
 	/**
 	 * Retrieve the list of attributes of a java class object. Only attribute

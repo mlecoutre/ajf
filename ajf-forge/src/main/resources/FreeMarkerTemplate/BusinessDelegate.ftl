@@ -1,6 +1,12 @@
 package ${libBusinessPackage};
 
-public interface ${function.name}BD {
+<#list function.UTs as ut>
+<#assign utCap = "${capitalizeFirst(ut)}"<#-- UT name with upper case first letter-->>
+import ${libDtoPackage}.${utCap}PB;
+import ${libDtoPackage}.${utCap}RB;
+</#list>
+
+public interface ${function.name}BD  {
 
 	
 	<#list function.UTs as ut>

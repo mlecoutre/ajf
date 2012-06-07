@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import am.ajf.forge.core.CrudGeneration;
 import am.ajf.forge.lib.EntityDTO;
-import am.ajf.forge.util.JavaUtils;
+import am.ajf.forge.util.JavaHelper;
 import am.ajf.forge.util.TemplateUtils;
 
 /**
@@ -158,7 +158,7 @@ public class TemlateUtilsTest {
 		JavaSource javaSource = new JavaResource(factory, javaClass)
 				.getJavaSource();
 
-		JavaUtils javaUtils = new JavaUtils();
+		JavaHelper javaUtils = new JavaHelper();
 		entityDto.setEntityAttributeList(javaUtils
 				.retrieveAttributeList(javaSource));
 

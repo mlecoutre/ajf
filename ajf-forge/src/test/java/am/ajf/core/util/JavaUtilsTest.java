@@ -13,7 +13,7 @@ import org.jboss.forge.project.services.ResourceFactory;
 import org.jboss.forge.resources.java.JavaResource;
 import org.junit.Test;
 
-import am.ajf.forge.util.JavaUtils;
+import am.ajf.forge.util.JavaHelper;
 
 public class JavaUtilsTest {
 
@@ -28,7 +28,7 @@ public class JavaUtilsTest {
 		JavaSource javaSource = new JavaResource(factory, javaClass)
 				.getJavaSource();
 
-		JavaUtils javaUtils = new JavaUtils();
+		JavaHelper javaUtils = new JavaHelper();
 		List<String> myAttributes = javaUtils.retrieveAttributeList(javaSource);
 
 		// Data that should be returned

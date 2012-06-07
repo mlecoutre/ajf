@@ -3,7 +3,9 @@ package am.ajf.forge.plugin;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +14,8 @@ import javax.inject.Inject;
 import org.apache.commons.lang.WordUtils;
 import org.apache.maven.model.Model;
 import org.jboss.forge.maven.MavenCoreFacet;
+import org.jboss.forge.parser.JavaParser;
+import org.jboss.forge.parser.java.JavaClass;
 import org.jboss.forge.parser.java.JavaSource;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.JavaSourceFacet;
@@ -33,7 +37,7 @@ import am.ajf.forge.core.CrudGeneration;
 import am.ajf.forge.exception.EscapeForgePromptException;
 import am.ajf.forge.lib.EntityDTO;
 import am.ajf.forge.lib.ForgeConstants;
-import am.ajf.forge.util.JavaUtils;
+import am.ajf.forge.util.JavaHelper;
 import am.ajf.forge.util.ProjectHelper;
 
 /**
@@ -58,12 +62,12 @@ public class CrudGenerationPlugin implements Plugin {
 	private Shell shell;
 
 	@Inject
-	CrudGeneration projectManagement;
+	private CrudGeneration projectManagement;
 
 	@Inject
-	ProjectHelper projectHelper;
+	private ProjectHelper projectHelper;
 
-	JavaUtils javaUtils = new JavaUtils();
+	private JavaHelper javaUtils = new JavaHelper();
 
 	@DefaultCommand
 	public void show(final PipeOut out) {
@@ -94,6 +98,13 @@ public class CrudGenerationPlugin implements Plugin {
 			// debug mode
 			shell.setVerbose(true);
 
+			// TODO This list will be entered by user (manually for the moment)
+			List<String> uts = new ArrayList<String>();
+			uts.add("list" + WordUtils.capitalize(entityName));
+			uts.add("add" + WordUtils.capitalize(entityName));
+			uts.add("update" + WordUtils.capitalize(entityName));
+			uts.add("delete" + WordUtils.capitalize(entityName));
+
 			/*
 			 * PREPARATION FOR GENERATION
 			 */
@@ -115,8 +126,8 @@ public class CrudGenerationPlugin implements Plugin {
 			JavaSourceFacet javaFacet = project.getFacet(JavaSourceFacet.class);
 			// Which package where to create managedBean class
 			String managedBeanPackage = shell.prompt(
-					"Which package for Managed Bean ?",
-					javaFacet.getBasePackage());
+					"Which package for Managed Bean ?", javaFacet
+							.getBasePackage().concat(".controllers"));
 
 			// Way to escape prompt via exit command
 			if ("exit".equals(managedBeanPackage.toLowerCase()))
@@ -149,8 +160,68 @@ public class CrudGenerationPlugin implements Plugin {
 					entityDto, managedBeanPackage);
 
 			// generate Business Delegate interface for policy
-			generateBDInterface(function, out, ajfSolutionGlobalName,
-					libProject, libJavaFacet, entityName);
+			Map<String, String> libPackages = generateBDInterface(function,
+					out, ajfSolutionGlobalName, libProject, libJavaFacet,
+					entityName, uts);
+
+			/*
+			 * generate Policy
+			 */
+			// loading core component project
+			Project coreProject = projectHelper.locateProjectFromSolution(
+					project, projectFactory, resourceFactory,
+					ForgeConstants.PROJECT_TYPE_UI,
+					ForgeConstants.PROJECT_TYPE_CORE, out);
+
+			JavaSourceFacet coreJavaFacet = coreProject
+					.getFacet(JavaSourceFacet.class);
+
+			String corePolicyPackage = shell.prompt(
+					"Which sub package for Policies classes ?", coreJavaFacet
+							.getBasePackage().concat(".business"));
+			shell.println();
+
+			// Java file corresponding to the policy package
+			File corePolicyPackageFile = new File(coreJavaFacet
+					.getSourceFolder().getUnderlyingResourceObject()
+					.getAbsolutePath().concat("/")
+					.concat(corePolicyPackage.replace(".", "/")));
+
+			// Create package (folder) if needed
+			if (!corePolicyPackageFile.exists()) {
+				if (corePolicyPackageFile.mkdirs())
+					System.out.println("package ".concat(corePolicyPackage)
+							.concat(" has been created."));
+			}
+
+			/*
+			 * Load java file
+			 */
+			File policyFile = new File(corePolicyPackageFile.getAbsolutePath()
+					.concat("/").concat(WordUtils.capitalize(function))
+					.concat("Policy.java"));
+
+			if (policyFile.exists()
+					&& !shell.promptBoolean("Class " + policyFile.getName()
+							+ " already exists. OverWrite ?", false)) {
+
+				// TODO update file
+				temporaryChoiceForUpdate(out);
+
+			} else if (!policyFile.exists()) {
+				// File creation
+				if (policyFile.createNewFile()) {
+					System.out.println(policyFile.getName() + " created.");
+					shell.println();
+				}
+
+			}
+			/*
+			 * Implements via freemarker template
+			 */
+			projectManagement.buildPolicy(policyFile, function, uts,
+					libPackages.get("libBDpackage"),
+					libPackages.get("libDTOpackage"), corePolicyPackage);
 
 			/*
 			 * END
@@ -160,7 +231,9 @@ public class CrudGenerationPlugin implements Plugin {
 
 		} catch (EscapeForgePromptException esc) {
 
+			shell.println();
 			shell.print(ShellColor.RED, "***BYE BYE***");
+			shell.println();
 			return;
 
 		} catch (Exception e) {
@@ -181,13 +254,19 @@ public class CrudGenerationPlugin implements Plugin {
 	 * @param ajfSolutionGlobalName
 	 * @param libProject
 	 * @param libJavaFacet
+	 * @return Map containing libBDpackage wich contains the BD interfaces and
+	 *         the libDtoPackage which contains the DTO Beans objects
 	 * @throws Exception
 	 */
-	private void generateBDInterface(String function, final PipeOut out,
-			String ajfSolutionGlobalName, Project libProject,
-			JavaSourceFacet libJavaFacet, String entityName) throws Exception {
+	private Map<String, String> generateBDInterface(String function,
+			final PipeOut out, String ajfSolutionGlobalName,
+			Project libProject, JavaSourceFacet libJavaFacet,
+			String entityName, List<String> uts) throws Exception {
 
 		ShellMessages.info(out, "Start generating business delegate interface");
+		shell.println();
+
+		Map<String, String> output = new HashMap<String, String>();
 
 		File libSrcFolder = libJavaFacet.getSourceFolder()
 				.getUnderlyingResourceObject();
@@ -205,9 +284,9 @@ public class CrudGenerationPlugin implements Plugin {
 			if (!libBusinessFolder.exists()) {
 
 				// error message
-				ShellMessages.error(out,
+				ShellMessages.warn(out,
 						"the package ".concat(libBDpackage.replace("/", "."))
-								.concat("does not exist !"));
+								.concat(" does not exist !"));
 
 				// Ask user to create this new package
 				if (shell.promptBoolean(
@@ -240,10 +319,13 @@ public class CrudGenerationPlugin implements Plugin {
 			} else {
 				// Go on
 				foundLibBDPackage = true;
-				System.out.println("Lib business package folder : "
-						+ libBusinessFolder.getAbsolutePath());
+
 			}
 		}
+		out.println();
+
+		// put lib BD package in output
+		output.put("libBDpackage", libBDpackage.replace("/", "."));
 
 		// Create function BD interface
 		File functionBdFile = new File(libBusinessFolder.getAbsolutePath()
@@ -253,34 +335,115 @@ public class CrudGenerationPlugin implements Plugin {
 		// Escape
 		if (functionBdFile.exists()
 				&& !shell
-						.promptBoolean("File "
-								.concat(functionBdFile.getName())
-								.concat(" already exists. Do you want to overWrite ? "))) {
+						.promptBoolean(
+								"File ".concat(functionBdFile.getName())
+										.concat(" already exists. Do you want to overWrite ? "),
+								false)) {
 
-			ShellMessages.info(out, "Stopping the generation process...");
-			throw new EscapeForgePromptException();
+			// TODO update mode
+			temporaryChoiceForUpdate(out);
 
 		} else if (!functionBdFile.exists()) {
 
 			// if file does not exist, we create it
 			System.out.println("Creation of ".concat(functionBdFile.getName()
 					+ " : " + functionBdFile.createNewFile()));
-		} else {
+			out.println();
 
-			// TODO update mode
 		}
 
-		// TODO This list will be entered by user (manually for the moment)
-		List<String> uts = new ArrayList<String>();
-		uts.add("list" + WordUtils.capitalize(entityName));
-		uts.add("add" + WordUtils.capitalize(entityName));
-		uts.add("update" + WordUtils.capitalize(entityName));
-		uts.add("delete" + WordUtils.capitalize(entityName));
+		// out.println();
 
+		/*
+		 * Creation of Param beans and Result beans
+		 */
+		// Ask for package
+		String libDtoPackage = shell.prompt(
+				"Where do you want to create DTOs (ParamBean, ResultBeans)",
+				libBDpackage.replace("/", ".").concat(".dto"));
+		shell.println();
+
+		File libDtoPackageFile = new File(libJavaFacet.getSourceFolder()
+				.getUnderlyingResourceObject().getAbsolutePath()
+				.concat("/" + libDtoPackage.replace(".", "/")));
+
+		// Creation of package folder if needed
+		if (!libDtoPackageFile.exists()) {
+			if (libDtoPackageFile.mkdirs()) {
+				System.out.println("package ".concat(libDtoPackage).concat(
+						" created."));
+				shell.println();
+			}
+		}
+
+		// put lib DTO package in output
+		output.put("libDTOpackage", libDtoPackage.replace("/", "."));
+
+		/*
+		 * Beans DTO generation
+		 */
+		for (String myUt : uts) {
+
+			// Param Bean File
+			File utParamBeanFile = new File(libDtoPackageFile.getAbsolutePath()
+					.concat("/").concat(myUt + "PB.java"));
+
+			File utResultBeanFile = new File(libDtoPackageFile
+					.getAbsolutePath().concat("/").concat(myUt + "RB.java"));
+
+			// Existence verification for both files
+			List<File> files = new ArrayList<File>();
+			files.add(utParamBeanFile);
+			files.add(utResultBeanFile);
+			for (File myFile : files) {
+				if (myFile.exists()
+						&& !shell.promptBoolean(
+								myFile.getName().concat(
+										" file already exists. OverWrite ?"),
+								false)) {
+					// do nothing
+				} else {
+
+					try {
+						// Create empty java class
+						JavaClass javaclass = JavaParser
+								.create(JavaClass.class)
+								.setPackage(libDtoPackage.replace("/", "."))
+								.setName(
+										WordUtils.capitalize(myFile.getName())
+												.replace(".java", ""))
+								.getOrigin();
+
+						// implements Serializable with serialVersuin UID
+						javaclass.addField().setPrivate().setFinal(true)
+								.setStatic(true).setName("serialVersionUID")
+								.setType("long").setLiteralInitializer("1L");
+						javaclass.addInterface(Serializable.class);
+
+						System.out.println("Creating " + javaclass.getName()
+								+ ".java ...");
+						libJavaFacet.saveJavaSource(javaclass);
+
+					} catch (Exception e) {
+						ShellMessages.error(
+								out,
+								"Error occured while generating the java class "
+										+ myFile.getName() + " : "
+										+ e.toString());
+						throw e;
+					}
+				}
+			}
+		}
+
+		// Generate BD interface
 		projectManagement.buildBusinessDelegateInterface(functionBdFile,
-				libBDpackage.replace("/", "."), function, uts);
+				libBDpackage.replace("/", "."), function, uts,
+				libDtoPackage.replace("/", "."));
 
 		out.println();
+
+		return output;
 	}
 
 	/**
@@ -326,9 +489,17 @@ public class CrudGenerationPlugin implements Plugin {
 
 		// Creation of the xhtml physical file
 		if (!myXhtmlFile.exists()) {
+
 			myXhtmlFile.getParentFile().mkdirs();
-			System.out.println("Physical file creation : ".concat(String
-					.valueOf(myXhtmlFile.createNewFile())));
+			System.out.println(myXhtmlFile.getName()
+					+ "file creation : ".concat(String.valueOf(myXhtmlFile
+							.createNewFile())));
+
+		} else if (myXhtmlFile.exists()
+				&& !shell.promptBoolean("File " + myXhtmlFile.getName()
+						+ " already exists. Overwrite ?", false)) {
+			// TODO update file
+			temporaryChoiceForUpdate(out);
 		}
 
 		// Generate the xhtml CRUD file
@@ -402,10 +573,12 @@ public class CrudGenerationPlugin implements Plugin {
 
 		// Build data model for FreeMarker templates
 		Map dataModelMap = projectManagement.buildDataModel(
-				ajfSolutionGlobalName, function.concat("MBean"), entityName,
+				ajfSolutionGlobalName, function.concat("MBean"),
+				WordUtils.capitalize(entityName),
 				javaUtils.capitalizeDatas(entityDto.getEntityAttributeList()),
 				managedBeanPackage,
 				entityDto.getEntityLibPackage().replace("/", "."));
+
 		System.out.println("Data model Map generated.");
 
 		// Call the crud managed bean java class generation
@@ -545,5 +718,25 @@ public class CrudGenerationPlugin implements Plugin {
 
 		return entityDto;
 
+	}
+
+	/**
+	 * Temporary offer a choice to the user. As the Update mode is not yet
+	 * implemented, the user is prompted for either exiting the generation
+	 * process, either ovewriting the file
+	 * 
+	 * @param out
+	 * @throws EscapeForgePromptException
+	 */
+	private void temporaryChoiceForUpdate(final PipeOut out)
+			throws EscapeForgePromptException {
+		ShellMessages.warn(out,
+				"Update of existing files is not yet supported by AJF forge.");
+		List<String> choices = new ArrayList<String>();
+		choices.add("Exit the crud generation process.");
+		choices.add("Okay, Overwrite the file.");
+		if (shell.promptChoice("What to do ?", choices) == 0) {
+			throw new EscapeForgePromptException();
+		}
 	}
 }
