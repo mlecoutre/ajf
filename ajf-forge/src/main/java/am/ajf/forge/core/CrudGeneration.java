@@ -251,6 +251,8 @@ public class CrudGeneration {
 		function.put("capitalizeFirst", new CapitalizeFirst());
 
 		root.put("function", function);
+		root.put("unCapitalizeFirst", new UnCapitalizeFirst());
+		root.put("capitalizeFirst", new CapitalizeFirst());
 
 		return root;
 

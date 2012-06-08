@@ -105,6 +105,29 @@ public class CrudGenerationPlugin implements Plugin {
 			uts.add("update" + WordUtils.capitalize(entityName));
 			uts.add("delete" + WordUtils.capitalize(entityName));
 
+			while (shell.promptBoolean(
+					"Would you like to add a new Unit task ?", true)) {
+
+				String utvalue = shell
+						.prompt("UT name ( entityName will be suffixed automatically, i.e 'create' for 'create"
+								+ WordUtils.capitalize(entityName) + ")");
+				shell.println();
+				if (utvalue.toLowerCase().contains(entityName.toLowerCase())) {
+					// if the ut entered by user already contain entityName
+					// (risk of duplicate as entityName will be automatically
+					// suffixed)
+					if (!shell
+							.promptBoolean(
+									"Please note that the entered entityName will be automatically suffixed to the UT name. Here you're entered UT will be: "
+											+ utvalue
+											+ WordUtils.capitalize(entityName)
+											+ ". Is that ok ?", true)) {
+
+					}
+				}
+
+			}
+
 			/*
 			 * PREPARATION FOR GENERATION
 			 */
@@ -164,64 +187,8 @@ public class CrudGenerationPlugin implements Plugin {
 					out, ajfSolutionGlobalName, libProject, libJavaFacet,
 					entityName, uts);
 
-			/*
-			 * generate Policy
-			 */
-			// loading core component project
-			Project coreProject = projectHelper.locateProjectFromSolution(
-					project, projectFactory, resourceFactory,
-					ForgeConstants.PROJECT_TYPE_UI,
-					ForgeConstants.PROJECT_TYPE_CORE, out);
-
-			JavaSourceFacet coreJavaFacet = coreProject
-					.getFacet(JavaSourceFacet.class);
-
-			String corePolicyPackage = shell.prompt(
-					"Which sub package for Policies classes ?", coreJavaFacet
-							.getBasePackage().concat(".business"));
-			shell.println();
-
-			// Java file corresponding to the policy package
-			File corePolicyPackageFile = new File(coreJavaFacet
-					.getSourceFolder().getUnderlyingResourceObject()
-					.getAbsolutePath().concat("/")
-					.concat(corePolicyPackage.replace(".", "/")));
-
-			// Create package (folder) if needed
-			if (!corePolicyPackageFile.exists()) {
-				if (corePolicyPackageFile.mkdirs())
-					System.out.println("package ".concat(corePolicyPackage)
-							.concat(" has been created."));
-			}
-
-			/*
-			 * Load java file
-			 */
-			File policyFile = new File(corePolicyPackageFile.getAbsolutePath()
-					.concat("/").concat(WordUtils.capitalize(function))
-					.concat("Policy.java"));
-
-			if (policyFile.exists()
-					&& !shell.promptBoolean("Class " + policyFile.getName()
-							+ " already exists. OverWrite ?", false)) {
-
-				// TODO update file
-				temporaryChoiceForUpdate(out);
-
-			} else if (!policyFile.exists()) {
-				// File creation
-				if (policyFile.createNewFile()) {
-					System.out.println(policyFile.getName() + " created.");
-					shell.println();
-				}
-
-			}
-			/*
-			 * Implements via freemarker template
-			 */
-			projectManagement.buildPolicy(policyFile, function, uts,
-					libPackages.get("libBDpackage"),
-					libPackages.get("libDTOpackage"), corePolicyPackage);
+			// generate policy class
+			generatePolicy(function, out, uts, libPackages);
 
 			/*
 			 * END
@@ -251,6 +218,81 @@ public class CrudGenerationPlugin implements Plugin {
 	 * 
 	 * @param function
 	 * @param out
+	 * @param uts
+	 * @param libPackages
+	 * @throws Exception
+	 * @throws EscapeForgePromptException
+	 * @throws IOException
+	 */
+	private void generatePolicy(String function, final PipeOut out,
+			List<String> uts, Map<String, String> libPackages)
+			throws Exception, EscapeForgePromptException, IOException {
+
+		ShellMessages.info(out, "Start generating Policy java class");
+		shell.println();
+
+		// loading core component project
+		Project coreProject = projectHelper.locateProjectFromSolution(project,
+				projectFactory, resourceFactory,
+				ForgeConstants.PROJECT_TYPE_UI,
+				ForgeConstants.PROJECT_TYPE_CORE, out);
+
+		shell.println();
+
+		JavaSourceFacet coreJavaFacet = coreProject
+				.getFacet(JavaSourceFacet.class);
+
+		// package where to store Policy
+		String corePolicyPackage = shell.prompt("In Which package of "
+				+ ForgeConstants.PROJECT_TYPE_CORE
+				+ " do you want to generate Policy class ?", coreJavaFacet
+				.getBasePackage().concat(".business"));
+
+		// Java file corresponding to the policy package
+		File corePolicyPackageFile = new File(coreJavaFacet.getSourceFolder()
+				.getUnderlyingResourceObject().getAbsolutePath().concat("/")
+				.concat(corePolicyPackage.replace(".", "/")));
+
+		// Create package (folder) if needed
+		if (!corePolicyPackageFile.exists()) {
+			System.out.println("create package : "
+					+ corePolicyPackageFile.mkdirs());
+		}
+
+		/*
+		 * Load java file
+		 */
+		File policyFile = new File(corePolicyPackageFile.getAbsolutePath()
+				.concat("/").concat(WordUtils.capitalize(function))
+				.concat("Policy.java"));
+
+		if (policyFile.exists()
+				&& !shell.promptBoolean("Class " + policyFile.getName()
+						+ " already exists. OverWrite ?", false)) {
+
+			// TODO update file
+			temporaryChoiceForUpdate(out);
+
+		} else if (!policyFile.exists()) {
+			// File creation
+			if (policyFile.createNewFile()) {
+				System.out.println(policyFile.getName() + " created.");
+				shell.println();
+			}
+
+		}
+		/*
+		 * Implements policy via freemarker template
+		 */
+		projectManagement.buildPolicy(policyFile, function, uts,
+				libPackages.get("libBDpackage"),
+				libPackages.get("libDTOpackage"), corePolicyPackage);
+	}
+
+	/**
+	 * 
+	 * @param function
+	 * @param out
 	 * @param ajfSolutionGlobalName
 	 * @param libProject
 	 * @param libJavaFacet
@@ -272,10 +314,15 @@ public class CrudGenerationPlugin implements Plugin {
 				.getUnderlyingResourceObject();
 
 		// lib package containing BD interfaces
-		String libBDpackage = ajfSolutionGlobalName.toLowerCase().concat(
-				"/lib/business");
+		String libBDpackagePath = shell
+				.prompt("In which packae of project lib you want to generate the BD interfaces ?",
+						ajfSolutionGlobalName.toLowerCase()
+								.concat("/lib/business").replace("/", "."))
+				.replace(".", "/");
+		shell.println();
+
 		File libBusinessFolder = new File(libSrcFolder.getAbsolutePath()
-				.concat("/").concat(libBDpackage));
+				.concat("/").concat(libBDpackagePath));
 		boolean foundLibBDPackage = libBusinessFolder.exists();
 
 		// Loop until found package
@@ -284,14 +331,16 @@ public class CrudGenerationPlugin implements Plugin {
 			if (!libBusinessFolder.exists()) {
 
 				// error message
-				ShellMessages.warn(out,
-						"the package ".concat(libBDpackage.replace("/", "."))
-								.concat(" does not exist !"));
+				ShellMessages.warn(
+						out,
+						"the package ".concat(
+								libBDpackagePath.replace("/", ".")).concat(
+								" of project lib does not exist !"));
 
 				// Ask user to create this new package
 				if (shell.promptBoolean(
 						"Do you want to create this new Package for BDs ?",
-						false)) {
+						true)) {
 
 					System.out.println("Create package : "
 							+ libBusinessFolder.mkdirs());
@@ -299,7 +348,7 @@ public class CrudGenerationPlugin implements Plugin {
 				} else {
 
 					// Prompt user for package containing BD
-					libBDpackage = shell.prompt(
+					libBDpackagePath = shell.prompt(
 							"Sub package of the "
 									+ libProject.getProjectRoot().getName()
 									+ " that contains the BD interfaces ?",
@@ -309,10 +358,10 @@ public class CrudGenerationPlugin implements Plugin {
 
 					// physiscal folder corresponding to input
 					libBusinessFolder = new File(libSrcFolder.getAbsolutePath()
-							.concat("/").concat(libBDpackage));
+							.concat("/").concat(libBDpackagePath));
 				}
 
-			} else if ("exit".equals(libBDpackage.toLowerCase())) {
+			} else if ("exit".equals(libBDpackagePath.toLowerCase())) {
 				// Exit prompt loop
 				throw new EscapeForgePromptException();
 
@@ -322,10 +371,9 @@ public class CrudGenerationPlugin implements Plugin {
 
 			}
 		}
-		out.println();
 
 		// put lib BD package in output
-		output.put("libBDpackage", libBDpackage.replace("/", "."));
+		output.put("libBDpackage", libBDpackagePath.replace("/", "."));
 
 		// Create function BD interface
 		File functionBdFile = new File(libBusinessFolder.getAbsolutePath()
@@ -358,9 +406,9 @@ public class CrudGenerationPlugin implements Plugin {
 		 * Creation of Param beans and Result beans
 		 */
 		// Ask for package
-		String libDtoPackage = shell.prompt(
-				"Where do you want to create DTOs (ParamBean, ResultBeans)",
-				libBDpackage.replace("/", ".").concat(".dto"));
+		String libDtoPackage = shell
+				.prompt("In which package of Lib project you want to create DTOs (ParamBeans, ResultBeans)",
+						libBDpackagePath.replace("/", ".").concat(".dto"));
 		shell.println();
 
 		File libDtoPackageFile = new File(libJavaFacet.getSourceFolder()
@@ -435,10 +483,11 @@ public class CrudGenerationPlugin implements Plugin {
 				}
 			}
 		}
+		System.out.println("Done.");
 
 		// Generate BD interface
 		projectManagement.buildBusinessDelegateInterface(functionBdFile,
-				libBDpackage.replace("/", "."), function, uts,
+				libBDpackagePath.replace("/", "."), function, uts,
 				libDtoPackage.replace("/", "."));
 
 		out.println();
@@ -492,7 +541,7 @@ public class CrudGenerationPlugin implements Plugin {
 
 			myXhtmlFile.getParentFile().mkdirs();
 			System.out.println(myXhtmlFile.getName()
-					+ "file creation : ".concat(String.valueOf(myXhtmlFile
+					+ " file creation : ".concat(String.valueOf(myXhtmlFile
 							.createNewFile())));
 
 		} else if (myXhtmlFile.exists()
@@ -514,7 +563,7 @@ public class CrudGenerationPlugin implements Plugin {
 		// launch the generation
 		projectManagement.buildCrudXhtml(myXhtmlFile, dataModelMap);
 
-		System.out.println("Managed bean generation done.");
+		System.out.println("Xhtml file generation done.");
 		out.println();
 
 		dataModelMap = null;

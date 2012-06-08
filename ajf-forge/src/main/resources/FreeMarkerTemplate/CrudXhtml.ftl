@@ -7,13 +7,14 @@
 	template="/ext/templates/brandClassicLayout.xhtml">
 	
 	<#assign beanName = "${function.MbeanName}">
-	<#assign addUT = "create${function.entity.name}">
-	<ui:define name="applicationTitle">${function.entity.name} Crud screen</ui:define>
+	<#assign capEntityName = "${capitalizeFirst(function.entity.name)}">
+	<#assign addUT = "create${capEntityName}">
+	<ui:define name="applicationTitle">${capEntityName} Crud screen</ui:define>
 
 	<ui:define name="content">
 	
 	<h:form id="form">
-		<p:panel id="searchPanelID" header="Create ${function.entity.name}" toggleable="true">
+		<p:panel id="searchPanelID" header="Create ${capEntityName}" toggleable="true">
 				
 		<p:panelGrid style="margin-bottom:2px;width:100%;" cellpadding="2">
 
@@ -74,7 +75,7 @@
 					</#list>
 					
 					<f:facet name="footer">
-						<#assign deleteUT = "delete${function.entity.name}">
+						<#assign deleteUT = "delete${capEntityName}">
 						<p:commandButton value="Delete"
 							actionListener="${setToEl(beanName,deleteUT)}"
 							update=":form:iPnl" icon="ui-icon-trash">
