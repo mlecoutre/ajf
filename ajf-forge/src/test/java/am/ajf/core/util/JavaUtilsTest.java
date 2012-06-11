@@ -8,7 +8,11 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.WordUtils;
+import org.jboss.forge.parser.JavaParser;
+import org.jboss.forge.parser.java.JavaClass;
 import org.jboss.forge.parser.java.JavaSource;
+import org.jboss.forge.parser.java.Method;
 import org.jboss.forge.project.services.ResourceFactory;
 import org.jboss.forge.resources.java.JavaResource;
 import org.junit.Test;
@@ -46,4 +50,28 @@ public class JavaUtilsTest {
 
 	}
 
+	@Test
+	public void testJavaClass() {
+
+		JavaClass javaclass = JavaParser.create(JavaClass.class).setName(
+				"myClass");
+
+		List<String> uts = new ArrayList<String>();
+		uts.add("myAction1");
+		uts.add("myAction2");
+		uts.add("myAction3");
+
+		for (String ut : uts) {
+			Method<JavaClass> myMethod = javaclass.addMethod(
+					"public void " + ut + "(" + WordUtils.capitalize(ut)
+							+ "PB " + WordUtils.uncapitalize(ut) + "pb)")
+					.setReturnType(WordUtils.capitalize(ut) + "RB");
+
+			myMethod.setBody("BOOOOOOM");
+			myMethod.addThrows(Exception.class);
+		}
+
+		System.out.println(javaclass.toString());
+
+	}
 }

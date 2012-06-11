@@ -4,6 +4,7 @@ import java.util.List;
 
 public class EntityDTO {
 
+	private String entityName;
 	private String entityLibPackage;
 	private List<String> entityAttributeList;
 
@@ -25,6 +26,14 @@ public class EntityDTO {
 
 	public void setEntityAttributeList(List<String> entityAttributeList) {
 		this.entityAttributeList = entityAttributeList;
+	}
+
+	public String getEntityName() {
+		return entityName;
+	}
+
+	public void setEntityName(String entityName) {
+		this.entityName = entityName;
 	}
 
 }

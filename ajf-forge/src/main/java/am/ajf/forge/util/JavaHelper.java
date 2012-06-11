@@ -69,6 +69,29 @@ public class JavaHelper {
 
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<String> retrieveMethodList(JavaSource javaRes) {
+
+		List<Member> members = javaRes.getMembers();
+		List<String> methodNames = new ArrayList<String>();
+
+		for (Member member : members) {
+
+			// if we find a setter or getter we extract the corresponding
+			// attribute.
+
+			if (member instanceof MethodImpl) { // We keep only methods
+				MethodImpl method = (MethodImpl) member; // cast member to
+															// method
+				if (!methodNames.contains(method.getName()))
+					methodNames.add(method.getName());
+			}
+		}
+
+		return methodNames;
+
+	}
+
 	/**
 	 * Returns the same list of String, but each data in the list will have it's
 	 * first letter capitalized

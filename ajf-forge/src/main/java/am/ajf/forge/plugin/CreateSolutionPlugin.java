@@ -23,6 +23,7 @@ import org.jboss.forge.resources.FileResource;
 import org.jboss.forge.resources.Resource;
 import org.jboss.forge.resources.ResourceException;
 import org.jboss.forge.shell.Shell;
+import org.jboss.forge.shell.ShellColor;
 import org.jboss.forge.shell.ShellMessages;
 import org.jboss.forge.shell.plugins.Alias;
 import org.jboss.forge.shell.plugins.Command;
@@ -81,6 +82,18 @@ public class CreateSolutionPlugin implements Plugin {
 
 		String AJF_PROJECT_TYPE_SIMPLE = "Compacted ajf solution";
 		String AJF_PROJECT_TYPE_COMPLEX = "Exploded ajf solution";
+
+		// Welcome logo
+		shell.println();
+		shell.println(ShellColor.YELLOW,
+				"*****************************************");
+		shell.println();
+		shell.println(ShellColor.YELLOW,
+				"** WELCOME ON AJF2 PROJECT GENERATION TOOL **");
+		shell.println();
+		shell.println(ShellColor.YELLOW,
+				"*****************************************");
+		shell.println();
 
 		/*
 		 * Prompt choice for Wich AJF solution type to generate
