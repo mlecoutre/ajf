@@ -11,7 +11,7 @@
 	<version>2.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
-	<name>ajf2</name>
+	<name>AJF2</name>
 
 	<scm>
 		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-parent</connection>
