@@ -8,7 +8,7 @@
 	
 	<#assign beanName = "${function.MbeanName}">
 	<#assign capEntityName = "${capitalizeFirst(function.entity.name)}">
-	<#assign addUT = "create${capEntityName}">
+	
 	<ui:define name="applicationTitle">${capEntityName} Crud screen</ui:define>
 
 	<ui:define name="content">
@@ -37,6 +37,11 @@
 			</p:column>
 		</p:row>
 		</#list>
+		
+		<#--Create button only if the 'addFlag' is true - which means an ADD UT has been asked-->
+		<#--<#assign addFlag = "${function.addFlag}">-->
+		<#if "${function.addFlag}" = "true">
+		<#assign addUT = "${function.addUT}" <#--add UT name-->>
 		<p:row>
 			<p:column colspan="4">
 				<center>
@@ -47,6 +52,8 @@
 				</center>
 			</p:column>
 		</p:row>
+		</#if>
+		
 		</p:panelGrid>
 	</p:panel>
 		
@@ -74,13 +81,17 @@
 					</p:column>
 					</#list>
 					
-					<f:facet name="footer">
-						<#assign deleteUT = "delete${capEntityName}">
-						<p:commandButton value="Delete"
-							actionListener="${setToEl(beanName,deleteUT)}"
-							update=":form:iPnl" icon="ui-icon-trash">
-						</p:commandButton>
-					</f:facet>
+					<#--<#assign deleteFlag = "${function.deleteFlag}">-->
+					<#if  "${function.deleteFlag}" = "true">
+						<#assign addUT = "${function.deleteUT}" <#--delete UT name-->>
+						<f:facet name="footer">
+							<#assign deleteUT = "delete${capEntityName}">
+							<p:commandButton value="Delete"
+								actionListener="${setToEl(beanName,deleteUT)}"
+								update=":form:iPnl" icon="ui-icon-trash">
+							</p:commandButton>
+						</f:facet>
+					</#if>
 					
 				</p:dataTable>
 				</center>

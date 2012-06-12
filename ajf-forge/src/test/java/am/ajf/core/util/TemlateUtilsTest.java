@@ -2,6 +2,8 @@ package am.ajf.core.util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
@@ -11,7 +13,7 @@ import org.jboss.forge.resources.java.JavaResource;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import am.ajf.forge.core.CrudGeneration;
+import am.ajf.forge.core.generators.templates.McrGeneration;
 import am.ajf.forge.lib.EntityDTO;
 import am.ajf.forge.util.JavaHelper;
 import am.ajf.forge.util.TemplateUtils;
@@ -107,7 +109,7 @@ public class TemlateUtilsTest {
 	@Test
 	public void testBuildCrudManagedBean() throws Exception {
 
-		CrudGeneration projectManagement = new CrudGeneration();
+		McrGeneration projectManagement = new McrGeneration();
 
 		/*
 		 * OutputFile
@@ -123,26 +125,91 @@ public class TemlateUtilsTest {
 				entityDto.getEntityAttributeList(),
 				"am.ajf.web.controllers.test", entityDto.getEntityLibPackage());
 
-		projectManagement.buildCrudManagedBean(myFile, dataModel);
+		projectManagement.buildManagedBean(myFile, dataModel);
 
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Test
-	public void testBuildCrudXhtml() throws Exception {
+	public void testBuildCrudXhtmlWithAddDelete() throws Exception {
 
-		CrudGeneration projectManagement = new CrudGeneration();
+		McrGeneration projectManagement = new McrGeneration();
 
 		File myFile = new File("C:/myCrudXhtml.xhtml");
 		if (!myFile.exists())
 			myFile.createNewFile();
 
-		Map dataModel = projectManagement.buildDataModel("voila",
-				"myGeneratedBean", "Person",
-				entityDto.getEntityAttributeList(),
-				"am.ajf.web.controllers.test", entityDto.getEntityLibPackage());
+		List<String> uts = new ArrayList<String>();
+		uts.add("addPerson");
+		uts.add("deletePerson");
+		uts.add("otherUt");
 
-		projectManagement.buildCrudXhtml(myFile, dataModel);
+		projectManagement.buildXhtml(myFile, "voila", "myGeneratedBean",
+				"Person", entityDto.getEntityAttributeList(),
+				"am.ajf.web.controllers.test", entityDto.getEntityLibPackage(),
+				uts);
+
+	}
+
+	@Test
+	public void testBuildCrudXhtmlWithAddOnly() throws Exception {
+
+		McrGeneration projectManagement = new McrGeneration();
+
+		File myFile = new File("C:/myCrudXhtml.xhtml");
+		if (!myFile.exists())
+			myFile.createNewFile();
+
+		List<String> uts = new ArrayList<String>();
+		uts.add("addPerson");
+		uts.add("otherUt");
+
+		projectManagement.buildXhtml(myFile, "voila", "myGeneratedBean",
+				"Person", entityDto.getEntityAttributeList(),
+				"am.ajf.web.controllers.test", entityDto.getEntityLibPackage(),
+				uts);
+
+	}
+
+	@Test
+	public void testBuildCrudXhtmlWithDeleteOnly() throws Exception {
+
+		McrGeneration projectManagement = new McrGeneration();
+
+		File myFile = new File("C:/myCrudXhtml.xhtml");
+		if (!myFile.exists())
+			myFile.createNewFile();
+
+		List<String> uts = new ArrayList<String>();
+		uts.add("deletePerson");
+		uts.add("otherUt");
+
+		projectManagement.buildXhtml(myFile, "voila", "myGeneratedBean",
+				"Person", entityDto.getEntityAttributeList(),
+				"am.ajf.web.controllers.test", entityDto.getEntityLibPackage(),
+				uts);
+
+	}
+
+	@Test
+	public void testBuildCrudXhtmlWithNoAddDelete() throws Exception {
+
+		McrGeneration projectManagement = new McrGeneration();
+
+		File myFile = new File("C:/myCrudXhtml.xhtml");
+		if (!myFile.exists())
+			myFile.createNewFile();
+
+		List<String> uts = new ArrayList<String>();
+		uts.add("otherUt");
+		uts.add("otherUt2");
+		uts.add("otherUt3");
+		uts.add("otherUt4");
+		uts.add("otherUt5");
+
+		projectManagement.buildXhtml(myFile, "voila", "myGeneratedBean",
+				"Person", entityDto.getEntityAttributeList(),
+				"am.ajf.web.controllers.test", entityDto.getEntityLibPackage(),
+				uts);
 
 	}
 

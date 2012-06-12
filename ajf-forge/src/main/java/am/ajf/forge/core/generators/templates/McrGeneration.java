@@ -1,4 +1,4 @@
-package am.ajf.forge.core;
+package am.ajf.forge.core.generators.templates;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,16 +19,16 @@ import freemarker.template.TemplateMethodModel;
 import freemarker.template.TemplateModelException;
 
 @Singleton
-public class CrudGeneration {
+public class McrGeneration {
 
-	private static final String CRUD_MBEAN_TEMPLATE = "CrudMBean.ftl";
-	private static final String CRUD_XHTML_TEMPLATE = "CrudXhtml.ftl";
+	private static final String CRUD_MBEAN_TEMPLATE = "ManagedBean.ftl";
+	private static final String CRUD_XHTML_TEMPLATE = "Xhtml.ftl";
 	private static final String CRUD_BUSINESS_DELEGATE_TEMPLATE = "BusinessDelegate.ftl";
 	private static final String CRUD_BUSINESS_POLICY_TEMPLATE = "Policy.ftl";
 
 	TemplateUtils templateUtils;
 
-	public CrudGeneration() {
+	public McrGeneration() {
 		super();
 	}
 
@@ -43,7 +43,7 @@ public class CrudGeneration {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
-	public void buildCrudManagedBean(File managedBeanFile, Map dataModelMap)
+	public void buildManagedBean(File managedBeanFile, Map dataModelMap)
 			throws Exception {
 
 		try {
@@ -75,14 +75,70 @@ public class CrudGeneration {
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void buildCrudXhtml(File xhtmlFile, Map dataModelMap)
-			throws Exception {
+	public void buildXhtml(File xhtmlFile, String globalProjectName,
+			String functionName, String entityName,
+			List<String> entityAttributes, String javaPackage,
+			String entityLibPackage, List<String> uts) throws Exception {
 
 		try {
 			FileOutputStream fos = new FileOutputStream(xhtmlFile);
 			Writer writer = new OutputStreamWriter(fos);
 
 			Template myTemplate = loadTemplate(CRUD_XHTML_TEMPLATE);
+
+			// Generate a data model
+			Map dataModelMap = new HashMap();
+
+			dataModelMap.put("projectGlobalName", globalProjectName);
+
+			Map function = new HashMap();
+			function.put("MbeanName", functionName);
+			function.put("package", javaPackage);
+			// function.put("entityName", entityName);
+			Map entity = new HashMap();
+			entity.put("name", entityName);
+			entity.put("libPackage", entityLibPackage);
+
+			SimpleSequence attributeSequence = new SimpleSequence();
+			for (String attribute : entityAttributes) {
+				attributeSequence.add(attribute);
+			}
+			entity.put("attributes", attributeSequence);
+
+			/*
+			 * need to find speacial UT for special XHTML sub part
+			 */
+			// init:
+			function.put("addUT", "");
+			function.put("deleteUT", "");
+			function.put("addFlag", "false");
+			function.put("deleteFlag", "false");
+			for (String ut : uts) {
+
+				// check if an Add (or create) UT has been asked
+				if (ut.startsWith("add" + WordUtils.capitalize(entityName))
+						|| ut.startsWith("create"
+								+ WordUtils.capitalize(entityName))) {
+					function.put("addFlag", "true");
+					function.put("addUT", ut);
+
+				} else if (ut.startsWith("remove"
+						+ WordUtils.capitalize(entityName))
+						|| ut.startsWith("delete"
+								+ WordUtils.capitalize(entityName))) {
+
+					function.put("deleteFlag", "true");
+					function.put("deleteUT", ut);
+				}
+
+			}
+
+			function.put("entity", entity);
+			function.put("capitalizeFirst", new CapitalizeFirst());
+
+			dataModelMap.put("function", function);
+			dataModelMap.put("unCapitalizeFirst", new UnCapitalizeFirst());
+			dataModelMap.put("capitalizeFirst", new CapitalizeFirst());
 
 			// add setToEl to data Model (only needed for building xhtmlFile)
 			dataModelMap.put("setToEl", new TransformToEL());
@@ -136,6 +192,9 @@ public class CrudGeneration {
 			SimpleSequence utSequence = new SimpleSequence();
 			for (String ut : uts) {
 				utSequence.add(ut);
+				if (ut.startsWith("add")) {
+
+				}
 			}
 			function.put("UTs", utSequence);
 

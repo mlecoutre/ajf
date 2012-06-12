@@ -36,7 +36,9 @@ import org.jboss.forge.shell.util.Files;
 import org.jboss.forge.shell.util.ResourceUtil;
 
 import am.ajf.forge.core.CreateProject;
+import am.ajf.forge.exception.EscapeForgePromptException;
 import am.ajf.forge.lib.ForgeConstants;
+import am.ajf.forge.util.ShellHelper;
 
 /**
  * 
@@ -51,12 +53,15 @@ public class CreateSolutionPlugin implements Plugin {
 	private Shell shell;
 
 	@Inject
+	private ShellHelper shellhelper;
+
+	@Inject
 	private ProjectFactory projectFactory;
 
 	@Inject
 	private ResourceFactory factory;
 
-	boolean isProjectDirFlag = false;
+	boolean isProjectDirFlag;
 
 	/**
 	 * Default command of the plug-in which will prompt the user in order to let
@@ -80,109 +85,98 @@ public class CreateSolutionPlugin implements Plugin {
 			@Option(name = "EJB", description = "Set flag to generate EJB component ajf project", flagOnly = true, required = false) boolean isEjb,
 			final PipeOut out) {
 
-		String AJF_PROJECT_TYPE_SIMPLE = "Compacted ajf solution";
-		String AJF_PROJECT_TYPE_COMPLEX = "Exploded ajf solution";
+		try {
 
-		// Welcome logo
-		shell.println();
-		shell.println(ShellColor.YELLOW,
-				"*****************************************");
-		shell.println();
-		shell.println(ShellColor.YELLOW,
-				"** WELCOME ON AJF2 PROJECT GENERATION TOOL **");
-		shell.println();
-		shell.println(ShellColor.YELLOW,
-				"*****************************************");
-		shell.println();
+			String AJF_PROJECT_TYPE_SIMPLE = "Compacted ajf solution";
+			String AJF_PROJECT_TYPE_COMPLEX = "Exploded ajf solution";
 
-		/*
-		 * Prompt choice for Wich AJF solution type to generate
-		 */
-		if (null == projectType) {
+			// Welcome logo
+			shell.println();
+			shell.println(ShellColor.YELLOW,
+					"*****************************************");
+			shell.println();
+			shell.println(ShellColor.YELLOW,
+					"** WELCOME ON AJF2 PROJECT GENERATION TOOL **");
+			shell.println();
+			shell.println(ShellColor.YELLOW,
+					"*****************************************");
+			shell.println();
 
-			List<String> options = new ArrayList<String>();
+			/*
+			 * Prompt choice for Wich AJF solution type to generate
+			 */
+			if (null == projectType) {
 
-			options.add(AJF_PROJECT_TYPE_SIMPLE);
-			options.add(AJF_PROJECT_TYPE_COMPLEX);
+				List<String> options = new ArrayList<String>();
 
-			int selectedoption = shell.promptChoice(
-					"Which type of AJF project ?", options);
+				options.add(AJF_PROJECT_TYPE_SIMPLE);
+				options.add(AJF_PROJECT_TYPE_COMPLEX);
 
-			projectType = options.get(selectedoption);
+				int selectedoption = shell.promptChoice(
+						"Which type of AJF project ?", options);
 
-		}
-
-		// The user could have entered "c" as project type for compacted
-		// solution
-		if (AJF_PROJECT_TYPE_SIMPLE.equals(projectType)
-				|| "c".equals(projectType.toLowerCase())) {
-
-			boolean doWeContinue = validateCompactedProject(isWs, isEjb, out);
-
-			if (doWeContinue) {
-
-				/*
-				 * Case of generating a compact ajf solution
-				 */
-				String projectName = promptForProjectName();
-
-				// the keyword "exit" is always used to exit the prompt loop
-				if ("exit".equals(projectName)) {
-					ShellMessages.info(out, "bye bye !");
-
-				} else {
-					String projectDirectory = promptProjectDirectory("Project directory (empty is current directory) :");
-					if (!"exit".equals(projectDirectory)) {
-
-						isProjectDirFlag = true;
-						// Call the compact project generation method
-						createAjfSolutionCompacted(projectName,
-								projectDirectory, out);
-					} else {
-						ShellMessages.info(out, "bye bye !");
-					}
-				}
+				projectType = options.get(selectedoption);
 
 			}
-			// The user could have entered "e" as project type for exploded
+
+			// The user could have entered "c" as project type for compacted
 			// solution
-		} else if (AJF_PROJECT_TYPE_COMPLEX.equals(projectType)
-				|| "e".equals(projectType.toLowerCase())) {
+			if (AJF_PROJECT_TYPE_SIMPLE.equals(projectType)
+					|| "c".equals(projectType.toLowerCase())) {
 
-			boolean doWeContinue = validateAjfProjectToUser(isWs, isEjb);
+				boolean doWeContinue = validateCompactedProject(isWs, isEjb,
+						out);
 
-			if (doWeContinue) {
+				if (doWeContinue) {
 
-				/*
-				 * Case of generating an exploded ajf solution
-				 */
-				String projectName = promptForProjectName();
-
-				// Possibility to exit the prompt loop
-				if ("exit".equals(projectName)) {
-					ShellMessages.info(out, "bye bye !");
-				} else {
-
+					/*
+					 * Case of generating a compact ajf solution
+					 */
+					String projectName = promptForProjectName();
 					String projectDirectory = promptProjectDirectory("Project directory (empty is current directory) :");
+					isProjectDirFlag = true;
+					shell.println();
+					// Call the compact project generation method
+					createAjfSolutionCompacted(projectName, projectDirectory,
+							out);
 
-					if (!"exit".equals(projectDirectory)) {
-
-						isProjectDirFlag = true;
-
-						// Call the exploded project generation method
-						createAjfSolutionExploded(projectName,
-								projectDirectory, isWs, isEjb, out);
-
-					} else {
-						ShellMessages.info(out, "bye bye !");
-					}
 				}
+				// The user could have entered "e" as project type for exploded
+				// solution
+			} else if (AJF_PROJECT_TYPE_COMPLEX.equals(projectType)
+					|| "e".equals(projectType.toLowerCase())) {
+
+				boolean doWeContinue = validateAjfProjectToUser(isWs, isEjb);
+
+				if (doWeContinue) {
+
+					/*
+					 * Case of generating an exploded ajf solution
+					 */
+					String projectName = promptForProjectName();
+					String projectDirectory = promptProjectDirectory("Project directory (empty is current directory) :");
+					shell.println();
+					isProjectDirFlag = true;
+					// Call the exploded project generation method
+					createAjfSolutionExploded(projectName, projectDirectory,
+							isWs, isEjb, out);
+
+				}
+
+			} else {
+
+				ShellMessages.error(out, "Project Type ".concat(projectType)
+						.concat(" does not exist... please try again..."));
+
 			}
+		} catch (EscapeForgePromptException escapeEx) {
 
-		} else {
-
-			ShellMessages.error(out, "Project Type ".concat(projectType)
-					.concat(" does not exist... please try again..."));
+			shell.println();
+			shell.println();
+			shell.print(ShellColor.MAGENTA, "***BYE BYE***");
+			shell.println();
+			shell.println();
+			return;
 
 		}
 
@@ -208,19 +202,16 @@ public class CreateSolutionPlugin implements Plugin {
 			@Option(name = "WS", description = "Optional: if a project-ws has to be generated", flagOnly = true, required = false) boolean isWs,
 			@Option(name = "EJB", description = "Optional: if a project-ejb has to be generated", flagOnly = true, required = false) boolean isEjb,
 			final PipeOut out) {
+		try {
+			// Check project directory
+			shellhelper.promptFacade("flag : " + isProjectDirFlag);
+			if (isProjectDirFlag
+					|| checkProjectDirectoryConsistency(folderName)) {
 
-		// Check project directory
-		if (isProjectDirFlag || checkProjectDirectoryConsistency(folderName)) {
-
-			// let the user escape the prompt loop
-			if ("exit".equals(folderName) || "exit".equals(name)) {
-				ShellMessages.info(out, "bye bye !");
-
-			} else {
-
+				shell.println();
 				ShellMessages.info(
 						out,
-						"Creating the AJF exploded solution".concat(name)
+						"Creating the AJF exploded solution ".concat(name)
 								.concat(" in the directory : ")
 								.concat(folderName));
 				try {
@@ -260,10 +251,20 @@ public class CreateSolutionPlugin implements Plugin {
 									+ e.toString());
 
 				}
-			}
-		} else {
+				// }
+			} else {
 
-			// Do nothing - If coming here : problem with input project folder
+				// Do nothing - If coming here : problem with input project
+				// folder
+			}
+		} catch (EscapeForgePromptException e) {
+			shell.println();
+			shell.println();
+			shell.print(ShellColor.MAGENTA, "***BYE BYE***");
+			shell.println();
+			shell.println();
+			return;
+
 		}
 	}
 
@@ -285,25 +286,22 @@ public class CreateSolutionPlugin implements Plugin {
 		// Check project directory
 		if (isProjectDirFlag || checkProjectDirectoryConsistency(folderName)) {
 
-			if ("exit".equals(folderName) || "exit".equals(name)) {
-				ShellMessages.info(out, "bye bye !");
-			} else {
-				ShellMessages.info(
-						out,
-						"Creating the AJF compacted solution".concat(name)
-								.concat(" in the directory : ")
-								.concat(folderName));
-				try {
-					generateAjfProject(name, folderName, PROJECT_TYPE_COMPACT,
-							false, false, out);
+			shell.println();
+			ShellMessages.info(
+					out,
+					"Creating the AJF compacted solution".concat(name)
+							.concat(" in the directory : ").concat(folderName));
+			try {
+				generateAjfProject(name, folderName, PROJECT_TYPE_COMPACT,
+						false, false, out);
 
-				} catch (Exception e) {
-					// print on the shell the exception thrown
-					ShellMessages.error(out,
-							"AJF project generation process has thrown an Exception : "
-									+ e.toString());
-				}
+			} catch (Exception e) {
+				// print on the shell the exception thrown
+				ShellMessages.error(out,
+						"AJF project generation process has thrown an Exception : "
+								+ e.toString());
 			}
+			// }
 		} else {
 			// Do nothing - If coming here : problem with input project folder
 		}
@@ -440,21 +438,15 @@ public class CreateSolutionPlugin implements Plugin {
 
 	}
 
-	// private void generateAjfProjectParent(final String globalProjectName,
-	// String projectFolder, String projectType, boolean isWs,
-	// boolean isEjb, PipeOut out) {
-	//
-	// String projectFinalName = globalProjectName + "-" + projectType;
-	//
-	// }
-
 	/**
 	 * Return a correct directory for the generated project
 	 * 
 	 * @param shellPromptMessage
 	 * @return projectDirectory
+	 * @throws EscapeForgePromptException
 	 */
-	private String promptProjectDirectory(String shellPromptMessage) {
+	private String promptProjectDirectory(String shellPromptMessage)
+			throws EscapeForgePromptException {
 
 		boolean isCorrectDirectory = false;
 		String projectDirectory = null;
@@ -462,7 +454,7 @@ public class CreateSolutionPlugin implements Plugin {
 		while (isCorrectDirectory == false) {
 			// Loop on project directory prompt message until directory is
 			// correct (or 'exit')
-			projectDirectory = shell.prompt(shellPromptMessage);
+			projectDirectory = shellhelper.promptFacade(shellPromptMessage);
 			isCorrectDirectory = checkProjectDirectoryConsistency(projectDirectory);
 
 		}
@@ -474,11 +466,12 @@ public class CreateSolutionPlugin implements Plugin {
 	 * Loop until user enter a project name.
 	 * 
 	 * @return projectName
+	 * @throws EscapeForgePromptException
 	 */
-	private String promptForProjectName() {
-		String projectName = shell.prompt("Project Name :");
+	private String promptForProjectName() throws EscapeForgePromptException {
+		String projectName = shellhelper.promptFacade("Project Name :");
 		while (null == projectName || projectName.isEmpty()) {
-			projectName = shell.prompt("Project Name :");
+			projectName = shellhelper.promptFacade("Project Name :");
 		}
 		return projectName;
 	}
@@ -495,6 +488,7 @@ public class CreateSolutionPlugin implements Plugin {
 	 */
 	private boolean checkProjectDirectoryConsistency(String projectDirectory) {
 
+		shell.println();
 		ShellMessages.info(shell, "Checking project directory...");
 
 		File myFile;
@@ -505,10 +499,6 @@ public class CreateSolutionPlugin implements Plugin {
 
 			projectDirectory = shell.getCurrentDirectory()
 					.getUnderlyingResourceObject().getAbsolutePath();
-
-		} else if ("exit".equals(projectDirectory)) {
-			// way of escaping the loop
-			return true;
 
 		} else if (!projectDirectory.contains(":")) {
 			// In case the hard drive is not specified, create a

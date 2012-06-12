@@ -15,9 +15,8 @@ public interface ${function.name}BD  {
 	/**
 	 * Business Service for UT : ${ut}
 	 * @param ${utUnCap}
-	 *
 	 */ 
-	${utCap}RB ${utUnCap}(
+	public ${utCap}RB ${utUnCap}(
 			${utCap}PB ${utUnCap}ParamBean)
 			throws Exception;
 			

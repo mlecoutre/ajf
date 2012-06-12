@@ -23,6 +23,10 @@
 		<appender-ref ref="STDOUT" />
 	</logger>
 
+	<logger name="a.a.f.util" level="WARN" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
 	<logger name="org.apache.velocity" level="DEBUG" additivity="false">
 		<appender-ref ref="STDOUT" />
 	</logger>
