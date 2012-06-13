@@ -19,7 +19,7 @@ import freemarker.template.TemplateMethodModel;
 import freemarker.template.TemplateModelException;
 
 @Singleton
-public class McrGeneration {
+public class McrGenerationTemplate {
 
 	private static final String CRUD_MBEAN_TEMPLATE = "ManagedBean.ftl";
 	private static final String CRUD_XHTML_TEMPLATE = "Xhtml.ftl";
@@ -28,7 +28,7 @@ public class McrGeneration {
 
 	TemplateUtils templateUtils;
 
-	public McrGeneration() {
+	public McrGenerationTemplate() {
 		super();
 	}
 

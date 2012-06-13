@@ -76,4 +76,33 @@ public class ForgeConstants {
 	public static final String DEFAULT_TEMPLATES_DIRECTORY = "/FreeMarkerTemplate";
 	public static final String DEFAULT_TEMPLATES_DIRECTORY_ZIP = "FreeMarkerTemplate.zip";
 
+	/*
+	 * Code Generation - default packages (which are changeable on forge prompt)
+	 */
+	// KeyWord where to replace the project name
+	public static final String PROJECT_NAME = "projectName";
+
+	// package (of lib project if exploded solution) where look for entities
+	public static final String PACKAGE_FOR_ENTITY = "am.ajf.".concat(
+			PROJECT_NAME).concat(".lib.model");
+
+	// package (of ui project if exploded solution) where to generate managed
+	// beans
+	public static final String PACKAGE_FOR_MANAGED_BEAN = "am.ajf.".concat(
+			PROJECT_NAME).concat(".web.controllers");
+
+	// package (of lib project if exploded solution) where to generate BD
+	// interfaces
+	public static final String PACKAGE_FOR_BD_INTERFACES = "am.ajf.".concat(
+			PROJECT_NAME).concat(".lib.business");
+
+	// package (of lib project if exploded solution) where to generate DTO beans
+	// (ResultBean
+	// and ParamBean)
+	public static final String PACKAGE_FOR_DTO = PACKAGE_FOR_BD_INTERFACES
+			.concat(".dto");
+
+	// Package (of core project if exploded solution) where to generate POLICIES
+	public static final String PACKAGE_FOR_POLICY = "am.ajf.".concat(
+			PROJECT_NAME).concat(".core.business");
 }

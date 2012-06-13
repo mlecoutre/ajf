@@ -1,5 +1,12 @@
 package am.ajf.forge.core;
 
+import static am.ajf.forge.lib.ForgeConstants.PACKAGE_FOR_BD_INTERFACES;
+import static am.ajf.forge.lib.ForgeConstants.PACKAGE_FOR_DTO;
+import static am.ajf.forge.lib.ForgeConstants.PACKAGE_FOR_POLICY;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_NAME;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -24,10 +31,9 @@ import org.jboss.forge.shell.Shell;
 import org.jboss.forge.shell.ShellMessages;
 import org.jboss.forge.shell.plugins.PipeOut;
 
-import am.ajf.forge.core.generators.templates.McrGeneration;
+import am.ajf.forge.core.generators.templates.McrGenerationTemplate;
 import am.ajf.forge.exception.EscapeForgePromptException;
 import am.ajf.forge.lib.EntityDTO;
-import am.ajf.forge.lib.ForgeConstants;
 import am.ajf.forge.util.JavaHelper;
 import am.ajf.forge.util.ProjectHelper;
 import am.ajf.forge.util.ShellHelper;
@@ -53,7 +59,7 @@ public class CreateMcr {
 	private ShellHelper shellhelper;
 
 	@Inject
-	private McrGeneration projectManagement;
+	private McrGenerationTemplate projectManagement;
 
 	@Inject
 	private JavaHelper javaUtils;
@@ -245,14 +251,21 @@ public class CreateMcr {
 		File libSrcFolder = libJavaFacet.getSourceFolder()
 				.getUnderlyingResourceObject();
 
-		// lib package containing BD interfaces
+		// lib package containing BD interfaces (package is entered with '.'
+		// separators that we automatically replace by '/')
 		String libBDpackagePath = shellhelper
 				.promptFacade(
 						"In which package of project lib you want to generate the BD interfaces ?",
-						ajfSolutionGlobalName.toLowerCase()
-								.concat("/lib/business").replace("/", "."))
-				.replace(".", "/");
+						PACKAGE_FOR_BD_INTERFACES.replace(PROJECT_NAME,
+								ajfSolutionGlobalName.toLowerCase())).replace(
+						".", "/");
+
 		shell.println();
+
+		// TODO BACKUP TO REMOVE LATER
+		// ajfSolutionGlobalName.toLowerCase()
+		// .concat("/lib/business").replace("/", "."))
+		// .replace(".", "/")
 
 		File libBusinessFolder = new File(libSrcFolder.getAbsolutePath()
 				.concat("/").concat(libBDpackagePath));
@@ -263,36 +276,36 @@ public class CreateMcr {
 
 			if (!libBusinessFolder.exists()) {
 
-				// error message
-				ShellMessages.warn(
-						out,
-						"the package ".concat(
-								libBDpackagePath.replace("/", ".")).concat(
-								" of project lib does not exist !"));
+				// // error message
+				// ShellMessages.info(
+				// out,
+				// "the package ".concat(
+				// libBDpackagePath.replace("/", ".")).concat(
+				// " of project lib does not exist !"));
+				//
+				// // Ask user to create this new package
+				// if (shell.promptBoolean(
+				// "Do you want to create this new Package for BDs [y]?",
+				// true)) {
 
-				// Ask user to create this new package
-				if (shell.promptBoolean(
-						"Do you want to create this new Package for BDs [y]?",
-						true)) {
+				shell.println("Create package : " + libBusinessFolder.mkdirs());
 
-					System.out.println("Create package : "
-							+ libBusinessFolder.mkdirs());
-
-				} else {
-
-					// Prompt user for package containing BD
-					libBDpackagePath = shellhelper.promptFacade(
-							"Sub package of the "
-									+ libProject.getProjectRoot().getName()
-									+ " that contains the BD interfaces ?",
-							ajfSolutionGlobalName.toLowerCase()
-									.concat("/lib/business").replace("/", "."))
-							.replace(".", "/");
-
-					// physiscal folder corresponding to input
-					libBusinessFolder = new File(libSrcFolder.getAbsolutePath()
-							.concat("/").concat(libBDpackagePath));
-				}
+				// } else {
+				//
+				// // lib package containing BD interfaces (package is entered
+				// // with '.'separators that we automatically replace by '/')
+				// libBDpackagePath = shellhelper
+				// .promptFacade(
+				// "In which package of project lib you want to generate the BD interfaces ?",
+				// PACKAGE_FOR_BD_INTERFACES.replace(
+				// PROJECT_NAME,
+				// ajfSolutionGlobalName.toLowerCase()))
+				// .replace(".", "/");
+				//
+				// // physiscal folder corresponding to input
+				// libBusinessFolder = new File(libSrcFolder.getAbsolutePath()
+				// .concat("/").concat(libBDpackagePath));
+				// }
 
 			} else {
 				// Go on
@@ -323,17 +336,20 @@ public class CreateMcr {
 								false)) {
 
 			// UPDATE MODE
-			// temporaryChoiceForUpdate(out);
+			ShellMessages.info(out,
+					"Updating ".concat(functionBdFile.getName() + "..."));
 
+			// get JavaSource corresonding to existing java BD class
 			functionBdJavaSource = libJavaFacet.getJavaResource(
 					libBDpackagePath.replace(".", "/") + "/"
 							+ functionBdFile.getName()).getJavaSource();
 
+			// retrieve method list of this java source
 			List<String> methodList = javaUtils
 					.retrieveMethodList(functionBdJavaSource);
 
-			// A second list has to be created to avoid concurrentModification
-			// Exception: utTobeAdded in java class
+			// A second list has to be created to with new method to add during
+			// update avoid concurrentModification Exception
 			utToBeAdded = new ArrayList<String>();
 			utToBeAdded.addAll(uts);
 			for (String ut : uts) {
@@ -343,28 +359,31 @@ public class CreateMcr {
 							+ " generation as it already exists.");
 				}
 			}
+			// flags
 			creationMode = false;
 			updateMode = true;
 
 		} else if (!functionBdFile.exists()) {
 
 			// if file does not exist, we create it
-			System.out.println("Creation of ".concat(functionBdFile.getName()
+			shell.println("Creation of ".concat(functionBdFile.getName()
 					+ " : " + functionBdFile.createNewFile()));
-			out.println();
+			shell.println();
 
 		}
 
 		/*
 		 * Creation of Param beans and Result beans
 		 */
-		// Ask for package
+		// Prompt for package where to create parambean and resultbean objects
 		String libDtoPackage = shellhelper
 				.promptFacade(
 						"In which package of Lib project you want to create DTOs (ParamBeans, ResultBeans)",
-						libBDpackagePath.replace("/", ".").concat(".dto"));
+						PACKAGE_FOR_DTO.replace(PROJECT_NAME,
+								ajfSolutionGlobalName.toLowerCase()));
 		shell.println();
 
+		// File corresponding to package
 		File libDtoPackageFile = new File(libJavaFacet.getSourceFolder()
 				.getUnderlyingResourceObject().getAbsolutePath()
 				.concat("/" + libDtoPackage.replace(".", "/")));
@@ -402,7 +421,8 @@ public class CreateMcr {
 			JavaInterfaceImpl javaclass = (JavaInterfaceImpl) functionBdJavaSource
 					.getOrigin();
 
-			ShellMessages.info(out, "UT to be added:");
+			if (utToBeAdded.size() > 0)
+				ShellMessages.info(out, "Addition of DTOs for new Unit tasks:");
 
 			for (String ut : utToBeAdded) {
 				shell.println("Adding UT:" + ut + "...");
@@ -442,16 +462,16 @@ public class CreateMcr {
 	 */
 	@SuppressWarnings("rawtypes")
 	public void generatePolicy(String function, final PipeOut out,
-			List<String> uts, Map<String, String> libPackages)
-			throws Exception, EscapeForgePromptException, IOException {
+			List<String> uts, Map<String, String> libPackages,
+			String ajfSolutionGlobalName) throws Exception,
+			EscapeForgePromptException, IOException {
 
 		ShellMessages.info(out, "Start generating Policy java class");
 
 		// loading core component project
 		Project coreProject = projectHelper.locateProjectFromSolution(
-				uiProject, projectFactory, resourceFactory,
-				ForgeConstants.PROJECT_TYPE_UI,
-				ForgeConstants.PROJECT_TYPE_CORE, out);
+				uiProject, projectFactory, resourceFactory, PROJECT_TYPE_UI,
+				PROJECT_TYPE_CORE, out);
 
 		shell.println();
 
@@ -459,10 +479,11 @@ public class CreateMcr {
 				.getFacet(JavaSourceFacet.class);
 
 		// package where to store Policy
-		String corePolicyPackage = shell.prompt("In Which package of "
-				+ ForgeConstants.PROJECT_TYPE_CORE
-				+ " do you want to generate Policy class ?", coreJavaFacet
-				.getBasePackage().concat(".business"));
+		String corePolicyPackage = shell.prompt(
+				"In Which package of " + PROJECT_TYPE_CORE
+						+ " do you want to generate Policy class ?",
+				PACKAGE_FOR_POLICY.replace(PROJECT_NAME,
+						ajfSolutionGlobalName.toLowerCase()));
 
 		// Java file corresponding to the policy package
 		File corePolicyPackageFile = new File(coreJavaFacet.getSourceFolder()
@@ -507,9 +528,7 @@ public class CreateMcr {
 				}
 			}
 
-			/*
-			 * Update Policy with new UT
-			 */
+			// Update Policy with new UT
 			JavaClass javaclass = (JavaClass) policyFileJavaSource.getOrigin();
 			shell.println();
 

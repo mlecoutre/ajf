@@ -13,7 +13,7 @@ import org.jboss.forge.resources.java.JavaResource;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import am.ajf.forge.core.generators.templates.McrGeneration;
+import am.ajf.forge.core.generators.templates.McrGenerationTemplate;
 import am.ajf.forge.lib.EntityDTO;
 import am.ajf.forge.util.JavaHelper;
 import am.ajf.forge.util.TemplateUtils;
@@ -109,7 +109,7 @@ public class TemlateUtilsTest {
 	@Test
 	public void testBuildCrudManagedBean() throws Exception {
 
-		McrGeneration projectManagement = new McrGeneration();
+		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
 
 		/*
 		 * OutputFile
@@ -132,7 +132,7 @@ public class TemlateUtilsTest {
 	@Test
 	public void testBuildCrudXhtmlWithAddDelete() throws Exception {
 
-		McrGeneration projectManagement = new McrGeneration();
+		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
 
 		File myFile = new File("C:/myCrudXhtml.xhtml");
 		if (!myFile.exists())
@@ -153,7 +153,7 @@ public class TemlateUtilsTest {
 	@Test
 	public void testBuildCrudXhtmlWithAddOnly() throws Exception {
 
-		McrGeneration projectManagement = new McrGeneration();
+		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
 
 		File myFile = new File("C:/myCrudXhtml.xhtml");
 		if (!myFile.exists())
@@ -173,7 +173,7 @@ public class TemlateUtilsTest {
 	@Test
 	public void testBuildCrudXhtmlWithDeleteOnly() throws Exception {
 
-		McrGeneration projectManagement = new McrGeneration();
+		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
 
 		File myFile = new File("C:/myCrudXhtml.xhtml");
 		if (!myFile.exists())
@@ -193,7 +193,7 @@ public class TemlateUtilsTest {
 	@Test
 	public void testBuildCrudXhtmlWithNoAddDelete() throws Exception {
 
-		McrGeneration projectManagement = new McrGeneration();
+		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
 
 		File myFile = new File("C:/myCrudXhtml.xhtml");
 		if (!myFile.exists())

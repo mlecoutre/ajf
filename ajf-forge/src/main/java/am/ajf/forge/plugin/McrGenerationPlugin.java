@@ -1,5 +1,11 @@
 package am.ajf.forge.plugin;
 
+import static am.ajf.forge.lib.ForgeConstants.PACKAGE_FOR_ENTITY;
+import static am.ajf.forge.lib.ForgeConstants.PACKAGE_FOR_MANAGED_BEAN;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_NAME;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +33,6 @@ import org.jboss.forge.shell.plugins.Plugin;
 import am.ajf.forge.core.CreateMcr;
 import am.ajf.forge.exception.EscapeForgePromptException;
 import am.ajf.forge.lib.EntityDTO;
-import am.ajf.forge.lib.ForgeConstants;
 import am.ajf.forge.util.JavaHelper;
 import am.ajf.forge.util.ProjectHelper;
 import am.ajf.forge.util.ShellHelper;
@@ -141,7 +146,7 @@ public class McrGenerationPlugin implements Plugin {
 			// get the global project Name (without any suffixe). As we should
 			// be on the UI project, we remove the suffixe:
 			String ajfSolutionGlobalName = uiProject.getProjectRoot().getName()
-					.replace("-".concat(ForgeConstants.PROJECT_TYPE_UI), "");
+					.replace("-".concat(PROJECT_TYPE_UI), "");
 
 			/*
 			 * Entity loading
@@ -153,8 +158,7 @@ public class McrGenerationPlugin implements Plugin {
 			// should be)
 			Project libProject = projectHelper.locateProjectFromSolution(
 					uiProject, projectFactory, resourceFactory,
-					ForgeConstants.PROJECT_TYPE_UI,
-					ForgeConstants.PROJECT_TYPE_LIB, out);
+					PROJECT_TYPE_UI, PROJECT_TYPE_LIB, out);
 
 			// Java facet of the lib project
 			JavaSourceFacet libJavaFacet = libProject
@@ -191,7 +195,8 @@ public class McrGenerationPlugin implements Plugin {
 								function.replaceAll("MBean", ""));
 			}
 
-			JavaSourceFacet javaFacet = uiProject
+			// Java facet for ui project
+			JavaSourceFacet uiJavaFacet = uiProject
 					.getFacet(JavaSourceFacet.class);
 
 			/*
@@ -201,13 +206,16 @@ public class McrGenerationPlugin implements Plugin {
 
 			// Which package where to create managedBean class
 			String managedBeanPackage = shellhelper.promptFacade(
-					"Which package of ui project for Managed Bean ?", javaFacet
-							.getBasePackage().concat(".controllers"));
+					"Which package of ui project for Managed Bean ?",
+					PACKAGE_FOR_MANAGED_BEAN.replace(PROJECT_NAME,
+							ajfSolutionGlobalName.toLowerCase()));
+
+			// uiJavaFacet.getBasePackage().concat(".controllers")
 
 			// Generate managed bean for CRUD
 			mcrManagement.generateManagedBean(function, entityName,
 					ajfSolutionGlobalName, entityDto, managedBeanPackage,
-					javaFacet, out);
+					uiJavaFacet, out);
 
 			// generate xhtml web page for CRUD
 			promptTitle("Xhtml web page generation");
@@ -223,7 +231,8 @@ public class McrGenerationPlugin implements Plugin {
 
 			// generate policy class
 			promptTitle("Policy Class generation");
-			mcrManagement.generatePolicy(function, out, uts, libPackages);
+			mcrManagement.generatePolicy(function, out, uts, libPackages,
+					ajfSolutionGlobalName);
 
 			/*
 			 * END
@@ -416,7 +425,7 @@ public class McrGenerationPlugin implements Plugin {
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	protected EntityDTO loadEntity(String ajfSolutionGlobalName,
+	private EntityDTO loadEntity(String ajfSolutionGlobalName,
 			JavaSourceFacet libJavaFacet, String entityName, PipeOut out)
 			throws Exception {
 
@@ -445,8 +454,9 @@ public class McrGenerationPlugin implements Plugin {
 		JavaSource modelJavaResource = null;
 
 		// Path of the supposed model (default value)
-		String entityPackage = ajfSolutionGlobalName.toLowerCase().concat(
-				"/lib/model");
+		String entityPackage = PACKAGE_FOR_ENTITY.replace(PROJECT_NAME,
+				ajfSolutionGlobalName.toLowerCase());
+
 		String entityModelPath = entityPackage.concat("/").concat(
 				WordUtils.capitalize(entityName) + ".java");
 
