@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.jboss.forge.parser.java.JavaSource;
 import org.jboss.forge.project.services.ResourceFactory;
 import org.jboss.forge.resources.java.JavaResource;
@@ -64,50 +62,8 @@ public class TemlateUtilsTest {
 
 	}
 
-	// @SuppressWarnings("unchecked")
-	// @Test
-	// public void javaClassMBeanTemplate() throws Exception {
-	//
-	// TemplateUtils templateUtils = new TemplateUtils();
-	// System.out.println("template utils instanciated.");
-	//
-	// // Find the a template in the project resources
-	// Template myTemplate = templateUtils.getTemplate("classJava.ftl");
-	// System.out.println("template".concat("classJava.ftl").concat(
-	// " located."));
-	//
-	// // Generate an my data model data model
-	// Map root = new HashMap();
-	//
-	// Map function = new HashMap();
-	// function.put("MbeanName", "myGeneratedManagedBean");
-	//
-	// SimpleSequence uts = new SimpleSequence();
-	//
-	// Map ut1 = new HashMap();
-	// ut1.put("methodName", "displayMethod");
-	// ut1.put("returnType", "void");
-	//
-	// Map ut2 = new HashMap();
-	// ut2.put("methodName", "deleteMethod");
-	// ut2.put("returnType", "void");
-	//
-	// uts.add(ut1);
-	// uts.add(ut2);
-	//
-	// function.put("UTs", uts);
-	//
-	// root.put("function", function);
-	//
-	// // merge data model and the template in the logs
-	// Writer out = new OutputStreamWriter(System.out);
-	// templateUtils.mergeDataModelWithTemplate(root, myTemplate, out);
-	//
-	// }
-
-	@SuppressWarnings("rawtypes")
 	@Test
-	public void testBuildCrudManagedBean() throws Exception {
+	public void testBuildManagedBean() throws Exception {
 
 		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
 
@@ -116,27 +72,95 @@ public class TemlateUtilsTest {
 		 */
 		File myFile = new File("C:/myGeneratedBean.java");
 		if (myFile.exists())
-			FileUtils.forceDelete(myFile);
+			myFile.delete();
 
 		myFile.createNewFile();
 
-		Map dataModel = projectManagement.buildDataModel("voila",
-				"myGeneratedBean", "Person",
-				entityDto.getEntityAttributeList(),
-				"am.ajf.web.controllers.test", entityDto.getEntityLibPackage());
+		List<String> uts = new ArrayList<String>();
+		uts.add("addPerson");
+		uts.add("deletePerson");
+		uts.add("otherUt");
 
-		projectManagement.buildManagedBean(myFile, dataModel);
+		projectManagement.buildManagedBean(myFile, "voila", "myFunctionName",
+				"Person", entityDto.getEntityAttributeList(),
+				"am.ajf.web.controllers.test", "am.ajf.voila.lib.business",
+				"am.ajf.voila.lib.business.dto",
+				entityDto.getEntityLibPackage(), uts);
 
 	}
 
 	@Test
-	public void testBuildCrudXhtmlWithAddDelete() throws Exception {
+	public void testBuildPolicy() throws Exception {
+
+		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
+
+		/*
+		 * OutputFile
+		 */
+		File myFile = new File("C:/myGeneratedBean.java");
+		if (myFile.exists())
+			myFile.delete();
+
+		myFile.createNewFile();
+
+		List<String> uts = new ArrayList<String>();
+		uts.add("addPerson");
+		uts.add("deletePerson");
+		uts.add("otherUt");
+
+		projectManagement.buildPolicy(myFile, "myFunctionName", uts,
+				entityDto.getEntityLibPackage(),
+				entityDto.getEntityLibPackage() + ".dto",
+				"am.ajf.voila.core.test");
+
+	}
+
+	@Test
+	public void testBuildBusinessDelegate() throws Exception {
+
+		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
+
+		/*
+		 * OutputFile
+		 */
+		File myFile = new File("C:/myGeneratedBean.java");
+		if (myFile.exists())
+			myFile.delete();
+
+		myFile.createNewFile();
+
+		List<String> uts = new ArrayList<String>();
+		uts.add("addPerson");
+		uts.add("deletePerson");
+		uts.add("otherUt");
+
+		projectManagement.buildBusinessDelegateInterface(myFile,
+				entityDto.getEntityLibPackage(), "myFunctionName", uts,
+				entityDto.getEntityLibPackage() + ".dto");
+
+	}
+
+	@Test
+	public void testBuildManagedBeanMethod() throws Exception {
+		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
+
+		String output = projectManagement.buildManagedBeanMethod(
+				"myFunctionName", "utName");
+		System.out.println(output);
+
+	}
+
+	@Test
+	public void testBuildXhtmlWithAddDelete() throws Exception {
 
 		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
 
 		File myFile = new File("C:/myCrudXhtml.xhtml");
-		if (!myFile.exists())
-			myFile.createNewFile();
+
+		if (myFile.exists())
+			myFile.delete();
+
+		myFile.createNewFile();
 
 		List<String> uts = new ArrayList<String>();
 		uts.add("addPerson");
@@ -151,13 +175,16 @@ public class TemlateUtilsTest {
 	}
 
 	@Test
-	public void testBuildCrudXhtmlWithAddOnly() throws Exception {
+	public void testBuildXhtmlWithAddOnly() throws Exception {
 
 		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
 
 		File myFile = new File("C:/myCrudXhtml.xhtml");
-		if (!myFile.exists())
-			myFile.createNewFile();
+
+		if (myFile.exists())
+			myFile.delete();
+
+		myFile.createNewFile();
 
 		List<String> uts = new ArrayList<String>();
 		uts.add("addPerson");
@@ -171,13 +198,15 @@ public class TemlateUtilsTest {
 	}
 
 	@Test
-	public void testBuildCrudXhtmlWithDeleteOnly() throws Exception {
+	public void testBuildXhtmlWithDeleteOnly() throws Exception {
 
 		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
 
 		File myFile = new File("C:/myCrudXhtml.xhtml");
-		if (!myFile.exists())
-			myFile.createNewFile();
+
+		if (myFile.exists())
+			myFile.delete();
+		myFile.createNewFile();
 
 		List<String> uts = new ArrayList<String>();
 		uts.add("deletePerson");
@@ -191,13 +220,16 @@ public class TemlateUtilsTest {
 	}
 
 	@Test
-	public void testBuildCrudXhtmlWithNoAddDelete() throws Exception {
+	public void testBuildXhtmlWithNoAddDelete() throws Exception {
 
 		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
 
 		File myFile = new File("C:/myCrudXhtml.xhtml");
-		if (!myFile.exists())
-			myFile.createNewFile();
+
+		if (myFile.exists())
+			myFile.delete();
+
+		myFile.createNewFile();
 
 		List<String> uts = new ArrayList<String>();
 		uts.add("otherUt");

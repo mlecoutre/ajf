@@ -202,20 +202,12 @@ public class McrGenerationPlugin implements Plugin {
 			/*
 			 * GENERATION
 			 */
-			promptTitle("Managed Bean generation");
 
 			// Which package where to create managedBean class
 			String managedBeanPackage = shellhelper.promptFacade(
 					"Which package of ui project for Managed Bean ?",
 					PACKAGE_FOR_MANAGED_BEAN.replace(PROJECT_NAME,
 							ajfSolutionGlobalName.toLowerCase()));
-
-			// uiJavaFacet.getBasePackage().concat(".controllers")
-
-			// Generate managed bean for CRUD
-			mcrManagement.generateManagedBean(function, entityName,
-					ajfSolutionGlobalName, entityDto, managedBeanPackage,
-					uiJavaFacet, out);
 
 			// generate xhtml web page for CRUD
 			promptTitle("Xhtml web page generation");
@@ -224,6 +216,7 @@ public class McrGenerationPlugin implements Plugin {
 
 			// generate Business Delegate interface for policy
 			promptTitle("Business delegate interfaces generation");
+
 			Map<String, String> libPackages = mcrManagement
 					.generateBDInterfaceAndDto(function, out,
 							ajfSolutionGlobalName, libProject, libJavaFacet,
@@ -233,6 +226,14 @@ public class McrGenerationPlugin implements Plugin {
 			promptTitle("Policy Class generation");
 			mcrManagement.generatePolicy(function, out, uts, libPackages,
 					ajfSolutionGlobalName);
+
+			// Generate managed bean for CRUD
+			promptTitle("Managed Bean generation");
+
+			mcrManagement.generateManagedBean(function, entityName,
+					ajfSolutionGlobalName, entityDto, managedBeanPackage,
+					libPackages.get("libBDpackage"),
+					libPackages.get("libDTOpackage"), uiJavaFacet, uts, out);
 
 			/*
 			 * END

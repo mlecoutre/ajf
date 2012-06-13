@@ -1,10 +1,19 @@
 package am.ajf.forge.util;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Singleton;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.WordUtils;
 import org.jboss.forge.parser.java.JavaSource;
 import org.jboss.forge.parser.java.Member;
@@ -106,5 +115,64 @@ public class JavaHelper {
 			capitalizedDatas.add(WordUtils.capitalize(value));
 		}
 		return capitalizedDatas;
+	}
+
+	/**
+	 * Return as String the txt file set as input. Note, the input txt file must
+	 * be in the Resource Zip file JavaClassStringTemplate.zip
+	 * 
+	 * @param fileName
+	 * @return String
+	 * @throws Exception
+	 */
+	public String getJavaClassAsString(String zipContainingTxts, String fileName)
+			throws Exception {
+
+		try {
+			// tmp directory to extract zip
+			File tmpDirectory = new File(FileUtils.getTempDirectoryPath()
+					+ "/ajfForge/tmpJavaClassTxt");
+
+			// extract zip file
+			ExtractionUtils.unzipFile(zipContainingTxts, tmpDirectory);
+
+			// load txt file
+			File javaClassTxt = new File(tmpDirectory.getAbsolutePath().concat(
+					"/" + fileName));
+
+			// open stream in file
+			FileInputStream javaClassTxtIs = new FileInputStream(javaClassTxt);
+
+			// Read stream and write into String
+			char[] byteArr = new char[1024];
+			Writer stringWriter = new StringWriter();
+			Reader reader = new BufferedReader(new InputStreamReader(
+					javaClassTxtIs, "UTF-8"));
+			int n;
+			while ((n = reader.read(byteArr)) != -1) {
+				stringWriter.write(byteArr, 0, n);
+			}
+
+			// Result of Java class as String
+			String output = stringWriter.toString();
+
+			// Clean everything
+			javaClassTxtIs.close();
+			javaClassTxtIs = null;
+			stringWriter.close();
+			stringWriter = null;
+			reader.close();
+			reader = null;
+			FileUtils.forceDelete(tmpDirectory);
+
+			return output;
+
+		} catch (IOException e) {
+
+			throw new Exception(
+					"ERROR occured in getJavaMethodBody for fileName = "
+							+ fileName);
+		}
+
 	}
 }

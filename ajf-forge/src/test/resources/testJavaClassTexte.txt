@@ -1,0 +1,34 @@
+public class ManagePersonMBean implements Serializable
+{
+
+public void deletePerson() 
+   {
+
+      try
+      {
+         log.debug("Start of deletePerson... ");
+
+         //Print here an info message on screen
+         FacesContext message = javax.faces.context.FacesContext.getCurrentInstance();
+         message.addMessage(null, new FacesMessage("Deleting Person"));
+
+         //Delete selected elements from List
+         int i;
+         for (i = 0; i <= selectedItems.length - 1; i++)
+         {
+            dataList.remove(selectedItems[i]);
+         }
+
+         //TODO here is your UT deletePerson code
+
+         //} catch (BusinessLayerException e) {
+
+         //TODO manage error
+
+      }
+      catch (Exception e)
+      {
+         log.error("Error Occured in deletePerson.", e);
+      }
+   }
+   }

@@ -3,6 +3,7 @@ package am.ajf.forge.core.generators.templates;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
@@ -21,10 +22,12 @@ import freemarker.template.TemplateModelException;
 @Singleton
 public class McrGenerationTemplate {
 
-	private static final String CRUD_MBEAN_TEMPLATE = "ManagedBean.ftl";
-	private static final String CRUD_XHTML_TEMPLATE = "Xhtml.ftl";
-	private static final String CRUD_BUSINESS_DELEGATE_TEMPLATE = "BusinessDelegate.ftl";
-	private static final String CRUD_BUSINESS_POLICY_TEMPLATE = "Policy.ftl";
+	private static final String MBEAN_TEMPLATE = "ManagedBean.ftl";
+	private static final String XHTML_TEMPLATE = "Xhtml.ftl";
+	private static final String BUSINESS_DELEGATE_TEMPLATE = "BusinessDelegate.ftl";
+	private static final String BUSINESS_POLICY_TEMPLATE = "Policy.ftl";
+	private static final String MBEAN_METHOD_TEMPLATE = "ManagedBeanMethod.ftl";
+	private static final String POLICY_METHOD_TEMPLATE = "PolicyMethod.ftl";
 
 	TemplateUtils templateUtils;
 
@@ -37,21 +40,66 @@ public class McrGenerationTemplate {
 	 * corresponding to the input data model
 	 * 
 	 * @param managedBeanFile
+	 * @param globalProjectName
 	 * @param functionName
 	 * @param entityName
-	 * @param javaPackage
+	 * @param entityAttributes
+	 * @param managedBeanPackage
+	 * @param libBDPackage
+	 * @param libDTOPackage
+	 * @param entityLibPackage
+	 * @param uts
 	 * @throws Exception
 	 */
-	@SuppressWarnings("rawtypes")
-	public void buildManagedBean(File managedBeanFile, Map dataModelMap)
-			throws Exception {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void buildManagedBean(File managedBeanFile,
+			String globalProjectName, String functionName, String entityName,
+			List<String> entityAttributes, String managedBeanPackage,
+			String libBDPackage, String libDTOPackage, String entityLibPackage,
+			List<String> uts) throws Exception {
 
 		try {
 
 			FileOutputStream fos = new FileOutputStream(managedBeanFile);
 			Writer writer = new OutputStreamWriter(fos);
 
-			Template myTemplate = loadTemplate(CRUD_MBEAN_TEMPLATE);
+			Template myTemplate = loadTemplate(MBEAN_TEMPLATE);
+
+			// Generate a data model
+			Map dataModelMap = new HashMap();
+
+			dataModelMap.put("projectGlobalName", globalProjectName);
+
+			Map function = new HashMap();
+			function.put("name", functionName);
+			function.put("package", managedBeanPackage);
+
+			function.put("libBDPackage", libBDPackage);
+			function.put("libDTOPackage", libDTOPackage);
+
+			// function.put("entityName", entityName);
+			Map entity = new HashMap();
+			entity.put("name", entityName);
+			entity.put("libPackage", entityLibPackage);
+
+			SimpleSequence attributeSequence = new SimpleSequence();
+			for (String attribute : entityAttributes) {
+				attributeSequence.add(attribute);
+			}
+			entity.put("attributes", attributeSequence);
+
+			// UT List
+			SimpleSequence utSequence = new SimpleSequence();
+			for (String ut : uts) {
+				utSequence.add(ut);
+			}
+			function.put("UTs", utSequence);
+
+			function.put("entity", entity);
+
+			dataModelMap.put("function", function);
+			dataModelMap.put("unCapitalizeFirst", new UnCapitalizeFirst());
+			dataModelMap.put("capitalizeFirst", new CapitalizeFirst());
 
 			// merge data model and the template in the logs
 			// Writer out = new OutputStreamWriter(System.out);
@@ -84,7 +132,7 @@ public class McrGenerationTemplate {
 			FileOutputStream fos = new FileOutputStream(xhtmlFile);
 			Writer writer = new OutputStreamWriter(fos);
 
-			Template myTemplate = loadTemplate(CRUD_XHTML_TEMPLATE);
+			Template myTemplate = loadTemplate(XHTML_TEMPLATE);
 
 			// Generate a data model
 			Map dataModelMap = new HashMap();
@@ -134,7 +182,6 @@ public class McrGenerationTemplate {
 			}
 
 			function.put("entity", entity);
-			function.put("capitalizeFirst", new CapitalizeFirst());
 
 			dataModelMap.put("function", function);
 			dataModelMap.put("unCapitalizeFirst", new UnCapitalizeFirst());
@@ -174,7 +221,7 @@ public class McrGenerationTemplate {
 			FileOutputStream fos = new FileOutputStream(file);
 			Writer writer = new OutputStreamWriter(fos);
 
-			Template myTemplate = loadTemplate(CRUD_BUSINESS_DELEGATE_TEMPLATE);
+			Template myTemplate = loadTemplate(BUSINESS_DELEGATE_TEMPLATE);
 
 			Map dataModelMap = new HashMap();
 
@@ -192,9 +239,6 @@ public class McrGenerationTemplate {
 			SimpleSequence utSequence = new SimpleSequence();
 			for (String ut : uts) {
 				utSequence.add(ut);
-				if (ut.startsWith("add")) {
-
-				}
 			}
 			function.put("UTs", utSequence);
 
@@ -233,7 +277,7 @@ public class McrGenerationTemplate {
 			FileOutputStream fos = new FileOutputStream(policyFile);
 			Writer writer = new OutputStreamWriter(fos);
 
-			Template myTemplate = loadTemplate(CRUD_BUSINESS_POLICY_TEMPLATE);
+			Template myTemplate = loadTemplate(BUSINESS_POLICY_TEMPLATE);
 
 			Map dataModelMap = new HashMap();
 
@@ -271,51 +315,108 @@ public class McrGenerationTemplate {
 
 	/**
 	 * 
-	 * Generate the common part of the data model. This data model is commun to
-	 * diffrent templates, that's why it is isolated
-	 * 
-	 * @param globalProjectName
 	 * @param functionName
-	 * @param entityName
-	 * @param entityAttributes
-	 * @param javaPackage
-	 * @param entityLibPackage
-	 * @return Map data model
+	 * @param ut
+	 * @return
+	 * @throws Exception
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Map buildDataModel(String globalProjectName, String functionName,
-			String entityName, List<String> entityAttributes,
-			String javaPackage, String entityLibPackage) {
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public String buildManagedBeanMethod(String functionName, String ut)
+			throws Exception {
 
-		// Generate an my data model
-		Map root = new HashMap();
+		Template myTemplate = loadTemplate(MBEAN_METHOD_TEMPLATE);
 
-		root.put("projectGlobalName", globalProjectName);
+		Map dataModelMap = new HashMap();
 
-		Map function = new HashMap();
-		function.put("MbeanName", functionName);
-		function.put("package", javaPackage);
-		// function.put("entityName", entityName);
-		Map entity = new HashMap();
-		entity.put("name", entityName);
-		entity.put("libPackage", entityLibPackage);
+		// package that contain the BD interfaces in the lib project
+		dataModelMap.put("functionName", functionName);
+		dataModelMap.put("ut", ut);
+		dataModelMap.put("unCapitalizeFirst", new UnCapitalizeFirst());
+		dataModelMap.put("capitalizeFirst", new CapitalizeFirst());
 
-		SimpleSequence attributeSequence = new SimpleSequence();
-		for (String attribute : entityAttributes) {
-			attributeSequence.add(attribute);
-		}
-		entity.put("attributes", attributeSequence);
+		Writer writer = new StringWriter();
 
-		function.put("entity", entity);
-		function.put("capitalizeFirst", new CapitalizeFirst());
+		templateUtils.mergeDataModelWithTemplate(dataModelMap, myTemplate,
+				writer);
 
-		root.put("function", function);
-		root.put("unCapitalizeFirst", new UnCapitalizeFirst());
-		root.put("capitalizeFirst", new CapitalizeFirst());
-
-		return root;
-
+		return writer.toString();
 	}
+
+	/**
+	 * 
+	 * @param functionName
+	 * @param ut
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public String buildPolicyMethod(String ut) throws Exception {
+
+		Template myTemplate = loadTemplate(POLICY_METHOD_TEMPLATE);
+
+		Map dataModelMap = new HashMap();
+
+		// package that contain the BD interfaces in the lib project
+		dataModelMap.put("ut", ut);
+		dataModelMap.put("unCapitalizeFirst", new UnCapitalizeFirst());
+		dataModelMap.put("capitalizeFirst", new CapitalizeFirst());
+
+		Writer writer = new StringWriter();
+
+		templateUtils.mergeDataModelWithTemplate(dataModelMap, myTemplate,
+				writer);
+
+		return writer.toString();
+	}
+
+	// /**
+	// *
+	// * Generate the common part of the data model. This data model is commun
+	// to
+	// * diffrent templates, that's why it is isolated
+	// *
+	// * @param globalProjectName
+	// * @param functionName
+	// * @param entityName
+	// * @param entityAttributes
+	// * @param javaPackage
+	// * @param entityLibPackage
+	// * @return Map data model
+	// */
+	// @SuppressWarnings({ "rawtypes", "unchecked" })
+	// public Map buildDataModel(String globalProjectName, String functionName,
+	// String entityName, List<String> entityAttributes,
+	// String javaPackage, String entityLibPackage) {
+	//
+	// // Generate an my data model
+	// Map root = new HashMap();
+	//
+	// root.put("projectGlobalName", globalProjectName);
+	//
+	// Map function = new HashMap();
+	// function.put("MbeanName", functionName);
+	// function.put("package", javaPackage);
+	// // function.put("entityName", entityName);
+	// Map entity = new HashMap();
+	// entity.put("name", entityName);
+	// entity.put("libPackage", entityLibPackage);
+	//
+	// SimpleSequence attributeSequence = new SimpleSequence();
+	// for (String attribute : entityAttributes) {
+	// attributeSequence.add(attribute);
+	// }
+	// entity.put("attributes", attributeSequence);
+	//
+	// function.put("entity", entity);
+	// function.put("capitalizeFirst", new CapitalizeFirst());
+	//
+	// root.put("function", function);
+	// root.put("unCapitalizeFirst", new UnCapitalizeFirst());
+	// root.put("capitalizeFirst", new CapitalizeFirst());
+	//
+	// return root;
+	//
+	// }
 
 	/**
 	 * Return a reference to the FreeMarker template corresponding to the input

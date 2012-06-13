@@ -21,6 +21,7 @@ import org.apache.commons.lang.WordUtils;
 import org.jboss.forge.parser.JavaParser;
 import org.jboss.forge.parser.java.JavaClass;
 import org.jboss.forge.parser.java.JavaSource;
+import org.jboss.forge.parser.java.Method;
 import org.jboss.forge.parser.java.impl.JavaInterfaceImpl;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.JavaSourceFacet;
@@ -69,14 +70,14 @@ public class CreateMcr {
 	 * using a FreeMarker template
 	 * 
 	 * @param function
-	 *            for crud
 	 * @param entityName
-	 *            that is managed in Crud
 	 * @param ajfSolutionGlobalName
-	 *            name of ajf solution
-	 * @param entityAttributes
+	 * @param entityDto
 	 * @param managedBeanPackage
-	 * @param javaFacet
+	 * @param libBDpackage
+	 * @param libDTOPackage
+	 * @param uiJavaFacet
+	 * @param uts
 	 * @param out
 	 * @return boolean
 	 * @throws Exception
@@ -84,8 +85,9 @@ public class CreateMcr {
 	@SuppressWarnings("rawtypes")
 	public boolean generateManagedBean(String function, String entityName,
 			String ajfSolutionGlobalName, EntityDTO entityDto,
-			String managedBeanPackage, JavaSourceFacet javaFacet,
-			final PipeOut out) throws Exception {
+			String managedBeanPackage, String libBDpackage,
+			String libDTOPackage, JavaSourceFacet uiJavaFacet,
+			List<String> uts, final PipeOut out) throws Exception {
 
 		ShellMessages.info(out, "Start generating ManagedBean class "
 				+ function + ".java");
@@ -98,7 +100,7 @@ public class CreateMcr {
 			managedBeanPackage = managedBeanPackage.substring(1);
 
 		// SRC folder of the current project
-		File javaSrcFolder = javaFacet.getSourceFolder()
+		File javaSrcFolder = uiJavaFacet.getSourceFolder()
 				.getUnderlyingResourceObject();
 
 		// Managed bean class java file
@@ -109,31 +111,83 @@ public class CreateMcr {
 		// Create directory if needed
 		managedBeanClassFile.getParentFile().mkdirs();
 		if (!managedBeanClassFile.exists()) {
+
 			System.out.println("Physical file creation : "
 					+ managedBeanClassFile.createNewFile());
-
-			// Build data model for FreeMarker templates
-			Map dataModelMap = projectManagement.buildDataModel(
-					ajfSolutionGlobalName, function.concat("MBean"), WordUtils
-							.capitalize(entityName),
-					javaUtils.capitalizeDatas(entityDto
-							.getEntityAttributeList()), managedBeanPackage,
-					entityDto.getEntityLibPackage().replace("/", "."));
 
 			System.out.println("Data model Map generated.");
 
 			// Call the crud managed bean java class generation
 			projectManagement.buildManagedBean(managedBeanClassFile,
-					dataModelMap);
+					ajfSolutionGlobalName, function, WordUtils
+							.capitalize(entityName),
+					javaUtils.capitalizeDatas(entityDto
+							.getEntityAttributeList()), managedBeanPackage,
+					libBDpackage, libDTOPackage, entityDto
+							.getEntityLibPackage().replace("/", "."), uts);
 
 			System.out.println("Managed bean generation done.");
 			out.println();
 
-			dataModelMap = null;
 			managedBeanClassFile = null;
+
 		} else {
+			/*
+			 * Update file
+			 */
 			shell.println("Managed bean java file already exist");
-			// TODO update mode
+			ShellMessages.info(out,
+					"Updating ".concat(managedBeanClassFile.getName() + "..."));
+
+			// get JavaSource corresonding to existing java BD class
+			JavaSource managedBeanJavaSource = uiJavaFacet.getJavaResource(
+					managedBeanPackage.replace(".", "/").concat("/")
+							.concat(managedBeanClassFile.getName()))
+					.getJavaSource();
+
+			// List of UT that do not already exist in java source, and will be
+			// added
+			List<String> utToBeAdded = calculateUtListToAdd(out, uts,
+					managedBeanJavaSource);
+
+			/*
+			 * Update Managed Bean Class with new UTs
+			 */
+			JavaClass managedBeanJavaclass = (JavaClass) managedBeanJavaSource
+					.getOrigin();
+
+			if (utToBeAdded.size() > 0)
+				ShellMessages.info(out,
+						"Addition of methods for new Unit tasks:");
+
+			// generate 1 empty method for each UT
+			for (String ut : utToBeAdded) {
+				shell.println("Adding UT:" + ut + "...");
+
+				// Set body to java class using java class txt templates
+				// get Java Class template as String and parse it to java
+
+				// generate method for managed bean for additional UT
+				String managedBeanMethodForUT = projectManagement
+						.buildManagedBeanMethod(function, ut);
+
+				// parse method (javaclass containing one method, which is the
+				// method we want)
+				JavaClass temp = (JavaClass) JavaParser
+						.parse(managedBeanMethodForUT);
+
+				// We use the METHOD 0 (first method of the class)
+				Method<JavaClass> myMethod = temp.getMethods().get(0);
+
+				// Create method in managedBean class beeing updated
+				Method<JavaClass> myMethod2 = managedBeanJavaclass
+						.addMethod("public void " + WordUtils.uncapitalize(ut)
+								+ "()");
+				// Set the body thanks to template
+				myMethod2.setBody(myMethod.getBody());
+
+			}
+			uiJavaFacet.saveJavaSource(managedBeanJavaclass);
 
 		}
 
@@ -196,7 +250,7 @@ public class CreateMcr {
 
 		} else if (myXhtmlFile.exists()
 				&& !shell.promptBoolean("File " + myXhtmlFile.getName()
-						+ " already exists. Overwrite ?", false)) {
+						+ " already exists. Overwrite ? [N]", false)) {
 			// xhtml file is not updated
 			ShellMessages.info(out, myXhtmlFile.getName()
 					+ " file will not be modified");
@@ -230,8 +284,9 @@ public class CreateMcr {
 	 * @param ajfSolutionGlobalName
 	 * @param libProject
 	 * @param libJavaFacet
-	 * @return Map containing libBDpackage wich contains the BD interfaces and
-	 *         the libDtoPackage which contains the DTO Beans objects
+	 * @return Map which key 'libBDpackage' is linked to the BD interfaces
+	 *         package and the 'libDtoPackage' key which is linked to the DTO
+	 *         Beans objects package
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
@@ -275,37 +330,7 @@ public class CreateMcr {
 		while (!foundLibBDPackage) {
 
 			if (!libBusinessFolder.exists()) {
-
-				// // error message
-				// ShellMessages.info(
-				// out,
-				// "the package ".concat(
-				// libBDpackagePath.replace("/", ".")).concat(
-				// " of project lib does not exist !"));
-				//
-				// // Ask user to create this new package
-				// if (shell.promptBoolean(
-				// "Do you want to create this new Package for BDs [y]?",
-				// true)) {
-
 				shell.println("Create package : " + libBusinessFolder.mkdirs());
-
-				// } else {
-				//
-				// // lib package containing BD interfaces (package is entered
-				// // with '.'separators that we automatically replace by '/')
-				// libBDpackagePath = shellhelper
-				// .promptFacade(
-				// "In which package of project lib you want to generate the BD interfaces ?",
-				// PACKAGE_FOR_BD_INTERFACES.replace(
-				// PROJECT_NAME,
-				// ajfSolutionGlobalName.toLowerCase()))
-				// .replace(".", "/");
-				//
-				// // physiscal folder corresponding to input
-				// libBusinessFolder = new File(libSrcFolder.getAbsolutePath()
-				// .concat("/").concat(libBDpackagePath));
-				// }
 
 			} else {
 				// Go on
@@ -344,21 +369,10 @@ public class CreateMcr {
 					libBDpackagePath.replace(".", "/") + "/"
 							+ functionBdFile.getName()).getJavaSource();
 
-			// retrieve method list of this java source
-			List<String> methodList = javaUtils
-					.retrieveMethodList(functionBdJavaSource);
+			// List of UT that do not already exist in java source, and will be
+			// added
+			utToBeAdded = calculateUtListToAdd(out, uts, functionBdJavaSource);
 
-			// A second list has to be created to with new method to add during
-			// update avoid concurrentModification Exception
-			utToBeAdded = new ArrayList<String>();
-			utToBeAdded.addAll(uts);
-			for (String ut : uts) {
-				if (methodList.contains(ut)) {
-					utToBeAdded.remove(ut);
-					ShellMessages.warn(out, "Ignoring UT=" + ut
-							+ " generation as it already exists.");
-				}
-			}
 			// flags
 			creationMode = false;
 			updateMode = true;
@@ -422,7 +436,7 @@ public class CreateMcr {
 					.getOrigin();
 
 			if (utToBeAdded.size() > 0)
-				ShellMessages.info(out, "Addition of DTOs for new Unit tasks:");
+				ShellMessages.info(out, "Addition Unit tasks in BD interface:");
 
 			for (String ut : utToBeAdded) {
 				shell.println("Adding UT:" + ut + "...");
@@ -514,19 +528,9 @@ public class CreateMcr {
 					corePolicyPackage.replace(".", "/") + "/"
 							+ policyFile.getName()).getJavaSource();
 
-			List<String> methodNames = javaUtils
-					.retrieveMethodList(policyFileJavaSource);
-
-			List<String> newUts = new ArrayList<String>();
-			newUts.addAll(uts);
-			for (String ut : uts) {
-				if (methodNames.contains(ut)) {
-					newUts.remove(ut);
-					shell.println();
-					ShellMessages.info(out, "Ignoring UT:" + ut
-							+ " as it already exists.");
-				}
-			}
+			// Calculate list containing new UT for update
+			List<String> newUts = calculateUtListToAdd(out, uts,
+					policyFileJavaSource);
 
 			// Update Policy with new UT
 			JavaClass javaclass = (JavaClass) policyFileJavaSource.getOrigin();
@@ -534,19 +538,38 @@ public class CreateMcr {
 
 			for (String ut : newUts) {
 				shell.println("Adding UT:" + ut + "...");
-				javaclass
-						.addMethod(
-								"public void " + ut + "("
-										+ WordUtils.capitalize(ut) + "PB "
-										+ WordUtils.capitalize(ut) + "pb)")
-						.setReturnType(WordUtils.capitalize(ut) + "RB")
-						.addThrows(Exception.class);
 
 				// Add DTO import
 				javaclass.addImport(libPackages.get("libDTOpackage") + "."
 						+ WordUtils.capitalize(ut) + "PB");
 				javaclass.addImport(libPackages.get("libDTOpackage") + "."
 						+ WordUtils.capitalize(ut) + "RB");
+
+				// generate method for managed bean for additional UT
+				String policyMethodForUT = projectManagement
+						.buildPolicyMethod(ut);
+
+				// parse method (javaclass containing one method, which is the
+				// method we want)
+				JavaClass temp = (JavaClass) JavaParser
+						.parse(policyMethodForUT);
+
+				// We use the METHOD 0 of the template class as it contains only
+				// one
+				Method<JavaClass> myMethod = temp.getMethods().get(0);
+
+				// Create method in managedBean class beeing updated
+				Method<JavaClass> myMethod2 = javaclass
+						.addMethod(
+								"public void " + WordUtils.uncapitalize(ut)
+										+ "(" + WordUtils.capitalize(ut)
+										+ "PB " + WordUtils.uncapitalize(ut)
+										+ "pb){}")
+						.setReturnType(WordUtils.capitalize(ut) + "RB")
+						.addThrows(Exception.class);
+
+				// Set the body thanks to template
+				myMethod2.setBody(myMethod.getBody());
 
 			}
 			coreJavaFacet.saveJavaSource(javaclass);
@@ -575,6 +598,39 @@ public class CreateMcr {
 					libPackages.get("libDTOpackage"), corePolicyPackage);
 		}
 
+	}
+
+	/**
+	 * This method retrieve the list of method that exists in the input java
+	 * source. It checks if methods related to input UT list already exists in
+	 * the java source. If it's not, the UT is added to the output 'utToBeAdded'
+	 * list. The UT names contained in the output list can be added to the java
+	 * source without risk of duplicate.
+	 * 
+	 * @param out
+	 * @param uts
+	 * @param javaSource
+	 * @return List<String> utToBeAdded
+	 */
+	@SuppressWarnings("rawtypes")
+	private List<String> calculateUtListToAdd(final PipeOut out,
+			List<String> uts, JavaSource javaSource) {
+		List<String> utToBeAdded;
+		// retrieve method list of this java source
+		List<String> methodList = javaUtils.retrieveMethodList(javaSource);
+
+		// A second list has to be created to with new method to add during
+		// update avoid concurrentModification Exception
+		utToBeAdded = new ArrayList<String>();
+		utToBeAdded.addAll(uts);
+		for (String ut : uts) {
+			if (methodList.contains(ut)) {
+				utToBeAdded.remove(ut);
+				ShellMessages.warn(out, "Ignoring UT=" + ut
+						+ " generation as it already exists.");
+			}
+		}
+		return utToBeAdded;
 	}
 
 	/**
@@ -607,10 +663,11 @@ public class CreateMcr {
 			files.add(utResultBeanFile);
 			for (File myFile : files) {
 				if (myFile.exists()
-						&& !shell.promptBoolean(
-								myFile.getName().concat(
-										" file already exists. OverWrite ?"),
-								false)) {
+						&& !shell
+								.promptBoolean(
+										myFile.getName()
+												.concat(" file already exists. OverWrite [N]?"),
+										false)) {
 					// do nothing
 				} else {
 

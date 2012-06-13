@@ -1,5 +1,6 @@
 package am.ajf.core.util;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -51,27 +52,48 @@ public class JavaUtilsTest {
 	}
 
 	@Test
-	public void testJavaClass() {
+	public void testJavaClass() throws Exception {
 
-		JavaClass javaclass = JavaParser.create(JavaClass.class).setName(
-				"myClass");
+		JavaClass javaclass = JavaParser.create(JavaClass.class)
+				.setPackage("am.voila.test").setName("myClass");
 
 		List<String> uts = new ArrayList<String>();
 		uts.add("myAction1");
 		uts.add("myAction2");
 		uts.add("myAction3");
 
+		Method<JavaClass> myMethod = null;
 		for (String ut : uts) {
-			Method<JavaClass> myMethod = javaclass.addMethod(
-					"public void " + ut + "(" + WordUtils.capitalize(ut)
-							+ "PB " + WordUtils.uncapitalize(ut) + "pb)")
-					.setReturnType(WordUtils.capitalize(ut) + "RB");
 
-			myMethod.setBody("BOOOOOOM");
-			myMethod.addThrows(Exception.class);
+			// myMethod = (Method<JavaClass>) javaclass.addMethod();
+			JavaHelper javahelper = new JavaHelper();
+
+			// get Java Class template as String and parse it to java
+			JavaClass temp = (JavaClass) JavaParser.parse(javahelper
+					.getJavaClassAsString("TestJavaClassStringTemplate.zip",
+							"testJavaClassTexte.txt").replace("deletePerson",
+							ut));
+
+			myMethod = temp.getMethods().get(0);
+			// System.out.println(myMethod.toString());
+			Method<JavaClass> myMethod2 = javaclass.addMethod("public void "
+					+ ut + "(" + WordUtils.capitalize(ut) + "PB "
+					+ WordUtils.uncapitalize(ut) + "pb) {}");
+			myMethod2.addThrows(Exception.class);
+			myMethod2.setReturnType(WordUtils.capitalize(ut) + "RB");
+			myMethod2.setBody(myMethod.getBody());
+
 		}
 
 		System.out.println(javaclass.toString());
+		System.out.println("Size:" + javaclass.toString().length());
 
+		// Assertions
+		int supposedSize = 1802;
+		assertFalse("Generated java class should not be empty", javaclass
+				.toString().isEmpty());
+		assertTrue("Generated Java class should be sized of" + supposedSize
+				+ " but is :" + javaclass.toString().length(), javaclass
+				.toString().length() == supposedSize);
 	}
 }

@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Singleton;
@@ -161,49 +160,6 @@ public class TemplateUtils {
 			throw e;
 
 		}
-
-	}
-
-	/**
-	 * Example employee data model
-	 * 
-	 * @param listOfHashMap
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Map createEmployeeDataModel() {
-
-		Map root = new HashMap();
-		root.put("employee", "e01234");
-
-		Map identityMap = new HashMap();
-		root.put("identity", identityMap);
-		identityMap.put("name", "Mr Vince");
-		identityMap.put("age", 26);
-		identityMap.put("sex", "Girl");
-
-		Map adressMap = new HashMap();
-		identityMap.put("address", adressMap);
-		adressMap.put("city", "Dunkerque");
-		adressMap.put("country", "France");
-
-		return root;
-
-	}
-
-	/**
-	 * Create a Map corresponding to a FreeMaker data model containing the
-	 * application name. The aim of this data model is to be use for the Header
-	 * template
-	 * 
-	 * @param applicationName
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Map createHeaderDataModel(String applicationName) {
-
-		Map headerDataModel = new HashMap();
-		headerDataModel.put("appliName", applicationName);
-
-		return headerDataModel;
 
 	}
 

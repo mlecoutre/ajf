@@ -1,5 +1,8 @@
 package ${function.package <#-- package where to generate function MBean-->};
 
+<#assign functionNameCap = "${capitalizeFirst(function.name)}"<#-- function name with upper case first letter-->>
+<#assign functionNameUnCap = "${unCapitalizeFirst(function.name)}"<#-- function name with lower case first letter-->>
+
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -8,8 +11,12 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.annotation.PostConstruct;
+
+import ${function.libBDPackage}.${functionNameCap}BD;
+import ${function.libDTOPackage}.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +27,8 @@ import ${function.entity.libPackage}.${function.entity.name};
 
 @Named
 @SessionScoped
-public class ${function.MbeanName <#-- The name of Managed Bean class -->} implements Serializable {
+public class ${function.name}MBean implements Serializable {
+
 
 	/**
 	 * The serial version
@@ -32,16 +40,19 @@ public class ${function.MbeanName <#-- The name of Managed Bean class -->} imple
 
 	// Logger
 	private transient static Logger log = LoggerFactory
-			.getLogger(${function.MbeanName}.class);
+			.getLogger(${function.name}MBean.class);
 			
 	//TODO this are initial values to be modified
 	private ${function.entity.name} newData;
 	private List<${function.entity.name}> dataList;
+	
+	@Inject
+	private ${functionNameCap}BD ${functionNameUnCap}management;
 
 	/**
 	 * constructor 
 	 */
-	public ${function.MbeanName}() {
+	public ${function.name}MBean() {
 		super();
 	}
 	
@@ -54,136 +65,39 @@ public class ${function.MbeanName <#-- The name of Managed Bean class -->} imple
 
 	}
 
-<#-- generate UT names as variable -->
-<#assign listUT = "list${function.entity.name}"> 
-<#assign createUT = "create${function.entity.name}">
-<#assign updateUT = "update${function.entity.name}">
-<#assign deleteUT = "delete${function.entity.name}">
+<#list function.UTs as ut>
 
+<#-- generate UT managedBean Mehod -->
+<#assign utCap = "${capitalizeFirst(ut)}"<#-- UT name with upper case first letter-->>
+<#assign utUnCap = "${unCapitalizeFirst(ut)}"<#-- UT name with lower case first letter-->> 
 	/**
-	 * UT method for listing ${function.entity.name}
+	 * UT method for listing ${utCap}
 	 * 
-	 * @param 
-	 * @return 
 	 */
-	public void  ${listUT}() {
+	public void  ${utUnCap}() {
 
 		try {
-			log.debug("Start of ${listUT}... ");
+			log.debug("Start of ${utUnCap}... ");
 		
-			//Print here an info message on screen
-			FacesContext message = javax.faces.context.FacesContext
-				.getCurrentInstance();
-			message.addMessage(null, new FacesMessage("Listing ${function.entity.name}"));
+			//TODO fill in Param bean
+			${utCap}PB ${utUnCap}Pb= new ${utCap}PB();
+			
+			//Call Policy
+			${functionNameUnCap}management.${utUnCap}(${utUnCap}Pb);
 						
-			//TODO here is your UT ${listUT} code
-			
 
 		//} catch (BusinessLayerException e) {
 
 			//TODO manage error
 
 		} catch(Exception e){
-			log.error("Error Occured in ${listUT}.",e);
+			log.error("Error Occured in ${utUnCap}.",e);
 		}
 	}
 	
-   /**
-	 * UT method to create ${function.entity.name}
-	 * 
-	 * @param 
-	 * @return 
-	 */
-	public void ${createUT}() {
-
-		try {
-			log.debug("Start of ${createUT}... ");
-		
-			//Print here an info message on screen
-			FacesContext message = javax.faces.context.FacesContext
-				.getCurrentInstance();
-			message.addMessage(null, new FacesMessage("Creating ${function.entity.name}"));
-			
-			//TODO here is your UT ${createUT} code
-			${function.entity.name} new${function.entity.name} = new ${function.entity.name}();
-		
-		<#list function.entity.attributes as att>
-			<#assign uAtt = "${function.capitalizeFirst(att)}"/>
-			new${function.entity.name}.set${uAtt}(newData.get${uAtt}());
-		</#list>
-		
-		dataList.add(new${function.entity.name});
-		
-
-		//} catch (BusinessLayerException e) {
-
-			//TODO manage error
-
-		} catch(Exception e){
-			log.error("Error Occured in ${createUT}.",e);
-		}
-	}
+</#list>
 	
-   /**
-	 * UT method to update ${function.entity.name}
-	 * 
-	 * @param 
-	 * @return 
-	 */
-	public void ${updateUT}() {
-
-		try {
-			log.debug("Start of ${updateUT}... ");
-		
-			//Print here an info message on screen
-			FacesContext message = javax.faces.context.FacesContext
-				.getCurrentInstance();
-			message.addMessage(null, new FacesMessage("Updating ${function.entity.name}"));
-			
-			//TODO here is your UT ${updateUT} code
-
-		//} catch (BusinessLayerException e) {
-
-			//TODO manage error
-
-		} catch(Exception e){
-			log.error("Error Occured in ${updateUT}.",e);		
-		}
-	}
-	
-   /**
-	 * UT method to delete ${function.entity.name}
-	 * 
-	 * @param 
-	 * @return 
-	 */
-	public void ${deleteUT}() {
-
-		try {
-			log.debug("Start of ${deleteUT}... ");
-		
-			//Print here an info message on screen
-			FacesContext message = javax.faces.context.FacesContext
-				.getCurrentInstance();
-			message.addMessage(null, new FacesMessage("Deleting ${function.entity.name}"));
-
-			//Delete selected elements from List
-			int i;
-			for (i = 0; i <= selectedItems.length - 1; i++) {
-				dataList.remove(selectedItems[i]);
-			}
-				
-			//TODO here is your UT ${deleteUT} code
-
-		//} catch (BusinessLayerException e) {
-
-			//TODO manage error
-
-		} catch(Exception e){
-			log.error("Error Occured in ${deleteUT}.",e);		
-		}
-	}
-	
+ 	
 	/*
 	 * Accessors
 	 */
