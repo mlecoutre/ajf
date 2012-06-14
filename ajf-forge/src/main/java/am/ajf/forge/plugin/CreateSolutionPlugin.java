@@ -202,9 +202,9 @@ public class CreateSolutionPlugin implements Plugin {
 			@Option(name = "WS", description = "Optional: if a project-ws has to be generated", flagOnly = true, required = false) boolean isWs,
 			@Option(name = "EJB", description = "Optional: if a project-ejb has to be generated", flagOnly = true, required = false) boolean isEjb,
 			final PipeOut out) {
+
 		try {
 			// Check project directory
-			shellhelper.promptFacade("flag : " + isProjectDirFlag);
 			if (isProjectDirFlag
 					|| checkProjectDirectoryConsistency(folderName)) {
 
@@ -257,13 +257,20 @@ public class CreateSolutionPlugin implements Plugin {
 				// Do nothing - If coming here : problem with input project
 				// folder
 			}
-		} catch (EscapeForgePromptException e) {
-			shell.println();
-			shell.println();
-			shell.print(ShellColor.MAGENTA, "***BYE BYE***");
-			shell.println();
-			shell.println();
-			return;
+		} catch (Exception e) {
+
+			if (e instanceof EscapeForgePromptException) {
+				shell.println();
+				shell.println();
+				shell.print(ShellColor.MAGENTA, "***BYE BYE***");
+				shell.println();
+				shell.println();
+				return;
+			} else {
+				ShellMessages.error(out,
+						"Error occured during creation of exploded ajf solution : "
+								+ e.toString());
+			}
 
 		}
 	}

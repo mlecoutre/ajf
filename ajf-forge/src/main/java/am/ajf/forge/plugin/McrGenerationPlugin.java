@@ -33,6 +33,7 @@ import org.jboss.forge.shell.plugins.Plugin;
 import am.ajf.forge.core.CreateMcr;
 import am.ajf.forge.exception.EscapeForgePromptException;
 import am.ajf.forge.lib.EntityDTO;
+import am.ajf.forge.lib.ForgeConstants;
 import am.ajf.forge.util.JavaHelper;
 import am.ajf.forge.util.ProjectHelper;
 import am.ajf.forge.util.ShellHelper;
@@ -240,6 +241,22 @@ public class McrGenerationPlugin implements Plugin {
 			 */
 			ShellMessages.success(out, "Done generated MCR for function:"
 					+ function);
+			shell.println();
+
+			ShellMessages
+					.success(
+							out,
+							"After deploying your web project on embedded tomcat server, please find your generated web page here : ");
+			// print web address
+			shell.println(
+					ShellColor.YELLOW,
+					"http://localhost:8080/" + ajfSolutionGlobalName + "-"
+							+ ForgeConstants.PROJECT_TYPE_UI + "/"
+							+ WordUtils.uncapitalize(function) + "/"
+							+ WordUtils.uncapitalize(function) + ".jsf");
+			shell.println();
+			shell.println();
+			shell.println(" ");
 
 		} catch (EscapeForgePromptException esc) {
 
@@ -346,34 +363,9 @@ public class McrGenerationPlugin implements Plugin {
 				}
 
 			} else if (choice == 1) { // Choice to display key UTs
-				shell.println();
-				shell.println(
-						ShellColor.CYAN,
-						"Key Unit Tasks are used to generate special functionalities on the web interface, for Creation or Deletion of entities.");
-				shell.println();
-				shell.print(ShellColor.YELLOW, "'add' or 'create' : ");
-				shell.print(
-						ShellColor.CYAN,
-						" will generate on the web xhtml page the ability to add an entity. In your case, this will generate a creation method such as 'add"
-								+ WordUtils.capitalize(entityName)
-								+ "' or 'create"
-								+ WordUtils.capitalize(entityName) + "'");
-				shell.println();
-				shell.println();
-				shell.print(ShellColor.YELLOW, "'delete' or 'remove' : ");
-				shell.print(
-						ShellColor.CYAN,
-						" will generate on the web xhtml page the ability to Delete an entity. In your case, this will generate a creation method such as 'delete"
-								+ WordUtils.capitalize(entityName)
-								+ "' or 'remove"
-								+ WordUtils.capitalize(entityName) + "'");
-				shell.println();
-				shell.println();
-				shell.println(
-						ShellColor.RED,
-						"Caution: You'll have either to create your xhtml file for the first time, or if it already exists, to overwrite it, for the modification to take effect.");
-				shell.println();
-				shell.println();
+				// Display a help text with particuliar keyword corresponding to
+				// particuliar MCR type
+				displayHelpForMcr(entityName);
 
 			} else if (choice == 2) {
 				shell.println();
@@ -556,49 +548,70 @@ public class McrGenerationPlugin implements Plugin {
 
 	}
 
-	// /**
-	// * Temporary offer a choice to the user. As the Update mode is not yet
-	// * implemented, the user is prompted for either exiting the generation
-	// * process, either ovewriting the file
-	// *
-	// * @param out
-	// * @throws EscapeForgePromptException
-	// */
-	// private void temporaryChoiceForUpdate(final PipeOut out)
-	// throws EscapeForgePromptException {
-	// shell.println();
-	// ShellMessages.warn(out,
-	// "Update of existing files is not yet supported by AJF forge.");
-	// List<String> choices = new ArrayList<String>();
-	// choices.add("Exit.");
-	// choices.add("Okay, Overwrite the file.");
-	// if (shell.promptChoice("What to do ?", choices) == 0) {
-	// throw new EscapeForgePromptException();
-	// }
-	// }
-
 	/**
-	 * Key UT values as 'add', 'create', 'delete', or 'remove' are particuliar
-	 * values that are checked during the xhtml web file generation. This method
-	 * only log an information message to the user if the input UT value he's
-	 * entered is one of thos key values
+	 * Key UT values as 'create', 'delete', or 'list' are particuliar values
+	 * that are checked during the xhtml web file generation. This method only
+	 * log an information message to the user if the input UT value he's entered
+	 * is one of thos key values
 	 * 
 	 * @param utvalue
 	 * @param entityName
 	 */
 	private void checkIfKeyUt(String utvalue, String entityName) {
 
-		if (utvalue.startsWith("add" + WordUtils.capitalize(entityName))
-				|| utvalue.startsWith("create"
-						+ WordUtils.capitalize(entityName))
-				|| utvalue.startsWith("remove"
-						+ WordUtils.capitalize(entityName))
+		if (utvalue.startsWith("create" + WordUtils.capitalize(entityName))
 				|| utvalue.startsWith("delete"
-						+ WordUtils.capitalize(entityName))) {
+						+ WordUtils.capitalize(entityName))
+				|| utvalue
+						.startsWith("list" + WordUtils.capitalize(entityName))) {
 
 			shell.println(ShellColor.GREEN, "This is a key UT for CRUD");
 
 		}
 
+	}
+
+	/**
+	 * Display a help text with key particuliar MCR
+	 * 
+	 * @param entityName
+	 */
+	private void displayHelpForMcr(String entityName) {
+		shell.println();
+		shell.println(
+				ShellColor.CYAN,
+				"Key Unit Tasks are used to generate special functionalities on the web interface, for Creation, Deletion or listing of entities.");
+		shell.println();
+		shell.print(ShellColor.YELLOW, "'create' : ");
+		shell.print(
+				ShellColor.CYAN,
+				" will generate on the web xhtml page the ability to create an entity. "
+						+ "A create entity button will be generated, and a pop up dialog with creation options will appear."
+						+ "In your case, this will also generate a creation method 'create"
+						+ WordUtils.capitalize(entityName) + "'");
+		shell.println();
+		shell.println();
+		shell.print(ShellColor.YELLOW, "'list' : ");
+		shell.print(
+				ShellColor.CYAN,
+				" will generate on the web xhtml page a data table in order to display your entity list."
+						+ "In your case, this will also generate a listing method 'list"
+						+ WordUtils.capitalize(entityName) + "'");
+		shell.println();
+		shell.println();
+		shell.print(ShellColor.YELLOW, "'delete' : ");
+		shell.print(
+				ShellColor.CYAN,
+				" will generate on the web xhtml page the ability to Delete an entity. "
+						+ "In case you also have asked for the 'list', A 'delete' button will appear near by the entity list."
+						+ "In your case, this will also generate a deletion method 'delete"
+						+ WordUtils.capitalize(entityName) + "'");
+		shell.println();
+		shell.println();
+		shell.println(
+				ShellColor.RED,
+				"Caution: You'll have either to create your xhtml file for the first time, or if it already exists, to overwrite it, for the modification to take effect.");
+		shell.println();
+		shell.println();
 	}
 }

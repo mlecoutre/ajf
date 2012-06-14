@@ -47,7 +47,7 @@ public class ${function.name}MBean implements Serializable {
 	private List<${function.entity.name}> dataList;
 	
 	@Inject
-	private ${functionNameCap}BD ${functionNameUnCap}management;
+	private transient ${functionNameCap}BD ${functionNameUnCap}management;
 
 	/**
 	 * constructor 

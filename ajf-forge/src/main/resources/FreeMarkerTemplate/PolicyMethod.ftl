@@ -8,10 +8,8 @@ public class ClassName implements Serializable {
 			throws Exception {
 			
 		${utCap}RB ${utUnCap}Rb = new ${utCap}RB();
-		/*
-		 *TODO fill in result bean
-		 */
-		 
+		
+		 //TODO fill in result bean
 		 return ${utUnCap}Rb;	
 	}
 

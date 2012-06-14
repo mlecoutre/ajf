@@ -17,6 +17,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.WordUtils;
 import org.jboss.forge.parser.JavaParser;
 import org.jboss.forge.parser.java.JavaClass;
@@ -145,8 +146,8 @@ public class CreateMcr {
 							.concat(managedBeanClassFile.getName()))
 					.getJavaSource();
 
-			// List of UT that do not already exist in java source, and will be
-			// added
+			// List of UT that do not already exist in java source, and will
+			// be added
 			List<String> utToBeAdded = calculateUtListToAdd(out, uts,
 					managedBeanJavaSource);
 
@@ -164,27 +165,48 @@ public class CreateMcr {
 			for (String ut : utToBeAdded) {
 				shell.println("Adding UT:" + ut + "...");
 
-				// Set body to java class using java class txt templates
-				// get Java Class template as String and parse it to java
+				// Temp file to store templated method
+				File tempFile = new File(FileUtils.getTempDirectoryPath()
+						.concat("/ajf-forge/managedBeanMethodForUT.tmp"));
+				try {
 
-				// generate method for managed bean for additional UT
-				String managedBeanMethodForUT = projectManagement
-						.buildManagedBeanMethod(function, ut);
+					// generate method for managed bean for additional UT
+					projectManagement.buildManagedBeanMethod(tempFile,
+							function, ut);
 
-				// parse method (javaclass containing one method, which is the
-				// method we want)
-				JavaClass temp = (JavaClass) JavaParser
-						.parse(managedBeanMethodForUT);
+					// parse as java class (containing one method, which
+					// is the method we want)
+					JavaClass temp = (JavaClass) JavaParser.parse(tempFile);
 
-				// We use the METHOD 0 (first method of the class)
-				Method<JavaClass> myMethod = temp.getMethods().get(0);
+					// We use the METHOD 0 (first method of the class)
+					Method<JavaClass> myMethod = temp.getMethods().get(0);
 
-				// Create method in managedBean class beeing updated
-				Method<JavaClass> myMethod2 = managedBeanJavaclass
-						.addMethod("public void " + WordUtils.uncapitalize(ut)
-								+ "()");
-				// Set the body thanks to template
-				myMethod2.setBody(myMethod.getBody());
+					// Create method in managedBean class beeing updated
+					Method<JavaClass> myMethod2 = managedBeanJavaclass
+							.addMethod("public void "
+									+ WordUtils.uncapitalize(ut) + "()");
+					// Set the body thanks to template
+					myMethod2.setBody(myMethod.getBody());
+
+					// Add libDTOpackage.* so that every new DTO is imported in
+					// managed bean (in case user has removed it)
+					if (null == managedBeanJavaclass.getImport(libDTOPackage
+							+ ".*"))
+						managedBeanJavaclass.addImport(libDTOPackage + ".*");
+
+				} catch (Exception e) {
+					ShellMessages.error(out,
+							"Problem occured while generating additional UT "
+									.concat(ut + ":").concat(e.toString()));
+					throw e;
+
+				} finally {
+
+					// clean temp file
+					if (tempFile.exists()) {
+						tempFile.delete();
+					}
+				}
 
 			}
 			uiJavaFacet.saveJavaSource(managedBeanJavaclass);
@@ -317,11 +339,6 @@ public class CreateMcr {
 
 		shell.println();
 
-		// TODO BACKUP TO REMOVE LATER
-		// ajfSolutionGlobalName.toLowerCase()
-		// .concat("/lib/business").replace("/", "."))
-		// .replace(".", "/")
-
 		File libBusinessFolder = new File(libSrcFolder.getAbsolutePath()
 				.concat("/").concat(libBDpackagePath));
 		boolean foundLibBDPackage = libBusinessFolder.exists();
@@ -427,6 +444,7 @@ public class CreateMcr {
 					libDtoPackage.replace("/", "."));
 
 			out.println();
+
 		} else if (updateMode) {
 
 			/*
@@ -545,31 +563,50 @@ public class CreateMcr {
 				javaclass.addImport(libPackages.get("libDTOpackage") + "."
 						+ WordUtils.capitalize(ut) + "RB");
 
-				// generate method for managed bean for additional UT
-				String policyMethodForUT = projectManagement
-						.buildPolicyMethod(ut);
+				// Temp file to store templated method
+				File tempFile = new File(FileUtils.getTempDirectoryPath()
+						.concat("/ajf-forge/managedBeanMethodForUT.tmp"));
+				try {
 
-				// parse method (javaclass containing one method, which is the
-				// method we want)
-				JavaClass temp = (JavaClass) JavaParser
-						.parse(policyMethodForUT);
+					// generate method for managed bean for additional UT
+					projectManagement.buildPolicyMethod(tempFile, ut);
 
-				// We use the METHOD 0 of the template class as it contains only
-				// one
-				Method<JavaClass> myMethod = temp.getMethods().get(0);
+					// parse method (javaclass containing one method, which is
+					// the
+					// method we want)
+					JavaClass temp = (JavaClass) JavaParser.parse(tempFile);
 
-				// Create method in managedBean class beeing updated
-				Method<JavaClass> myMethod2 = javaclass
-						.addMethod(
-								"public void " + WordUtils.uncapitalize(ut)
-										+ "(" + WordUtils.capitalize(ut)
-										+ "PB " + WordUtils.uncapitalize(ut)
-										+ "pb){}")
-						.setReturnType(WordUtils.capitalize(ut) + "RB")
-						.addThrows(Exception.class);
+					// We use the METHOD 0 of the template class as it contains
+					// only
+					// one
+					Method<JavaClass> myMethod = temp.getMethods().get(0);
 
-				// Set the body thanks to template
-				myMethod2.setBody(myMethod.getBody());
+					// Create method in managedBean class beeing updated
+					Method<JavaClass> myMethod2 = javaclass
+							.addMethod(
+									"public void " + WordUtils.uncapitalize(ut)
+											+ "(" + WordUtils.capitalize(ut)
+											+ "PB "
+											+ WordUtils.uncapitalize(ut)
+											+ "pb){}")
+							.setReturnType(WordUtils.capitalize(ut) + "RB")
+							.addThrows(Exception.class);
+
+					// Set the body thanks to template
+					myMethod2.setBody(myMethod.getBody());
+
+				} catch (Exception e) {
+					ShellMessages.error(out,
+							"Problem occured while generating additional UT "
+									.concat(ut + ":").concat(e.toString()));
+					throw e;
+
+				} finally {
+					// clean temp file
+					if (tempFile.exists()) {
+						tempFile.delete();
+					}
+				}
 
 			}
 			coreJavaFacet.saveJavaSource(javaclass);

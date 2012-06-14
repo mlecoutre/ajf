@@ -9,6 +9,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.WordUtils;
 import org.jboss.forge.parser.JavaParser;
 import org.jboss.forge.parser.java.JavaClass;
@@ -18,16 +19,17 @@ import org.jboss.forge.project.services.ResourceFactory;
 import org.jboss.forge.resources.java.JavaResource;
 import org.junit.Test;
 
+import am.ajf.forge.core.generators.templates.McrGenerationTemplate;
 import am.ajf.forge.util.JavaHelper;
 
-public class JavaUtilsTest {
+public class JavaHelperTest {
 
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testRetrieveAttributeList() throws URISyntaxException,
 			FileNotFoundException {
 
-		File javaClass = new File(JavaUtilsTest.class.getClassLoader()
+		File javaClass = new File(JavaHelperTest.class.getClassLoader()
 				.getResource("Person.java").toURI());
 		ResourceFactory factory = new ResourceFactory();
 		JavaSource javaSource = new JavaResource(factory, javaClass)
@@ -52,7 +54,7 @@ public class JavaUtilsTest {
 	}
 
 	@Test
-	public void testJavaClass() throws Exception {
+	public void testParseJavaTxtClass() throws Exception {
 
 		JavaClass javaclass = JavaParser.create(JavaClass.class)
 				.setPackage("am.voila.test").setName("myClass");
@@ -95,5 +97,54 @@ public class JavaUtilsTest {
 		assertTrue("Generated Java class should be sized of" + supposedSize
 				+ " but is :" + javaclass.toString().length(), javaclass
 				.toString().length() == supposedSize);
+	}
+
+	@Test
+	public void testParseJavaFromStream() throws Exception {
+
+		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
+
+		File myFile = new File(FileUtils.getTempDirectoryPath()
+				+ "/ajf-forge/testParseJavaFromStream.tmp");
+		projectManagement.buildManagedBeanMethod(myFile, "myFunction", "myUT");
+
+		// parse as java class (containing one method, which
+		// is the method we want)
+		JavaClass temp = (JavaClass) JavaParser.parse(myFile);
+
+		// Delete temp file
+		FileUtils.forceDelete(myFile.getParentFile());
+
+		System.out.println(temp.toString());
+	}
+
+	@Test
+	public void testAddMethodToJavaClass() throws Exception {
+
+		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
+
+		File myFile = new File(FileUtils.getTempDirectoryPath()
+				+ "/ajf-forge/testParseJavaFromStream.tmp");
+		projectManagement.buildManagedBeanMethod(myFile, "myFunction", "myUT");
+
+		// parse as java class (containing one method, which
+		// is the method we want)
+		JavaClass temp = (JavaClass) JavaParser.parse(myFile);
+
+		// We use the METHOD 0 (first method of the class)
+		Method<JavaClass> myMethod = temp.getMethods().get(0);
+
+		JavaClass javaclass = JavaParser.create(JavaClass.class)
+				.setPackage("am.voila.test").setName("myClass");
+
+		// // Create method in managedBean class beeing updated
+		Method<JavaClass> myMethod2 = javaclass.addMethod(
+				"public void voila() {" + myMethod.getBody() + "}").addThrows(
+				Exception.class);
+
+		myMethod2.setBody(myMethod.getBody());
+
+		System.out.println(javaclass.toString());
+		// System.out.println(javaclass.toString());
 	}
 }

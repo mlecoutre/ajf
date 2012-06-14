@@ -3,7 +3,6 @@ package am.ajf.forge.core.generators.templates;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
-import java.io.StringWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.List;
@@ -106,6 +105,11 @@ public class McrGenerationTemplate {
 			templateUtils.mergeDataModelWithTemplate(dataModelMap, myTemplate,
 					writer);
 
+			fos.close();
+			fos = null;
+			writer.close();
+			writer = null;
+
 		} catch (Exception e) {
 
 			e.printStackTrace();
@@ -156,27 +160,35 @@ public class McrGenerationTemplate {
 			/*
 			 * need to find speacial UT for special XHTML sub part
 			 */
+
 			// init:
 			function.put("addUT", "");
 			function.put("deleteUT", "");
+			function.put("listUT", "");
 			function.put("addFlag", "false");
 			function.put("deleteFlag", "false");
+			function.put("listFlag", "false");
+
 			for (String ut : uts) {
 
-				// check if an Add (or create) UT has been asked
-				if (ut.startsWith("add" + WordUtils.capitalize(entityName))
-						|| ut.startsWith("create"
-								+ WordUtils.capitalize(entityName))) {
+				// check if special create UT has been asked
+				if (ut.startsWith("create" + WordUtils.capitalize(entityName))) {
 					function.put("addFlag", "true");
 					function.put("addUT", ut);
 
-				} else if (ut.startsWith("remove"
-						+ WordUtils.capitalize(entityName))
-						|| ut.startsWith("delete"
-								+ WordUtils.capitalize(entityName))) {
+					// check if special delete UT has been asked
+				} else if (ut.startsWith("delete"
+						+ WordUtils.capitalize(entityName))) {
 
 					function.put("deleteFlag", "true");
 					function.put("deleteUT", ut);
+
+					// check if special list UT has been asked
+				} else if (ut.startsWith("list"
+						+ WordUtils.capitalize(entityName))) {
+
+					function.put("listFlag", "true");
+					function.put("listUT", ut);
 				}
 
 			}
@@ -194,6 +206,11 @@ public class McrGenerationTemplate {
 			// Writer out = new OutputStreamWriter(System.out);
 			templateUtils.mergeDataModelWithTemplate(dataModelMap, myTemplate,
 					writer);
+
+			fos.close();
+			fos = null;
+			writer.close();
+			writer = null;
 
 		} catch (Exception e) {
 
@@ -247,6 +264,11 @@ public class McrGenerationTemplate {
 			templateUtils.mergeDataModelWithTemplate(dataModelMap, myTemplate,
 					writer);
 
+			fos.close();
+			fos = null;
+			writer.close();
+			writer = null;
+
 		} catch (Exception e) {
 
 			System.err
@@ -258,7 +280,7 @@ public class McrGenerationTemplate {
 	}
 
 	/**
-	 * Build a pollicy template java class
+	 * Build a policy template java class
 	 * 
 	 * @param policyFile
 	 * @param functionName
@@ -303,6 +325,11 @@ public class McrGenerationTemplate {
 			templateUtils.mergeDataModelWithTemplate(dataModelMap, myTemplate,
 					writer);
 
+			fos.close();
+			fos = null;
+			writer.close();
+			writer = null;
+
 		} catch (Exception e) {
 
 			System.err
@@ -314,15 +341,18 @@ public class McrGenerationTemplate {
 	}
 
 	/**
+	 * Build a File containing managed bean class with templated managed bean
+	 * method. Use this method to add a Unit task in a managed bean
 	 * 
+	 * @param tmpFile
+	 *            temporary file where the template will be stored
 	 * @param functionName
 	 * @param ut
-	 * @return
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public String buildManagedBeanMethod(String functionName, String ut)
-			throws Exception {
+	public void buildManagedBeanMethod(File tmpFile, String functionName,
+			String ut) throws Exception {
 
 		Template myTemplate = loadTemplate(MBEAN_METHOD_TEMPLATE);
 
@@ -334,23 +364,39 @@ public class McrGenerationTemplate {
 		dataModelMap.put("unCapitalizeFirst", new UnCapitalizeFirst());
 		dataModelMap.put("capitalizeFirst", new CapitalizeFirst());
 
-		Writer writer = new StringWriter();
+		// Writer writer = new StringWriter();
+
+		if (!tmpFile.getParentFile().exists())
+			tmpFile.getParentFile().mkdirs();
+
+		if (!tmpFile.exists())
+			tmpFile.createNewFile();
+
+		FileOutputStream fos = new FileOutputStream(tmpFile);
+		Writer writer = new OutputStreamWriter(fos);
 
 		templateUtils.mergeDataModelWithTemplate(dataModelMap, myTemplate,
 				writer);
 
-		return writer.toString();
+		fos.close();
+		fos = null;
+		writer.close();
+		writer = null;
+
+		// return tmpFile;
+
 	}
 
 	/**
+	 * Build a File containing managed bean class with templated Policy method.
+	 * Use this method to add a Unit task in a Policy
 	 * 
-	 * @param functionName
+	 * @param tmpFile
 	 * @param ut
-	 * @return
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public String buildPolicyMethod(String ut) throws Exception {
+	public void buildPolicyMethod(File tmpFile, String ut) throws Exception {
 
 		Template myTemplate = loadTemplate(POLICY_METHOD_TEMPLATE);
 
@@ -361,62 +407,24 @@ public class McrGenerationTemplate {
 		dataModelMap.put("unCapitalizeFirst", new UnCapitalizeFirst());
 		dataModelMap.put("capitalizeFirst", new CapitalizeFirst());
 
-		Writer writer = new StringWriter();
+		if (!tmpFile.getParentFile().exists())
+			tmpFile.getParentFile().mkdirs();
+
+		if (!tmpFile.exists())
+			tmpFile.createNewFile();
+
+		FileOutputStream fos = new FileOutputStream(tmpFile);
+		Writer writer = new OutputStreamWriter(fos);
 
 		templateUtils.mergeDataModelWithTemplate(dataModelMap, myTemplate,
 				writer);
 
-		return writer.toString();
-	}
+		fos.close();
+		fos = null;
+		writer.close();
+		writer = null;
 
-	// /**
-	// *
-	// * Generate the common part of the data model. This data model is commun
-	// to
-	// * diffrent templates, that's why it is isolated
-	// *
-	// * @param globalProjectName
-	// * @param functionName
-	// * @param entityName
-	// * @param entityAttributes
-	// * @param javaPackage
-	// * @param entityLibPackage
-	// * @return Map data model
-	// */
-	// @SuppressWarnings({ "rawtypes", "unchecked" })
-	// public Map buildDataModel(String globalProjectName, String functionName,
-	// String entityName, List<String> entityAttributes,
-	// String javaPackage, String entityLibPackage) {
-	//
-	// // Generate an my data model
-	// Map root = new HashMap();
-	//
-	// root.put("projectGlobalName", globalProjectName);
-	//
-	// Map function = new HashMap();
-	// function.put("MbeanName", functionName);
-	// function.put("package", javaPackage);
-	// // function.put("entityName", entityName);
-	// Map entity = new HashMap();
-	// entity.put("name", entityName);
-	// entity.put("libPackage", entityLibPackage);
-	//
-	// SimpleSequence attributeSequence = new SimpleSequence();
-	// for (String attribute : entityAttributes) {
-	// attributeSequence.add(attribute);
-	// }
-	// entity.put("attributes", attributeSequence);
-	//
-	// function.put("entity", entity);
-	// function.put("capitalizeFirst", new CapitalizeFirst());
-	//
-	// root.put("function", function);
-	// root.put("unCapitalizeFirst", new UnCapitalizeFirst());
-	// root.put("capitalizeFirst", new CapitalizeFirst());
-	//
-	// return root;
-	//
-	// }
+	}
 
 	/**
 	 * Return a reference to the FreeMarker template corresponding to the input

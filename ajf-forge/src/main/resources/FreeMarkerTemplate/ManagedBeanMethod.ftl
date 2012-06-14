@@ -30,6 +30,4 @@ public class ClassName implements Serializable {
 			log.error("Error Occured in ${utUnCap}.",e);
 		}
 	}
-
-
 }

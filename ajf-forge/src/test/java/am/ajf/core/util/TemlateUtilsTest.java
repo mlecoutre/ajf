@@ -1,13 +1,18 @@
 package am.ajf.core.util;
 
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.jboss.forge.parser.java.JavaSource;
 import org.jboss.forge.project.services.ResourceFactory;
 import org.jboss.forge.resources.java.JavaResource;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -26,7 +31,36 @@ import am.ajf.forge.util.TemplateUtils;
  */
 public class TemlateUtilsTest {
 
-	static EntityDTO entityDto = new EntityDTO();
+	private static EntityDTO entityDto = new EntityDTO();
+	private static File tmpDirectory;
+
+	@BeforeClass
+	public static void beforeClass() {
+
+		tmpDirectory = new File(FileUtils.getTempDirectoryPath()
+				+ "/ajf-forge-test");
+
+		if (!tmpDirectory.exists())
+			tmpDirectory.mkdirs();
+
+	}
+
+	@AfterClass
+	public static void afterClass() {
+
+		if (tmpDirectory.exists()) {
+			try {
+				FileUtils.cleanDirectory(tmpDirectory);
+				FileUtils.forceDelete(tmpDirectory);
+			} catch (IOException e) {
+				System.err
+						.println("Fail to delete temp Directory used for test : "
+								+ tmpDirectory.getAbsolutePath());
+				e.printStackTrace();
+			}
+		}
+
+	}
 
 	/**
 	 * Test of the fail execution of Templating throw FreeMarker when the
@@ -144,9 +178,15 @@ public class TemlateUtilsTest {
 	public void testBuildManagedBeanMethod() throws Exception {
 		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
 
-		String output = projectManagement.buildManagedBeanMethod(
-				"myFunctionName", "utName");
-		System.out.println(output);
+		File tmpFile = new File(tmpDirectory.getAbsolutePath() + "/voila.tmp");
+
+		projectManagement.buildManagedBeanMethod(tmpFile, "myFunctionName",
+				"utName");
+
+		assertTrue("file shouldn't be empty", tmpFile.length() > 0);
+
+		// tmpFile.setWritable(true);
+		tmpFile.delete();
 
 	}
 
