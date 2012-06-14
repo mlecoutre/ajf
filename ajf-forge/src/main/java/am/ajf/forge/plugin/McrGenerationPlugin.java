@@ -1,6 +1,6 @@
 package am.ajf.forge.plugin;
 
-import static am.ajf.forge.lib.ForgeConstants.PACKAGE_FOR_ENTITY;
+import static am.ajf.forge.lib.ForgeConstants.*;
 import static am.ajf.forge.lib.ForgeConstants.PACKAGE_FOR_MANAGED_BEAN;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_NAME;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
@@ -71,6 +71,8 @@ public class McrGenerationPlugin implements Plugin {
 	@Inject
 	private JavaHelper javaUtils;
 
+	private String ajfSolutionType;
+
 	@DefaultCommand
 	public void show(final PipeOut out) {
 
@@ -97,10 +99,13 @@ public class McrGenerationPlugin implements Plugin {
 						"Which type of ajf project are you working on ?",
 						choiceList);
 
-				if (0 == choice)
-					shell.execute("manage-project AddFonction");
-				else if (1 == choice)
-					shell.println("not yet Implemented...");
+				if (0 == choice) {
+
+					shell.execute("manage-project AddFonction-exploded");
+				} else if (1 == choice) {
+
+					shell.execute("manage-project AddFonction-compacted");
+				}
 
 			} else {
 				ShellMessages.error(out,
@@ -119,17 +124,152 @@ public class McrGenerationPlugin implements Plugin {
 	 * @param entityName
 	 * @param out
 	 */
-	@Command("AddFonction")
-	public void createMcrFunction(
+	@Command("AddFonction-compacted")
+	public void createMcrFunctionCompacted(
 			@Option(required = false, name = "function name", shortName = "ft", description = " name of the function p+") String function,
 			@Option(required = false, name = "EntityName", shortName = "ent", description = " Name of the entity (i.e : Employee),"
 					+ " this must correspond to the java class model") String entityName,
 			final PipeOut out) {
 
-		// debug mode
 		shell.setVerbose(true);
 
 		try {
+			ajfSolutionType = AJF_SOUTION_COMPACTED;
+
+			/*
+			 * Function Name
+			 */
+			shell.println();
+			promptTitle("Function Generation");
+			while (null == function || function.isEmpty()) {
+				function = shellhelper
+						.promptFacade("Name of the function to generate (i.e: ManagePerson):");
+				if (null == function || function.isEmpty()) {
+					ShellMessages.warn(out, "This information is required !");
+				}
+			}
+			// Transform function to first letter in upperCase
+			function = WordUtils.capitalize(function);
+
+			// get the global project Name (without any suffixe). As we should
+			// be on the UI project, we remove the suffixe:
+			String ajfSolutionGlobalName = uiProject.getProjectRoot().getName()
+					.replace("-".concat(PROJECT_TYPE_UI), "");
+
+			// Java facet for ui project
+			JavaSourceFacet uiJavaFacet = uiProject
+					.getFacet(JavaSourceFacet.class);
+
+			/*
+			 * ENTITY LOADING
+			 */
+			shell.println();
+			promptTitle("Entity loading");
+			EntityDTO entityDto;
+
+			// Load entity in lib project
+			entityDto = loadEntity(ajfSolutionGlobalName, uiJavaFacet,
+					entityName, out);
+			entityName = entityDto.getEntityName();
+
+			/*
+			 * UNIT TASKS
+			 */
+			// Prompt user for UT list to generate
+			shell.println();
+			promptTitle("Unit tasks (UT) List");
+			List<String> uts = promptForUTs(entityName, out);
+			shell.println();
+
+			/*
+			 * PREPARATION FOR GENERATION
+			 */
+			// Function must not contain the suffix MBean to avoid the double
+			// suffix when the managed bean will be generated
+			if (function.contains("MBean")) {
+				function = shellhelper
+						.promptFacade(
+								"Function name must not contain the 'MBean' suffix as it will be generated for you when needed. please re-type the function Name:",
+								function.replaceAll("MBean", ""));
+			}
+
+			/*
+			 * GENERATION
+			 */
+			// Which package where to create managedBean class
+			String managedBeanPackage = shellhelper.promptFacade(
+					"Which package for Managed Bean ?",
+					PACKAGE_FOR_MANAGED_BEAN.replace(PROJECT_NAME,
+							ajfSolutionGlobalName.toLowerCase()));
+
+			// generate xhtml web page for CRUD
+			promptTitle("Xhtml web page generation");
+			mcrManagement.generateXhtml(function, entityName, out,
+					ajfSolutionGlobalName, entityDto, managedBeanPackage, uts);
+
+			// generate Business Delegate interface for policy
+			promptTitle("Business delegate interfaces generation");
+
+			Map<String, String> libPackages = mcrManagement
+					.generateBDInterfaceAndDto(function, out,
+							ajfSolutionGlobalName, uiProject, uiJavaFacet,
+							entityName, uts);
+
+			/*
+			 * generate policy class
+			 */
+			promptTitle("Policy Class generation");
+
+			mcrManagement.generatePolicy(uiProject, function, out, uts,
+					libPackages, ajfSolutionGlobalName);
+
+			// Generate managed bean for CRUD
+			promptTitle("Managed Bean generation");
+
+			mcrManagement.generateManagedBean(function, entityName,
+					ajfSolutionGlobalName, entityDto, managedBeanPackage,
+					libPackages.get("libBDpackage"),
+					libPackages.get("libDTOpackage"), uiJavaFacet, uts, out);
+
+			/*
+			 * END
+			 */
+			displayEndLog(function, out, ajfSolutionGlobalName);
+
+		} catch (EscapeForgePromptException esc) {
+
+			shell.println();
+			shell.println();
+			shell.print(ShellColor.MAGENTA, "***BYE BYE***");
+			shell.println();
+			shell.println();
+			return;
+
+		} catch (Exception e) {
+			ShellMessages
+					.error(out,
+							"An Exception occured during the manage-project AddFonction-compacted plugin execution. "
+									+ e.toString());
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * 
+	 * @param function
+	 * @param entityName
+	 * @param out
+	 */
+	@Command("AddFonction-exploded")
+	public void createMcrFunctionExploded(
+			@Option(required = false, name = "function name", shortName = "ft", description = " name of the function p+") String function,
+			@Option(required = false, name = "EntityName", shortName = "ent", description = " Name of the entity (i.e : Employee),"
+					+ " this must correspond to the java class model") String entityName,
+			@Option(required = false, name = "ajfType", shortName = "at", description = "Type of ajf solution ('exploded' or 'compacted')") String projectType,
+			final PipeOut out) {
+
+		try {
+			ajfSolutionType = AJF_SOUTION_EXPLODED;
 
 			/*
 			 * Function Name
@@ -149,11 +289,18 @@ public class McrGenerationPlugin implements Plugin {
 			String ajfSolutionGlobalName = uiProject.getProjectRoot().getName()
 					.replace("-".concat(PROJECT_TYPE_UI), "");
 
+			// Java facet for ui project
+			JavaSourceFacet uiJavaFacet = uiProject
+					.getFacet(JavaSourceFacet.class);
+
 			/*
-			 * Entity loading
+			 * ENTITY LOADING
 			 */
 			shell.println();
 			promptTitle("Entity loading");
+			EntityDTO entityDto;
+
+			// CASE EXPLODED SOLUTION
 
 			// Retrieve the lib component project from the UI (in which we
 			// should be)
@@ -165,9 +312,9 @@ public class McrGenerationPlugin implements Plugin {
 			JavaSourceFacet libJavaFacet = libProject
 					.getFacet(JavaSourceFacet.class);
 
-			// Retrieve the Attributes of the input entity
-			EntityDTO entityDto = loadEntity(ajfSolutionGlobalName,
-					libJavaFacet, entityName, out);
+			// Load entity in lib project
+			entityDto = loadEntity(ajfSolutionGlobalName, libJavaFacet,
+					entityName, out);
 			entityName = entityDto.getEntityName();
 
 			/*
@@ -196,10 +343,6 @@ public class McrGenerationPlugin implements Plugin {
 								function.replaceAll("MBean", ""));
 			}
 
-			// Java facet for ui project
-			JavaSourceFacet uiJavaFacet = uiProject
-					.getFacet(JavaSourceFacet.class);
-
 			/*
 			 * GENERATION
 			 */
@@ -225,8 +368,12 @@ public class McrGenerationPlugin implements Plugin {
 
 			// generate policy class
 			promptTitle("Policy Class generation");
-			mcrManagement.generatePolicy(function, out, uts, libPackages,
-					ajfSolutionGlobalName);
+			// loading core component project
+			Project coreProject = projectHelper.locateProjectFromSolution(
+					uiProject, projectFactory, resourceFactory,
+					PROJECT_TYPE_UI, PROJECT_TYPE_CORE, out);
+			mcrManagement.generatePolicy(coreProject, function, out, uts,
+					libPackages, ajfSolutionGlobalName);
 
 			// Generate managed bean for CRUD
 			promptTitle("Managed Bean generation");
@@ -239,24 +386,7 @@ public class McrGenerationPlugin implements Plugin {
 			/*
 			 * END
 			 */
-			ShellMessages.success(out, "Done generated MCR for function:"
-					+ function);
-			shell.println();
-
-			ShellMessages
-					.success(
-							out,
-							"After deploying your web project on embedded tomcat server, please find your generated web page here : ");
-			// print web address
-			shell.println(
-					ShellColor.YELLOW,
-					"http://localhost:8080/" + ajfSolutionGlobalName + "-"
-							+ ForgeConstants.PROJECT_TYPE_UI + "/"
-							+ WordUtils.uncapitalize(function) + "/"
-							+ WordUtils.uncapitalize(function) + ".jsf");
-			shell.println();
-			shell.println();
-			shell.println(" ");
+			displayEndLog(function, out, ajfSolutionGlobalName);
 
 		} catch (EscapeForgePromptException esc) {
 
@@ -268,12 +398,11 @@ public class McrGenerationPlugin implements Plugin {
 			return;
 
 		} catch (Exception e) {
-
-			ShellMessages.error(out,
-					"An Exception occured during the AddCrudFonction plugin execution. "
-							+ e.toString());
+			ShellMessages
+					.error(out,
+							"An Exception occured during the manage-project AddFonction-exploded plugin execution. "
+									+ e.toString());
 			e.printStackTrace();
-
 		}
 
 	}
@@ -401,17 +530,16 @@ public class McrGenerationPlugin implements Plugin {
 	}
 
 	/**
-	 * Locate in the lib project component, in the package <code>
-	 * am.ajf.'projectName'.model</code> the <strong>'entityName'.java</strong>
-	 * class corresponding to the input model name.</br> The list of Attributes
-	 * contained in this java class is returned (attributes that are linked to
-	 * getter or setter in the model)
+	 * Locate in the package <code>
+	 * am.ajf.'projectName'.lib.model</code> the
+	 * <strong>'entityName'.java</strong> class corresponding to the input model
+	 * name.</br> The list of Attributes contained in this java class is
+	 * returned (attributes that are linked to getter or setter in the model)
 	 * 
 	 * @param ajfSolutionGlobalName
-	 * @param libJavaFacet
-	 *            JavaSourceFacet corresponding to the lib component project of
-	 *            the global exploded ajf solution lib component project of the
-	 *            same ajf exploded solution
+	 * @param JavaFacet
+	 *            JavaSourceFacet corresponding to the project of the ajf
+	 *            solution of the that contain the model
 	 * @param entityName
 	 * @param out
 	 * @return List<String> attributes list corresponding to Entity Model
@@ -419,7 +547,7 @@ public class McrGenerationPlugin implements Plugin {
 	 */
 	@SuppressWarnings({ "rawtypes" })
 	private EntityDTO loadEntity(String ajfSolutionGlobalName,
-			JavaSourceFacet libJavaFacet, String entityName, PipeOut out)
+			JavaSourceFacet javaFacet, String entityName, PipeOut out)
 			throws Exception {
 
 		// Instanciate the output object
@@ -460,8 +588,8 @@ public class McrGenerationPlugin implements Plugin {
 			try {
 
 				// This is the entity model as Java source
-				modelJavaResource = libJavaFacet.getJavaResource(
-						entityModelPath).getJavaSource();
+				modelJavaResource = javaFacet.getJavaResource(entityModelPath)
+						.getJavaSource();
 
 				loopForEntity = false;
 				entityDto.setEntityLibPackage(entityPackage);
@@ -484,13 +612,16 @@ public class McrGenerationPlugin implements Plugin {
 								"Do you want to manually specify the model you want to use [y] ?",
 								true)) {
 
+					if (AJF_SOUTION_EXPLODED.equals(ajfSolutionType))
+						ShellMessages.info(out,
+								"Specify a package of the LIB project.");
+
 					// Ask for package containing the model in the lib project
 					// of ajf solution
 					shell.println();
-					entityPackage = shellhelper
-							.promptFacade(
-									"Sub-package of the Project-lib containing the Model class ",
-									entityPackage.replace("/", "."));
+					entityPackage = shellhelper.promptFacade(
+							"Which package contains the entity model class ?",
+							entityPackage.replace("/", "."));
 
 					// Prompt for model name
 					entityName = shellhelper.promptFacade("Model class name",
@@ -569,6 +700,37 @@ public class McrGenerationPlugin implements Plugin {
 
 		}
 
+	}
+
+	/**
+	 * print end log
+	 * 
+	 * @param function
+	 * @param out
+	 * @param ajfSolutionGlobalName
+	 */
+	private void displayEndLog(String function, final PipeOut out,
+			String ajfSolutionGlobalName) {
+		ShellMessages.success(out, "Done generated MCR for function:"
+				+ function);
+		shell.println();
+
+		ShellMessages
+				.success(
+						out,
+						"After deploying your web project on embedded tomcat server, please find your generated web page here : ");
+		shell.println();
+
+		// print web address
+		shell.println(
+				ShellColor.YELLOW,
+				"http://localhost:8080/" + ajfSolutionGlobalName + "-"
+						+ ForgeConstants.PROJECT_TYPE_UI + "/"
+						+ WordUtils.uncapitalize(function) + "/"
+						+ WordUtils.uncapitalize(function) + ".jsf");
+		shell.println();
+		shell.println();
+		shell.println(" ");
 	}
 
 	/**

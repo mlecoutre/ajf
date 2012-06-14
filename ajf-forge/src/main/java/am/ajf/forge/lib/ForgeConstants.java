@@ -10,6 +10,12 @@ package am.ajf.forge.lib;
 public class ForgeConstants {
 
 	/*
+	 * Ajf solution types
+	 */
+	public static final String AJF_SOUTION_COMPACTED = "compacted";
+	public static final String AJF_SOUTION_EXPLODED = "exploded";
+
+	/*
 	 * Project types (used as project suffixes)
 	 */
 	public static final String PROJECT_TYPE_PARENT = "parent";

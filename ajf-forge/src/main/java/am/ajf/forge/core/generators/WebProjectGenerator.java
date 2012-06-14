@@ -194,7 +194,7 @@ public class WebProjectGenerator {
 		/*
 		 * Create an empty java Managed Bean class
 		 */
-		UIProjectUtils.generateManagedBeanClass(javaPackage, project);
+		// UIProjectUtils.generateManagedBeanClass(javaPackage, project);
 
 		File webappDir = extractWebResources(project, WEBAPP_ZIP_RESOURCES);
 

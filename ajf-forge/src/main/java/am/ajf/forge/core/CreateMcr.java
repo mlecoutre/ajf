@@ -4,8 +4,6 @@ import static am.ajf.forge.lib.ForgeConstants.PACKAGE_FOR_BD_INTERFACES;
 import static am.ajf.forge.lib.ForgeConstants.PACKAGE_FOR_DTO;
 import static am.ajf.forge.lib.ForgeConstants.PACKAGE_FOR_POLICY;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_NAME;
-import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
-import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,8 +25,6 @@ import org.jboss.forge.parser.java.impl.JavaInterfaceImpl;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.JavaSourceFacet;
 import org.jboss.forge.project.facets.WebResourceFacet;
-import org.jboss.forge.project.services.ProjectFactory;
-import org.jboss.forge.project.services.ResourceFactory;
 import org.jboss.forge.shell.Shell;
 import org.jboss.forge.shell.ShellMessages;
 import org.jboss.forge.shell.plugins.PipeOut;
@@ -37,7 +33,6 @@ import am.ajf.forge.core.generators.templates.McrGenerationTemplate;
 import am.ajf.forge.exception.EscapeForgePromptException;
 import am.ajf.forge.lib.EntityDTO;
 import am.ajf.forge.util.JavaHelper;
-import am.ajf.forge.util.ProjectHelper;
 import am.ajf.forge.util.ShellHelper;
 
 public class CreateMcr {
@@ -45,14 +40,14 @@ public class CreateMcr {
 	@Inject
 	private Project uiProject;
 
-	@Inject
-	private ProjectFactory projectFactory;
-
-	@Inject
-	private ResourceFactory resourceFactory;
-
-	@Inject
-	private ProjectHelper projectHelper;
+	// @Inject
+	// private ProjectFactory projectFactory;
+	//
+	// @Inject
+	// private ResourceFactory resourceFactory;
+	//
+	// @Inject
+	// private ProjectHelper projectHelper;
 
 	@Inject
 	private Shell shell;
@@ -188,11 +183,8 @@ public class CreateMcr {
 					// Set the body thanks to template
 					myMethod2.setBody(myMethod.getBody());
 
-					// Add libDTOpackage.* so that every new DTO is imported in
-					// managed bean (in case user has removed it)
-					if (null == managedBeanJavaclass.getImport(libDTOPackage
-							+ ".*"))
-						managedBeanJavaclass.addImport(libDTOPackage + ".*");
+					// TODO if new DTO are ADDED, we must set the corresponding
+					// imports
 
 				} catch (Exception e) {
 					ShellMessages.error(out,
@@ -304,8 +296,9 @@ public class CreateMcr {
 	 * @param function
 	 * @param out
 	 * @param ajfSolutionGlobalName
-	 * @param libProject
-	 * @param libJavaFacet
+	 * @param project
+	 *            where to generate java class
+	 * @param javaFacet
 	 * @return Map which key 'libBDpackage' is linked to the BD interfaces
 	 *         package and the 'libDtoPackage' key which is linked to the DTO
 	 *         Beans objects package
@@ -313,9 +306,9 @@ public class CreateMcr {
 	 */
 	@SuppressWarnings("rawtypes")
 	public Map<String, String> generateBDInterfaceAndDto(String function,
-			final PipeOut out, String ajfSolutionGlobalName,
-			Project libProject, JavaSourceFacet libJavaFacet,
-			String entityName, List<String> uts) throws Exception {
+			final PipeOut out, String ajfSolutionGlobalName, Project project,
+			JavaSourceFacet javaFacet, String entityName, List<String> uts)
+			throws Exception {
 
 		ShellMessages.info(out, "Start generating business delegate interface");
 		shell.println();
@@ -325,7 +318,7 @@ public class CreateMcr {
 		/*
 		 * BD interface generation
 		 */
-		File libSrcFolder = libJavaFacet.getSourceFolder()
+		File libSrcFolder = javaFacet.getSourceFolder()
 				.getUnderlyingResourceObject();
 
 		// lib package containing BD interfaces (package is entered with '.'
@@ -382,7 +375,7 @@ public class CreateMcr {
 					"Updating ".concat(functionBdFile.getName() + "..."));
 
 			// get JavaSource corresonding to existing java BD class
-			functionBdJavaSource = libJavaFacet.getJavaResource(
+			functionBdJavaSource = javaFacet.getJavaResource(
 					libBDpackagePath.replace(".", "/") + "/"
 							+ functionBdFile.getName()).getJavaSource();
 
@@ -415,7 +408,7 @@ public class CreateMcr {
 		shell.println();
 
 		// File corresponding to package
-		File libDtoPackageFile = new File(libJavaFacet.getSourceFolder()
+		File libDtoPackageFile = new File(javaFacet.getSourceFolder()
 				.getUnderlyingResourceObject().getAbsolutePath()
 				.concat("/" + libDtoPackage.replace(".", "/")));
 
@@ -434,7 +427,7 @@ public class CreateMcr {
 		/*
 		 * Generate DTOs beans result beans and Param beans
 		 */
-		generateDTOs(out, libJavaFacet, uts, libDtoPackage, libDtoPackageFile);
+		generateDTOs(out, javaFacet, uts, libDtoPackage, libDtoPackageFile);
 
 		if (creationMode) {
 
@@ -473,7 +466,7 @@ public class CreateMcr {
 						+ WordUtils.capitalize(ut) + "RB");
 
 			}
-			libJavaFacet.saveJavaSource(javaclass);
+			javaFacet.saveJavaSource(javaclass);
 
 		}
 
@@ -481,39 +474,34 @@ public class CreateMcr {
 	}
 
 	/**
+	 * * Generate the policy java classwith input uts
 	 * 
-	 * Generate the policy java classwith input uts
-	 * 
+	 * @param project
+	 *            where to generate policy
 	 * @param function
 	 * @param out
 	 * @param uts
 	 * @param libPackages
+	 * @param ajfSolutionGlobalName
 	 * @throws Exception
 	 * @throws EscapeForgePromptException
 	 * @throws IOException
 	 */
 	@SuppressWarnings("rawtypes")
-	public void generatePolicy(String function, final PipeOut out,
-			List<String> uts, Map<String, String> libPackages,
-			String ajfSolutionGlobalName) throws Exception,
-			EscapeForgePromptException, IOException {
+	public void generatePolicy(Project project, String function,
+			final PipeOut out, List<String> uts,
+			Map<String, String> libPackages, String ajfSolutionGlobalName)
+			throws Exception, EscapeForgePromptException, IOException {
 
 		ShellMessages.info(out, "Start generating Policy java class");
 
-		// loading core component project
-		Project coreProject = projectHelper.locateProjectFromSolution(
-				uiProject, projectFactory, resourceFactory, PROJECT_TYPE_UI,
-				PROJECT_TYPE_CORE, out);
-
 		shell.println();
 
-		JavaSourceFacet coreJavaFacet = coreProject
-				.getFacet(JavaSourceFacet.class);
+		JavaSourceFacet coreJavaFacet = project.getFacet(JavaSourceFacet.class);
 
 		// package where to store Policy
 		String corePolicyPackage = shell.prompt(
-				"In Which package of " + PROJECT_TYPE_CORE
-						+ " do you want to generate Policy class ?",
+				"In Which package do you want to generate Policy class ?",
 				PACKAGE_FOR_POLICY.replace(PROJECT_NAME,
 						ajfSolutionGlobalName.toLowerCase()));
 

@@ -49,8 +49,8 @@
 					<p:commandButton value="Create new ${function.entity.name}"
 						onclick="createdlg.show();" type="button">
 					</p:commandButton>
-			</p:column>
 			</#if>
+			</p:column>
 		
 		</p:row>
 		
