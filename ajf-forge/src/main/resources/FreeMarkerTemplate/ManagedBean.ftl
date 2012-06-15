@@ -2,6 +2,8 @@ package ${function.package <#-- package where to generate function MBean-->};
 
 <#assign functionNameCap = "${capitalizeFirst(function.name)}"<#-- function name with upper case first letter-->>
 <#assign functionNameUnCap = "${unCapitalizeFirst(function.name)}"<#-- function name with lower case first letter-->>
+<#assign entityNameUncap = "${unCapitalizeFirst(function.entity.name)}"<#-- entity name with lower case first letter-->>
+
 
 
 import java.io.Serializable;
@@ -24,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import am.ajf.core.services.exceptions.BusinessLayerException;
 import ${function.entity.libPackage}.${function.entity.name};
 
+<#assign entityNameUncap = "${unCapitalizeFirst(function.entity.name)}"<#-- Entity name with lower case first letter-->>
 
 @Named
 @SessionScoped
@@ -34,17 +37,26 @@ public class ${function.name}MBean implements Serializable {
 	 * The serial version
 	 */
 	private static final long serialVersionUID = 1L;
-
-	//selection values in table
-	private ${function.entity.name}[] selectedItems;
-
+	
 	// Logger
 	private transient static Logger log = LoggerFactory
 			.getLogger(${function.name}MBean.class);
+
+	<#-- Generated only for listUT -->
+	<#if "${function.listFlag}" = "true">
+		//selection values in table
+		private ${function.entity.name}[] selectedItems;
+		
+		//data table value
+		private List<${function.entity.name}> ${entityNameUncap}List;
+	</#if>
 			
+	<#-- Generated only for create UT -->
+	<#if "${function.addFlag}" = "true">
 	//TODO this are initial values to be modified
-	private ${function.entity.name} newData;
-	private List<${function.entity.name}> dataList;
+	private ${function.entity.name} new${function.entity.name};
+	</#if>
+
 	
 	@Inject
 	private transient ${functionNameCap}BD ${functionNameUnCap}management;
@@ -57,12 +69,21 @@ public class ${function.name}MBean implements Serializable {
 	}
 	
 	
+	/**
+	 *Init Method
+	 *
+	 */
 	@PostConstruct
-	public void init() {
+	public void init() { //Do not remove or rename the init method (mandatory for code generation tool)
+	
 		log.debug("Initialization");
-		newData = new ${function.entity.name}();
-		dataList = new ArrayList<${function.entity.name}>();
-
+		
+		<#if "${function.addFlag}" = "true">
+			new${function.entity.name} = new ${function.entity.name}();
+		</#if>
+		<#if "${function.listFlag}" = "true">
+			${entityNameUncap}List = new ArrayList<${function.entity.name}>();
+		</#if>
 	}
 
 <#list function.UTs as ut>
@@ -98,10 +119,9 @@ public class ${function.name}MBean implements Serializable {
 </#list>
 	
  	
-	/*
-	 * Accessors
-	 */
-	 public ${function.entity.name}[] getSelectedItems() {
+	
+	<#if "${function.addFlag}" = "true"> 
+	public ${function.entity.name}[] getSelectedItems() {
 		return selectedItems;
 	}
 
@@ -109,18 +129,25 @@ public class ${function.name}MBean implements Serializable {
 		this.selectedItems = selectedItems;
 	}
 	
-	public ${function.entity.name} getNewData() {
-		return  newData;
+	public List<${function.entity.name}> get${function.entity.name}List() {
+		return ${entityNameUncap}List;
 	}
-	public void setNewData(${function.entity.name} newData) {
-		this.newData = newData;
+	public void set${function.entity.name}List(List<${function.entity.name}> ${entityNameUncap}List){
+		this.${entityNameUncap}List = ${entityNameUncap}List;
 	}
-	public List<${function.entity.name}> getDataList() {
-		return dataList;
+	
+	</#if>
+	
+	<#if "${function.addFlag}" = "true"> 
+	public ${function.entity.name} getNew${function.entity.name}() {
+		return  new${function.entity.name};
 	}
-	public void setDataList(List<${function.entity.name}> dataList){
-		this.dataList = dataList;
+	public void setNew${function.entity.name}(${function.entity.name} new${function.entity.name}) {
+		this.new${function.entity.name} = new${function.entity.name};
 	}
+	</#if>
+	
+
 		 
 }
 

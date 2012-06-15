@@ -8,6 +8,7 @@
 	
 	<#assign beanName = "${function.MbeanName}">
 	<#assign capEntityName = "${capitalizeFirst(function.entity.name)}">
+	<#assign unCapEntityName = "${unCapitalizeFirst(function.entity.name)}">
 	
 	<ui:define name="applicationTitle">${capEntityName} Crud screen</ui:define>
 
@@ -63,9 +64,11 @@
 			widgetVar="${function.entity.name}Panel" toggleable="false" collapsed="false" >
 
 				<center>
+				
+				<#assign dataList = "${unCapEntityName}List">
 			
 				<p:dataTable id="infosTbl" var="info"
-					value="${setToEl(beanName,"dataList")}" paginator="true"
+					value="${setToEl(beanName,dataList)}" paginator="true"
 					rows="10" resizableColumns="true" liveScroll="true"
 					scrollWidth="1148" rowKey="${setToEl("info",function.entity.attributes[0])<#-- The first attribute is used as id -->}"
 					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -134,13 +137,14 @@
 					<p:panelGrid style="margin-bottom:2px;width:100%;" cellpadding="2">
 					
 					<#list function.entity.attributes as att>
+					<#assign newData = "new${function.entity.name}">
 						<p:row>
 							<p:column>
 								<h:outputText value="${att}" style="text-align:left" />
 							</p:column>
 							<p:column>
 								<p:inputText id="${att}"
-									value="${setToEl(beanName,"newData",att)}">
+									value="${setToEl(beanName,newData ,att)}">
 									<f:ajax execute="${att}" event="blur" render="${att}-error" />
 								</p:inputText>
 								<h:panelGroup>

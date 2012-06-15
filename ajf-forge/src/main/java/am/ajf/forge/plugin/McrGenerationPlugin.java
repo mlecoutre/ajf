@@ -632,7 +632,6 @@ public class McrGenerationPlugin implements Plugin {
 
 				} else {
 					entityModelPath = null;
-					// TODO generate a model ?
 
 					shell.println();
 					shell.print("Stopping the MCR generation process...");

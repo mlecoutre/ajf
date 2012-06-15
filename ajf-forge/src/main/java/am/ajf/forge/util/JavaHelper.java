@@ -15,22 +15,30 @@ import javax.inject.Singleton;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.WordUtils;
+import org.jboss.forge.parser.JavaParser;
+import org.jboss.forge.parser.java.Field;
+import org.jboss.forge.parser.java.Import;
+import org.jboss.forge.parser.java.JavaClass;
 import org.jboss.forge.parser.java.JavaSource;
 import org.jboss.forge.parser.java.Member;
+import org.jboss.forge.parser.java.Method;
 import org.jboss.forge.parser.java.impl.MethodImpl;
+
+import am.ajf.forge.core.generators.templates.McrGenerationTemplate;
 
 @Singleton
 public class JavaHelper {
 
 	/**
 	 * Retrieve the list of attributes of a java class object. Only attribute
-	 * associated to at least a getter or a setter will be retrieved (starting
-	 * with 'get' or 'set'). Attribute names without the set or get prefixe will
-	 * be returned, with a lower case first letter. </br> </br>If the class
-	 * contain the methods :</br> <code>public void getFirstName()</code>
-	 * ...</br> <code>public void setFirstName(String firstname)</code>...</br>
+	 * associated to a getter will be retrieved (starting with 'get'). Attribute
+	 * names without the get prefixe will NOT be returned, others will be
+	 * returned with a lower case first letter. </br> </br>If the class contain
+	 * the methods :</br> <code>public void getFirstName()</code> ...</br>
+	 * <code>public void setFirstName(String firstname)</code>...</br>
 	 * <code>public void getName()</code>...</br>
 	 * <code>public void setName(String name)</code>...</br>
+	 * <code>public void setAge(int age)</code>...</br>
 	 * <code>public void retrieveAge(...)</code>...</br> </br> the method will
 	 * return the following list of String:</br><code>firstName</code></br>
 	 * <code>name</code></br>
@@ -45,18 +53,17 @@ public class JavaHelper {
 		List<String> entityAttributes = new ArrayList<String>();
 		for (Member member : members) {
 
-			// if we find a setter or getter we extract the corresponding
+			// if we find a getter we extract the corresponding
 			// attribute.
 
 			if (member instanceof MethodImpl) { // We keep only methods
 				MethodImpl method = (MethodImpl) member; // cast member to
 															// method
 
-				// check if first 3 letters of method name is 'get' or 'set'
-				if (("get".equals(method.getName().substring(0, 3)))
-						|| ("set".equals(method.getName().substring(0, 3)))) {
+				// check if first 3 letters of method name is 'get'
+				if (("get".equals(method.getName().substring(0, 3)))) {
 
-					// extract the Attribute name without the "set" or "get"
+					// extract the Attribute name without the "get"
 					// with first letter on lower case
 					String attributeName = WordUtils.uncapitalize(member
 							.getName().substring(3));
@@ -86,7 +93,7 @@ public class JavaHelper {
 
 		for (Member member : members) {
 
-			// if we find a setter or getter we extract the corresponding
+			// if we find a getter we extract the corresponding
 			// attribute.
 
 			if (member instanceof MethodImpl) { // We keep only methods
@@ -125,6 +132,7 @@ public class JavaHelper {
 	 * @return String
 	 * @throws Exception
 	 */
+	@Deprecated
 	public String getJavaClassAsString(String zipContainingTxts, String fileName)
 			throws Exception {
 
@@ -172,6 +180,134 @@ public class JavaHelper {
 			throw new Exception(
 					"ERROR occured in getJavaMethodBody for fileName = "
 							+ fileName);
+		}
+
+	}
+
+	/**
+	 * Update managed bean with input UT <br>
+	 * <br>
+	 * -generate empty Methods for new UTs<br>
+	 * -Add import for new Result Beans<br>
+	 * -generate getter and setters of new attributes (foir list or create UT)<br>
+	 * -update init method if needed<br>
+	 * 
+	 * @param utToBeAdded
+	 * @param function
+	 * @param entityName
+	 * @param libDTOPackage
+	 * @param managedBeanJavaclass
+	 * @param projectManagement
+	 * @throws Exception
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void updateManagedBean(List<String> utToBeAdded, String function,
+			String entityName, String libDTOPackage,
+			JavaClass managedBeanJavaclass,
+			McrGenerationTemplate projectManagement) throws Exception {
+
+		for (String ut : utToBeAdded) {
+			System.out.println("Adding UT:" + ut + "...");
+
+			// Temp file to store templated method
+			File tempFile = new File(FileUtils.getTempDirectoryPath().concat(
+					"/ajf-forge/managedBeanMethodForUT.tmp"));
+			try {
+
+				/*
+				 * Generate Method for new UT
+				 */
+				// generate method for managed bean for additional UT
+				projectManagement.buildManagedBeanMethod(tempFile, function,
+						entityName, ut, libDTOPackage);
+
+				// parse as java class (containing one method, which
+				// is the method we want)
+				JavaClass temp = (JavaClass) JavaParser.parse(tempFile);
+
+				// if new DTO are ADDED, we must set the corresponding
+				// import
+				for (Import imprt : temp.getImports()) {
+					// Import new Result bean if needed
+					if (!managedBeanJavaclass.getImports().contains(imprt)) {
+						managedBeanJavaclass.addImport(imprt);
+					}
+				}
+
+				/*
+				 * add also new attributes and getter setters
+				 */
+				boolean modifFlag = false;
+				for (Member member : temp.getMembers()) {
+
+					if (member instanceof Field<?>) {
+						// Add field if needed
+						managedBeanJavaclass
+								.addField(((Field<JavaClass>) member)
+										.toString());
+						modifFlag = true;
+					}
+
+					if (member instanceof Method) {
+						// Add method if needed (mainly for getter setters)
+						Method<JavaClass> memberMethod = (Method<JavaClass>) member;
+
+						// We add all method except the INI method as it will be
+						// treated later
+						if (!"init".equals(memberMethod.getName())) {
+							if (!managedBeanJavaclass.getMethods().contains(
+									memberMethod)) {
+
+								Method<JavaClass> newMethod = managedBeanJavaclass
+										.addMethod(memberMethod.toString());
+								newMethod.setBody(memberMethod.getBody());
+								modifFlag = true;
+							}
+						}
+					}
+				}
+
+				/*
+				 * Update init method if needed
+				 */
+				// if modif have been done, may need to update the init
+				// method of managed bean for initialization of new entities
+				if (modifFlag) {
+					try {
+
+						Method<JavaClass> initMethodMBean = managedBeanJavaclass
+								.getMethod("init");
+						Method<JavaClass> initemp = temp.getMethod("init");
+
+						if (!initemp.getBody()
+								.equals(initMethodMBean.getBody())) {
+
+							initMethodMBean.setBody(initMethodMBean.getBody()
+									+ "\n" + initemp.getBody());
+
+						}
+
+					} catch (Exception e) {
+						System.err
+								.println("**ERROR : Fail to update the @PostCostruct init method of managed bean. You may encouter initialization errors");
+						e.printStackTrace();
+					}
+				}
+
+			} catch (Exception e) {
+				System.err
+						.println("Problem occured while generating additional UT "
+								.concat(ut + ":").concat(e.toString()));
+				throw e;
+
+			} finally {
+
+				// clean temp file
+				if (tempFile.exists()) {
+					tempFile.delete();
+				}
+			}
+
 		}
 
 	}

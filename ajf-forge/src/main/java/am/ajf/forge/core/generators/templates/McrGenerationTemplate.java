@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,9 +77,13 @@ public class McrGenerationTemplate {
 			function.put("libBDPackage", libBDPackage);
 			function.put("libDTOPackage", libDTOPackage);
 
+			// Set special UTs verification
+			setSpecialUtVerifications(WordUtils.capitalize(entityName), uts,
+					function);
+
 			// function.put("entityName", entityName);
 			Map entity = new HashMap();
-			entity.put("name", entityName);
+			entity.put("name", WordUtils.capitalize(entityName));
 			entity.put("libPackage", entityLibPackage);
 
 			SimpleSequence attributeSequence = new SimpleSequence();
@@ -160,38 +165,7 @@ public class McrGenerationTemplate {
 			/*
 			 * need to find speacial UT for special XHTML sub part
 			 */
-
-			// init:
-			function.put("addUT", "");
-			function.put("deleteUT", "");
-			function.put("listUT", "");
-			function.put("addFlag", "false");
-			function.put("deleteFlag", "false");
-			function.put("listFlag", "false");
-
-			for (String ut : uts) {
-
-				// check if special create UT has been asked
-				if (ut.startsWith("create" + WordUtils.capitalize(entityName))) {
-					function.put("addFlag", "true");
-					function.put("addUT", ut);
-
-					// check if special delete UT has been asked
-				} else if (ut.startsWith("delete"
-						+ WordUtils.capitalize(entityName))) {
-
-					function.put("deleteFlag", "true");
-					function.put("deleteUT", ut);
-
-					// check if special list UT has been asked
-				} else if (ut.startsWith("list"
-						+ WordUtils.capitalize(entityName))) {
-
-					function.put("listFlag", "true");
-					function.put("listUT", ut);
-				}
-
-			}
+			setSpecialUtVerifications(entityName, uts, function);
 
 			function.put("entity", entity);
 
@@ -217,6 +191,41 @@ public class McrGenerationTemplate {
 			System.err.println("Error occured in buildCrudXhtml : ");
 			e.printStackTrace();
 			throw e;
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void setSpecialUtVerifications(String entityName, List<String> uts,
+			Map function) {
+		// init:
+		function.put("addUT", "");
+		function.put("deleteUT", "");
+		function.put("listUT", "");
+		function.put("addFlag", "false");
+		function.put("deleteFlag", "false");
+		function.put("listFlag", "false");
+
+		for (String ut : uts) {
+
+			// check if special create UT has been asked
+			if (ut.startsWith("create" + WordUtils.capitalize(entityName))) {
+				function.put("addFlag", "true");
+				function.put("addUT", ut);
+
+				// check if special delete UT has been asked
+			} else if (ut.startsWith("delete"
+					+ WordUtils.capitalize(entityName))) {
+
+				function.put("deleteFlag", "true");
+				function.put("deleteUT", ut);
+
+				// check if special list UT has been asked
+			} else if (ut.startsWith("list" + WordUtils.capitalize(entityName))) {
+
+				function.put("listFlag", "true");
+				function.put("listUT", ut);
+			}
+
 		}
 	}
 
@@ -347,12 +356,14 @@ public class McrGenerationTemplate {
 	 * @param tmpFile
 	 *            temporary file where the template will be stored
 	 * @param functionName
+	 * @param entityName
 	 * @param ut
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void buildManagedBeanMethod(File tmpFile, String functionName,
-			String ut) throws Exception {
+			String entityName, String ut, String libDtoPackage)
+			throws Exception {
 
 		Template myTemplate = loadTemplate(MBEAN_METHOD_TEMPLATE);
 
@@ -364,8 +375,19 @@ public class McrGenerationTemplate {
 		dataModelMap.put("unCapitalizeFirst", new UnCapitalizeFirst());
 		dataModelMap.put("capitalizeFirst", new CapitalizeFirst());
 
-		// Writer writer = new StringWriter();
+		Map function = new HashMap();
+		function.put("functionName", functionName);
+		function.put("libDTOPackage", libDtoPackage);
+		function.put("entityName", WordUtils.capitalize(entityName));
 
+		// Set the input ut in a list to use setSpecialUtVerifications
+		List<String> uts = new ArrayList<String>();
+		uts.add(ut);
+		setSpecialUtVerifications(entityName, uts, function);
+
+		dataModelMap.put("function", function);
+
+		// check existence of tmp file - create it if needed
 		if (!tmpFile.getParentFile().exists())
 			tmpFile.getParentFile().mkdirs();
 

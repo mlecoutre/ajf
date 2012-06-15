@@ -18,8 +18,11 @@ import javax.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.WordUtils;
 import org.jboss.forge.parser.JavaParser;
+import org.jboss.forge.parser.java.Field;
+import org.jboss.forge.parser.java.Import;
 import org.jboss.forge.parser.java.JavaClass;
 import org.jboss.forge.parser.java.JavaSource;
+import org.jboss.forge.parser.java.Member;
 import org.jboss.forge.parser.java.Method;
 import org.jboss.forge.parser.java.impl.JavaInterfaceImpl;
 import org.jboss.forge.project.Project;
@@ -78,7 +81,7 @@ public class CreateMcr {
 	 * @return boolean
 	 * @throws Exception
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public boolean generateManagedBean(String function, String entityName,
 			String ajfSolutionGlobalName, EntityDTO entityDto,
 			String managedBeanPackage, String libBDpackage,
@@ -157,50 +160,17 @@ public class CreateMcr {
 						"Addition of methods for new Unit tasks:");
 
 			// generate 1 empty method for each UT
-			for (String ut : utToBeAdded) {
-				shell.println("Adding UT:" + ut + "...");
+			javaUtils.updateManagedBean(utToBeAdded, function, entityName,
+					libDTOPackage, managedBeanJavaclass, projectManagement);
 
-				// Temp file to store templated method
-				File tempFile = new File(FileUtils.getTempDirectoryPath()
-						.concat("/ajf-forge/managedBeanMethodForUT.tmp"));
-				try {
+			// ReOrganize method (they are in wrong order)
+			// List<Method<JavaClass>> methods =
+			// managedBeanJavaclass.getMethods();
+			// List<Field<JavaClass>> fields = managedBeanJavaclass.getFields();
+			// List<Member<JavaClass, ?>> members = managedBeanJavaclass
+			// .getMembers();
 
-					// generate method for managed bean for additional UT
-					projectManagement.buildManagedBeanMethod(tempFile,
-							function, ut);
-
-					// parse as java class (containing one method, which
-					// is the method we want)
-					JavaClass temp = (JavaClass) JavaParser.parse(tempFile);
-
-					// We use the METHOD 0 (first method of the class)
-					Method<JavaClass> myMethod = temp.getMethods().get(0);
-
-					// Create method in managedBean class beeing updated
-					Method<JavaClass> myMethod2 = managedBeanJavaclass
-							.addMethod("public void "
-									+ WordUtils.uncapitalize(ut) + "()");
-					// Set the body thanks to template
-					myMethod2.setBody(myMethod.getBody());
-
-					// TODO if new DTO are ADDED, we must set the corresponding
-					// imports
-
-				} catch (Exception e) {
-					ShellMessages.error(out,
-							"Problem occured while generating additional UT "
-									.concat(ut + ":").concat(e.toString()));
-					throw e;
-
-				} finally {
-
-					// clean temp file
-					if (tempFile.exists()) {
-						tempFile.delete();
-					}
-				}
-
-			}
+			// Save updated java class in project
 			uiJavaFacet.saveJavaSource(managedBeanJavaclass);
 
 		}
@@ -216,6 +186,7 @@ public class CreateMcr {
 	 * @param function
 	 * @param entityName
 	 * @param out
+	 *            Pipeout
 	 * @param ajfSolutionGlobalName
 	 * @param entityAttributes
 	 * @param managedBeanPackage
@@ -560,13 +531,11 @@ public class CreateMcr {
 					projectManagement.buildPolicyMethod(tempFile, ut);
 
 					// parse method (javaclass containing one method, which is
-					// the
-					// method we want)
+					// the method we want)
 					JavaClass temp = (JavaClass) JavaParser.parse(tempFile);
 
 					// We use the METHOD 0 of the template class as it contains
-					// only
-					// one
+					// only one
 					Method<JavaClass> myMethod = temp.getMethods().get(0);
 
 					// Create method in managedBean class beeing updated

@@ -106,7 +106,8 @@ public class JavaHelperTest {
 
 		File myFile = new File(FileUtils.getTempDirectoryPath()
 				+ "/ajf-forge/testParseJavaFromStream.tmp");
-		projectManagement.buildManagedBeanMethod(myFile, "myFunction", "myUT");
+		projectManagement.buildManagedBeanMethod(myFile, "myFunction",
+				"Person", "myUT", "am.ajf.lib.dto");
 
 		// parse as java class (containing one method, which
 		// is the method we want)
@@ -125,7 +126,8 @@ public class JavaHelperTest {
 
 		File myFile = new File(FileUtils.getTempDirectoryPath()
 				+ "/ajf-forge/testParseJavaFromStream.tmp");
-		projectManagement.buildManagedBeanMethod(myFile, "myFunction", "myUT");
+		projectManagement.buildManagedBeanMethod(myFile, "myFunction",
+				"Person", "myUT", "am.ajf.lib.dto");
 
 		// parse as java class (containing one method, which
 		// is the method we want)
