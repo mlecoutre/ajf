@@ -12,6 +12,27 @@ import ${function.libDTOPackage}.${utCap}PB;
 <#-- name of class doesn't matter -->
 public class ClassName implements Serializable {
 
+<#-- Class Attributes to be added to managed bean for particuliar UT -->
+<#-- Generated only for listUT -->
+	<#if "${function.listFlag}" = "true">
+		//selection values in table
+		private ${entityNameCap}[] selectedItems;
+		
+		//data table value
+		private List<${entityNameCap}> ${entityNameUncap}List;
+		
+		//for search person
+		private ${entityNameCap} list${entityNameCap};
+	</#if>
+	
+				
+	<#-- Generated only for create UT -->
+	<#if "${function.addFlag}" = "true">
+	//TODO this are initial values to be modified
+	private ${entityNameCap} new${entityNameCap};
+	</#if>  
+
+
 	<#--Need to update init method in case new entities are set-->
 	@PostConstruct
 	public void init() {
@@ -20,31 +41,16 @@ public class ClassName implements Serializable {
 		</#if>
 		<#if "${function.listFlag}" = "true">
 			${entityNameUncap}List = new ArrayList<${entityNameCap}>();
+			list${entityNameCap} = list ${entityNameCap}();
 		</#if>
 	}
-
-<#-- Class Attributes to be added to managed bean for particuliar UT -->
-<#-- Generated only for listUT -->
-	<#if "${function.listFlag}" = "true">
-		//selection values in table
-		private ${function.entityName}[] selectedItems;
-		
-		//data table value
-		private List<${entityNameCap}> ${entityNameUncap}List;
-	</#if>
-			
-	<#-- Generated only for create UT -->
-	<#if "${function.addFlag}" = "true">
-	//TODO this are initial values to be modified
-	private ${entityNameCap} new${entityNameCap};
-	</#if>  
 
 
 	/**
 	 * UT method for ${utCap}
-	 * 
+	 * @throws Exception
 	 */
-	public void  ${utUnCap}() {
+	public void  ${utUnCap}() throws Exception {
 
 		try {
 			log.debug("Start of ${utUnCap}... ");
@@ -70,7 +76,7 @@ public class ClassName implements Serializable {
 	 * Accessors
 	 */
 	
-	<#if "${function.addFlag}" = "true"> 
+	<#if "${function.listFlag}" = "true"> 
 	public ${entityNameCap}[] getSelectedItems() {
 		return selectedItems;
 	}
@@ -85,6 +91,14 @@ public class ClassName implements Serializable {
 	public void set${entityNameCap}List(List<${entityNameCap}> ${entityNameUncap}List){
 		this.${entityNameUncap}List = ${entityNameUncap}List;
 	}
+	public ${entityNameCap} getList${entityNameCap}() {
+		return list${entityNameCap};
+	}
+
+	public void setList${entityNameCap}(${entityNameCap} list${entityNameCap}) {
+		this.list${entityNameCap} = list${entityNameCap};
+	}
+	
 	
 	</#if>
 	

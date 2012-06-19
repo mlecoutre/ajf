@@ -22,7 +22,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import am.ajf.forge.util.EclipseUtils;
+import am.ajf.forge.utils.EclipseUtils;
 
 /**
  * Tests dealing with the EclipseUtils utilities class tham aims to create all

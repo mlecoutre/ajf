@@ -12,7 +12,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import am.ajf.forge.util.ExtractionUtils;
+import am.ajf.forge.utils.ExtractionUtils;
 
 public class ExtractionUtilsTest {
 

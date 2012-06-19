@@ -17,8 +17,8 @@ import org.jboss.forge.project.facets.ResourceFacet;
 import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
-import am.ajf.forge.util.ExtractionUtils;
-import am.ajf.forge.util.ProjectHelper;
+import am.ajf.forge.utils.ExtractionUtils;
+import am.ajf.forge.utils.ProjectHelper;
 
 public class EjbProjectGenerator {
 

@@ -1,5 +1,13 @@
 package am.ajf.forge.core.generators.templates;
 
+import static am.ajf.forge.lib.ForgeConstants.BUSINESS_DELEGATE_TEMPLATE;
+import static am.ajf.forge.lib.ForgeConstants.BUSINESS_POLICY_TEMPLATE;
+import static am.ajf.forge.lib.ForgeConstants.MBEAN_METHOD_TEMPLATE;
+import static am.ajf.forge.lib.ForgeConstants.MBEAN_TEMPLATE;
+import static am.ajf.forge.lib.ForgeConstants.POLICY_METHOD_TEMPLATE;
+import static am.ajf.forge.lib.ForgeConstants.XHTML_CREATE_TEMPLATE;
+import static am.ajf.forge.lib.ForgeConstants.XHTML_LIST_TEMPLATE;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -13,7 +21,7 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.text.WordUtils;
 
-import am.ajf.forge.util.TemplateUtils;
+import am.ajf.forge.utils.TemplateUtils;
 import freemarker.template.SimpleSequence;
 import freemarker.template.Template;
 import freemarker.template.TemplateMethodModel;
@@ -21,13 +29,6 @@ import freemarker.template.TemplateModelException;
 
 @Singleton
 public class McrGenerationTemplate {
-
-	private static final String MBEAN_TEMPLATE = "ManagedBean.ftl";
-	private static final String XHTML_TEMPLATE = "Xhtml.ftl";
-	private static final String BUSINESS_DELEGATE_TEMPLATE = "BusinessDelegate.ftl";
-	private static final String BUSINESS_POLICY_TEMPLATE = "Policy.ftl";
-	private static final String MBEAN_METHOD_TEMPLATE = "ManagedBeanMethod.ftl";
-	private static final String POLICY_METHOD_TEMPLATE = "PolicyMethod.ftl";
 
 	TemplateUtils templateUtils;
 
@@ -127,21 +128,34 @@ public class McrGenerationTemplate {
 	 * freemarker template. The xhtml file is also set as input
 	 * 
 	 * @param xhtmlFile
+	 * @param globalProjectName
 	 * @param functionName
 	 * @param entityName
+	 * @param entityAttributes
+	 * @param javaPackage
+	 * @param entityLibPackage
+	 * @param uts
+	 * @param isList
+	 *            : true for listXhtml generation, and false for createXhtml
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void buildXhtml(File xhtmlFile, String globalProjectName,
 			String functionName, String entityName,
 			List<String> entityAttributes, String javaPackage,
-			String entityLibPackage, List<String> uts) throws Exception {
+			String entityLibPackage, List<String> uts, boolean isList)
+			throws Exception {
 
 		try {
 			FileOutputStream fos = new FileOutputStream(xhtmlFile);
 			Writer writer = new OutputStreamWriter(fos);
 
-			Template myTemplate = loadTemplate(XHTML_TEMPLATE);
+			Template myTemplate;
+			if (isList) {
+				myTemplate = loadTemplate(XHTML_LIST_TEMPLATE);
+			} else {
+				myTemplate = loadTemplate(XHTML_CREATE_TEMPLATE);
+			}
 
 			// Generate a data model
 			Map dataModelMap = new HashMap();
@@ -150,11 +164,11 @@ public class McrGenerationTemplate {
 
 			Map function = new HashMap();
 			function.put("MbeanName", functionName);
-			function.put("package", javaPackage);
+			// function.put("package", javaPackage);
 			// function.put("entityName", entityName);
 			Map entity = new HashMap();
 			entity.put("name", entityName);
-			entity.put("libPackage", entityLibPackage);
+			// entity.put("libPackage", entityLibPackage);
 
 			SimpleSequence attributeSequence = new SimpleSequence();
 			for (String attribute : entityAttributes) {
@@ -221,11 +235,9 @@ public class McrGenerationTemplate {
 
 				// check if special list UT has been asked
 			} else if (ut.startsWith("list" + WordUtils.capitalize(entityName))) {
-
 				function.put("listFlag", "true");
 				function.put("listUT", ut);
 			}
-
 		}
 	}
 

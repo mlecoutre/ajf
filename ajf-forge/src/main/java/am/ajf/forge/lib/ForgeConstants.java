@@ -82,6 +82,14 @@ public class ForgeConstants {
 	public static final String DEFAULT_TEMPLATES_DIRECTORY = "/FreeMarkerTemplate";
 	public static final String DEFAULT_TEMPLATES_DIRECTORY_ZIP = "FreeMarkerTemplate.zip";
 
+	public static final String MBEAN_TEMPLATE = "ManagedBean.ftl";
+	public static final String XHTML_LIST_TEMPLATE = "ListXhtml.ftl";
+	public static final String XHTML_CREATE_TEMPLATE = "CreateXhtml.ftl";
+	public static final String BUSINESS_DELEGATE_TEMPLATE = "BusinessDelegate.ftl";
+	public static final String BUSINESS_POLICY_TEMPLATE = "Policy.ftl";
+	public static final String MBEAN_METHOD_TEMPLATE = "ManagedBeanMethod.ftl";
+	public static final String POLICY_METHOD_TEMPLATE = "PolicyMethod.ftl";
+
 	/*
 	 * Code Generation - default packages (which are changeable on forge prompt)
 	 */
@@ -89,17 +97,17 @@ public class ForgeConstants {
 	public static final String PROJECT_NAME = "projectName";
 
 	// package (of lib project if exploded solution) where look for entities
-	public static final String PACKAGE_FOR_ENTITY = "am.ajf.".concat(
-			PROJECT_NAME).concat(".lib.model");
+	public static final String PACKAGE_FOR_ENTITY = "am.".concat(PROJECT_NAME)
+			.concat(".lib.model");
 
 	// package (of ui project if exploded solution) where to generate managed
 	// beans
-	public static final String PACKAGE_FOR_MANAGED_BEAN = "am.ajf.".concat(
+	public static final String PACKAGE_FOR_MANAGED_BEAN = "am.".concat(
 			PROJECT_NAME).concat(".web.controllers");
 
 	// package (of lib project if exploded solution) where to generate BD
 	// interfaces
-	public static final String PACKAGE_FOR_BD_INTERFACES = "am.ajf.".concat(
+	public static final String PACKAGE_FOR_BD_INTERFACES = "am.".concat(
 			PROJECT_NAME).concat(".lib.business");
 
 	// package (of lib project if exploded solution) where to generate DTO beans
@@ -109,6 +117,6 @@ public class ForgeConstants {
 			.concat(".dto");
 
 	// Package (of core project if exploded solution) where to generate POLICIES
-	public static final String PACKAGE_FOR_POLICY = "am.ajf.".concat(
-			PROJECT_NAME).concat(".core.business");
+	public static final String PACKAGE_FOR_POLICY = "am.".concat(PROJECT_NAME)
+			.concat(".core.business");
 }

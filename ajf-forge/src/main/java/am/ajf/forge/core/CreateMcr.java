@@ -18,11 +18,8 @@ import javax.inject.Inject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.WordUtils;
 import org.jboss.forge.parser.JavaParser;
-import org.jboss.forge.parser.java.Field;
-import org.jboss.forge.parser.java.Import;
 import org.jboss.forge.parser.java.JavaClass;
 import org.jboss.forge.parser.java.JavaSource;
-import org.jboss.forge.parser.java.Member;
 import org.jboss.forge.parser.java.Method;
 import org.jboss.forge.parser.java.impl.JavaInterfaceImpl;
 import org.jboss.forge.project.Project;
@@ -33,10 +30,11 @@ import org.jboss.forge.shell.ShellMessages;
 import org.jboss.forge.shell.plugins.PipeOut;
 
 import am.ajf.forge.core.generators.templates.McrGenerationTemplate;
-import am.ajf.forge.exception.EscapeForgePromptException;
+import am.ajf.forge.exceptions.EscapeForgePromptException;
 import am.ajf.forge.lib.EntityDTO;
-import am.ajf.forge.util.JavaHelper;
-import am.ajf.forge.util.ShellHelper;
+import am.ajf.forge.lib.ForgeConstants;
+import am.ajf.forge.utils.JavaHelper;
+import am.ajf.forge.utils.ShellHelper;
 
 public class CreateMcr {
 
@@ -81,7 +79,7 @@ public class CreateMcr {
 	 * @return boolean
 	 * @throws Exception
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	public boolean generateManagedBean(String function, String entityName,
 			String ajfSolutionGlobalName, EntityDTO entityDto,
 			String managedBeanPackage, String libBDpackage,
@@ -163,13 +161,6 @@ public class CreateMcr {
 			javaUtils.updateManagedBean(utToBeAdded, function, entityName,
 					libDTOPackage, managedBeanJavaclass, projectManagement);
 
-			// ReOrganize method (they are in wrong order)
-			// List<Method<JavaClass>> methods =
-			// managedBeanJavaclass.getMethods();
-			// List<Field<JavaClass>> fields = managedBeanJavaclass.getFields();
-			// List<Member<JavaClass, ?>> members = managedBeanJavaclass
-			// .getMembers();
-
 			// Save updated java class in project
 			uiJavaFacet.saveJavaSource(managedBeanJavaclass);
 
@@ -185,6 +176,8 @@ public class CreateMcr {
 	 * 
 	 * @param function
 	 * @param entityName
+	 * @param xhtmlType
+	 *            must be 'list' or 'create'
 	 * @param out
 	 *            Pipeout
 	 * @param ajfSolutionGlobalName
@@ -196,27 +189,28 @@ public class CreateMcr {
 	 * @throws Exception
 	 */
 	public boolean generateXhtml(String function, String entityName,
-			final PipeOut out, String ajfSolutionGlobalName,
+			String xhtmlType, final PipeOut out, String ajfSolutionGlobalName,
 			EntityDTO entityDto, String managedBeanPackage, List<String> uts)
 			throws IOException, Exception {
 
-		ShellMessages.info(
-				out,
-				"Start generating xhtml file for function : ".concat(WordUtils
-						.uncapitalize(function) + ".xhtml"));
+		// In case entityName is not capitalized
+		entityName = WordUtils.capitalize(entityName);
+		String xhtmlFileName = xhtmlType + entityName + ".xhtml";
+
+		ShellMessages.info(out, "Start generating xhtml file for function : "
+				.concat(xhtmlFileName));
 		/*
-		 * Xhtml File Creation
+		 * Xhtml File(s) Creation
 		 */
 		// Find the webApp directory
 		WebResourceFacet webFacet = uiProject.getFacet(WebResourceFacet.class);
 		File webAppDirectory = webFacet.getWebRootDirectory()
 				.getUnderlyingResourceObject();
 
-		// xhtml java file
-		File myXhtmlFile = new File(webAppDirectory.getAbsolutePath()
-				.concat("/").concat(WordUtils.uncapitalize(function))
-				.concat("/")
-				.concat(WordUtils.uncapitalize(function).concat(".xhtml")));
+		// xhtml java file : listEntityName.xhtml
+		File xhtmlFile = new File(webAppDirectory.getAbsolutePath().concat("/")
+				.concat(WordUtils.uncapitalize(function)).concat("/")
+				.concat(xhtmlFileName));
 
 		webAppDirectory = null;
 
@@ -226,18 +220,19 @@ public class CreateMcr {
 		boolean generateFileFlag = true;
 
 		// Creation of the xhtml physical file
-		if (!myXhtmlFile.exists()) {
+		if (!xhtmlFile.exists()) {
 
-			myXhtmlFile.getParentFile().mkdirs();
-			System.out.println(myXhtmlFile.getName()
-					+ " file creation : ".concat(String.valueOf(myXhtmlFile
+			xhtmlFile.getParentFile().mkdirs();
+			System.out.println(xhtmlFile.getName()
+					+ " file creation : ".concat(String.valueOf(xhtmlFile
 							.createNewFile())));
 
-		} else if (myXhtmlFile.exists()
-				&& !shell.promptBoolean("File " + myXhtmlFile.getName()
-						+ " already exists. Overwrite ? [N]", false)) {
+		} else if (xhtmlFile.exists()
+				&& !shell.promptBoolean("File " + xhtmlFile.getName()
+
+				+ " already exists. Overwrite ? [N]", false)) {
 			// xhtml file is not updated
-			ShellMessages.info(out, myXhtmlFile.getName()
+			ShellMessages.info(out, xhtmlFile.getName()
 					+ " file will not be modified");
 			generateFileFlag = false;
 		}
@@ -245,13 +240,17 @@ public class CreateMcr {
 		if (generateFileFlag) {
 
 			// launch the generation via template
-			projectManagement.buildXhtml(myXhtmlFile, ajfSolutionGlobalName,
+			projectManagement.buildXhtml(xhtmlFile, ajfSolutionGlobalName,
 					WordUtils.uncapitalize(function).concat("MBean"),
 					entityName, entityDto.getEntityAttributeList(),
 					managedBeanPackage, entityDto.getEntityLibPackage()
-							.replace("/", "."), uts);
+							.replace("/", "."), uts, "list".equals(xhtmlType));
 
-			System.out.println("Xhtml file generation done.");
+			// Note : "list".equals(xhtmlType) is set to return true in case of
+			// generating the list entity string xhtml and false if not which
+			// imply the generation of the create entity xhtml
+
+			System.out.println(xhtmlType + " Xhtml file generation done.");
 			out.println();
 
 		}
@@ -270,6 +269,8 @@ public class CreateMcr {
 	 * @param project
 	 *            where to generate java class
 	 * @param javaFacet
+	 * @param isExploded
+	 *            true if we are in an ajf exploded solution
 	 * @return Map which key 'libBDpackage' is linked to the BD interfaces
 	 *         package and the 'libDtoPackage' key which is linked to the DTO
 	 *         Beans objects package
@@ -278,8 +279,8 @@ public class CreateMcr {
 	@SuppressWarnings("rawtypes")
 	public Map<String, String> generateBDInterfaceAndDto(String function,
 			final PipeOut out, String ajfSolutionGlobalName, Project project,
-			JavaSourceFacet javaFacet, String entityName, List<String> uts)
-			throws Exception {
+			JavaSourceFacet javaFacet, String entityName, List<String> uts,
+			boolean isExploded) throws Exception {
 
 		ShellMessages.info(out, "Start generating business delegate interface");
 		shell.println();
@@ -294,12 +295,25 @@ public class CreateMcr {
 
 		// lib package containing BD interfaces (package is entered with '.'
 		// separators that we automatically replace by '/')
-		String libBDpackagePath = shellhelper
-				.promptFacade(
-						"In which package of project lib you want to generate the BD interfaces ?",
-						PACKAGE_FOR_BD_INTERFACES.replace(PROJECT_NAME,
-								ajfSolutionGlobalName.toLowerCase())).replace(
-						".", "/");
+		String libBDpackagePath;
+
+		if (isExploded) {
+			// If we are in exploded solution, we specify that BD interfaces
+			// will be created in lib project
+			libBDpackagePath = shellhelper.promptFacade(
+					"Which package of " + ForgeConstants.PROJECT_TYPE_LIB
+							+ " project for BD interfaces ?",
+					PACKAGE_FOR_BD_INTERFACES.replace(PROJECT_NAME,
+							ajfSolutionGlobalName.toLowerCase())).replace(".",
+					"/");
+		} else {
+			// If compacted project, no need to specify project type
+			libBDpackagePath = shellhelper.promptFacade(
+					"Which package for BD interfaces ?",
+					PACKAGE_FOR_BD_INTERFACES.replace(PROJECT_NAME,
+							ajfSolutionGlobalName.toLowerCase())).replace(".",
+					"/");
+		}
 
 		shell.println();
 
@@ -307,7 +321,9 @@ public class CreateMcr {
 				.concat("/").concat(libBDpackagePath));
 		boolean foundLibBDPackage = libBusinessFolder.exists();
 
-		// Loop until found package
+		/*
+		 * Loop until found package correct package to create BD
+		 */
 		while (!foundLibBDPackage) {
 
 			if (!libBusinessFolder.exists()) {
@@ -316,11 +332,10 @@ public class CreateMcr {
 			} else {
 				// Go on
 				foundLibBDPackage = true;
-
 			}
 		}
 
-		// put lib BD package in output
+		// store lib BD package value in output object
 		output.put("libBDpackage", libBDpackagePath.replace("/", "."));
 
 		// Create function BD interface
@@ -334,14 +349,18 @@ public class CreateMcr {
 		List<String> utToBeAdded = null; // second list used in case of update
 		JavaSource functionBdJavaSource = null; // java source in update mode
 
+		/*
+		 * Check function BD existence
+		 */
+		// Case already exist : update it or overwrite it ?
 		if (functionBdFile.exists()
 				&& !shell
 						.promptBoolean(
 								"File ".concat(functionBdFile.getName())
-										.concat(" already exists. Do you want to overWrite ? [N]"),
+										.concat(" already exists. Do you want to overWrite ('N' to update) ? [N]"),
 								false)) {
 
-			// UPDATE MODE
+			// UPDATE the function BD interface with new UT (if there are)
 			ShellMessages.info(out,
 					"Updating ".concat(functionBdFile.getName() + "..."));
 
@@ -350,8 +369,7 @@ public class CreateMcr {
 					libBDpackagePath.replace(".", "/") + "/"
 							+ functionBdFile.getName()).getJavaSource();
 
-			// List of UT that do not already exist in java source, and will be
-			// added
+			// Calculate list of UT that DOES NOT already exists
 			utToBeAdded = calculateUtListToAdd(out, uts, functionBdJavaSource);
 
 			// flags
@@ -368,8 +386,9 @@ public class CreateMcr {
 		}
 
 		/*
-		 * Creation of Param beans and Result beans
+		 * Before : Creation of Param beans and Result beans (DTOs)
 		 */
+		shell.println();
 		// Prompt for package where to create parambean and resultbean objects
 		String libDtoPackage = shellhelper
 				.promptFacade(
@@ -392,7 +411,7 @@ public class CreateMcr {
 			}
 		}
 
-		// put lib DTO package in output
+		// store lib DTO package in output
 		output.put("libDTOpackage", libDtoPackage.replace("/", "."));
 
 		/*
@@ -620,7 +639,8 @@ public class CreateMcr {
 		for (String ut : uts) {
 			if (methodList.contains(ut)) {
 				utToBeAdded.remove(ut);
-				ShellMessages.warn(out, "Ignoring UT=" + ut
+				shell.println();
+				ShellMessages.info(out, "Ignoring UT=" + ut
 						+ " generation as it already exists.");
 			}
 		}
@@ -628,27 +648,34 @@ public class CreateMcr {
 	}
 
 	/**
+	 * Generate the DTO objects (ParamBean and ResultBean) in the input package,
+	 * corresponding to the list of UTs.
 	 * 
 	 * @param out
-	 * @param libJavaFacet
+	 * @param javaFacet
+	 *            java facet of the project where to generate DTOs
 	 * @param uts
-	 * @param libDtoPackage
-	 * @param libDtoPackageFile
+	 *            list of UT to generate
+	 * @param dtoPackageName
+	 *            name of the java package of DTOs (as String, separated with
+	 *            points)
+	 * @param dtoDestinationPackageFile
+	 *            Java file corresponding to DTO package directory
 	 * @throws Exception
 	 */
-	private void generateDTOs(final PipeOut out, JavaSourceFacet libJavaFacet,
-			List<String> uts, String libDtoPackage, File libDtoPackageFile)
-			throws Exception {
+	private void generateDTOs(final PipeOut out, JavaSourceFacet javaFacet,
+			List<String> uts, String dtoPackageName,
+			File dtoDestinationPackageFile) throws Exception {
 		/*
 		 * Beans DTO generation
 		 */
 		for (String myUt : uts) {
 
 			// Param Bean File
-			File utParamBeanFile = new File(libDtoPackageFile.getAbsolutePath()
-					.concat("/").concat(myUt + "PB.java"));
+			File utParamBeanFile = new File(dtoDestinationPackageFile
+					.getAbsolutePath().concat("/").concat(myUt + "PB.java"));
 
-			File utResultBeanFile = new File(libDtoPackageFile
+			File utResultBeanFile = new File(dtoDestinationPackageFile
 					.getAbsolutePath().concat("/").concat(myUt + "RB.java"));
 
 			// Existence verification for both files
@@ -669,7 +696,7 @@ public class CreateMcr {
 						// Create empty java class
 						JavaClass javaclass = JavaParser
 								.create(JavaClass.class)
-								.setPackage(libDtoPackage.replace("/", "."))
+								.setPackage(dtoPackageName.replace("/", "."))
 								.setName(
 										WordUtils.capitalize(myFile.getName())
 												.replace(".java", ""))
@@ -683,7 +710,7 @@ public class CreateMcr {
 
 						System.out.println("Creating " + javaclass.getName()
 								+ ".java ...");
-						libJavaFacet.saveJavaSource(javaclass);
+						javaFacet.saveJavaSource(javaclass);
 
 					} catch (Exception e) {
 						ShellMessages.error(

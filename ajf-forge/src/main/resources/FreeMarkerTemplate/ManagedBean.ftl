@@ -3,6 +3,7 @@ package ${function.package <#-- package where to generate function MBean-->};
 <#assign functionNameCap = "${capitalizeFirst(function.name)}"<#-- function name with upper case first letter-->>
 <#assign functionNameUnCap = "${unCapitalizeFirst(function.name)}"<#-- function name with lower case first letter-->>
 <#assign entityNameUncap = "${unCapitalizeFirst(function.entity.name)}"<#-- entity name with lower case first letter-->>
+<#assign entityNameCap = "${capitalizeFirst(function.entity.name)}"<#-- entity name with upper case first letter-->>
 
 
 
@@ -23,7 +24,6 @@ import ${function.libDTOPackage}.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import am.ajf.core.services.exceptions.BusinessLayerException;
 import ${function.entity.libPackage}.${function.entity.name};
 
 <#assign entityNameUncap = "${unCapitalizeFirst(function.entity.name)}"<#-- Entity name with lower case first letter-->>
@@ -49,11 +49,14 @@ public class ${function.name}MBean implements Serializable {
 		
 		//data table value
 		private List<${function.entity.name}> ${entityNameUncap}List;
+		
+		//for search person
+		private ${function.entity.name} list${function.entity.name};
+		
 	</#if>
 			
 	<#-- Generated only for create UT -->
 	<#if "${function.addFlag}" = "true">
-	//TODO this are initial values to be modified
 	private ${function.entity.name} new${function.entity.name};
 	</#if>
 
@@ -83,8 +86,11 @@ public class ${function.name}MBean implements Serializable {
 		</#if>
 		<#if "${function.listFlag}" = "true">
 			${entityNameUncap}List = new ArrayList<${function.entity.name}>();
+			list${function.entity.name} = new ${function.entity.name}();
 		</#if>
 	}
+	
+
 
 <#list function.UTs as ut>
 
@@ -92,12 +98,11 @@ public class ${function.name}MBean implements Serializable {
 <#assign utCap = "${capitalizeFirst(ut)}"<#-- UT name with upper case first letter-->>
 <#assign utUnCap = "${unCapitalizeFirst(ut)}"<#-- UT name with lower case first letter-->> 
 	/**
-	 * UT method for listing ${utCap}
-	 * 
+	 * UT method for ${utCap}
+	 * @throws Exception 
 	 */
-	public void  ${utUnCap}() {
+	public void  ${utUnCap}() throws Exception {
 
-		try {
 			log.debug("Start of ${utUnCap}... ");
 		
 			//TODO fill in Param bean
@@ -105,22 +110,13 @@ public class ${function.name}MBean implements Serializable {
 			
 			//Call Policy
 			${functionNameUnCap}management.${utUnCap}(${utUnCap}Pb);
-						
-
-		//} catch (BusinessLayerException e) {
-
-			//TODO manage error
-
-		} catch(Exception e){
-			log.error("Error Occured in ${utUnCap}.",e);
-		}
 	}
 	
 </#list>
 	
  	
 	
-	<#if "${function.addFlag}" = "true"> 
+	<#if "${function.listFlag}" = "true"> 
 	public ${function.entity.name}[] getSelectedItems() {
 		return selectedItems;
 	}
@@ -134,6 +130,13 @@ public class ${function.name}MBean implements Serializable {
 	}
 	public void set${function.entity.name}List(List<${function.entity.name}> ${entityNameUncap}List){
 		this.${entityNameUncap}List = ${entityNameUncap}List;
+	}
+	public ${function.entity.name} getList${function.entity.name}() {
+		return list${function.entity.name};
+	}
+
+	public void setList${function.entity.name}(${function.entity.name} list${function.entity.name}) {
+		this.list${function.entity.name} = list${function.entity.name};
 	}
 	
 	</#if>

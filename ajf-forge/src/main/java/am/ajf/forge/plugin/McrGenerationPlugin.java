@@ -31,12 +31,12 @@ import org.jboss.forge.shell.plugins.PipeOut;
 import org.jboss.forge.shell.plugins.Plugin;
 
 import am.ajf.forge.core.CreateMcr;
-import am.ajf.forge.exception.EscapeForgePromptException;
+import am.ajf.forge.exceptions.EscapeForgePromptException;
 import am.ajf.forge.lib.EntityDTO;
 import am.ajf.forge.lib.ForgeConstants;
-import am.ajf.forge.util.JavaHelper;
-import am.ajf.forge.util.ProjectHelper;
-import am.ajf.forge.util.ShellHelper;
+import am.ajf.forge.utils.JavaHelper;
+import am.ajf.forge.utils.ProjectHelper;
+import am.ajf.forge.utils.ShellHelper;
 
 /**
  * 
@@ -119,6 +119,7 @@ public class McrGenerationPlugin implements Plugin {
 	}
 
 	/**
+	 * MCR generation plugin command for AJF COMPACTED SOLUTION
 	 * 
 	 * @param function
 	 * @param entityName
@@ -140,7 +141,7 @@ public class McrGenerationPlugin implements Plugin {
 			 * Function Name
 			 */
 			shell.println();
-			promptTitle("Function Generation");
+			displayChapterTitle("Function Generation");
 			while (null == function || function.isEmpty()) {
 				function = shellhelper
 						.promptFacade("Name of the function to generate (i.e: ManagePerson):");
@@ -164,7 +165,7 @@ public class McrGenerationPlugin implements Plugin {
 			 * ENTITY LOADING
 			 */
 			shell.println();
-			promptTitle("Entity loading");
+			displayChapterTitle("Entity loading");
 			EntityDTO entityDto;
 
 			// Load entity in lib project
@@ -177,7 +178,7 @@ public class McrGenerationPlugin implements Plugin {
 			 */
 			// Prompt user for UT list to generate
 			shell.println();
-			promptTitle("Unit tasks (UT) List");
+			displayChapterTitle("Unit tasks (UT) List");
 			List<String> uts = promptForUTs(entityName, out);
 			shell.println();
 
@@ -202,29 +203,58 @@ public class McrGenerationPlugin implements Plugin {
 					PACKAGE_FOR_MANAGED_BEAN.replace(PROJECT_NAME,
 							ajfSolutionGlobalName.toLowerCase()));
 
-			// generate xhtml web page for CRUD
-			promptTitle("Xhtml web page generation");
-			mcrManagement.generateXhtml(function, entityName, out,
-					ajfSolutionGlobalName, entityDto, managedBeanPackage, uts);
+			/*
+			 * generate xhtml web pages for CRUD
+			 */
+			boolean attributeListAlreadyFiltered = false;
 
-			// generate Business Delegate interface for policy
-			promptTitle("Business delegate interfaces generation");
+			if (uts.contains("list" + WordUtils.capitalize(entityName))) {
+				// create the listEntity.xhtml page
+				displayChapterTitle("Xhtml list web page generation");
+
+				filterEntityAttributesList(entityName,
+						entityDto.getEntityAttributeList());
+				attributeListAlreadyFiltered = true;
+
+				mcrManagement.generateXhtml(function, entityName, "list", out,
+						ajfSolutionGlobalName, entityDto, managedBeanPackage,
+						uts);
+			}
+			if (uts.contains("create" + WordUtils.capitalize(entityName))) {
+				// create the createEntity.xhtml page
+				displayChapterTitle("Xhtml creation web page generation");
+
+				// Filter entity attribute list if needed
+				if (!attributeListAlreadyFiltered) {
+					filterEntityAttributesList(entityName,
+							entityDto.getEntityAttributeList());
+				}
+
+				mcrManagement.generateXhtml(function, entityName, "create",
+						out, ajfSolutionGlobalName, entityDto,
+						managedBeanPackage, uts);
+			}
+
+			/*
+			 * generate Business Delegate interface for policy
+			 */
+			displayChapterTitle("Business delegate interfaces generation");
 
 			Map<String, String> libPackages = mcrManagement
 					.generateBDInterfaceAndDto(function, out,
 							ajfSolutionGlobalName, uiProject, uiJavaFacet,
-							entityName, uts);
+							entityName, uts, false);
 
 			/*
 			 * generate policy class
 			 */
-			promptTitle("Policy Class generation");
+			displayChapterTitle("Policy Class generation");
 
 			mcrManagement.generatePolicy(uiProject, function, out, uts,
 					libPackages, ajfSolutionGlobalName);
 
 			// Generate managed bean for CRUD
-			promptTitle("Managed Bean generation");
+			displayChapterTitle("Managed Bean generation");
 
 			mcrManagement.generateManagedBean(function, entityName,
 					ajfSolutionGlobalName, entityDto, managedBeanPackage,
@@ -234,7 +264,7 @@ public class McrGenerationPlugin implements Plugin {
 			/*
 			 * END
 			 */
-			displayEndLog(function, out, ajfSolutionGlobalName);
+			displayEndLog(function, out, ajfSolutionGlobalName, entityName);
 
 		} catch (EscapeForgePromptException esc) {
 
@@ -246,15 +276,14 @@ public class McrGenerationPlugin implements Plugin {
 			return;
 
 		} catch (Exception e) {
-			ShellMessages
-					.error(out,
-							"An Exception occured during the manage-project AddFonction-compacted plugin execution. "
-									+ e.toString());
-			e.printStackTrace();
+			ShellMessages.error(out,
+					"An Exception occured during MCR generation plugin execution. "
+							+ e.toString());
 		}
 	}
 
 	/**
+	 * MCR generation plugin command for AJF COMPACTED SOLUTION
 	 * 
 	 * @param function
 	 * @param entityName
@@ -275,7 +304,7 @@ public class McrGenerationPlugin implements Plugin {
 			 * Function Name
 			 */
 			shell.println();
-			promptTitle("Function Generation");
+			displayChapterTitle("Function Generation");
 			while (null == function || function.isEmpty()) {
 				function = shellhelper
 						.promptFacade("Name of the function to generate (i.e: ManagePerson):");
@@ -297,7 +326,7 @@ public class McrGenerationPlugin implements Plugin {
 			 * ENTITY LOADING
 			 */
 			shell.println();
-			promptTitle("Entity loading");
+			displayChapterTitle("Entity loading");
 			EntityDTO entityDto;
 
 			// CASE EXPLODED SOLUTION
@@ -322,7 +351,7 @@ public class McrGenerationPlugin implements Plugin {
 			 */
 			// Prompt user for UT list to generate
 			shell.println();
-			promptTitle("Unit tasks (UT) List");
+			displayChapterTitle("Unit tasks (UT) List");
 			List<String> uts = promptForUTs(entityName, out);
 
 			shell.println();
@@ -330,7 +359,6 @@ public class McrGenerationPlugin implements Plugin {
 			/*
 			 * PREPARATION FOR GENERATION
 			 */
-
 			// Transform function to first letter in upperCase
 			function = WordUtils.capitalize(function);
 
@@ -346,28 +374,40 @@ public class McrGenerationPlugin implements Plugin {
 			/*
 			 * GENERATION
 			 */
-
 			// Which package where to create managedBean class
 			String managedBeanPackage = shellhelper.promptFacade(
 					"Which package of ui project for Managed Bean ?",
 					PACKAGE_FOR_MANAGED_BEAN.replace(PROJECT_NAME,
 							ajfSolutionGlobalName.toLowerCase()));
 
-			// generate xhtml web page for CRUD
-			promptTitle("Xhtml web page generation");
-			mcrManagement.generateXhtml(function, entityName, out,
-					ajfSolutionGlobalName, entityDto, managedBeanPackage, uts);
+			/*
+			 * generate xhtml web pages for CRUD
+			 */
+			if (uts.contains("list" + WordUtils.capitalize(entityName))) {
+				// create the listEntity.xhtml page
+				displayChapterTitle("Xhtml list web page generation");
+				mcrManagement.generateXhtml(function, entityName, "list", out,
+						ajfSolutionGlobalName, entityDto, managedBeanPackage,
+						uts);
+			}
+			if (uts.contains("create" + WordUtils.capitalize(entityName))) {
+				// create the createEntity.xhtml page
+				displayChapterTitle("Xhtml Creation web page generation");
+				mcrManagement.generateXhtml(function, entityName, "create",
+						out, ajfSolutionGlobalName, entityDto,
+						managedBeanPackage, uts);
+			}
 
 			// generate Business Delegate interface for policy
-			promptTitle("Business delegate interfaces generation");
+			displayChapterTitle("Business delegate interfaces generation");
 
 			Map<String, String> libPackages = mcrManagement
 					.generateBDInterfaceAndDto(function, out,
 							ajfSolutionGlobalName, libProject, libJavaFacet,
-							entityName, uts);
+							entityName, uts, true);
 
 			// generate policy class
-			promptTitle("Policy Class generation");
+			displayChapterTitle("Policy Class generation");
 			// loading core component project
 			Project coreProject = projectHelper.locateProjectFromSolution(
 					uiProject, projectFactory, resourceFactory,
@@ -376,7 +416,7 @@ public class McrGenerationPlugin implements Plugin {
 					libPackages, ajfSolutionGlobalName);
 
 			// Generate managed bean for CRUD
-			promptTitle("Managed Bean generation");
+			displayChapterTitle("Managed Bean generation");
 
 			mcrManagement.generateManagedBean(function, entityName,
 					ajfSolutionGlobalName, entityDto, managedBeanPackage,
@@ -386,7 +426,7 @@ public class McrGenerationPlugin implements Plugin {
 			/*
 			 * END
 			 */
-			displayEndLog(function, out, ajfSolutionGlobalName);
+			displayEndLog(function, out, ajfSolutionGlobalName, entityName);
 
 		} catch (EscapeForgePromptException esc) {
 
@@ -398,29 +438,10 @@ public class McrGenerationPlugin implements Plugin {
 			return;
 
 		} catch (Exception e) {
-			ShellMessages
-					.error(out,
-							"An Exception occured during the manage-project AddFonction-exploded plugin execution. "
-									+ e.toString());
-			e.printStackTrace();
+			ShellMessages.error(out,
+					"An Exception occured during the MCR generation plugin execution. "
+							+ e.toString());
 		}
-
-	}
-
-	/**
-	 * Prompt a beautiful title in the forge prompt
-	 * 
-	 * @param title
-	 */
-	private void promptTitle(String title) {
-
-		shell.println();
-
-		shell.println(ShellColor.GREEN, "******************");
-		shell.println();
-		shell.println(ShellColor.GREEN, "---  " + title + "  ----");
-		shell.println();
-		shell.println(ShellColor.GREEN, "******************");
 
 	}
 
@@ -436,6 +457,9 @@ public class McrGenerationPlugin implements Plugin {
 	private List<String> promptForUTs(String entityName, PipeOut out)
 			throws EscapeForgePromptException {
 
+		// in case entityname is not capitalized
+		entityName = WordUtils.capitalize(entityName);
+
 		shell.println();
 		List<String> uts = new ArrayList<String>();
 
@@ -443,67 +467,153 @@ public class McrGenerationPlugin implements Plugin {
 		boolean doneWithUts = false;
 
 		while (!doneWithUts) {
+
 			// Prompt choice
 			List<String> choices = new ArrayList<String>();
+			choices.add("Display help with particuliar unit Tasks for CRUD.");
 			choices.add("Add a new Unit Task to my Function.");
-			choices.add("Display key unit Tasks for CRUD.");
-			choices.add("I'm Done with Unit tasks. Let's continue !");
+			choices.add("Add quickly several unit tasks.");
+			choices.add("OK, let's continue !");
+
 			int choice = shell.promptChoice("What whould you like to do ?",
 					choices);
 
-			// While user ask for adding a new unit tasks
-			if (choice == 0) {
+			if (choice == 0) {// Choice to display key UTs
 
-				String utvalue = shellhelper
-						.promptFacade("UT name (caution: entity Name '"
-								+ entityName
-								+ "' will be suffixed automatically):");
-
-				shell.println();
-
-				if (utvalue.toLowerCase().contains(entityName.toLowerCase())) {
-					// if the ut entered by user already contain entityName
-					// (risk of duplicate as entityName will be automatically
-					// suffixed)
-					ShellMessages
-							.warn(out,
-									"Please note that the entered entityName will be automatically suffixed to the UT name. Here you're entered UT will be: "
-											+ utvalue
-											+ WordUtils.capitalize(entityName));
-
-					if (shell.promptBoolean("Is that ok ?", true)) {
-
-						// suffixe entityName to ut
-						utvalue = utvalue + WordUtils.capitalize(entityName);
-						saveUtToList(entityName, out, uts, utvalue);
-
-					} else {
-						ShellMessages.info(out, "The UT has been ignored.");
-						shell.println();
-					}
-				} else if (utvalue.isEmpty()) {
-					ShellMessages.error(out, "Empty UT name is not tolerated.");
-					shell.println();
-				} else {
-
-					// suffixe entityName to ut
-					utvalue = utvalue + WordUtils.capitalize(entityName);
-					saveUtToList(entityName, out, uts, utvalue);
-				}
-
-			} else if (choice == 1) { // Choice to display key UTs
 				// Display a help text with particuliar keyword corresponding to
 				// particuliar MCR type
 				displayHelpForMcr(entityName);
 
-			} else if (choice == 2) {
+			} else if (choice == 1) { // adding a new unit tasks
+
+				shell.println();
+				ShellMessages
+						.info(out,
+								"Please enter your UT name. Please not that the Entity name will automatically be suffixed to your UT value. For example, if you enter 'create', the unit task 'create"
+										+ entityName + "' will be added.");
+				shell.println();
+
+				String utvalue = shellhelper.promptFacade("UT name :").trim();
+				shell.println();
+
+				// check and add ut to list
+				checkUtName(entityName, uts, utvalue, out);
+
+			} else if (choice == 2) { // Choice to add many UT quickly
+
+				// Intro help text
+				shell.println();
+				ShellMessages
+						.info(out,
+								"Please enter your UT values down here. Validate each UT by hitting 'ENTER' key. When you are done, enter an 'empty' UT so as to exit the UT creation.");
+				shell.println();
+				// Loop on UT entering
+				List<String> utList = new ArrayList<String>();
+				String myUt = "";
+				while (!(myUt = shellhelper.promptFacade(" - UT name: ").trim())
+						.isEmpty()) {
+					utList.add(myUt);
+				}
+				shell.println();
+
+				// If UT has been entered process them
+				if (null != utList && utList.size() > 0) {
+					for (String ut : utList) {
+						// check and add ut to list
+						checkUtName(entityName, uts, ut, out);
+					}
+				}
+
+			} else if (choice == 3) {
 				shell.println();
 				shell.println("Done.");
 				doneWithUts = true;
 			}
 
+			shell.println();
+			// If UT list does not contains list or create, no xhtml page will
+			// be generated
+			if (doneWithUts) {
+				if (!(uts.contains("list" + entityName) || (uts
+						.contains("create" + entityName)))) {
+					ShellMessages
+							.warn(out,
+									"You didn't entered the 'list' or 'create' UT. Therefore, no xhtml web page is going to be generated. You need to enter 'list' UT in order to generate 'list"
+											+ entityName
+											+ "'.xhtml' file allowing to list, and search for "
+											+ entityName
+											+ ". Enter the 'create' UT in order to generate the 'create"
+											+ entityName
+											+ ".xhtml' allowing to create new "
+											+ entityName);
+					shell.println();
+
+					if (!shell
+							.promptBoolean(
+									"Do you which to continue (press 'n' to add new UT)",
+									true)) {
+						// set flag to return to UT creation menu
+						doneWithUts = false;
+					}
+
+					shell.println();
+
+				}
+			}
+
 		}
+
 		return uts;
+	}
+
+	/**
+	 * Check that the input UT value is correct. If so, it is added the UT list
+	 * that is also set as input
+	 * 
+	 * @param entityName
+	 * @param uts
+	 *            ut list
+	 * @param utvalue
+	 * @param out
+	 */
+	private void checkUtName(String entityName, List<String> uts,
+			String utvalue, PipeOut out) {
+
+		// in case entityname is not capitalized
+		entityName = WordUtils.capitalize(entityName);
+
+		if (utvalue.toLowerCase().contains(entityName.toLowerCase())) {
+
+			// if the ut entered by user already contain entityName
+			// (risk of duplicate as entityName will be automatically
+			// suffixed)
+			ShellMessages
+					.warn(out,
+							"Entity name will automatically be suffixed to the UT name. Here you're entered UT "
+									+ utvalue
+									+ ". It will become: "
+									+ utvalue
+									+ entityName);
+
+			if (shell.promptBoolean("Is that ok ?", true)) {
+				// suffixe entityName to ut
+				utvalue = utvalue.toLowerCase() + entityName;
+				saveUtToList(entityName, out, uts, utvalue);
+
+			} else {
+				ShellMessages.info(out, "The UT '" + utvalue
+						+ "' will be ignored.");
+				shell.println();
+			}
+		} else if (utvalue.isEmpty()) {
+			ShellMessages.error(out, "Empty UT name is not tolerated.");
+			shell.println();
+
+		} else {
+			// suffixe entityName to ut
+			utvalue = utvalue.toLowerCase() + entityName;
+			saveUtToList(entityName, out, uts, utvalue);
+		}
 	}
 
 	/**
@@ -517,14 +627,23 @@ public class McrGenerationPlugin implements Plugin {
 	 */
 	private void saveUtToList(String entityName, PipeOut out, List<String> uts,
 			String utvalue) {
+
+		// UT search corresponds to UT list for generation so if SearchEntity is
+		// entered as UT, we replace it by List
+		if (utvalue.equals("search" + entityName)) {
+			utvalue = "list" + entityName;
+			ShellMessages
+					.warn(out,
+							"'search' UT has been replaced by 'list' as it corresponds to the same code generation");
+		}
+
 		// if Ok add ut
 		if (!uts.contains(utvalue)) {
-
 			uts.add(utvalue);
 			ShellMessages.info(out, "The UT '" + utvalue + "' has been saved.");
 			checkIfKeyUt(utvalue, entityName);
 		} else {
-			ShellMessages.info(out, "The UT " + " was already set.");
+			ShellMessages.info(out, "The UT " + utvalue + " was already set.");
 		}
 		shell.println();
 	}
@@ -556,7 +675,6 @@ public class McrGenerationPlugin implements Plugin {
 		/*
 		 * Locate EntityModel
 		 */
-
 		// loop for entity name
 		shell.println();
 		while (null == entityName || entityName.isEmpty()) {
@@ -614,7 +732,7 @@ public class McrGenerationPlugin implements Plugin {
 
 					if (AJF_SOUTION_EXPLODED.equals(ajfSolutionType))
 						ShellMessages.info(out,
-								"Specify a package of the LIB project.");
+								"Specify a package name that contains model.");
 
 					// Ask for package containing the model in the lib project
 					// of ajf solution
@@ -647,24 +765,9 @@ public class McrGenerationPlugin implements Plugin {
 		List<String> entityAttributes = javaUtils
 				.retrieveAttributeList(modelJavaResource);
 
-		// Ask user if he wants to keep this attribute in the MCR
-		out.println();
-		ShellMessages.info(
-				out,
-				"Entity model ".concat(entityName)
-						.concat(" contains " + entityAttributes.size())
-						.concat(" attributes :"));
-
 		entityDto.setEntityAttributeList(new ArrayList<String>());
-		for (String att : entityAttributes) {
-			if (shell.promptBoolean(
-					"Use Attribute ".concat(att).concat(" in MCR ? [y]"), true)) {
-				// Add attribute to final list if User answer yes
+		entityDto.getEntityAttributeList().addAll(entityAttributes);
 
-				entityDto.getEntityAttributeList().add(att);
-			}
-
-		}
 		out.println();
 
 		// entity name has to be set here in case it has been entered several
@@ -676,6 +779,39 @@ public class McrGenerationPlugin implements Plugin {
 
 		return entityDto;
 
+	}
+
+	/**
+	 * prompt the user to keep or not each attribute of the list. If user answer
+	 * not, the current attribute is removed from the list
+	 * 
+	 * @param entityName
+	 * @param entityAttributes
+	 * 
+	 */
+	private void filterEntityAttributesList(String entityName,
+			List<String> entityAttributes) {
+
+		// Ask user if he wants to keep this attribute in the MCR
+		shell.println();
+		ShellMessages
+				.info(shell,
+						"Please select which entity's attributes to use on web interface.");
+		shell.println();
+		shell.println("Entity model '".concat(entityName)
+				.concat("' has " + entityAttributes.size())
+				.concat(" attributes :"));
+
+		shell.println();
+
+		for (String att : entityAttributes) {
+			if (!shell.promptBoolean(
+					"Use Attribute ".concat(att).concat(" in MCR ? [y]"), true)) {
+				// Add attribute to final list if User answer yes
+				entityAttributes.remove(att);
+			}
+		}
+		shell.println();
 	}
 
 	/**
@@ -695,7 +831,7 @@ public class McrGenerationPlugin implements Plugin {
 				|| utvalue
 						.startsWith("list" + WordUtils.capitalize(entityName))) {
 
-			shell.println(ShellColor.GREEN, "This is a key UT for CRUD");
+			shell.println(ShellColor.GREEN, "This is a key UT");
 
 		}
 
@@ -709,7 +845,7 @@ public class McrGenerationPlugin implements Plugin {
 	 * @param ajfSolutionGlobalName
 	 */
 	private void displayEndLog(String function, final PipeOut out,
-			String ajfSolutionGlobalName) {
+			String ajfSolutionGlobalName, String entityName) {
 		ShellMessages.success(out, "Done generated MCR for function:"
 				+ function);
 		shell.println();
@@ -721,15 +857,30 @@ public class McrGenerationPlugin implements Plugin {
 		shell.println();
 
 		// print web address
-		shell.println(
-				ShellColor.YELLOW,
-				"http://localhost:8080/" + ajfSolutionGlobalName + "-"
-						+ ForgeConstants.PROJECT_TYPE_UI + "/"
-						+ WordUtils.uncapitalize(function) + "/"
-						+ WordUtils.uncapitalize(function) + ".jsf");
+		shell.println(ShellColor.YELLOW, "http://localhost:8080/"
+				+ ajfSolutionGlobalName + "-" + ForgeConstants.PROJECT_TYPE_UI
+				+ "/" + WordUtils.uncapitalize(function) + "/" + "list"
+				+ WordUtils.capitalize(entityName) + ".jsf");
 		shell.println();
 		shell.println();
 		shell.println(" ");
+	}
+
+	/**
+	 * Prompt a beautiful title in the forge prompt
+	 * 
+	 * @param title
+	 */
+	private void displayChapterTitle(String title) {
+
+		shell.println();
+
+		shell.println(ShellColor.GREEN, "******************");
+		shell.println();
+		shell.println(ShellColor.GREEN, "---  " + title + "  ----");
+		shell.println();
+		shell.println(ShellColor.GREEN, "******************");
+
 	}
 
 	/**
@@ -755,8 +906,10 @@ public class McrGenerationPlugin implements Plugin {
 		shell.print(ShellColor.YELLOW, "'list' : ");
 		shell.print(
 				ShellColor.CYAN,
-				" will generate on the web xhtml page a data table in order to display your entity list."
-						+ "In your case, this will also generate a listing method 'list"
+				" will generate on the web xhtml page a data table in order to display your entity list. It also generates a 'Search' panel in order to find entity from criteria."
+						+ "In your case, this will generate a listing method 'list"
+						+ WordUtils.capitalize(entityName)
+						+ "', in addition to a search method 'search"
 						+ WordUtils.capitalize(entityName) + "'");
 		shell.println();
 		shell.println();

@@ -20,7 +20,7 @@ import am.ajf.forge.core.generators.EjbProjectGenerator;
 import am.ajf.forge.core.generators.LibProjectGenerator;
 import am.ajf.forge.core.generators.ParentProjectGenerator;
 import am.ajf.forge.core.generators.WebProjectGenerator;
-import am.ajf.forge.util.EclipseUtils;
+import am.ajf.forge.utils.EclipseUtils;
 
 public class CreateProject {
 

@@ -18,8 +18,8 @@ import org.jboss.forge.project.packaging.PackagingType;
 import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
-import am.ajf.forge.util.ExtractionUtils;
-import am.ajf.forge.util.ProjectHelper;
+import am.ajf.forge.utils.ExtractionUtils;
+import am.ajf.forge.utils.ProjectHelper;
 
 /**
  * AJF2 Lib project generator.

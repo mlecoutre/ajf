@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import am.ajf.forge.util.VelocityBuilder;
+import am.ajf.forge.utils.VelocityBuilder;
 
 public class VelocityBuilderTest {
 

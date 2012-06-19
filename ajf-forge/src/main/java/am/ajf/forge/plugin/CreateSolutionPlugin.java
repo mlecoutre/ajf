@@ -36,9 +36,9 @@ import org.jboss.forge.shell.util.Files;
 import org.jboss.forge.shell.util.ResourceUtil;
 
 import am.ajf.forge.core.CreateProject;
-import am.ajf.forge.exception.EscapeForgePromptException;
+import am.ajf.forge.exceptions.EscapeForgePromptException;
 import am.ajf.forge.lib.ForgeConstants;
-import am.ajf.forge.util.ShellHelper;
+import am.ajf.forge.utils.ShellHelper;
 
 /**
  * 

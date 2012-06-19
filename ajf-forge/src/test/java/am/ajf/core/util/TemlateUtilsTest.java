@@ -24,8 +24,8 @@ import org.junit.Test;
 
 import am.ajf.forge.core.generators.templates.McrGenerationTemplate;
 import am.ajf.forge.lib.EntityDTO;
-import am.ajf.forge.util.JavaHelper;
-import am.ajf.forge.util.TemplateUtils;
+import am.ajf.forge.utils.JavaHelper;
+import am.ajf.forge.utils.TemplateUtils;
 
 /**
  * 
@@ -33,7 +33,7 @@ import am.ajf.forge.util.TemplateUtils;
  * API is done in templateUtils. This whole test case is commented as for the
  * moment FreeMarker make the forge plugin fail...
  * 
- * @author E019851
+ * @author Guillaume G. - E019851
  */
 public class TemlateUtilsTest {
 
@@ -302,7 +302,7 @@ public class TemlateUtilsTest {
 		myFile.createNewFile();
 
 		List<String> uts = new ArrayList<String>();
-		uts.add("addPerson");
+		uts.add("createPerson");
 		uts.add("deletePerson");
 		uts.add("listPerson");
 		uts.add("otherUt");
@@ -310,7 +310,32 @@ public class TemlateUtilsTest {
 		projectManagement.buildXhtml(myFile, "voila", "myGeneratedBean",
 				"Person", entityDto.getEntityAttributeList(),
 				"am.ajf.web.controllers.test", entityDto.getEntityLibPackage(),
-				uts);
+				uts, true);
+
+	}
+
+	@Test
+	public void testBuildCreateXhtml() throws Exception {
+
+		McrGenerationTemplate projectManagement = new McrGenerationTemplate();
+
+		File myFile = new File("C:/myCrudXhtml.xhtml");
+
+		if (myFile.exists())
+			myFile.delete();
+
+		myFile.createNewFile();
+
+		List<String> uts = new ArrayList<String>();
+		uts.add("createPerson");
+		uts.add("deletePerson");
+		uts.add("listPerson");
+		uts.add("otherUt");
+
+		projectManagement.buildXhtml(myFile, "voila", "myGeneratedBean",
+				"Person", entityDto.getEntityAttributeList(),
+				"am.ajf.web.controllers.test", entityDto.getEntityLibPackage(),
+				uts, true);
 
 	}
 
@@ -333,7 +358,7 @@ public class TemlateUtilsTest {
 		projectManagement.buildXhtml(myFile, "voila", "myGeneratedBean",
 				"Person", entityDto.getEntityAttributeList(),
 				"am.ajf.web.controllers.test", entityDto.getEntityLibPackage(),
-				uts);
+				uts, true);
 
 	}
 
@@ -355,7 +380,7 @@ public class TemlateUtilsTest {
 		projectManagement.buildXhtml(myFile, "voila", "myGeneratedBean",
 				"Person", entityDto.getEntityAttributeList(),
 				"am.ajf.web.controllers.test", entityDto.getEntityLibPackage(),
-				uts);
+				uts, true);
 
 	}
 
@@ -381,7 +406,7 @@ public class TemlateUtilsTest {
 		projectManagement.buildXhtml(myFile, "voila", "myGeneratedBean",
 				"Person", entityDto.getEntityAttributeList(),
 				"am.ajf.web.controllers.test", entityDto.getEntityLibPackage(),
-				uts);
+				uts, true);
 
 	}
 

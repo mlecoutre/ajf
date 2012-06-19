@@ -1,4 +1,4 @@
-package am.ajf.forge.exception;
+package am.ajf.forge.exceptions;
 
 public class EscapeForgePromptException extends Exception {
 
