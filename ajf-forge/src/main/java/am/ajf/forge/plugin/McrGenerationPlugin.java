@@ -32,11 +32,11 @@ import org.jboss.forge.shell.plugins.Plugin;
 
 import am.ajf.forge.core.CreateMcr;
 import am.ajf.forge.exceptions.EscapeForgePromptException;
+import am.ajf.forge.helpers.JavaHelper;
+import am.ajf.forge.helpers.ProjectHelper;
+import am.ajf.forge.helpers.ShellHelper;
 import am.ajf.forge.lib.EntityDTO;
 import am.ajf.forge.lib.ForgeConstants;
-import am.ajf.forge.utils.JavaHelper;
-import am.ajf.forge.utils.ProjectHelper;
-import am.ajf.forge.utils.ShellHelper;
 
 /**
  * 

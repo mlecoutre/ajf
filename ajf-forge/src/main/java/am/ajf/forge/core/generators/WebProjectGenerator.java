@@ -27,9 +27,9 @@ import org.jboss.forge.project.packaging.PackagingType;
 import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
-import am.ajf.forge.utils.ExtractionUtils;
-import am.ajf.forge.utils.ProjectHelper;
-import am.ajf.forge.utils.UIProjectUtils;
+import am.ajf.forge.helpers.ExtractionUtils;
+import am.ajf.forge.helpers.ProjectHelper;
+import am.ajf.forge.helpers.UIProjectUtils;
 
 /**
  * AJF2 web project generator. This class can be used for a WS typed project or

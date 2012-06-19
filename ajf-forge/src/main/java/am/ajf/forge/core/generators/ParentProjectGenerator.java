@@ -26,8 +26,8 @@ import org.jboss.forge.project.packaging.PackagingType;
 import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.resources.DirectoryResource;
 
-import am.ajf.forge.utils.ExtractionUtils;
-import am.ajf.forge.utils.ProjectHelper;
+import am.ajf.forge.helpers.ExtractionUtils;
+import am.ajf.forge.helpers.ProjectHelper;
 
 /**
  * AJF2 Parent project generator. (parent of the current solution)

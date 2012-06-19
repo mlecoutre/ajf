@@ -20,7 +20,7 @@ import org.jboss.forge.resources.java.JavaResource;
 import org.junit.Test;
 
 import am.ajf.forge.core.generators.templates.McrGenerationTemplate;
-import am.ajf.forge.utils.JavaHelper;
+import am.ajf.forge.helpers.JavaHelper;
 
 public class JavaHelperTest {
 

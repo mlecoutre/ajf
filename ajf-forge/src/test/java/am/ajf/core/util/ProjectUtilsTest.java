@@ -12,7 +12,7 @@ import org.jboss.forge.parser.JavaParser;
 import org.jboss.forge.parser.java.JavaClass;
 import org.junit.Test;
 
-import am.ajf.forge.utils.ProjectHelper;
+import am.ajf.forge.helpers.ProjectHelper;
 
 public class ProjectUtilsTest {
 

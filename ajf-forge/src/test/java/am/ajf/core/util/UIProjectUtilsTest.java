@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.jboss.forge.parser.java.JavaClass;
 import org.junit.Test;
 
-import am.ajf.forge.utils.UIProjectUtils;
+import am.ajf.forge.helpers.UIProjectUtils;
 
 public class UIProjectUtilsTest {
 

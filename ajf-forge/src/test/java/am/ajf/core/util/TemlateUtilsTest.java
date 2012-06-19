@@ -23,9 +23,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import am.ajf.forge.core.generators.templates.McrGenerationTemplate;
+import am.ajf.forge.helpers.JavaHelper;
+import am.ajf.forge.helpers.TemplateUtils;
 import am.ajf.forge.lib.EntityDTO;
-import am.ajf.forge.utils.JavaHelper;
-import am.ajf.forge.utils.TemplateUtils;
 
 /**
  * 

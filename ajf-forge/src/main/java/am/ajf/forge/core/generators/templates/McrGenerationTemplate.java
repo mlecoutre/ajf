@@ -21,7 +21,7 @@ import javax.inject.Singleton;
 
 import org.apache.commons.lang3.text.WordUtils;
 
-import am.ajf.forge.utils.TemplateUtils;
+import am.ajf.forge.helpers.TemplateUtils;
 import freemarker.template.SimpleSequence;
 import freemarker.template.Template;
 import freemarker.template.TemplateMethodModel;
