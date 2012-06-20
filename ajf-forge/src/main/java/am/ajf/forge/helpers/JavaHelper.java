@@ -282,6 +282,8 @@ public class JavaHelper {
 						if (!initemp.getBody()
 								.equals(initMethodMBean.getBody())) {
 
+							// What is new new init method is ADDED to the
+							// previous init method body
 							initMethodMBean.setBody(initMethodMBean.getBody()
 									+ "\n" + initemp.getBody());
 

@@ -1,6 +1,7 @@
 package am.ajf.forge.helpers;
 
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_GROUPID_PREFIX;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_PARENT;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_WS;
@@ -15,6 +16,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.apache.maven.model.Dependency;
@@ -28,8 +30,8 @@ import org.jboss.forge.project.facets.MetadataFacet;
 import org.jboss.forge.project.services.ProjectFactory;
 import org.jboss.forge.project.services.ResourceFactory;
 import org.jboss.forge.resources.DirectoryResource;
+import org.jboss.forge.shell.Shell;
 import org.jboss.forge.shell.ShellMessages;
-import org.jboss.forge.shell.plugins.PipeOut;
 
 /**
  * This utility class implements some methods that deals with the project
@@ -41,6 +43,15 @@ import org.jboss.forge.shell.plugins.PipeOut;
 
 @Singleton
 public class ProjectHelper {
+
+	@Inject
+	private ProjectFactory projectFactory;
+
+	@Inject
+	private ResourceFactory resourceFactory;
+
+	@Inject
+	private Shell shell;
 
 	/**
 	 * Return the group ID of the procject. Project group id, suffixed by the
@@ -495,11 +506,9 @@ public class ProjectHelper {
 	 * @throws Exception
 	 */
 	public Project locateProjectFromSolution(Project project,
-			ProjectFactory projectFactory, ResourceFactory resourceFactory,
-			String initialProjectType, String newProjectType, PipeOut out)
-			throws Exception {
+			String initialProjectType, String newProjectType) throws Exception {
 		/*
-		 * Locate the LIB project from the expoded AJF Solution
+		 * Locate the new project from the expoded AJF Solution
 		 */
 		File projectFile = project.getProjectRoot()
 				.getUnderlyingResourceObject();
@@ -523,8 +532,8 @@ public class ProjectHelper {
 
 		projectFile = null;
 
-		out.println();
-		ShellMessages.info(out, "Project "
+		shell.println();
+		ShellMessages.info(shell, "Project "
 				+ newProjectFile.getName()
 				+ " of your AJF solution has been loaded :"
 				+ newProject.getProjectRoot().getUnderlyingResourceObject()
@@ -532,5 +541,46 @@ public class ProjectHelper {
 		newProjectFile = null;
 
 		return newProject;
+	}
+
+	/**
+	 * Check if we are working on an exploded ajf solution or a compacted one.
+	 * Input project must be an UI ajf project type. This method try to locate
+	 * the CORE component corresponding to the same ajf solution.<br/>
+	 * <br/>
+	 * For example, input project is named "myProject-ui". We try to locate the
+	 * "myProject-core". If it's found, return 'true', we are on a exploded
+	 * solution, if it's not, return 'false'.
+	 * 
+	 * @param project
+	 * @return boolean true if exploded
+	 */
+	public boolean isAjfSolutionExploded(Project project) {
+
+		/*
+		 * Locate the LIB project from the expoded AJF Solution
+		 */
+		File projectFile = project.getProjectRoot()
+				.getUnderlyingResourceObject();
+
+		File newProjectFile = new File(projectFile.getParent().concat("/")
+				.concat(projectFile.getName())
+				.replace(PROJECT_TYPE_UI, PROJECT_TYPE_CORE));
+
+		// Check if the lib project directory does exist
+		if (!newProjectFile.exists()) {
+			ShellMessages.info(shell, "Your current project "
+					+ project.getProjectRoot().getName()
+					+ " as been detected as a COMPACTED AJF Solution.");
+			shell.println();
+			return false;
+		} else {
+			ShellMessages.info(shell, "Your current project "
+					+ project.getProjectRoot().getName()
+					+ " as been detected as part of an EXPLODED AJF Solution.");
+			shell.println();
+			return true;
+		}
+
 	}
 }

@@ -39,9 +39,10 @@ public class ClassName implements Serializable {
 		<#if "${function.addFlag}" = "true">
 			new${entityNameCap} = new ${entityNameCap}();
 		</#if>
-		<#if "${function.listFlag}" = "true">
+		
+		<#if "${function.listFlag}" = "true"> 
 			${entityNameUncap}List = new ArrayList<${entityNameCap}>();
-			list${entityNameCap} = list ${entityNameCap}();
+			list${entityNameCap} = new ${entityNameCap}();
 		</#if>
 	}
 
@@ -72,9 +73,6 @@ public class ClassName implements Serializable {
 	}
 	
 	
-		/*
-	 * Accessors
-	 */
 	
 	<#if "${function.listFlag}" = "true"> 
 	public ${entityNameCap}[] getSelectedItems() {

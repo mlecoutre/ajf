@@ -39,18 +39,24 @@
 					style="text-align:left" />
 					
 		<p:focus context="searchPanelId" />
-		<h:panelGrid style="margin-bottom:2px;width:100%;" cellpadding="2">
+		<h:panelGrid style="margin-bottom:2px;width:100%;" cellpadding="2" columns="3" columnClasses="label, column">
 
 		<#list function.entity.attributes as att>
 		<#assign listData = "list${capEntityName}">
+		
+		
 				<h:outputText value="${att}"
 					style="text-align:left" />
+					
 				<p:inputText id="list${att}" value="${setToEl(beanName,listData ,att)}">
 				<f:ajax execute="list${att}" event="blur" render="list${att}-error" />
 				</p:inputText>
+				
 				<h:panelGroup>
 					<p:message id="list${att}-error" for="list${att}" />
 				</h:panelGroup>
+				
+				
 		</#list>
 			<p:commandButton value="Search ${function.entity.name}"
 					actionListener="${setToEl(beanName,listUT)}" update=":form:iPnl">

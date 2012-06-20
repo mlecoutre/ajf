@@ -1,8 +1,11 @@
 package am.ajf.forge.plugin;
 
-import static am.ajf.forge.lib.ForgeConstants.*;
+import static am.ajf.forge.lib.ForgeConstants.AJF_SOUTION_COMPACTED;
+import static am.ajf.forge.lib.ForgeConstants.AJF_SOUTION_EXPLODED;
+import static am.ajf.forge.lib.ForgeConstants.PACKAGE_FOR_ENTITY;
 import static am.ajf.forge.lib.ForgeConstants.PACKAGE_FOR_MANAGED_BEAN;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_NAME;
+import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_CORE;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_LIB;
 import static am.ajf.forge.lib.ForgeConstants.PROJECT_TYPE_UI;
 
@@ -17,8 +20,6 @@ import org.apache.commons.lang.WordUtils;
 import org.jboss.forge.parser.java.JavaSource;
 import org.jboss.forge.project.Project;
 import org.jboss.forge.project.facets.JavaSourceFacet;
-import org.jboss.forge.project.services.ProjectFactory;
-import org.jboss.forge.project.services.ResourceFactory;
 import org.jboss.forge.shell.Shell;
 import org.jboss.forge.shell.ShellColor;
 import org.jboss.forge.shell.ShellMessages;
@@ -50,11 +51,11 @@ public class McrGenerationPlugin implements Plugin {
 	@Inject
 	private Project uiProject;
 
-	@Inject
-	private ProjectFactory projectFactory;
-
-	@Inject
-	private ResourceFactory resourceFactory;
+	// @Inject
+	// private ProjectFactory projectFactory;
+	//
+	// @Inject
+	// private ResourceFactory resourceFactory;
 
 	@Inject
 	private Shell shell;
@@ -91,19 +92,18 @@ public class McrGenerationPlugin implements Plugin {
 						"*****************************************");
 				shell.println();
 
-				// Prompt for which ajf project type
-				List<String> choiceList = new ArrayList<String>();
-				choiceList.add("Exploded AJF solution");
-				choiceList.add("Compacted AJF solution");
-				int choice = shell.promptChoice(
-						"Which type of ajf project are you working on ?",
-						choiceList);
+				// // Prompt for which ajf project type
+				// List<String> choiceList = new ArrayList<String>();
+				// choiceList.add("Exploded AJF solution");
+				// choiceList.add("Compacted AJF solution");
+				// int choice = shell.promptChoice(
+				// "Which type of ajf project are you working on ?",
+				// choiceList);
 
-				if (0 == choice) {
-
+				// detect which project type (explode or compacted)
+				if (projectHelper.isAjfSolutionExploded(uiProject)) {
 					shell.execute("manage-project AddFonction-exploded");
-				} else if (1 == choice) {
-
+				} else {
 					shell.execute("manage-project AddFonction-compacted");
 				}
 
@@ -138,6 +138,12 @@ public class McrGenerationPlugin implements Plugin {
 			ajfSolutionType = AJF_SOUTION_COMPACTED;
 
 			/*
+			 * first check that we are on UI project
+			 */
+			if (!isCurrentProjectUi())
+				return;
+
+			/*
 			 * Function Name
 			 */
 			shell.println();
@@ -168,7 +174,7 @@ public class McrGenerationPlugin implements Plugin {
 			displayChapterTitle("Entity loading");
 			EntityDTO entityDto;
 
-			// Load entity in lib project
+			// Load entity
 			entityDto = loadEntity(ajfSolutionGlobalName, uiJavaFacet,
 					entityName, out);
 			entityName = entityDto.getEntityName();
@@ -204,7 +210,8 @@ public class McrGenerationPlugin implements Plugin {
 							ajfSolutionGlobalName.toLowerCase()));
 
 			/*
-			 * generate xhtml web pages for CRUD
+			 * GENERATE XHTML WEB PAGES only if LIST or CREATE Unit tasks have
+			 * been asked
 			 */
 			boolean attributeListAlreadyFiltered = false;
 
@@ -301,6 +308,12 @@ public class McrGenerationPlugin implements Plugin {
 			ajfSolutionType = AJF_SOUTION_EXPLODED;
 
 			/*
+			 * first check that we are on UI project
+			 */
+			if (!isCurrentProjectUi())
+				return;
+
+			/*
 			 * Function Name
 			 */
 			shell.println();
@@ -329,13 +342,9 @@ public class McrGenerationPlugin implements Plugin {
 			displayChapterTitle("Entity loading");
 			EntityDTO entityDto;
 
-			// CASE EXPLODED SOLUTION
-
-			// Retrieve the lib component project from the UI (in which we
-			// should be)
+			// load the lib project
 			Project libProject = projectHelper.locateProjectFromSolution(
-					uiProject, projectFactory, resourceFactory,
-					PROJECT_TYPE_UI, PROJECT_TYPE_LIB, out);
+					uiProject, PROJECT_TYPE_UI, PROJECT_TYPE_LIB);
 
 			// Java facet of the lib project
 			JavaSourceFacet libJavaFacet = libProject
@@ -381,18 +390,34 @@ public class McrGenerationPlugin implements Plugin {
 							ajfSolutionGlobalName.toLowerCase()));
 
 			/*
-			 * generate xhtml web pages for CRUD
+			 * GENERATE XHTML WEB PAGES only if LIST or CREATE Unit tasks have
+			 * been asked
 			 */
+			boolean attributeListAlreadyFiltered = false; // flag for filtering
+															// entity attributes
 			if (uts.contains("list" + WordUtils.capitalize(entityName))) {
 				// create the listEntity.xhtml page
 				displayChapterTitle("Xhtml list web page generation");
+
+				filterEntityAttributesList(entityName,
+						entityDto.getEntityAttributeList());
+				attributeListAlreadyFiltered = true;
+
 				mcrManagement.generateXhtml(function, entityName, "list", out,
 						ajfSolutionGlobalName, entityDto, managedBeanPackage,
 						uts);
 			}
+
 			if (uts.contains("create" + WordUtils.capitalize(entityName))) {
 				// create the createEntity.xhtml page
 				displayChapterTitle("Xhtml Creation web page generation");
+
+				// Filter entity attribute list if needed
+				if (!attributeListAlreadyFiltered) {
+					filterEntityAttributesList(entityName,
+							entityDto.getEntityAttributeList());
+				}
+
 				mcrManagement.generateXhtml(function, entityName, "create",
 						out, ajfSolutionGlobalName, entityDto,
 						managedBeanPackage, uts);
@@ -410,8 +435,8 @@ public class McrGenerationPlugin implements Plugin {
 			displayChapterTitle("Policy Class generation");
 			// loading core component project
 			Project coreProject = projectHelper.locateProjectFromSolution(
-					uiProject, projectFactory, resourceFactory,
-					PROJECT_TYPE_UI, PROJECT_TYPE_CORE, out);
+					uiProject, PROJECT_TYPE_UI, PROJECT_TYPE_CORE);
+
 			mcrManagement.generatePolicy(coreProject, function, out, uts,
 					libPackages, ajfSolutionGlobalName);
 
@@ -804,13 +829,23 @@ public class McrGenerationPlugin implements Plugin {
 
 		shell.println();
 
+		List<String> attToRemove = new ArrayList<String>();
 		for (String att : entityAttributes) {
 			if (!shell.promptBoolean(
 					"Use Attribute ".concat(att).concat(" in MCR ? [y]"), true)) {
 				// Add attribute to final list if User answer yes
-				entityAttributes.remove(att);
+				attToRemove.add(att);
 			}
 		}
+
+		// Remove UT from UT list
+		for (String att : attToRemove) {
+			entityAttributes.remove(att);
+		}
+
+		attToRemove.clear();
+		attToRemove = null;
+
 		shell.println();
 	}
 
@@ -881,6 +916,25 @@ public class McrGenerationPlugin implements Plugin {
 		shell.println();
 		shell.println(ShellColor.GREEN, "******************");
 
+	}
+
+	/**
+	 * Check if the forge command has been launch on a AJF UI instance project.
+	 * If not, 'false' is returned and an error message is prompted
+	 * 
+	 * @return boolean
+	 */
+	private boolean isCurrentProjectUi() {
+
+		if (!uiProject.getProjectRoot().getName()
+				.endsWith("-" + ForgeConstants.PROJECT_TYPE_UI)) {
+			ShellMessages.error(shell,
+					"Please launch this commande when you are on a "
+							+ PROJECT_TYPE_UI.toUpperCase()
+							+ " AJF project instance");
+			return false;
+		}
+		return true;
 	}
 
 	/**
