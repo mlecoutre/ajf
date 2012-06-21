@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='ISO-8859-1'?>
-<!-- This document was created with Syntext Serna Free. --><!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
 <chapter id="forge">
 	<title>AJF - Forge</title>
 	<para>
@@ -32,7 +32,6 @@
 			project.
 		</para>
 	</section>
-
 	<section>
 		<title>Install forge</title>
 		<para>
@@ -44,9 +43,7 @@
 			<para>
 				Download the
 				<ulink
-					url="http://web-maven-repo/nexus/content/repositories/releases/am/ajf/forge/jboss-forge-1.0.0.final/2.0.1/jboss-forge-1.0.0.final-2.0.1.zip">
-					Jboss forge distribution.
-				</ulink>
+					url="http://web-maven-repo/nexus/content/repositories/releases/am/ajf/forge/jboss-forge-1.0.0.final/2.0.1/jboss-forge-1.0.0.final-2.0.1.zip"> Jboss forge distribution. </ulink>
 			</para>
 			<para>
 				Unzip the forge distribution in your
@@ -132,7 +129,6 @@
 			</para>
 		</section>
 	</section>
-
 	<section>
 		<title>Install ajf-forge plugin</title>
 		<para>
@@ -201,155 +197,184 @@
 			</mediaobject>
 		</figure>
 	</section>
-
 	<section>
 		<title id="useForgePlugin">Use the ajf-forge Plugin</title>
 		<para>
-			Let's now use the ajf-forge plugin to generate an ajf2
-			application
+			Let&apos;s now use the ajf-forge plugin to generate an AJF2
+			applications.
 		</para>
-		<section>
-			<title id="attachForgeContext">Attach forge's context</title>
-			<para>
-				First and foremost, in order to run the ajf-forge plugin, you
-				have to
-				attach
-				the
-				ajf-forge-context to the shell.
-				To do so, download
-				the
-				<ulink
-					url="http://web-maven-repo/nexus/content/repositories/releases/am/ajf/forge/ajf-forge-context/2.0.1/ajf-forge-context-2.0.1.zip">ajf-forge-context.zip</ulink>
-				file.
-			</para>
-			<para>
-				Unzip it in the
-				directory that you like. (i.e : C:/myDirectory).
-				<figure id="forge-ajfForgeContextFolder-screen.fig">
-					<title>ajf-forge-context folder</title>
-					<mediaobject>
-						<imageobject>
-							<imagedata align="center"
-								fileref="images/forge/forge-ajfForgeContextFolder-screen.png" />
-						</imageobject>
-					</mediaobject>
-				</figure>
-			</para>
-			<para>
-				Secondly, launch the forge Shell and navigate to this context folder
-				(via
-				<command>cd</command>
-				command). You should see the forge prompt switch to green color
-				written :
+		<para>
 
-				<emphasis> ajf-forge-context </emphasis>
-
-				<figure id="forge-attachForgeContext-screen.fig">
-					<title>attach forge shell&apos;s context</title>
-					<mediaobject>
-						<imageobject>
-							<imagedata align="center"
-								fileref="images/forge/forge-attachForgeContext-screen.png" />
-						</imageobject>
-					</mediaobject>
-				</figure>
-			</para>
-		</section>
-		<section>
-			<title>Run AJF-Forge commands</title>
-			<para>You are now ready to run the
-				commands for AJF solution
-				generation :
-			</para>
-			<screen>
-   <prompt>[ajf-forge-context] ajf-forge-context $&gt;</prompt><userinput>ajf-solution</userinput> 
-  			</screen>
-			<para>And you should now be prompted the kind of ajf project that
-				you
-				want to generate.
-			</para>
-			<figure id="forgeDefaultCommandScreen.fig">
-				<title>launch ajf-forge default command</title>
-				<mediaobject>
-					<imageobject>
-						<imagedata align="center" scale="80"
-							fileref="images/forge/forge-defaultCommand-screen.png" />
-					</imageobject>
-				</mediaobject>
-			</figure>
-<?ajfProjectTypes compacted&quot; AJF project is a mono-web project. It can be used to make a simple web application (a stand alone ui application). The &quot;exploded&quot; AJF project will be composed of several project types (core, ws, ui, config, lib). This kind of project is suitable for more complex applications. For more details, see the <link linkend="norms">
- >AJF-Norms chapter.</link>?>
-			<para>
-				Both of the two options work pretty much the same way. Two
-				inputs
-				will be prompted :
-				<itemizedlist>
-					<listitem>
-						<para>
-							- Project name ( general name of your
-							application, i.e:
-							<emphasis role="italic">myApplication</emphasis>
-							)
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							- Project folder : Directory where to create the application
-							(i.e:
-							<emphasis role="italic">C:/projects/myProjectFolder</emphasis>
-							)
-						</para>
-					</listitem>
-				</itemizedlist>
-				If selecting the &quot;exploded&quot; ajf project, several java
-				maven
-				projects will be generated:
-			</para>
+			The ajf-forge plugin contains two commands allowing to do different
+			things:
 			<itemizedlist>
 				<listitem>
 					<para>
-						<filename>C:/projects/myProjectFolder/myApplication-core
-						</filename>
+						<link linkend="ajf-solution-command">ajf-solution</link>
+						: Generate quickly complete AJF java projects ready to fill in
+						with your business code.
 					</para>
 				</listitem>
 				<listitem>
 					<para>
-						<filename>C:/projects/myProjectFolder/myApplication-lib </filename>
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						<filename>C:/projects/myProjectFolder/myApplication-ui </filename>
-					</para>
-				</listitem>
-				<listitem>
-					<para>
-						<emphasis role="italic">(...)</emphasis>
+						<link linkend="manage-project-command">manage-project</link>
+						: Generate Function and unit tasks, with all the Java classes and
+						plumbering code in accordance with ajf2 norms. Also generate
+						easily automatically CRUD web interfaces from an entity.
 					</para>
 				</listitem>
 			</itemizedlist>
-			<para>In case of chosing the &quot;compacted&quot; project type,
-				only
-				the UI project will be generated.
+		</para>
+		<section id="ajf-solution-command">
+			<title>'ajf-solution' command : Generate projects</title>
+			<para>
+
 			</para>
-			<section id="compactedGenerationSection">
-				<title>Generate a &quot;compacted&quot; ajf project</title>
-				<para>On the &quot;ajf-solution&quot; default command prompted
-					choice, enter &quot;1&quot; value in order to select choice number
-					one corresponding to &quot;compacted&quot; ajf solution.
-					Immediately, you will be prompted for the name you want to give to
-					your application, and the folder where you want to create your
-					project.
+			<section>
+				<title id="attachForgeContext">Attach forge&apos;s context</title>
+				<para>
+					First and foremost, in order to run the ajf-forge plugin, you
+					have
+					to
+					attach
+					the
+					ajf-forge-context to the shell.
+					To do so, download
+					the
+					<ulink
+						url="http://web-maven-repo/nexus/content/repositories/releases/am/ajf/forge/ajf-forge-context/2.0.1/ajf-forge-context-2.0.1.zip">ajf-forge-context.zip</ulink>
+					file.
 				</para>
-				<note>
-					<para>Entering
-						the value &apos;exit&apos; for the project name OR
-						the project
-						directory will allow you to
-						<link linkend="escapeForgePrompt">escape the process</link>
-						!
+				<para>
+					Unzip it in the
+					directory that you like. (i.e : C:/myDirectory).
+					<figure id="forge-ajfForgeContextFolder-screen.fig">
+						<title>ajf-forge-context folder</title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center"
+									fileref="images/forge/forge-ajfForgeContextFolder-screen.png" />
+							</imageobject>
+						</mediaobject>
+					</figure>
+				</para>
+				<para>
+					Secondly, launch the forge Shell and navigate to this context
+					folder
+					(via
+					<command>cd</command>
+					command). You should see the forge prompt switch to green color
+					written :
+
+					<emphasis> ajf-forge-context </emphasis>
+
+					<figure id="forge-attachForgeContext-screen.fig">
+						<title>attach forge shell&apos;s context</title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center"
+									fileref="images/forge/forge-attachForgeContext-screen.png" />
+							</imageobject>
+						</mediaobject>
+					</figure>
+				</para>
+			</section>
+			<section>
+				<title>Run AJF-Forge commands</title>
+				<para>You are now ready to run the
+					commands for AJF solution
+					generation :
+				</para>
+				<screen>
+   <prompt>[ajf-forge-context] ajf-forge-context $&gt;</prompt><userinput>ajf-solution</userinput> 
+     </screen>
+				<para>And you should now be prompted the kind of ajf project that
+					you
+					want to generate.
+				</para>
+				<figure id="forgeDefaultCommandScreen.fig">
+					<title>launch ajf-forge default command</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata align="center" scale="80"
+								fileref="images/forge/forge-defaultCommand-screen.png" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+<?ajfProjectTypes compacted&quot; AJF project is a mono-web project. It can be used to make a simple web application (a stand alone ui application). The &quot;exploded&quot; AJF project will be composed of several project types (core, ws, ui, config, lib). This kind of project is suitable for more complex applications. For more details, see the <link linkend="norms">
+ >AJF-Norms chapter.</link>?>
+				<para>
+					Both of the two options work pretty much the same way. Two
+					inputs
+					will be prompted :
+					<itemizedlist>
+						<listitem>
+							<para>
+								- Project name ( general name of your
+								application, i.e:
+								<emphasis role="italic">myApplication</emphasis>
+								)
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								- Project folder : Directory where to create the application
+								(i.e:
+								<emphasis role="italic">C:/projects/myProjectFolder</emphasis>
+								)
+							</para>
+						</listitem>
+					</itemizedlist>
+					If selecting the &quot;exploded&quot; ajf project, several java
+					maven
+					projects will be generated:
+				</para>
+				<itemizedlist>
+					<listitem>
+						<para>
+							<filename>C:/projects/myProjectFolder/myApplication-core
+							</filename>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<filename>C:/projects/myProjectFolder/myApplication-lib
+							</filename>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<filename>C:/projects/myProjectFolder/myApplication-ui </filename>
+						</para>
+					</listitem>
+					<listitem>
+						<para>
+							<emphasis role="italic">(...)</emphasis>
+						</para>
+					</listitem>
+				</itemizedlist>
+				<para>In case of chosing the &quot;compacted&quot; project type,
+					only
+					the UI project will be generated.
+				</para>
+				<section id="compactedGenerationSection">
+					<title>Generate a &quot;compacted&quot; ajf project</title>
+					<para>On the &quot;ajf-solution&quot; default command prompted
+						choice, enter &quot;1&quot; value in order to select choice number
+						one corresponding to &quot;compacted&quot; ajf solution.
+						Immediately, you will be prompted for the name you want to give to
+						your application, and the folder where you want to create your
+						project.
 					</para>
-					<screen>
+					<note>
+						<para>Entering
+							the value &apos;exit&apos; for the project name OR
+							the project
+							directory will allow you to
+							<link linkend="escapeForgePrompt">escape the process</link>
+							!
+						</para>
+						<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt><command>ajf-solution</command>
 Which type of AJF project ?
 
@@ -363,24 +388,24 @@ Which type of AJF project ?
 ***INFO*** bye bye !
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt>
  </screen>
-				</note>
-				<note>
-					<para>
-						you could also have entered as a shortcut from the choice
-						prompt.
-					</para>
-					<screen>
+					</note>
+					<note>
+						<para>
+							you could also have entered as a shortcut from the choice
+							prompt.
+						</para>
+						<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt><command>ajf-solution compacted</command>
 </screen>
-				</note>
-				<warning>
-					<para>When entering the inputs data, a validation of the input
-						folder is done. If the directory is not correct, you will be
-						invited to start again the process. (example here : the Y drive
-						does not exist)
-					</para>
-					<para>
-						<screen>
+					</note>
+					<warning>
+						<para>When entering the inputs data, a validation of the input
+							folder is done. If the directory is not correct, you will be
+							invited to start again the process. (example here : the Y drive
+							does not exist)
+						</para>
+						<para>
+							<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt> <command>ajf-solution compacted</command>
  ? [named=The name of the new AJF project (of type java.lang.String)]: <userinput>myProject</userinput>
  ? [Directory=ARG (of type java.lang.String)]: <userinput>Y:/notExistingPath</userinput>
@@ -389,29 +414,33 @@ Which type of AJF project ?
 <prompt>[ajf-forge-context] ajf-forge-context $ </prompt>
 </screen>
 
-						Note : if the input folder path does not exist, but is correct and
-						creatable, it will be correctly create and no error message will
+							Note : if the input folder path does not exist, but is correct
+							and
+							creatable, it will be correctly create and no error message
+							will
+							be
+							prompted.
+							This error message is thrown only when the
+							directory
+							path
+							is not possible to create.
+						</para>
+					</warning>
+					<para>Let&apos;s now generate the compacted ajf project.</para>
+					<para>Once the validation of the project directory is done, a
+						validation
+						will be asked to the user, showing the directory where
+						is
+						going to
 						be
-						prompted.
-						This error message is thrown only when the directory
-						path
-						is not possible to create.
+						created the project. This is a simple validation to be
+						sure that
+						the
+						entered folder has been correctly set.
 					</para>
-				</warning>
-				<para>Let&apos;s now generate the compacted ajf project.</para>
-				<para>Once the validation of the project directory is done, a
-					validation
-					will be asked to the user, showing the directory where is
-					going to
-					be
-					created the project. This is a simple validation to be
-					sure that
-					the
-					entered folder has been correctly set.
-				</para>
-				<para>After this last validation, the project generation starts...
-				</para>
-				<screen>
+					<para>After this last validation, the project generation starts...
+					</para>
+					<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt> <command>ajf-solution compacted</command>
  ? [named=The name of the new AJF project (of type java.lang.String)]: <userinput>myApplication</userinput>
  ? [Directory=ARG (of type java.lang.String)]: <userinput>C:/Projects/myProjectFolder</userinput>
@@ -456,23 +485,23 @@ Wrote C:\/Projects/myProjectFolder/myApplication-compacted/src/main/java/am/myAp
 plication/web/controllers/ExempleMBean.java
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt>
 </screen>
-			</section>
-			<section>
-				<title>Generate an &quot;exploded&quot; ajf project</title>
-				<para>When entering the choice 2 on the ajf-solution prompt choice
-					screen, or by entering directely the shortcut command :
-				</para>
-				<screen>
+				</section>
+				<section>
+					<title>Generate an &quot;exploded&quot; ajf project</title>
+					<para>When entering the choice 2 on the ajf-solution prompt choice
+						screen, or by entering directely the shortcut command :
+					</para>
+					<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $ </prompt><command>ajf-solution exploded</command>
 </screen>
-				<para>
-					You are now about to generate an exploded ajf project. Again you
-					will be prompted for a project name and a project folder. The
-					process is precisely the same as for the
-					<link linkend="compactedGenerationSection"> compacted project generation. </link>
-					except that there will be a little more logs:
-				</para>
-				<screen>
+					<para>
+						You are now about to generate an exploded ajf project. Again you
+						will be prompted for a project name and a project folder. The
+						process is precisely the same as for the
+						<link linkend="compactedGenerationSection"> compacted project generation. </link>
+						except that there will be a little more logs:
+					</para>
+					<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt> <command>ajf-solution exploded</command>
  ? [named=The name of the new AJF project (of type java.lang.String)]: <userinput>myExplodedProject</userinput>
  ? [Directory=ARG (of type java.lang.String)]: <userinput>C:/projects/explodedProject</userinput>
@@ -521,12 +550,12 @@ Directive: org.apache.velocity.runtime.directive.Parse
 Directive: org.apache.velocity.runtime.directive.Include
 11:17:11.227 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Loaded System
 Directive: org.apache.velocity.runtime.directive.Foreach
-11:17:11.321 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Created '20' p
+11:17:11.321 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Created &apos;20&apos; p
 arsers.
 11:17:11.336 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Velocimacro :
-"velocimacro.library" is not set.  Trying default library: VM_global_library.vm
+&quot;velocimacro.library&quot; is not set.  Trying default library: VM_global_library.vm
 11:17:11.336 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Could not load
- resource 'VM_global_library.vm' from ResourceLoader org.apache.velocity.runtime
+ resource &apos;VM_global_library.vm&apos; from ResourceLoader org.apache.velocity.runtime
 .resource.loader.ClasspathResourceLoader: ClasspathResourceLoader Error: cannot
 find resource VM_global_library.vm
 11:17:11.336 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Velocimacro :
@@ -545,7 +574,7 @@ autoload off : VM system will not automatically reload global library macros
 r : found site.xml.vm with loader org.apache.velocity.runtime.resource.loader.Cl
 asspathResourceLoader
 11:17:11.367 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Null reference
- [template 'site.xml.vm', line 13, column 15] : ${project.name} cannot be resolv
+ [template &apos;site.xml.vm&apos;, line 13, column 15] : ${project.name} cannot be resolv
 ed.
 ** DEBUG :myExplodedProject-parent OK
 ***SUCCESS*** Project : myExplodedProject-parent created.
@@ -560,7 +589,7 @@ te\site.xml
 r : found site.xml.vm with loader org.apache.velocity.runtime.resource.loader.Cl
 asspathResourceLoader
 11:17:11.711 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Null reference
- [template 'site.xml.vm', line 13, column 15] : ${project.name} cannot be resolv
+ [template &apos;site.xml.vm&apos;, line 13, column 15] : ${project.name} cannot be resolv
 ed.
 ** DEBUG :myExplodedProject-ear OK
 ***SUCCESS*** Project : myExplodedProject-ear created.
@@ -575,7 +604,7 @@ ite\site.xml
 r : found site.xml.vm with loader org.apache.velocity.runtime.resource.loader.Cl
 asspathResourceLoader
 11:17:11.976 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Null reference
- [template 'site.xml.vm', line 13, column 15] : ${project.name} cannot be resolv
+ [template &apos;site.xml.vm&apos;, line 13, column 15] : ${project.name} cannot be resolv
 ed.
 ** DEBUG :myExplodedProject-core OK
 ***SUCCESS*** Project : myExplodedProject-core created.
@@ -622,7 +651,7 @@ ect-config/src/main/resources
 r : found site.xml.vm with loader org.apache.velocity.runtime.resource.loader.Cl
 asspathResourceLoader
 11:17:17.437 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Null reference
- [template 'site.xml.vm', line 13, column 15] : ${project.name} cannot be resolv
+ [template &apos;site.xml.vm&apos;, line 13, column 15] : ${project.name} cannot be resolv
 ed.
 ** DEBUG :myExplodedProject-config OK
 ***SUCCESS*** Project : myExplodedProject-config created.
@@ -637,7 +666,7 @@ te\site.xml
 r : found site.xml.vm with loader org.apache.velocity.runtime.resource.loader.Cl
 asspathResourceLoader
 11:17:17.656 [Thread-2] DEBUG a.a.f.util.VelocitySlf4JLogSystem - Null reference
- [template 'site.xml.vm', line 13, column 15] : ${project.name} cannot be resolv
+ [template &apos;site.xml.vm&apos;, line 13, column 15] : ${project.name} cannot be resolv
 ed.
 ** DEBUG :myExplodedProject-lib OK
 ***SUCCESS*** Project : myExplodedProject-lib created.
@@ -669,52 +698,59 @@ Wrote C:\/projects/explodedProject/myExplodedProject-lib/src/main/resources
 Wrote C:\/projects/explodedProject/myExplodedProject-lib/src/test/resources
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt>
 </screen>
-				<para>
-					You can now check the resources that has been generated. In
-					case of an
-					exploded ajf project you will find something like this :
-				</para>
-				<figure id="forge-explodedResources-screen.fig">
-					<title>Generated exploded Ajf project</title>
-					<mediaobject>
-						<imageobject>
-							<imagedata align="center"
-								fileref="images/forge/forge-explodedResources-screen.png" />
-						</imageobject>
-					</mediaobject>
-				</figure>
+					<para>
+						You can now check the resources that has been generated. In
+						case of an
+						exploded ajf project you will find something like this :
+					</para>
+					<figure id="forge-explodedResources-screen.fig">
+						<title>Generated exploded Ajf project</title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center"
+									fileref="images/forge/forge-explodedResources-screen.png" />
+							</imageobject>
+						</mediaobject>
+					</figure>
+				</section>
 			</section>
-		</section>
-	</section>
 
-	<section id="ejbAndWsProject">
-		<title>WS and EJB projects</title>
-		<para>Please note that by default, during an exploded ajf solution
-			generation,
-			none of the WS or EJB component projects will be
-			generated. If you
-			want to create them, you have to manually ask for it
-			in the plugin start command.
-		</para>
-		<para>For example, if you want to generate an exploded AJF2 solution,
-			with an EJB component project, you have to set the following command:
-		</para>
-		<screen>
+			<section id="ejbAndWsProject">
+				<title>WS and EJB projects</title>
+				<para>Please note that by default, during an exploded ajf solution
+					generation,
+					none of the WS or EJB component projects will be
+					generated. If you
+					want to create them, you have to manually ask for
+					it
+					in the plugin start command.
+				</para>
+				<para>For example, if you want to generate an exploded AJF2
+					solution,
+					with an EJB component project, you have to set the
+					following
+					command:
+				</para>
+				<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt><command>ajf-solution --EJB</command>
-		</screen>
-		<para>OR, if you want to skip the first prompt choice menu:</para>
-		<screen>
+  </screen>
+				<para>OR, if you want to skip the first prompt choice menu:</para>
+				<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt><command>ajf-solution exploded --EJB</command>
-		</screen>
-		<para>Then, you can use the plugin exactly the same way than before.
-			Only one confirmation question will be prompted for you, in order to
-			validate the generation of one component or another (WS
-			and/or EJB)
-		</para>
-		<para>For example, let's generate an AJF2 exploded solution with both
-			WS and EJB component project:
-		</para>
-		<screen>
+  </screen>
+				<para>Then, you can use the plugin exactly the same way than before.
+					Only one confirmation question will be prompted for you, in order
+					to
+					validate the generation of one component or another (WS
+					and/or
+					EJB)
+				</para>
+				<para>For example, let&apos;s generate an AJF2 exploded solution
+					with
+					both
+					WS and EJB component project:
+				</para>
+				<screen>
 <prompt>[ajf-forge-context] ajf-forge-context $</prompt><userinput>ajf-solution --WS --EJB</userinput>
 Which type of AJF project ?
 
@@ -762,324 +798,334 @@ Wrote C:\/projects/explodedProject/myProjectName-ejb/src/test/java
 Wrote C:\/projects/explodedProject/myProjectName-ejb/src/main/resources
 Wrote C:\/projects/explodedProject/myProjectName-ejb/src/test/resources
 </screen>
-		<para>
-			You can notice that the EJB and WS component projects have been
-			generated.
-		</para>
-	</section>
-
-	<section id="deployOnTomcatSection">
-		<title>Deploy your generated web ajf application </title>
-		<para>You can immediately deploy your new application on a tomcat7
-			application server which is embedded to the web project via a maven
-			plugin.
-		</para>
-		<para>For that, just launch a command prompt, navigate to your project
-			web ui project directory and run the command:
-		</para>
-		<screen>
+				<para>
+					You can notice that the EJB and WS component projects have
+					been
+					generated.
+				</para>
+			</section>
+			<section id="deployOnTomcatSection">
+				<title>Deploy your generated web ajf application </title>
+				<para>You can immediately deploy your new application on a tomcat7
+					application server which is embedded to the web project via a maven
+					plugin.
+				</para>
+				<para>For that, just launch a command prompt, navigate to your
+					project
+					web ui project directory and run the command:
+				</para>
+				<screen>
  <prompt>C:\projects\myExplodedApp\myApplication-ui&gt;</prompt> <command>mvn clean install tomcat7:run -P JEE5_PROFILE</command>
    </screen>
-		<important>
-			<para>Maven has to be correctly installed on your workstation !
-			</para>
-			<para>If
-				it&apos;s not, you can see the documentation
-				<ulink
-					url="https://www.myarcelormittal.com/sps1/portal/teamsites/ITFCETAE/techno/java/Documentation/Development%20tools/How%20to%20install%20Eclipse%20Environnement.doc">here</ulink>
-			</para>
-		</important>
-		<para>
-			At the end of the process, you can go on your favourite web
-			browser
-			and check your AJF2-web application welcome page via localhost:8080/
-			<emphasis>myApplication</emphasis>
-			-ui :
-		</para>
-		<figure id="forge-webApplicationPage-screen.fig">
-			<title>AJF2 Web application welcome page</title>
-			<mediaobject>
-				<imageobject>
-					<imagedata align="center" scale="20" scalefit="1"
-						fileref="images/forge/forge-webApplicationPage-screen.png" />
-				</imageobject>
-			</mediaobject>
-		</figure>
-		<warning>
-			<title>Deploying exploded solution</title>
-			<para>
-				Be carefull when deploying an exploded solution. You first
-				have to
-				<link linkend="fixDepsResolError">'clean install' the parentProject</link>
-				to avoid
-				<link linkend="depsResolError">dependencies resolution error</link>
-				.
-			</para>
-		</warning>
-		<note>
-			<para>
-				You can also launch this maven command directly from
-				your
-				IDE.
-				For
-				example, when using Ecplise, see
-				<link linkend="workWithEclipseSection">next chapter.</link>
-			</para>
-		</note>
-	</section>
-
-	<section id="workWithEclipseSection">
-		<title>Work with Eclipse</title>
-		<section>
-			<title>Import you project in Eclipse</title>
-			<para>
-				You are now ready to import your project in eclipse. For that, open
-				your favourite IDE in an empty workspace and just
-				hit the
-				<emphasis>file</emphasis>
-				submenu of Eclipse, and choose
-				<emphasis>import</emphasis>
-				choice menu.
-				Then, in the &quot;import project&quot; window, select
-				to import
-				an
-				<emphasis>Existing maven project.</emphasis>
-			</para>
-			<figure id="forge-importMavenProjectEclipse-screen.fig">
-				<title>Import a maven project in Eclipse</title>
-				<mediaobject>
-					<imageobject>
-						<imagedata align="center" scale="30"
-							fileref="images/forge/forge-importMavenProjectEclipse-screen.png" />
-					</imageobject>
-				</mediaobject>
-			</figure>
-			<para>
-				Then for the root directory, just click the browse button and
-				navigate until
-				selecting the parent folder of your application.
-
-				<figure id="forge-importMavenProjectEclipse2-screen.fig">
-					<title>Browse parent directory of your application</title>
-					<mediaobject>
-						<imageobject>
-							<imagedata align="center" scale="50"
-								fileref="images/forge/forge-importMavenProjectEclipse2-screen.png" />
-						</imageobject>
-					</mediaobject>
-				</figure>
-			</para>
-			<para>
-				After validation, you should be able to see each component of
-				your
-				application.
-			</para>
-			<para>
-				In case of a compacted project, you&apos;ll only the
-				ui-application
-				but in case of an exploded project, you&apos;ll
-				have:
-				<figure id="forge-importMavenProjectEclipse3-screen.fig">
-					<title>Components of your application</title>
-					<mediaobject>
-						<imageobject>
-							<imagedata align="center" scale="30"
-								fileref="images/forge/forge-importMavenProjectEclipse3-screen.png" />
-						</imageobject>
-					</mediaobject>
-				</figure>
-			</para>
-			<important>
-				<title>Set the JEE5_PROFILE to each project</title>
+				<important>
+					<para>Maven has to be correctly installed on your workstation !
+					</para>
+					<para>If
+						it&apos;s not, you can see the documentation
+						<ulink
+							url="https://www.myarcelormittal.com/sps1/portal/teamsites/ITFCETAE/techno/java/Documentation/Development%20tools/How%20to%20install%20Eclipse%20Environnement.doc">here</ulink>
+					</para>
+				</important>
 				<para>
-					In order for maven to work properly, you have to set the maven
-					JEE5_PROFILE to
-					<emphasis role="bold">
-						<emphasis role="underline">EACH</emphasis>
-					</emphasis>
-					of your project in Eclipse.
-					For that, right
-					click on the project and
-					select the
-					<emphasis>Properties</emphasis>
-					option. Then find the
-					<emphasis>maven</emphasis>
-					label on the left panel, and set the JEE5_PROFILE to your project.
+					At the end of the process, you can go on your favourite web
+					browser
+					and check your AJF2-web application welcome page via
+					localhost:8080/
+					<emphasis>myApplication</emphasis>
+					-ui :
 				</para>
-				<figure id="forge-setMavenProfile-screen.fig">
-					<title>Set maven JEE5_PROFILE to your project</title>
+				<figure id="forge-webApplicationPage-screen.fig">
+					<title>AJF2 Web application welcome page</title>
 					<mediaobject>
 						<imageobject>
-							<imagedata align="center"
-								fileref="images/forge/forge-setMavenProfile-screen.png" />
+							<imagedata align="center" scale="20" scalefit="1"
+								fileref="images/forge/forge-webApplicationPage-screen.png" />
 						</imageobject>
 					</mediaobject>
 				</figure>
-				<para>
-					In case of using a compacted ajf-project, you'll have to do it to
-					your only
-					<emphasis>myApplication-ui</emphasis>
-					project. But in case of using an exploded ajf-solution, you'll
-					have
-					to do this operation on every single project of the solution
-				</para>
-			</important>
-		</section>
-		<section id="deployTomCatEclipse">
-			<title>Deploy ui application on embedded tomcat</title>
-			<para>
-				As seen in the
-				<link linkend="deployOnTomcatSection">previous chapter</link>
-				, you are easily able to deploy your web UI application via the
-				embedded maven tomcat7 applications server plugin that is already
-				set on your AJF2 solution.
-				To do so you just have to launch the
-				maven
-				command, which can be set directly in eclipse. For that, just
-				head to
-				the
-				<emphasis>run configuration</emphasis>
-				menu of eclipse via :
-				<figure id="forge-runConfigMenu-screen.fig">
-					<title>&quot;run configuration&quot; menu of Eclipse </title>
-					<mediaobject>
-						<imageobject>
-							<imagedata align="center" scale="50"
-								fileref="images/forge/forge-runConfigMenu-screen.png" />
-						</imageobject>
-					</mediaobject>
-				</figure>
-			</para>
-			<para>
-				Then, double-click on the left panel the
-				<emphasis>Maven build</emphasis>
-				option. And then, on the right panel, set as follow :
+				<warning>
+					<title>Deploying exploded solution</title>
+					<para>
+						Be carefull when deploying an exploded solution. You first
+						have to
+						<link linkend="fixDepsResolError">&apos;clean install&apos; the parentProject
+						</link>
+						to avoid
+						<link linkend="depsResolError">dependencies resolution error</link>
+						.
+					</para>
+				</warning>
 				<note>
 					<para>
-						Use the
-						<emphasis>Browse Workspace...</emphasis>
-						button to select
-						<emphasis>Base Directory </emphasis>
-						of your UI application
+						You can also launch this maven command directly from
+						your
+						IDE.
+						For
+						example, when using Ecplise, see
+						<link linkend="workWithEclipseSection">next chapter.</link>
 					</para>
 				</note>
-				<figure id="forge-runConfigWind-screen.fig">
-					<title>Set the maven command to deploy on tomcat</title>
-					<mediaobject>
-						<imageobject>
-							<imagedata align="center" scale="40"
-								fileref="images/forge/forge-runConfigWind-screen.png" />
-						</imageobject>
-					</mediaobject>
-				</figure>
-			</para>
-			<warning>
-				<title>Deploying exploded solution</title>
-				<para>
-					Be carefull when deploying an exploded solution. You first
-					have to
-					<link linkend="fixDepsResolError">'clean install' the parentProject</link>
-					to avoid
-					<link linkend="depsResolError">dependencies resolution error</link>
-					.
-				</para>
-			</warning>
-			<para>
-				After that, you&apos;ll be able to run it via the
-				<emphasis>run</emphasis>
-				button. And you should see in the Eclipse&apos;s console the maven
-				logs.
-			</para>
-			<para>
-				At the end of the process, you can check the
-				<link linkend="forge-webApplicationPage-screen.fig">welcome page</link>
-				of your application
-				via going to
-				localhost:8080/
-				<emphasis>myApplication</emphasis>
-				-ui
-			</para>
+			</section>
+			<section id="workWithEclipseSection">
+				<title>Work with Eclipse</title>
+				<section>
+					<title>Import you project in Eclipse</title>
+					<para>
+						You are now ready to import your project in eclipse. For that,
+						open
+						your favourite IDE in an empty workspace and just
+						hit the
+						<emphasis>file</emphasis>
+						submenu of Eclipse, and choose
+						<emphasis>import</emphasis>
+						choice menu.
+						Then, in the &quot;import project&quot; window, select
+						to import
+						an
+						<emphasis>Existing maven project.</emphasis>
+					</para>
+					<figure id="forge-importMavenProjectEclipse-screen.fig">
+						<title>Import a maven project in Eclipse</title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center" scale="30"
+									fileref="images/forge/forge-importMavenProjectEclipse-screen.png" />
+							</imageobject>
+						</mediaobject>
+					</figure>
+					<para>
+						Then for the root directory, just click the browse button and
+						navigate until
+						selecting the parent folder of your application.
 
-		</section>
-	</section>
-	<section>
-		<title>Troubleshooting</title>
-		<para>
-			Here is a short List of errors that could occured when using the
-			forge. You may found a few solutions to your problem here
-		</para>
-		<section>
-			<title>AJF Project generation Error</title>
-			<para>
-				You may encouter this error when launching the forge and trying
-				to use directly the forge plugin.
-			</para>
-			<screen id="mavenBuildError">
-			
+						<figure id="forge-importMavenProjectEclipse2-screen.fig">
+							<title>Browse parent directory of your application</title>
+							<mediaobject>
+								<imageobject>
+									<imagedata align="center" scale="50"
+										fileref="images/forge/forge-importMavenProjectEclipse2-screen.png" />
+								</imageobject>
+							</mediaobject>
+						</figure>
+					</para>
+					<para>
+						After validation, you should be able to see each component of
+						your
+						application.
+					</para>
+					<para>
+						In case of a compacted project, you&apos;ll only the
+						ui-application
+						but in case of an exploded project, you&apos;ll
+						have:
+						<figure id="forge-importMavenProjectEclipse3-screen.fig">
+							<title>Components of your application</title>
+							<mediaobject>
+								<imageobject>
+									<imagedata align="center" scale="30"
+										fileref="images/forge/forge-importMavenProjectEclipse3-screen.png" />
+								</imageobject>
+							</mediaobject>
+						</figure>
+					</para>
+					<important>
+						<title>Set the JEE5_PROFILE to each project</title>
+						<para>
+							In order for maven to work properly, you have to set the maven
+							JEE5_PROFILE to
+							<emphasis role="bold">
+								<emphasis role="underline">EACH</emphasis>
+							</emphasis>
+							of your project in Eclipse.
+							For that, right
+							click on the project
+							and
+							select the
+							<emphasis>Properties</emphasis>
+							option. Then find the
+							<emphasis>maven</emphasis>
+							label on the left panel, and set the JEE5_PROFILE to your
+							project.
+						</para>
+						<figure id="forge-setMavenProfile-screen.fig">
+							<title>Set maven JEE5_PROFILE to your project</title>
+							<mediaobject>
+								<imageobject>
+									<imagedata align="center"
+										fileref="images/forge/forge-setMavenProfile-screen.png" />
+								</imageobject>
+							</mediaobject>
+						</figure>
+						<para>
+							In case of using a compacted ajf-project, you&apos;ll have to do
+							it to
+							your only
+							<emphasis>myApplication-ui</emphasis>
+							project. But in case of using an exploded ajf-solution,
+							you&apos;ll
+							have
+							to do this operation on every single project of
+							the
+							solution
+						</para>
+					</important>
+				</section>
+				<section id="deployTomCatEclipse">
+					<title>Deploy ui application on embedded tomcat</title>
+					<para>
+						As seen in the
+						<link linkend="deployOnTomcatSection">previous chapter</link>
+						, you are easily able to deploy your web UI application via the
+						embedded maven tomcat7 applications server plugin that is already
+						set on your AJF2 solution.
+						To do so you just have to launch the
+						maven
+						command, which can be set directly in eclipse. For that, just
+						head to
+						the
+						<emphasis>run configuration</emphasis>
+						menu of eclipse via :
+						<figure id="forge-runConfigMenu-screen.fig">
+							<title>&quot;run configuration&quot; menu of Eclipse </title>
+							<mediaobject>
+								<imageobject>
+									<imagedata align="center" scale="50"
+										fileref="images/forge/forge-runConfigMenu-screen.png" />
+								</imageobject>
+							</mediaobject>
+						</figure>
+					</para>
+					<para>
+						Then, double-click on the left panel the
+						<emphasis>Maven build</emphasis>
+						option. And then, on the right panel, set as follow :
+						<note>
+							<para>
+								Use the
+								<emphasis>Browse Workspace...</emphasis>
+								button to select
+								<emphasis>Base Directory </emphasis>
+								of your UI application
+							</para>
+						</note>
+						<figure id="forge-runConfigWind-screen.fig">
+							<title>Set the maven command to deploy on tomcat</title>
+							<mediaobject>
+								<imageobject>
+									<imagedata align="center" scale="40"
+										fileref="images/forge/forge-runConfigWind-screen.png" />
+								</imageobject>
+							</mediaobject>
+						</figure>
+					</para>
+					<warning>
+						<title>Deploying exploded solution</title>
+						<para>
+							Be carefull when deploying an exploded solution. You first
+							have to
+							<link linkend="fixDepsResolError">&apos;clean install&apos; the parentProject
+							</link>
+							to avoid
+							<link linkend="depsResolError">dependencies resolution error</link>
+							.
+						</para>
+					</warning>
+					<para>
+						After that, you&apos;ll be able to run it via the
+						<emphasis>run</emphasis>
+						button. And you should see in the Eclipse&apos;s console the maven
+						logs.
+					</para>
+					<para>
+						At the end of the process, you can check the
+						<link linkend="forge-webApplicationPage-screen.fig">welcome page</link>
+						of your application
+						via going to
+						localhost:8080/
+						<emphasis>myApplication</emphasis>
+						-ui
+					</para>
+				</section>
+			</section>
+			<section>
+				<title>Troubleshooting</title>
+				<para>
+					Here is a short List of errors that could occured when using
+					the
+					forge. You may found a few solutions to your problem here
+				</para>
+				<section>
+					<title>AJF Project generation Error</title>
+					<para>
+						You may encouter this error when launching the forge and
+						trying
+						to use directly the forge plugin.
+					</para>
+					<screen id="mavenBuildError">
+   
 START generating ajf project compacted
 Error occured during ajf web project generation : org.jboss.forge.project.ProjectModelException: 
 Could not create Maven project building request
 ***ERROR*** AJF project generation process has thrown an Exception : java.lang.N
 ullPointerException
-			
-			</screen>
-
-			<para>
-				This Error is due to the fact that the forge tool has never had
-				it's
-				context attached.
-			</para>
-			<para>
-				If you encounter this error:
-			</para>
-			<itemizedlist>
-				<listitem>
+   
+   </screen>
 					<para>
-						Firstly, exit the forge tool and then relaunch it.
+						This Error is due to the fact that the forge tool has never
+						had
+						it&apos;s
+						context attached.
 					</para>
-				</listitem>
-				<listitem>
 					<para>
-						Secondly, try to
-						<link linkend="attachForgeContext">attach your forge's context</link>
-						before launching the AJF plugin again.
+						If you encounter this error:
 					</para>
-				</listitem>
-			</itemizedlist>
+					<itemizedlist>
+						<listitem>
+							<para>
+								Firstly, exit the forge tool and then relaunch it.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Secondly, try to
+								<link linkend="attachForgeContext">attach your forge&apos;s context</link>
+								before launching the AJF plugin again.
+							</para>
+						</listitem>
+					</itemizedlist>
+					<important>
+						<title>Re launch the Forge Shell !</title>
+						<para>
+							Once this error has occured, the forge engine is broken.
+							Don&apos;t
+							forget to
+							relaunch to forge and immediately attach it to
+							the
+							ajf-forge
+							context.
+							Ideally, start the forge once your shell is
+							situated in the
+							ajf forge contect directory.
+						</para>
+					</important>
+				</section>
+				<section>
+					<title>Error when deploying AJF exploded on embedded tomcat</title>
+					<important>
+						<title>Particularity for exploded projects</title>
+						<para>
+							In the case of an exploded project (i.e named
+							<emphasis>myApplication</emphasis>
+							), the web user interface project
+							<emphasis>myApplication-ui</emphasis>
+							project has internal dependencies to the
+							<emphasis>myApplication-core</emphasis>
+							and
+							<emphasis>myApplication-config</emphasis>
+							projects. If you launch directly the deployment on tomcat via the
+							maven plugin, you may encounter the kind of following error :
 
-			<important>
-				<title>Re launch the Forge Shell !</title>
-				<para>
-					Once this error has occured, the forge engine is broken. Don't
-					forget to
-					relaunch to forge and immediately attach it to the
-					ajf-forge
-					context.
-					Ideally, start the forge once your shell is
-					situated in the
-					ajf forge contect directory.
-				</para>
-			</important>
-
-		</section>
-
-		<section>
-			<title>Error when deploying AJF exploded on embedded tomcat</title>
-			<important>
-				<title>Particularity for exploded projects</title>
-				<para>
-					In the case of an exploded project (i.e named
-					<emphasis>myApplication</emphasis>
-					), the web user interface project
-					<emphasis>myApplication-ui</emphasis>
-					project has internal dependencies to the
-					<emphasis>myApplication-core</emphasis>
-					and
-					<emphasis>myApplication-config</emphasis>
-					projects. If you launch directly the deployment on tomcat via the
-					maven plugin, you may encounter the kind of following error :
-
-					<screen id="depsResolError">
+							<screen id="depsResolError">
 []INFO] ------------------------------------------------------------------------
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
@@ -1105,99 +1151,98 @@ lutionException
      </screen>
 
 
-				</para>
-				<para>This is because maven is trying to resolve those
-					dependencies...
-					But in fact, as you just generated your exploded
-					solution, those
-					dependencies do not exist on your local maven
-					repository.
-				</para>
-				<para>
-
-				</para>
-				<para id="fixDepsResolError">
-					To fix this, you have to :
-				</para>
-				<para>
-
-				</para>
-				<itemizedlist>
-					<listitem>
-						<para>
-							Run a maven
-							<emphasis>clean install</emphasis>
-							on the PARENT project :
-							<emphasis>myApplication-parent</emphasis>
 						</para>
-					</listitem>
-				</itemizedlist>
-				<para>
+						<para>This is because maven is trying to resolve those
+							dependencies...
+							But in fact, as you just generated your exploded
+							solution, those
+							dependencies do not exist on your local maven
+							repository.
+						</para>
+						<para>
 
-				</para>
-				<para>
-					To do so,
-					you can either do it
-					directly
-					via the windows command
-					prompt
-					terminal
-					by running the
-					following
-					command:
-					<screen>
+						</para>
+						<para id="fixDepsResolError">
+							To fix this, you have to :
+						</para>
+						<para>
+
+						</para>
+						<itemizedlist>
+							<listitem>
+								<para>
+									Run a maven
+									<emphasis>clean install</emphasis>
+									on the
+									<emphasis role="bold">PARENT</emphasis>
+									project :
+									<emphasis>myApplication-parent</emphasis>
+								</para>
+							</listitem>
+						</itemizedlist>
+						<para>
+
+						</para>
+						<para>
+							To do so,
+							you can either do it
+							directly
+							via the windows command
+							prompt
+							terminal
+							by running the
+							following
+							command:
+							<screen>
 <prompt>C:/(...)/myApplication-parent&gt;</prompt><command>mvn clean install -P JEE5_PROFILE</command>
      </screen>
-				</para>
-
-				<para>
-					Or you can do it directly in Eclipse, by right clicking on the
-					project and doing
-					<emphasis> Run as / Maven Install </emphasis>
-					<figure id="forge-runAsMavenInstall-screen.fing">
-						<title>Maven install of a project in eclipse</title>
-						<mediaobject>
-							<imageobject>
-								<imagedata align="center"
-									fileref="images/forge/forge-runAsMavenInstall-screen.png" />
-							</imageobject>
-						</mediaobject>
-					</figure>
-				</para>
-				<para>
-					<note>
-						<title>
-							Plugin
-							<emphasis>m2eclipse</emphasis>
-							to run this command
-						</title>
-						<blockquote>
-							<para>
-								You must have the
-								<emphasis>m2eclipse</emphasis>
-								plugin to do this. If you don&apos;t have it, just catch it
-								<ulink url="http://www.eclipse.org/m2e/download/">here.</ulink>
-							</para>
-						</blockquote>
-					</note>
-				</para>
-			</important>
-
-		</section>
-
-		<section id="escapeForgePrompt">
-			<title>How do I escape the prompted menu ?</title>
-			<para>
-				It may happens that you are locked in the prompted menu, and
-				that you
-				want to cancel the project generation.
-				Don't panic, the
-				"exit"
-				keyword is here for you
-			</para>
-
-			<screen>
-	
+						</para>
+						<para>
+							Or you can do it directly in Eclipse, by right clicking on the
+							project and doing
+							<emphasis> Run as / Maven Install </emphasis>
+							<figure id="forge-runAsMavenInstall-screen.fing">
+								<title>Maven install of a project in eclipse</title>
+								<mediaobject>
+									<imageobject>
+										<imagedata align="center"
+											fileref="images/forge/forge-runAsMavenInstall-screen.png" />
+									</imageobject>
+								</mediaobject>
+							</figure>
+						</para>
+						<para>
+							<note>
+								<title>
+									Plugin
+									<emphasis>m2eclipse</emphasis>
+									to run this command
+								</title>
+								<blockquote>
+									<para>
+										You must have the
+										<emphasis>m2eclipse</emphasis>
+										plugin to do this. If you don&apos;t have it, just catch it
+										<ulink url="http://www.eclipse.org/m2e/download/">here.</ulink>
+									</para>
+								</blockquote>
+							</note>
+						</para>
+					</important>
+				</section>
+				<section id="escapeForgePrompt">
+					<title>How do I escape the prompted menu ?</title>
+					<para>
+						It may happens that you are locked in the prompted menu, and
+						that you
+						want to cancel the project generation.
+						Don&apos;t panic,
+						the
+						&quot;exit&quot;
+						keyword is here for you
+					</para>
+					<screen>
+ 
 [ajf-forge-context] ajf-forge-context $ ajf-solution
 Which type of AJF project ?
 
@@ -1208,31 +1253,1244 @@ Which type of AJF project ?
  ? Project Name : <userinput>exit</userinput>
 ***INFO*** bye bye !
 [ajf-forge-context] ajf-forge-context $
-	
-		</screen>
-
+ 
+  </screen>
+				</section>
+				<section id="madatoryComponentsProblem">
+					<title>I can&apos;t find any WS and/or EJB component project in my
+						exploded AJF2 solution
+					</title>
+					<para>
+						WS and EJB component projects are optional for an AJF2
+						exploded
+						solution. Therefore, they are not generated by default in
+						the
+						exploded generation process.
+					</para>
+					<para>
+						Don&apos;t be scared ! You can ask for them when generating your
+						AJF2
+						solution, by doing
+						<link linkend="ejbAndWsProject">this</link>
+						.
+					</para>
+				</section>
+			</section>
 		</section>
 
-		<section id="madatoryComponentsProblem">
-			<title>I can't find any WS and/or EJB component project in my
-				exploded
-				AJF2 solution
-			</title>
+		<section id="manage-project-command">
+			<title>&apos;manage-project&apos; command : Generate MCR</title>
 			<para>
-				WS and EJB component projects are optional for an AJF2
-				exploded
-				solution. Therefore, they are not generated by default in
-				the
-				exploded generation process.
+				Via the
+				<command> manage-project</command>
+				forge plugin command, you will be able to generate some p+
+				functions,
+				with
+				Unit Tasks ready to be coded. All the plumbing will be
+				generated
+				by
+				the forge. You will also have the possibility to generate
+				CRUD
+				xhtml
+				web interfaces from existing model entities.
 			</para>
 			<para>
-				Don't be scared ! You can ask for them when generating your AJF2
-				solution, by doing
-				<link linkend="ejbAndWsProject">this</link>
-				.
+				The command works pretty much the same way than the
+				<command> ajf-solution </command>
+				project generation command. When calling the command, you will be
+				prompted with different questions in order generate what you want.
 			</para>
-		</section>
+			<important id="uiInstanceToLaunchCommand">
+				<para>
+					In order to use the
+					<command>manage-project</command>
+					command, your forge tool must be on your AJf UI project instance.
+				</para>
+				<para>
+					For example, if you want to generate some code on your exploded
+					ajf
+					solution named
+					<emphasis>myProject</emphasis>
+					, you must navigate with the forge up to the
+					<emphasis>myProject-ui</emphasis>
+					instance. if not you&apos;ll get an Error.
+				</para>
+				<figure id="launchManageProject">
+					<title>Launch manage-project</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata align="center"
+								fileref="images/forge/launchManageProjectCommand.png" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+				<para>The same way, in a compacted ajf solution, just point the ui
+					project instance when launching the command
+				</para>
+			</important>
+			<note>
+				<para>
+					The command should automatically detect if you are situated in an
+					AJF
+					<emphasis role="bold">EXPLODED</emphasis>
+					solution or
+					<emphasis role="bold">COMPACTED</emphasis>
+					one. An
+					<emphasis role="bold">**INFO**</emphasis>
+					log will be displayed as soon as you call your
+					command, showing
+					which
+					ajf solution type you have been detected.
+				</para>
+				<screen>
+<emphasis role="bold">***INFO***</emphasis> Your current project myProject-ui as been detected as part of an EXPLODED AJF Solution.
+    </screen>
+			</note>
+			<tip>
+				<title>Don't lose time, use default values !</title>
+				<para>
+					When you are prompt for something, there is always a default value
+					that is set just by hitting the
+					<keycap>ENTER</keycap>
+					button without entering any value.
 
+					This default value is always
+					written between
+					<emphasis role="bold">[ ]</emphasis>
+					at the end of each prompted question :
+
+					<figure id="defaultValueTip.fig">
+						<title>Default Value</title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center" fileref="images/forge/defaultValueTip.png" />
+							</imageobject>
+						</mediaobject>
+					</figure>
+
+					Please note that default value are generally the way to use
+					standards value and a very good way to respect the AJF2 norms
+				</para>
+			</tip>
+
+
+			<section>
+				<title>Work in exploded solution</title>
+				<para>
+					In exploded solution, the command will follow exactly the AJF2
+					rules. Therefore, when you will be prompted for package names,
+					they
+					will always refer to the project type corresponding to the entity
+					beeing generated.
+				</para>
+				<para>
+					For example:
+					<itemizedlist>
+						<listitem>
+							<para>
+								<emphasis role="bold">JPA Entity Model</emphasis>
+								will be looked up in
+								<emphasis role="bold">LIB</emphasis>
+								project component.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<emphasis role="bold">Policy</emphasis>
+								java classes
+								will be generated in
+								<emphasis role="bold">CORE</emphasis>
+								component project
+							</para>
+						</listitem>
+					</itemizedlist>
+    <?For more info, please check the
+    <link linkend="norms">
+     >AJF-Norms chapter.
+    </link>
+    ?>
+				</para>
+			</section>
+			<section>
+				<title>Work in Compacted Solution</title>
+				<para>
+					In a compacted solution, naturally all prompted package name
+					will
+					refer to the only java
+					<emphasis role="bold">UI</emphasis>
+					project that compose you solution.
+				</para>
+			</section>
+			<section>
+				<title>What will be generated ?</title>
+				<para>
+					During the command execution, you will be firstly prompted for a
+					<emphasis role="bold">Function Name</emphasis>
+					. Then you&apos;ll be asked for the list of
+					<emphasis role="bold">Unit tasks</emphasis>
+					that compose the function. You will also be asked for the name of
+					the existing
+					<emphasis role="bold">entity</emphasis>
+					that you want to manipulate with your function.
+					This entity can be a
+					JPA entity model, mapped on a particular table
+					of a data base, or a
+					simple POJO.
+				</para>
+				<para>
+					From those information, will be generated :
+					<itemizedlist>
+						<listitem>
+							<para>
+								<emphasis role="bold">Listing xhtml web page :</emphasis>
+								&apos;listEntity.xhtml&apos;, web interface
+								displaying the list
+								of
+								entity in
+								a data table, and a search
+								entity panel. (generated if
+								asked)
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<emphasis role="bold">Creation xhtml web page :</emphasis>
+								&apos;createEntity.xhtml&apos;, web
+								interface offering a panel to
+								create a
+								new entity. (generated if
+								asked)
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<emphasis role="bold">ManagedBean java class :</emphasis>
+								&apos;functionNameMBean.java&apos;, linked to
+								the web xhtml page
+								via JSF2
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<emphasis role="bold">BusinessDelegate java interface :
+								</emphasis>
+								&apos;functionNameBD.java&apos;,
+								java interface for the policy
+								business core
+								class.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<emphasis role="bold">Data transfer Objects (DTO):</emphasis>
+								for each unit task, param bean
+								and result beans object,
+								&apos;unitTaskPB&apos;.java&apos; and
+								&apos;UnitTaskRB.java&apos;.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<emphasis role="bold">Policy java class :</emphasis>
+								&apos;functionNamePolicy.java&apos;, java class
+								containing the
+								core business
+								code of each unit tasks.
+							</para>
+						</listitem>
+					</itemizedlist>
+				</para>
+				<para>
+					After generation, everyting is compiling and in the case you
+					aksed for a web page, it is immediately useable via deploying the
+					java AJF 2 project on it&apos;s embedded tomcat application server.
+				</para>
+				<figure id="globalListXhtml.fig">
+					<title>list entity generated screen</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata align="center" scale="20" scalefit="1"
+								fileref="images/forge/globalListXhtml.png" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+				<figure id="globalCreateXhtml.fig">
+					<title>Create entity generated screen</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata align="center" scale="20" scalefit="1"
+								fileref="images/forge/globalCreateXhtml.png" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+			</section>
+			<section>
+				<title>Process Command</title>
+				<para>The command process will be decomposed in several steps:
+				</para>
+				<section id="functionName">
+					<title>Function name</title>
+					<para>
+						When launching the
+						<command>manage-project</command>
+						command on your
+						<emphasis role="bold">UI</emphasis>
+						project, you will be firstly prompted for the name of the
+						function
+						that you want to generate. This function name corresponds to the
+						global business function that you want to code in your
+						application.
+						This function name will give it&apos;s name to the
+						<emphasis>ManagedBean</emphasis>
+						java class, but also to the
+						<emphasis>BusinessDelegate</emphasis>
+						java interface and the
+						<emphasis>Policy</emphasis>
+						core business java class.
+					</para>
+					<important>
+						<para>
+							Suffixes for java class names will automatically be added to the
+							function name. For example, if you enter
+							<emphasis>managePerson</emphasis>
+							as function name, the suffixe
+							<emphasis>MBEAN</emphasis>
+							will be automatically suffixed to it to generate
+							<emphasis>managePersonMBean.java</emphasis>
+						</para>
+					</important>
+					<para>
+						For our example, let's use
+						<emphasis>managePerson</emphasis>
+						as the function name.
+					</para>
+					<screen>
+
+******************
+
+---  Function Generation  ----
+
+******************
+ ? Name of the function to generate (i.e: ManagePerson): <userinput>managePerson</userinput>
+ 
+ 			 </screen>
+				</section>
+				<section id="entityInput">
+					<title>Entity Name</title>
+					<para>
+						Secondly, you will be prompted for the
+						<emphasis>EntityName</emphasis>
+						to use. Please note that you must specify an existing entity data
+						model. For example, in our example, we use the
+						<emphasis>Person.java</emphasis>
+						. If using an
+						<emphasis role="bold">EXPLODED</emphasis>
+						ajf solution, the data model must be situated in the
+						<emphasis role="bold">LIB</emphasis>
+						component project.
+					</para>
+
+					<figure id="enityModelLocation">
+						<title>Entity model</title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center" fileref="images/forge/enityModelLocation.png" />
+							</imageobject>
+						</mediaobject>
+					</figure>
+					<para>
+						You will notice in the forge logs, that the project lib is
+						firstly
+						loaded. In case of a
+						<emphasis role="bold">COMPACTED</emphasis>
+						ajf solution, this wouldn't appear as the model will be looked up
+						in the UI project.
+					</para>
+					<screen>
+******************
+
+---  Entity loading  ----
+
+******************
+
+***INFO*** Project myProject-lib of your AJF solution has been loaded :C:\myProject\EXPLODED\myProject-lib
+
+ ? Name of Entity, same as model class (i.e: Person): <userinput>person</userinput>
+***INFO*** Entity Person has been loaded.
+				</screen>
+
+					<note>
+						<para>
+							Please note that the package name containing the model
+							correspondds to the AJF2 norm (
+							<emphasis>am.projectname.lib.model</emphasis>
+							). The model will be looked up in this package by default. If
+							not
+							found, you will be prompted for the custom package name where you
+							located this entity. In this case you are also prompted an other
+							time for the entity name, it you don't want to change it you can
+							directly press enter)
+						</para>
+					</note>
+
+					<screen>
+***ERROR*** The Model [am.myproject.lib.model.Person.java] was not found.
+
+ ? Do you want to manually specify the model you want to use [y] ? [Y/n] <userinput>y</userinput>
+***INFO*** Specify a package name that contains model.
+
+ ? Which package contains the entity model class ? [am.myproject.lib.model] <userinput>am.mycustom.package</userinput>
+ ? Model class name [Person]<userinput>enter here new entity name if needed, or let empty</userinput>
+ ***INFO*** Entity Person has been loaded.
+				</screen>
+				</section>
+
+				<section>
+					<title>Unit Tasks (UT)</title>
+					<para>
+						Now you get to the unit tasks creation. Unit tasks
+						corresponds
+						technically to the method that will be contained in all
+						your
+						function classes.
+					</para>
+					<para>
+						For example, if you ask for the UT
+						<emphasis>create</emphasis>
+						for the function
+						<emphasis>managePerson</emphasis>
+						with entity
+						<emphasis>Person</emphasis>
+						. This will generate the method
+						<emphasis>create</emphasis>
+						in the business classes like
+						<emphasis>ManagePersonMBean.java</emphasis>
+					</para>
+					<important>
+						<para>
+							Each Unit task that will be entered will be automatically
+							suffixed
+							by the entity name. For instance, entering the
+							<emphasis>create</emphasis>
+							UT for entity
+							<emphasis>Person</emphasis>
+							will automatically generate
+							<emphasis>createPerson</emphasis>
+							methods.
+						</para>
+						<para>In case you would forget that, if you set the entity name
+							in
+							your UT name, wou will receive a warning for that:
+						</para>
+						<screen>
+***WARNING*** Entity name will automatically be suffixed to the UT name. Here yo
+u're entered UT createPerson. It will become: createPersonPerson
+ ? Is that ok ? [Y/n]
+					</screen>
+					</important>
+
+					<para>Here is the Unit task prompt menu you will get to at this
+						point :
+					</para>
+					<screen>
+******************
+
+---  Unit tasks (UT) List  ----
+
+******************
+
+What whould you like to do ?
+
+  1 - [Display help with particuliar unit Tasks for CRUD.]
+  2 - [Add a new Unit Task to my Function.]
+  3 - [Add quickly several unit tasks.]
+  4 - [OK, let's continue !]
+
+ ? Choose an option by typing the number of the selection: 
+						
+					</screen>
+
+					<para>Here is what each choice is doing:</para>
+					<itemizedlist>
+						<listitem>
+							<para>
+								<emphasis role="bold">choice 1 </emphasis>
+								: This choice is will display a help text for the 3 particular
+								UT
+								that impacts web page generation.
+							</para>
+							<para>
+								The
+								<emphasis role="bold">create</emphasis>
+								UT will generate the
+								<emphasis>createEntity.xmtml</emphasis>
+								page offering the possibility to create entities.
+							</para>
+							<para>
+								The
+								<emphasis role="bold">list</emphasis>
+								UT will generate the
+								<emphasis>listEntity.xhml</emphasis>
+								page that display a data table of entity, and a search panel
+								for
+								displaying search result. Please note that the
+								<emphasis role="bold">search</emphasis>
+								UT will automatically be changed to
+								<emphasis role="bold">list</emphasis>
+								UT as the same code is generated.
+							</para>
+							<para>
+								The
+								<emphasis role="bold">delete</emphasis>
+								UT will offer the creation of delete button next to the data
+								table in order to ask for the deletion of selected entities.
+							</para>
+							<para>
+								It is also specified in red color that every xhtml web page
+								can't
+								be updated (on the opposite of java classes). Only
+								overWriting
+								them is possible. Therefore
+								pay attention to what
+								you're doing when
+								using the tool, because by overwriting an
+								xhtml
+								page, you will
+								generate it only with the UT list of the
+								current
+								<emphasis>manage-project</emphasis>
+								command's current instance.
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<emphasis role="bold">Choice 2 : </emphasis>
+								This choice offer you the possibility to enter one Unit task.
+								By
+								using this choice you will be prompted for your UT name, and
+								then
+								it will be immediatltly checked and corrected if needed.
+								You
+								will
+								then be back to the UT input menu, until you select the
+								<emphasis role="bold">exit</emphasis>
+								choice. This
+								<emphasis role="bold">choice 2 </emphasis>
+								is ideal to enter a small number of Unit tasks.
+							</para>
+							<screen>
+ ? Choose an option by typing the number of the selection: <userinput>2</userinput>
+
+***INFO*** Please enter your UT name. Please not that the Entity name will autom
+atically be suffixed to your UT value. For example, if you enter 'create', the unit task 'createPerson' will be added.
+
+ ? UT name : <userinput>search</userinput>
+
+***WARNING*** 'search' UT has been replaced by 'list' as it corresponds to the same code generation
+***INFO*** The UT 'listPerson' has been saved.
+This is a key UT							
+							</screen>
+							<para>
+								As you may have noticed, when entring a key UT which impact the
+								xhtml web page(s) generation, a small green log is displayed
+								<emphasis>This is a key UT</emphasis>
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								<emphasis role="bold">Choice 3 : </emphasis>
+								This offer you the possibility to enter several UT tasks at a
+								time, without beeing pushed back to UT main menu every time you
+								enter one.
+							</para>
+							<para>
+								Here you enter your UT name and validate with
+								<keycap>ENTER</keycap>
+								to enter a new one. When finished, press
+								<keycap>ENTER</keycap>
+								with an empty UT line, and head back to the menu.
+							</para>
+							<para>All the entered UTs are then checked up and added to the
+								list. (If already exist on the current list, you are prompted
+								and
+								the UT is ignored).
+							</para>
+							<note>
+								<para>At this point, we don't check if the UT already exists in
+									any java class, we just manipulate the list of UT. This check
+									up
+									will be done later.
+								</para>
+							</note>
+							<screen>
+? Choose an option by typing the number of the selection: <userinput>3</userinput>
+
+***INFO*** Please enter your UT values down here. Validate each UT by hitting 'E
+NTER' key. When you are done, enter an 'empty' UT so as to exit the UT creation.
+
+
+ ?  - UT name: <userinput>list</userinput>
+ ?  - UT name: <userinput>create</userinput>
+ ?  - UT name: <userinput>update</userinput>
+ ?  - UT name: <userinput>delete</userinput>
+ ?  - UT name: <userinput>hire</userinput>
+ ?  - UT name:
+
+***INFO*** The UT listPerson was already set.
+
+***INFO*** The UT 'createPerson' has been saved.
+This is a key UT
+
+***INFO*** The UT 'updatePerson' has been saved.
+
+***INFO*** The UT 'deletePerson' has been saved.
+This is a key UT
+
+***INFO*** The UT 'hirePerson' has been saved.
+
+	</screen>
+						</listitem>
+						<listitem>
+							<para>
+								<emphasis role="bold">Choice 3 : </emphasis>
+								use this choice when you are done with adding UTs and that you
+								want to go on to the next step.
+							</para>
+						</listitem>
+					</itemizedlist>
+
+					<para id="managedBeanPackage">
+						At the end of this UT entering part, you are now prompted for
+						the
+						managed bean package. Please not that, like in every AJF-forge
+						prompt question, the default value used if nothing is entered by
+						user, is display at the end of each question between
+						<emphasis role="bold">[ ]</emphasis>
+						. Here for the managed bean :
+					</para>
+					<screen>
+? Which package of ui project for Managed Bean ? [am.myproject.web.controllers]				
+				</screen>
+
+					<para>This information is asked now, because it will be used all
+						along the generation process.
+					</para>
+				</section>
+				<section>
+					<title>Web pages generation</title>
+					<para>Depending on the UT you asked for, you are now about to
+						generate one or two Xhtml web pages.
+					</para>
+					<section>
+						<title>Xhtml List page</title>
+						<para>
+							if you ask for the
+							<emphasis role="bold">list</emphasis>
+							UT, you are about to
+							generate the Xhtml web pages of listing and
+							searching entities.
+						</para>
+						<para id="attributesSelection">
+							Firstly, the entity model that we entered at the begining
+							(Person
+							in
+							our example) is loaded an analyzed.
+							Every attribute in it that
+							has
+							an associated
+							<emphasis>getter</emphasis>
+							method
+							is prompted to you. You are asked if you want to use them
+							on
+							the
+							web interface. You may not be interested to display on the
+							screen
+							one or another attribute of your entity. Enter
+							<emphasis>y</emphasis>
+							or
+							<emphasis>empty</emphasis>
+							to keep it, and
+							<emphasis>N</emphasis>
+							to avoid it.
+						</para>
+						<para>For example :</para>
+						<screen>
+******************
+
+---  Xhtml list web page generation  ----
+
+******************
+
+***INFO*** Please select which entity's attributes to use on web interface.
+
+Entity model 'Person' has 5 attributes :
+
+ ? Use Attribute personid in MCR ? [y] [Y/n]
+ ? Use Attribute firstname in MCR ? [y] [Y/n]
+ ? Use Attribute lastname in MCR ? [y] [Y/n]
+ ? Use Attribute birthday in MCR ? [y] [Y/n] <userinput>n</userinput>
+ ? Use Attribute sex in MCR ? [y] [Y/n]
+
+***INFO*** Start generating xhtml file for function : listPerson.xhtml
+list Xhtml file generation done.
+</screen>
+						<para>
+							Here we have removed the
+							<emphasis>birthday</emphasis>
+							attribute, so on the screen you'll have (example on the creation
+							screen):
+						</para>
+						<figure id="exampleAttributes">
+							<title>Attribute list on the screen</title>
+							<mediaobject>
+								<imageobject>
+									<imagedata align="center" fileref="images/forge/exampleAttributes.png" />
+								</imageobject>
+							</mediaobject>
+						</figure>
+						<note>
+							<para>Those Entity attributes are detected via their 'getter'
+								method in the entity model. A model attribute without any
+								'getter'
+								will not be taken into account at this point. (this
+								would
+								fail the
+								JSF2 page loading anyway).
+							</para>
+						</note>
+						<para id="listEntityWeb">
+							After that, the
+							<emphasis>listEntity.xhtml</emphasis>
+							file generation is going to start. Depending on the key UT you
+							entered, it will generate a search panel with some search
+							criteria
+							to be entered, a data list to display entities.
+						</para>
+						<screen>
+***INFO*** Start generating xhtml file for function : listPerson.xhtml
+list Xhtml file generation done.
+				</screen>
+						<para>
+							In case the file already exists, you will be asked either to
+							overwrite it, either to not modify it. IT will not be updated if
+							you ask
+							<emphasis role="bold">Y</emphasis>
+							at this point. But it will be overwritten. Let emtpy for
+							<emphasis role="bold">N</emphasis>
+							as it is default value.
+						</para>
+						<screen>
+***INFO*** Start generating xhtml file for function : listPerson.xhtml
+ ? File listPerson.xhtml already exists. Overwrite ? [N] [y/N] <userinput>y</userinput>
+list Xhtml file generation done.
+				</screen>
+						<para>Or, if you don't overwrite it:</para>
+						<screen>
+***INFO*** Start generating xhtml file for function : listPerson.xhtml
+ ? File listPerson.xhtml already exists. Overwrite ? [N] [y/N]
+***INFO*** listPerson.xhtml file will not be modified				
+				</screen>
+					</section>
+					<section>
+						<title>Create xhtml file</title>
+						<para>
+							Then, if you asked for the
+							<emphasis role="bold">create</emphasis>
+							UT, the
+							<emphasis>createEntity.xhtml</emphasis>
+							is now going to be generated.
+						</para>
+						<para>
+							If you didn't ask for the list, and that you haven't been
+							prompted
+							for
+							<link linkend="attributesSelection">entity attribute selection</link>
+							, you may have to do it now.
+						</para>
+						<para>
+							Then, the web page generation happens exactly the same way than
+							the
+							<link linkend="listEntityWeb">list Entity web page creation.</link>
+						</para>
+					</section>
+					<section>
+						<title>xhtml files location</title>
+						<para>
+							The web pages will be generated in your
+							<emphasis>UI</emphasis>
+							project, in a folder specified by the AJF2 norms.
+						</para>
+						<para>
+							The files are generated in the
+							<filename>src/main/webapp</filename>
+							directory of the project. Then, a sub directory named as the
+							<link linkend="functionName">functionName</link>
+							you previously entered. In this directory you will find your
+							xhtml
+							generated file(s). In our example of
+							<emphasis role="bold">managePerson</emphasis>
+							function, it will be set like the following:
+						</para>
+						<figure id="xhtmlFilesLocation.fig">
+							<title>Generated Xhtml files location</title>
+							<mediaobject>
+								<imageobject>
+									<imagedata align="center"
+										fileref="images/forge/xhtmlFilesLocation.png" />
+								</imageobject>
+							</mediaobject>
+						</figure>
+					</section>
+				</section>
+				<section>
+					<title>Business Delegate Interface</title>
+					<para>
+						Next Step is the generation of the business delegate
+						interface. This interface, will contained all the method related
+						to
+						each UT you entered. It is the interface of the Policy class
+						that
+						will be generated later on.
+					</para>
+					<para>
+						Firstly, you are prompted to set the package that will
+						contained this Java Interface. Again the default value is the
+						package as described in the AJF2 norms.
+					</para>
+					<note>
+						<para>In an exploded solution, this package is related to the lib
+							project.
+						</para>
+					</note>
+					<screen>
+ ? Which package of lib project for BD interfaces ? [am.myproject.lib.business]
+
+Create package : true
+Creation of ManagePersonBD.java : true
+				</screen>
+					<para>If needed the package is created. If needed, the Business
+						Delegate java class corresponding to your function name is also
+						created.
+					</para>
+					<para>
+						In case the file does already exists, you are asked about
+						overwriting it or not ?
+						By Default, the answer is
+						<emphasis role="bold">N</emphasis>
+						which means that the file is goind to be
+						<emphasis role="bold">updated</emphasis>
+						. If you manually specify the
+						<emphasis role="bold">Y</emphasis>
+						answer, you will simply overwrite the file witht the UTs you
+						entered in this
+						<command>manage-project</command>
+						instance.
+					</para>
+					<para>The update is simply adding the missing method, for UT that
+						does not already exists in the file. If UT does already exist,
+						you
+						are informed via **INFO** logs.
+					</para>
+					<screen>
+ ? File ManagePersonBD.java already exists. Do you want to overWrite ('N' to update) ? [N] [y/N]
+***INFO*** Updating ManagePersonBD.java...
+
+***INFO*** Ignoring UT=listPerson generation as it already exists.
+
+***INFO*** Ignoring UT=createPerson generation as it already exists.
+
+***INFO*** Ignoring UT=updatePerson generation as it already exists.				
+				</screen>
+					<para>
+						At the same time of generating Business delege interface, we need
+						to generate the
+						<emphasis role="bold">
+							DTOs
+						</emphasis>
+						(Data transfer object). Those are
+						<emphasis role="bold">result beans</emphasis>
+						, and
+						<emphasis role="bold">param beans</emphasis>
+						used for each UT method input/output. For each UT, a
+						<emphasis>UtNamePB.java</emphasis>
+						and
+						<emphasis>UtNameRB.java</emphasis>
+						are generated.
+					</para>
+					<para>For that, you are also prompted for the package where to
+						generate them. By default, as specified in AJF2 norms, a sub
+						package DTO is set. Right After, DTOs are generated. If some does
+						already exist, you are again ask to over write or simply ignore.
+					</para>
+					<screen>
+ ? In which package of Lib project you want to create DTOs (ParamBeans, ResultBeans) [am.myproject.lib.business.dto]
+
+ ? listPersonPB.java file already exists. OverWrite [N]? [y/N]
+ ? listPersonRB.java file already exists. OverWrite [N]? [y/N]
+ ? createPersonPB.java file already exists. OverWrite [N]? [y/N]
+ ? createPersonRB.java file already exists. OverWrite [N]? [y/N]
+Creating updatePersonPB.java ...
+Creating updatePersonPB.java ...
+Done.				
+				</screen>
+					<para>Here, listPerson and createPerson DTOs did already exist and
+						we simply ignored them. On the contrary, the updatePerson DTOs
+						have
+						been created
+					</para>
+					<figure id="DTO.fig">
+						<title>Data transfer Objetcs generated content</title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center" fileref="images/forge/DTO.png" />
+							</imageobject>
+						</mediaobject>
+					</figure>
+					<para>
+						Finally, the Business Delegate interface finish to be
+						generated or updated with new UTs.
+						You can find your generated
+						classes in the mentionned packages (of lib project for Exploded
+						solution):
+					</para>
+					<figure id="businessDelegateLocation.fig">
+						<title>Generated Business Delegate and DTOs location</title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center"
+									fileref="images/forge/businessDelegateLocation.png" />
+							</imageobject>
+						</mediaobject>
+					</figure>
+					<figure id="BusinessDelegate.fig">
+						<title>Business Delegate generated content</title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center" fileref="images/forge/BusinessDelegate.png" />
+							</imageobject>
+						</mediaobject>
+					</figure>
+				</section>
+				<section>
+					<title>Policy Class</title>
+					<para>
+						At this point, we are about to generate the policy class for
+						your function. Empty methods corresponding to each UT will be
+						prepared to welcome your core business code.
+					</para>
+					<para>You will like usual be prompted for the package where to
+						generate this java class.
+					</para>
+					<note>
+						<para>
+							Again, when working in an Exploded AJF2 solution, this package
+							will be related to the
+							<emphasis>CORE</emphasis>
+							project. An **INFO** log is then display to inform you that the
+							CORE project has correctly been loaded.
+						</para>
+						<screen>
+***INFO*** Project myProject-core of your AJF solution has been loaded :C:\myPro
+ject\exploded\myProject-core
+						</screen>
+					</note>
+					<para>
+						Once you entered your package (you can keep by default the
+						package
+						respecting AJF2 norms), the generation starts.
+					</para>
+					<screen>
+******************
+
+---  Policy Class generation  ----
+
+******************
+
+***INFO*** Project myProject-core of your AJF solution has been loaded :C:\myPro
+ject\exploded\myProject-core
+***INFO*** Start generating Policy java class
+
+ ? In Which package do you want to generate Policy class ? [am.myproject.core.business]
+Creating ManagePersonPolicy.java ...
+Done.
+					</screen>
+					<para>Like before, if the class already exists, you are asked to
+						overwrite it, or by default, to update it. In this case you are
+						informed of what is ignored, and what has been added to the
+						policy
+						class:
+					</para>
+					<screen>
+ ? Class ManagePersonPolicy.java already exists. OverWrite ? [N] [y/N]
+Updating ManagePersonPolicy.java ...
+
+***INFO*** Ignoring UT=listPerson generation as it already exists.
+
+***INFO*** Ignoring UT=createPerson generation as it already exists.
+
+***INFO*** Ignoring UT=updatePerson generation as it already exists.
+
+Adding UT:updatePerson...
+					</screen>
+					<figure id="PolicyClass.fig">
+						<title>Policy generated content</title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center" fileref="images/forge/PolicyClass.png" />
+							</imageobject>
+						</mediaobject>
+					</figure>
+				</section>
+				<section>
+					<title>Managed Bean</title>
+					<para>
+						Final step is the generation of the
+						<emphasis role="bold">managed bean class.</emphasis>
+						As you were already asked ate the beginning for the
+						<link linkend="managedBeanPackage">package where to generate it</link>
+						you will not be prompted again for it, and the generation will
+						start automatically.
+					</para>
+					<screen>
+******************
+
+---  Managed Bean generation  ----
+
+******************
+***INFO*** Start generating ManagedBean class ManagePerson2.java
+Physical file creation : true
+Data model Map generated.
+Managed bean generation done.
+					</screen>
+					<para>
+						You will be prompted again if the file does already exist,
+						like other
+						files. In case, additionnal unexisting UT will be
+						generated in
+						managed bean.
+					</para>
+					<screen>
+Managed bean java file already exist
+***INFO*** Updating ManagePersonMBean.java...
+
+***INFO*** Ignoring UT=listPerson generation as it already exists.
+
+***INFO*** Ignoring UT=createPerson generation as it already exists.
+
+***INFO*** Addition of methods for new Unit tasks:
+Adding UT:updatePerson...
+					</screen>
+					<warning>
+						<para>
+							When updating the java class, everything is added sequentially
+							to
+							the file. For some UT, like if you are updating the file by
+							adding
+							the
+							<emphasis role="bold">create</emphasis>
+							UT, the updating process will add some attributes to the class,
+							as
+							well as getters and setters for them.
+							In this case, your class
+							may
+							disorganized...
+							You'll just have to re-organize the class
+							members
+							as you wish.
+						</para>
+					</warning>
+					<figure id="managedBeanClass1.fig">
+						<title>Managed Bean generated content</title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center" fileref="images/forge/managedBeanClass1.png" />
+							</imageobject>
+						</mediaobject>
+					</figure>
+					<figure id="managedBeanClass2.fig">
+						<title>Managed Bean generated content (part2)</title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center" fileref="images/forge/managedBeanClass2.png" />
+							</imageobject>
+						</mediaobject>
+					</figure>
+				</section>
+			</section>
+			<section>
+				<title>Final Project contitution</title>
+				<para>
+					After generated a function containing several UT, this is how
+					your
+					exploded solution looks like (taken into account the value of our
+					<emphasis>managePerson</emphasis>
+					example function):
+				</para>
+
+				<figure id="generatedProjectCore.fig">
+					<title>Generated Core Project</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata align="center"
+								fileref="images/forge/generatedProjectCore.png" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+				<figure id="generatedProjectLib.fig">
+					<title>Generated Lib Project</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata align="center" fileref="images/forge/generatedProjectLib.png" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+				<figure id="generatedProjectUi.fig">
+					<title>Generated UI Project</title>
+					<mediaobject>
+						<imageobject>
+							<imagedata align="center" fileref="images/forge/generatedProjectUi.png" />
+						</imageobject>
+					</mediaobject>
+				</figure>
+				<note>
+					<para>In a compacted AJF solution, the same file are generated, but
+						in the same UI project
+					</para>
+				</note>
+			</section>
+
+			<section>
+				<title>Troubleshooting</title>
+				<para>
+					Here after a list a problems that you may encounter while using the
+					command. Come here
+					when
+					you have a problem with this
+					<command>manage-project</command>
+					command, you may find something helpfull.
+				</para>
+				<section>
+					<title>Error asks me to launch command on a UI AJF project instance
+					</title>
+					<screen>
+[myProject-core] myProject-core $ <userinput>manage-project</userinput>
+*****************************************
+
+** WELCOME ON AJF2 MCR GENERATION TOOL **
+
+*****************************************
+
+***INFO*** Your current project myProject-core as been detected as part of an EX
+PLODED AJF Solution.
+
+***ERROR*** Please launch this command when you are on a UI AJF project instance					
+					</screen>
+					<para>
+						In this situation, it seems that you are working on an
+						exploded AJF
+						solution. In this case you have different project type such as
+						<emphasis role="bold">CORE</emphasis>
+						,
+						<emphasis role="bold">LIB</emphasis>
+						,
+						<emphasis role="bold">UI</emphasis>
+						...
+						It is mandatory to launch this command from the
+						<emphasis role="bold">UI</emphasis>
+						component project
+					</para>
+					<para>
+						SOLUTION:
+					</para>
+					<itemizedlist>
+						<listitem>
+							<para>
+								Let's say you are situated in your
+								<emphasis role="bold">CORE</emphasis>
+								project named for instance
+								<emphasis>myProject-core</emphasis>
+								.
+								Navigate to your ui instance project :
+								<screen>
+[myProject-core] myProject-core $ <userinput>cd ../myProject-ui</userinput>
+[myProject-ui] myProject-ui $
+								</screen>
+							</para>
+						</listitem>
+						<listitem>
+							<para>
+								Launch again the
+								<command>manage-project</command>
+								command.
+							</para>
+						</listitem>
+					</itemizedlist>
+				</section>
+				<section>
+					<title>My Entity name is rejected</title>
+					<para>
+
+						When you are prompted for the entity name that you want to
+						use, you
+						have this error:
+
+					</para>
+					<screen>
+ ? Name of Entity, same as model class (i.e: Person): <userinput>myEntity</userinput>
+
+***ERROR*** The Model [am.myproject.lib.model.MyEntity.java] was not found.
+
+ ? Do you want to manually specify the model you want to use [y] ? [Y/n]
+					</screen>
+					<para>
+						This is because the program can not find the entity model
+						class
+						named as you entered. By default, the program will check in
+						the
+						default AJF 2 lib package containing the model :
+						<emphasis>am.myproject.lib.model</emphasis>
+					</para>
+					<para>
+						If you are in an exploded ajf project, this package must be set in
+						the
+						<emphasis role="bold">LIB</emphasis>
+						component project
+					</para>
+					<para>If your entity is situated in a custom package different that
+						the default package, you can enter your package name (separator
+						must be points).
+					</para>
+					<para>
+						More over, the entity name that you enter must be the
+						<emphasis role="bold">same name as the entity model class name
+						</emphasis>
+						. If you want to use the java entity model named
+						<filename>Person.java</filename>
+						you must enter
+						<userinput>Person</userinput>
+					</para>
+					<para>
+						You can see example
+						<link linkend="entityInput">here.</link>
+					</para>
+				</section>
+				<section>
+					<title>i'm locked in the loop, how to exit?</title>
+					<para>
+						You can enter the keyword
+						<emphasis>exit</emphasis>
+						at anytime to exit the command process.
+					</para>
+					<figure id="exitTheCommand.fig">
+						<title>Exiting the command loop</title>
+						<mediaobject>
+							<imageobject>
+								<imagedata align="center" fileref="images/forge/exitTheCommand.png" />
+							</imageobject>
+						</mediaobject>
+					</figure>
+				</section>
+			</section>
+		</section>
 	</section>
-
 </chapter>
