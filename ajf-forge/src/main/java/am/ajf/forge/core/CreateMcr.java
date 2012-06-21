@@ -107,12 +107,22 @@ public class CreateMcr {
 
 		// Create directory if needed
 		managedBeanClassFile.getParentFile().mkdirs();
+		boolean updateMode = false; // true to update
+
 		if (!managedBeanClassFile.exists()) {
 
 			System.out.println("Physical file creation : "
 					+ managedBeanClassFile.createNewFile());
 
-			System.out.println("Data model Map generated.");
+		} else {
+
+			// Ask to update or overwrite
+			shell.println("Managed bean java file already exist");
+			updateMode = !shell.promptBoolean(
+					"Do you whish to overwrite ? [N]", false);
+		}
+
+		if (!updateMode) {
 
 			// Call the crud managed bean java class generation
 			projectManagement.buildManagedBean(managedBeanClassFile,
@@ -129,10 +139,10 @@ public class CreateMcr {
 			managedBeanClassFile = null;
 
 		} else {
+
 			/*
-			 * Update file
+			 * UPDATE
 			 */
-			shell.println("Managed bean java file already exist");
 			ShellMessages.info(out,
 					"Updating ".concat(managedBeanClassFile.getName() + "..."));
 
@@ -163,7 +173,6 @@ public class CreateMcr {
 
 			// Save updated java class in project
 			uiJavaFacet.saveJavaSource(managedBeanJavaclass);
-
 		}
 
 		return true;

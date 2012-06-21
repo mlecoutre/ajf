@@ -929,7 +929,7 @@ public class McrGenerationPlugin implements Plugin {
 		if (!uiProject.getProjectRoot().getName()
 				.endsWith("-" + ForgeConstants.PROJECT_TYPE_UI)) {
 			ShellMessages.error(shell,
-					"Please launch this commande when you are on a "
+					"Please launch this command when you are on a "
 							+ PROJECT_TYPE_UI.toUpperCase()
 							+ " AJF project instance");
 			return false;
