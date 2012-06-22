@@ -204,10 +204,10 @@ public class CreateSolutionPlugin implements Plugin {
 			final PipeOut out) {
 
 		try {
+
 			// Check project directory
 			if (isProjectDirFlag
-					|| checkProjectDirectoryConsistency(folderName)) {
-
+					|| (folderName = checkProjectDirectoryConsistency(folderName)) != null) {
 				shell.println();
 				ShellMessages.info(
 						out,
@@ -291,13 +291,16 @@ public class CreateSolutionPlugin implements Plugin {
 			final PipeOut out) {
 
 		// Check project directory
-		if (isProjectDirFlag || checkProjectDirectoryConsistency(folderName)) {
+		if (isProjectDirFlag
+				|| (folderName = checkProjectDirectoryConsistency(folderName)) != null) {
 
 			shell.println();
-			ShellMessages.info(
-					out,
-					"Creating the AJF compacted solution".concat(name)
-							.concat(" in the directory : ").concat(folderName));
+			ShellMessages
+					.info(out,
+							"Creating the AJF compacted solution '"
+									.concat(name)
+									.concat("' in the directory : ")
+									.concat(folderName));
 			try {
 				generateAjfProject(name, folderName, PROJECT_TYPE_COMPACT,
 						false, false, out);
@@ -462,7 +465,7 @@ public class CreateSolutionPlugin implements Plugin {
 			// Loop on project directory prompt message until directory is
 			// correct (or 'exit')
 			projectDirectory = shellhelper.promptFacade(shellPromptMessage);
-			isCorrectDirectory = checkProjectDirectoryConsistency(projectDirectory);
+			isCorrectDirectory = (projectDirectory = checkProjectDirectoryConsistency(projectDirectory)) != null;
 
 		}
 
@@ -493,13 +496,12 @@ public class CreateSolutionPlugin implements Plugin {
 	 * @param projectDirectory
 	 * @return boolean
 	 */
-	private boolean checkProjectDirectoryConsistency(String projectDirectory) {
+	private String checkProjectDirectoryConsistency(String projectDirectory) {
 
 		shell.println();
 		ShellMessages.info(shell, "Checking project directory...");
 
 		File myFile;
-		boolean isCorrectDirectory = false;
 		// If input project directory not set, use the current directory of
 		// the shell
 		if (null == projectDirectory || projectDirectory.isEmpty()) {
@@ -524,7 +526,7 @@ public class CreateSolutionPlugin implements Plugin {
 				// if not correct, escape the loop and prompt error
 				ShellMessages.error(shell,
 						"Entered directory is not correct ! Please try Again");
-				return false;
+				return null;
 			}
 		}
 
@@ -533,22 +535,21 @@ public class CreateSolutionPlugin implements Plugin {
 		options.add("Yes, let's do this !");
 		options.add("No, change directory.");
 		int choice = shell.promptChoice(
-				"Are you sure to generate AJF project in :"
-						.concat(projectDirectory), options);
+				"Are you sure to generate AJF project in :".concat(myFile
+						.getAbsolutePath()), options);
 
 		if (choice == 0) {
 			// If choice "Yes" is selected
-			isCorrectDirectory = true;
+			return myFile.getAbsolutePath();
 		} else {
 			// If "No" choice selected, we delete the previously created project
 			// directory
 			if (myFile.exists()) {
 				myFile.delete();
 			}
-			isCorrectDirectory = false;
+			return null;
 		}
 
-		return isCorrectDirectory;
 	}
 
 	/**
