@@ -43,7 +43,7 @@
 			<para>
 				Download the
 				<ulink
-					url="http://web-maven-repo/nexus/content/repositories/releases/am/ajf/forge/jboss-forge-1.0.0.final/2.0.1/jboss-forge-1.0.0.final-2.0.1.zip"> Jboss forge distribution. </ulink>
+					url="http://web-maven-repo/nexus/content/repositories/releases/am/ajf/forge/jboss-forge-1.0.5.final/2.0.1/jboss-forge-1.0.5.final-2.0.1.zip"> Jboss forge distribution. </ulink>
 			</para>
 			<para>
 				Unzip the forge distribution in your
