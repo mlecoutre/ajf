@@ -1,0 +1,57 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-parent</artifactId>
+		<version>2.1.1-SNAPSHOT</version>
+		<relativePath>../ajf-parent/pom.xml</relativePath>
+	</parent>
+
+	<artifactId>ajf-security-was</artifactId>
+
+	<scm>
+		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-security-was</connection>
+		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-security-was</developerConnection>
+		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-security-was/]]></url>
+	</scm>
+
+	<properties>
+		<shiro.version>1.2.0</shiro.version>
+	</properties>
+
+	<dependencies>
+
+		<!-- AJF testing dependency -->
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-testing</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-security</artifactId>		
+		</dependency>
+
+		<!-- Container Provided -->
+		<dependency>
+			<groupId>amresources.ibm.was.70</groupId>
+			<artifactId>runtime-libraries</artifactId>
+			<version>7.0</version>
+			<type>pom</type>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<scope>provided</scope>
+		</dependency>
+		
+	</dependencies>
+
+
+</project>
