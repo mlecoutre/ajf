@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<infinispan xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="urn:infinispan:config:5.1 http://www.infinispan.org/schemas/infinispan-config-5.1.xsd"
+	xmlns="urn:infinispan:config:5.1">
+	<global>
+		<transport clusterName="myTestCluster" machineId="${machine.id}" nodeName="${node.name}"> 
+			<properties>
+				<!-- system variables
+				jgroups.udp.mcast_addr	 IP address to use for multicast (both for communications and discovery).  Must be a valid Class D IP address, suitable for IP multicast.	 228.6.7.8	 
+				jgroups.udp.mcast_port	 Port to use for multicast socket	 46655	 
+				jgroups.udp.ip_ttl 
+				-->
+				<property name="configurationFile" value="jgroups-udp.xml" />
+      		</properties>
+		</transport>
+	</global>
+	<default>
+		<eviction maxEntries="5000" strategy="LRU" threadPolicy="PIGGYBACK" />
+		<expiration lifespan="5000" />
+		<clustering mode="INVL">
+			<sync/>
+		</clustering>
+	</default>
+</infinispan>
