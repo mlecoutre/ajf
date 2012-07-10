@@ -18,6 +18,9 @@ public interface StoredProcedureServiceBD {
 	@StoredProcedure(name="ZZTESTWITHPARAM")
 	List<ModelSp> findAllModelsByName(String name);
 	
+	@StoredProcedure(name="ZZTESTWITHPARAM")
+	List<ModelSp> findAllModelsByNameCustomParams(@In("name") String otherName);
+	
 	@StoredProcedure(name="ZZTESTONEWITHPARAM")
 	ModelSp findOneModelByName(String name);
 	
@@ -30,16 +33,13 @@ public interface StoredProcedureServiceBD {
 		stored procedure to call on the datasource.
 	</para>
 	<para>The following restrictions applies :</para>
-	<itemizedlist>
-		<listitem>
-			<para>
-				Out parameters are not supported for the moment.
-			</para>
-		</listitem>
+	<itemizedlist>		
 		<listitem>
 			<para>
 				The parameter list need to be in the same order than defined in the stored 
-				procedure signature.
+				procedure signature. You can change the order of the parameters or the name of
+				the parameters by using the annotation <classname>@In</classname> with
+				the stored procedure name of the input parameter.
 			</para>
 		</listitem>
 		<listitem>
@@ -49,10 +49,21 @@ public interface StoredProcedureServiceBD {
 				But you can use a custom <classname>Mapper</classname> if you want a more
 				complex return type mapping.
 			</para>
+			<para>
+				You can encapsulate the return object inside a custom bean object annotated
+				with the annotation <classname>@Result</classname>. This is especially usefull
+				if you want to specify multiple result sets (Not Yest Supported !) or/and
+				Out parameters (see following sample).				 
+			</para>
 		</listitem>
 		<listitem>
 			<para>
 				Nested objects structures are not supported by the default mapper.
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				Multiple return result sets are not supported yet. 
 			</para>
 		</listitem>				
 	</itemizedlist>
@@ -81,5 +92,40 @@ public interface Mapper {
 	<para>
 		The parameter <parameter>data</parameter> map the column names to the corresponding
 		row value and the result is the Object mapped for one line of data.
-	</para>	
+	</para>
+	<para>
+		To specify out parameters, you need to define a custom Bean object
+		that will contain the <classname>@Out</classname> parameters you want
+		and the annotation <classname>@Result</classname> for the result set if applicable.
+	</para>
+	<example>
+	<title />
+	<programlisting language="Java" role="Java"><![CDATA[
+public class FindModelResult {
+	
+	@Result
+	private List<ModelSp> result;
+	
+	@Out("STATUS")
+	private String status;
+
+	public List<ModelSp> getResult() {
+		return result;
+	}
+
+	public void setResult(List<ModelSp> result) {
+		this.result = result;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+}
+				]]></programlisting>					
+	</example>
+	
 </section>

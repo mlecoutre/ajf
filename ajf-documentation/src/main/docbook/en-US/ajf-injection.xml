@@ -51,14 +51,105 @@
 			if the library contain a beans configuration file (META-INF/beans.xml)
 			<example>
 				<title>Empty 'beans.xml' file</title>
-				<programlisting>
-				<![CDATA[
-				<beans>
-				</beans>
-				]]>
-				</programlisting>
+				<programlisting><![CDATA[
+<beans>
+</beans>
+				]]></programlisting>
 			</example>
 		</para>
+		<para>
+			What components can be injected and what you can inject also depend
+			of your deployment container. Here is a list of what we have tested
+			for injection so far : 
+		</para>
+		<table frame="all">
+				<title>Injection support in AJF in Websphere 7 and Tomcat 7</title>
+				<tgroup cols="5">
+					<colspec colname="c1"/>
+					<colspec colname="c2"/>
+					<colspec colname="c3"/>
+					<colspec colname="c4"/>
+					<colspec colname="c5"/>
+					<thead>
+						<row>
+							<entry namest="c2" nameend="c3" align="center">WAS 7</entry>
+							<entry namest="c4" nameend="c5" align="center">Tomcat 7</entry>					    
+						</row>					
+						<row>
+							<entry>Component</entry>
+							<entry>Injection Into</entry>
+							<entry>Can Be Injected</entry>
+							<entry>Injection Into</entry>
+							<entry>Can Be Injected</entry>						    
+						</row>
+					</thead>
+					<tbody>						
+						<row>
+							<entry>Policy</entry>
+							<entry>Y</entry>
+							<entry>Y</entry>
+							<entry>Y</entry>
+							<entry>Y</entry>							
+						</row>
+						<row>
+							<entry>Service</entry>
+							<entry>Y</entry>
+							<entry>Y</entry>							
+							<entry>Y</entry>
+							<entry>Y</entry>
+						</row>
+						<row>
+							<entry>EJB Local</entry>
+							<entry>Y</entry>
+							<entry>Y</entry>
+							<entry>-</entry>
+							<entry>-</entry>							
+						</row>
+						<row>
+							<entry>Managed bean</entry>
+							<entry>Y</entry>
+							<entry>-</entry>
+							<entry>Y</entry>
+							<entry>-</entry>							
+						</row>
+						<row>
+							<entry>Servlet</entry>
+							<entry>N</entry>
+							<entry>-</entry>	
+							<entry>Y</entry>
+							<entry>-</entry>						
+						</row>
+						<row>
+							<entry>EJB Remote</entry>
+							<entry>N</entry>
+							<entry>-</entry>
+							<entry>-</entry>
+							<entry>-</entry>							
+						</row>
+						<row>
+							<entry>EJB MDB</entry>
+							<entry>N</entry>
+							<entry>-</entry>							
+							<entry>-</entry>
+							<entry>-</entry>
+						</row>						
+						<row>
+							<entry>JAX-WS End Point</entry>
+							<entry>N</entry>
+							<entry>-</entry>							
+							<entry>N</entry>
+							<entry>-</entry>
+						</row>
+						<row>
+							<entry>JAX-RS End Point</entry>
+							<entry>N</entry>
+							<entry>-</entry>
+							<entry>N</entry>
+							<entry>-</entry>							
+						</row>
+					</tbody>
+				</tgroup>
+			</table>		
 		<section>
 			<title>Inject Logger</title>
 			<para></para>

@@ -29,11 +29,11 @@
 				for <emphasis>each project</emphasis> you use the interceptor annotation in.
 				The name of the interceptor for @Transactional is : 				
 			</para> 
-			<para><emphasis>am.ajf.transaction.TransactionInterceptor</emphasis></para>
+			<para><emphasis>am.ajf.injection.annotation.TransactionInterceptor</emphasis></para>
 			<programlisting language="Xml" role="Xml"><![CDATA[
 <beans>
 	<interceptors>
-      <class>am.ajf.transaction.TransactionInterceptor</class>
+      <class>am.ajf.injection.annotation.TransactionInterceptor</class>
     </interceptors>
 </beans>				
 			]]></programlisting>
