@@ -2,7 +2,7 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.35//EN"
         "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en">
-
+	<!-- DEPRECATED, Use the master-user-guide.xml -->
 	<!--
 	docbook ref : http://www.sagehill.net/docbookxsl/ 
 	-->

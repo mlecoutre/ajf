@@ -34,13 +34,6 @@
       <item name="Home" href="index.html" />
   </menu>
 
-  <menu name="Modules">
-   <item name="ajf-remoting-api" href="../ajf-remoting-api/index.html" />
-   <item name="ajf-remoting-impl" href="../ajf-remoting-impl/index.html" />
-   <item name="ajf-remoting-tests" href="../ajf-remoting-tests/index.html" />
-   <item name="ajf-remoting-dist" href="../ajf-remoting-dist/index.html" />
-  </menu>
-
   <menu ref="reports"/>
 
  </body>
