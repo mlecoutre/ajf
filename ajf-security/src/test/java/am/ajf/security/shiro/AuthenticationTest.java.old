@@ -1,4 +1,4 @@
-package am.ajf.security;
+package am.ajf.security.shiro;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -22,8 +22,10 @@ public class AuthenticationTest {
 	public void setUp() {
 		
 		// instanciate shiro SecurityManager
-		Factory<org.apache.shiro.mgt.SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro.ini");
+		Factory<org.apache.shiro.mgt.SecurityManager> factory = new IniSecurityManagerFactory("classpath:shiro-armony.ini");
+		
 		org.apache.shiro.mgt.SecurityManager securityManager = factory.getInstance();
+		
         // register the new SecurityManager
         SecurityUtils.setSecurityManager(securityManager);
     		
@@ -35,19 +37,25 @@ public class AuthenticationTest {
 		Subject currentSubject = SecurityUtils.getSubject();
 		
 		// has to authenticate the subject
-        if (!currentSubject.isAuthenticated()) {
-			UsernamePasswordToken authToken = new UsernamePasswordToken("u002617", "myPassword");
+		if (!currentSubject.isAuthenticated()) {
+			UsernamePasswordToken authToken = new UsernamePasswordToken("u002617", "Web$phere140");
 			authToken.setRememberMe(true);
 			currentSubject.login(authToken);
 		}
+		logger.info("User: {}", currentSubject.getPrincipal().toString());
 		
-        logger.info("User: {}", currentSubject.getPrincipal().toString());
-                
+                        
         boolean isAdmin = currentSubject.hasRole("admin");
         logger.info("Is admin: {}", isAdmin);
         
+        boolean isValideur = currentSubject.hasRole("valideur");
+        logger.info("Is valideur: {}", isValideur);
+        
         boolean isAuthorizedOnWelcome = currentSubject.isPermitted("welcome");
         logger.info("Is authorized on 'welcome': {}", isAuthorizedOnWelcome);
+        
+        boolean isAuthorizedOnFileAcess = currentSubject.isPermitted("fileAccess");
+        logger.info("Is authorized on 'fileAccess': {}", isAuthorizedOnFileAcess);
         
 		//Logout the subject
 		currentSubject.logout();

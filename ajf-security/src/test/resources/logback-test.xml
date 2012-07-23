@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-	<include resource="logger/logback-ajf.xml"/>
+	<include resource="logger/includes/logback-ajf-test.xml"/>
 		
-	<root level="DEBUG">
+	<root level="INFO">
 		<appender-ref ref="STDOUT" />
 	</root>
 		

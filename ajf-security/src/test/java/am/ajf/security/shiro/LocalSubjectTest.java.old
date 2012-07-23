@@ -1,4 +1,4 @@
-package am.ajf.security;
+package am.ajf.security.shiro;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
