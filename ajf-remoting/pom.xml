@@ -19,12 +19,10 @@
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-core</artifactId>
-			<version>${project.version}</version>
 		</dependency>	
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-injection</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		
 		<!-- Real project deps -->
