@@ -3,9 +3,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>am.parent</groupId>
-		<artifactId>standard</artifactId>
-		<version>2.0.7</version>
+		<groupId>am.ajf</groupId>
+		<artifactId>ajf-parent</artifactId>
+		<version>2.1.1-SNAPSHOT</version>
+		<relativePath>../ajf-parent/pom.xml</relativePath>
 	</parent>
 
 	<groupId>am.ajf</groupId>
@@ -64,10 +65,23 @@
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-skin-default</artifactId>
-			<version>2.1.1-SNAPSHOT</version>
+			<version>${ajfversion}</version>
 		</dependency>
-
-
+		
+		<!-- Container Provided -->
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-catalina</artifactId>
+			<version>7.0.28</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>am.ajf</groupId>
+			<artifactId>ajf-security</artifactId>
+			<version>${ajfversion}</version>
+			<scope>provided</scope>
+		</dependency>
+		
 		<!-- the logger abstraction -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -95,38 +109,6 @@
 			<version>1.0.1</version>
 		</dependency>
 		<!-- End : Logging dependencies -->
-
-		<dependency>
-			<groupId>com.sun.xml.ws</groupId>
-			<artifactId>jaxws-rt</artifactId>
-			<version>2.1.7</version>
-			<scope>provided</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>jaxb-api</artifactId>
-					<groupId>javax.xml.bind</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>javax.annotation</groupId>
-			<artifactId>jsr250-api</artifactId>
-			<version>1.0</version>
-			<scope>optional</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>javax.jws</groupId>
-			<artifactId>jsr181-api</artifactId>
-			<version>1.0-MR1</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.geronimo.specs</groupId>
-			<artifactId>geronimo-ejb_3.0_spec</artifactId>
-			<version>1.0</version>
-			<scope>provided</scope>
-		</dependency>
 
 		<!-- open web beans common between was7 and tomcat7 -->
 		<dependency>
@@ -162,7 +144,7 @@
 		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>javax.faces</artifactId>
-			<version>2.1.9</version>
+			<version>2.1.6</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.el</groupId>
@@ -182,7 +164,7 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>3.3</version>
+			<version>3.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
@@ -239,6 +221,7 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- 
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-core</artifactId>
@@ -249,6 +232,7 @@
 			<artifactId>shiro-web</artifactId>
 			<version>1.2.0</version>
 		</dependency>
+		-->
 
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -263,6 +247,14 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- 
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc14</artifactId>
+			<version>10.2.0.4.0</version>
+		</dependency>
+		-->
+		
 	</dependencies>
 
 	<profiles>
@@ -296,6 +288,7 @@
 					<version>1.0</version>
 					<scope>provided</scope><!-- provided for tomcat -->
 				</dependency>
+				
 			</dependencies>
 
 			<build>
@@ -308,9 +301,15 @@
 						<artifactId>tomcat7-maven-plugin</artifactId>
 						<version>2.0-beta-1</version>
 						<configuration>
+							<systemProperties>
+            					<java.security.auth.login.config>src/test/tomcat/jaas.config</java.security.auth.login.config>
+          					</systemProperties>
 							<!-- Embedded port -->
 							<port>8080</port>
-							<contextFile>src/test/resources/tomcat_context.xml</contextFile>
+							<configurationDir>${project.build.directory}/tomcat</configurationDir>
+							<contextFile>src/test/tomcat/context.xml</contextFile>
+							<additionalConfigFilesDir>src/test/tomcat</additionalConfigFilesDir>
+							<tomcatWebXml>src/test/tomcat/web.xml</tomcatWebXml>
 							<warFile>target/${project.artifactId}.war</warFile>
 							<path>/${project.artifactId}</path>
 						</configuration>
@@ -320,7 +319,7 @@
 							<dependency>
 								<groupId>org.apache.derby</groupId>
 								<artifactId>derby</artifactId>
-								<version>10.8.2.2</version>
+								<version>10.9.1.0</version>
 							</dependency>
 
 							<!-- EL 2.2 -->
@@ -424,6 +423,17 @@
 								<version>3.12.1.GA</version>
 							</dependency>
 							<!-- END OPEN WEB BEANS -->
+							
+							<dependency>
+								<groupId>am.ajf</groupId>
+								<artifactId>ajf-security</artifactId>
+								<version>${ajfversion}</version>
+							</dependency>
+							<dependency>
+								<groupId>am.ajf</groupId>
+								<artifactId>ajf-security-tomcat</artifactId>
+								<version>${ajfversion}</version>
+							</dependency>
 
 							<!-- Mail Service -->
 							<dependency>
@@ -513,17 +523,9 @@
 
 	<build>
 		<finalName>${project.artifactId}</finalName>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.mortbay.jetty</groupId>
-					<artifactId>maven-jetty-plugin</artifactId>
-					<version>6.1.26</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-
+		
 		<plugins>
+		
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
@@ -546,126 +548,6 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jaxws-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>Showcase</id>
-						<goals>
-							<goal>wsimport</goal>
-						</goals>
-						<configuration>
-							<keep>true</keep>
-							<verbose>true</verbose>
-							<wsdlDirectory>src/main/wsdl</wsdlDirectory>
-						</configuration>
-					</execution>
-
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.mortbay.jetty</groupId>
-				<artifactId>maven-jetty-plugin</artifactId>
-				<configuration>
-					<jettyConfig>src/test/resources/jetty.xml</jettyConfig>
-					<scanIntervalSeconds>10</scanIntervalSeconds>
-					<systemProperties>
-						<systemProperty>
-							<name>logback.configurationFile</name>
-							<value>src/test/resources/logback.xml</value>
-						</systemProperty>
-					</systemProperties>
-				</configuration>
-				<dependencies>
-					<!-- add drivers resources for the container -->
-					<dependency>
-						<groupId>amresources.ibm.db2.driver</groupId>
-						<artifactId>runtime-libraries</artifactId>
-						<version>9.7.4</version>
-						<type>pom</type>
-					</dependency>
-					<dependency>
-						<groupId>org.apache.derby</groupId>
-						<artifactId>derby</artifactId>
-						<version>10.8.2.2</version>
-					</dependency>
-
-					<!-- EL 2.2 -->
-					<dependency>
-						<groupId>javax.el</groupId>
-						<artifactId>el-api</artifactId>
-						<version>2.2</version>
-					</dependency>
-					<dependency>
-						<groupId>org.glassfish.web</groupId>
-						<artifactId>el-impl</artifactId>
-						<version>2.2</version>
-					</dependency>
-
-					<!-- WS aware -->
-					<dependency>
-						<groupId>com.sun.xml.ws</groupId>
-						<artifactId>jaxws-rt</artifactId>
-						<version>2.1.7</version>
-					</dependency>
-					<dependency>
-						<groupId>javax.annotation</groupId>
-						<artifactId>jsr250-api</artifactId>
-						<version>1.0</version>
-					</dependency>
-
-					<dependency>
-						<groupId>javax.jws</groupId>
-						<artifactId>jsr181-api</artifactId>
-						<version>1.0-MR1</version>
-					</dependency>
-					<dependency>
-						<groupId>org.apache.geronimo.specs</groupId>
-						<artifactId>geronimo-ejb_3.0_spec</artifactId>
-						<version>1.0</version>
-					</dependency>
-
-					<!-- LOGGING -->
-					<dependency>
-						<groupId>ch.qos.logback</groupId>
-						<artifactId>logback-classic</artifactId>
-						<version>0.9.24</version>
-					</dependency>
-					<dependency>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-						<version>1.1.1</version>
-					</dependency>
-					<dependency>
-						<groupId>org.slf4j</groupId>
-						<artifactId>log4j-over-slf4j</artifactId>
-						<version>1.6.1</version>
-					</dependency>
-					<dependency>
-						<groupId>org.slf4j</groupId>
-						<artifactId>jcl-over-slf4j</artifactId>
-						<version>1.6.1</version>
-					</dependency>
-					<dependency>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-						<version>1.6.1</version>
-					</dependency>
-
-
-					<!-- Bean Validation -->
-					<dependency>
-						<groupId>org.hibernate</groupId>
-						<artifactId>hibernate-validator</artifactId>
-						<version>4.0.2.GA</version>
-					</dependency>
-
-				</dependencies>
-			</plugin>
-			<!-- for m2eclipse integration -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>1.6</source>
@@ -673,6 +555,7 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</build>
 </project>
