@@ -2,14 +2,14 @@ package am.ajf.core.cache.impl;
 
 import java.util.concurrent.TimeUnit;
 
-import am.ajf.core.beans.LifecycleAware;
+import am.ajf.core.Service;
 import am.ajf.core.cache.Cache;
 import am.ajf.core.cache.CacheManagerAdapter;
 
 import com.google.common.cache.CacheBuilder;
 
 public class GuavaCacheManagerImpl extends AbstractCacheManager 
-	implements CacheManagerAdapter, LifecycleAware {
+	implements CacheManagerAdapter, Service {
 
 	private static final String GUAVA = "guava";
 

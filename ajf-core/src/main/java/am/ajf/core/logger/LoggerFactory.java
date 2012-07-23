@@ -2,16 +2,12 @@ package am.ajf.core.logger;
 
 import org.slf4j.Logger;
 
-import am.ajf.core.ApplicationContext;
 import am.ajf.core.utils.ClassUtils;
 import ch.qos.logback.classic.LoggerContext;
 
 public class LoggerFactory {
 	
 	static {
-		
-		// launch the ApplicationContext
-		ApplicationContext.init();
 		
 		LoggerContext ctx = (LoggerContext) org.slf4j.LoggerFactory.getILoggerFactory();
 		if (ctx.isStarted()) 
@@ -33,22 +29,6 @@ public class LoggerFactory {
 	private LoggerFactory() {
 		super();
 	}
-
-	/**
-	 * 
-	 * @return the appropriate logger 
-	 */
-	/**
-	public static Logger getLogger() {
-		
-		// populate the stack trace 
-		StackTraceElement[] stack = new Throwable().fillInStackTrace().getStackTrace();
-		// get the caller class name 
-		String callerClassName = stack[1].getClassName();
-		return getLogger(callerClassName);
-		
-	}
-	**/
 
 	/**
 	 * 

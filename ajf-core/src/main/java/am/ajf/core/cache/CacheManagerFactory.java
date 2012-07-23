@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 
-import am.ajf.core.beans.LifecycleAware;
+import am.ajf.core.Service;
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.utils.BeanUtils;
 
@@ -44,8 +44,8 @@ public class CacheManagerFactory {
 				CacheManager cacheManager = iterator.next();
 
 				BeanUtils.initialize(cacheManager);
-				if (cacheManager instanceof LifecycleAware) {
-					((LifecycleAware) cacheManager).start();
+				if (cacheManager instanceof Service) {
+					((Service) cacheManager).start();
 				}
 								
 				logger.info("Find CacheManager impl {} registered as {}",

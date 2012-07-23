@@ -1,6 +1,6 @@
-package am.ajf.core.beans;
+package am.ajf.core;
 
-public interface LifecycleAware {
+public interface Service {
 
 	/**
 	 * start the Component

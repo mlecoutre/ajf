@@ -47,6 +47,7 @@ public class ConfigurationHelper {
 					+ resourceName + "'.");
 
 		PropertiesConfiguration pConfig = new PropertiesConfiguration();
+		pConfig.setDelimiterParsingDisabled(true);
 		pConfig.load(is);
 
 		try {
@@ -147,6 +148,7 @@ public class ConfigurationHelper {
 		}
 
 		PropertiesConfiguration pConfig = new PropertiesConfiguration(file);
+		pConfig.setDelimiterParsingDisabled(true);
 		return pConfig;
 
 	}

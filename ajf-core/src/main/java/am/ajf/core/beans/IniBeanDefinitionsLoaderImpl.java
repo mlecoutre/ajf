@@ -22,43 +22,50 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.HierarchicalINIConfiguration;
 import org.slf4j.Logger;
 
-import am.ajf.core.ApplicationContext;
+import am.ajf.core.beans.api.BeanDefinitionBuilder;
+import am.ajf.core.beans.api.BeanDefinitionsLoader;
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.utils.ClassUtils;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
-public class BeanDeclarationsLoader {
+public class IniBeanDefinitionsLoaderImpl implements BeanDefinitionsLoader {
 
 	private final static Logger logger = LoggerFactory
-			.getLogger(BeanDeclarationsLoader.class);
+			.getLogger(IniBeanDefinitionsLoaderImpl.class);
 
-	private final static ClassLoader classLoader = BeanDeclarationsLoader.class
+	private final static ClassLoader classLoader = IniBeanDefinitionsLoaderImpl.class
 			.getClassLoader();
 
 	private final static Set<Class<?>> beansSet = new HashSet<Class<?>>();
 	private final static Map<Class<?>, Set<Class<?>>> beanImplementationsMap = new ConcurrentHashMap<Class<?>, Set<Class<?>>>();
 
-	private BeanDeclarationsLoader() {
+	private final static BeanDefinitionBuilder beanDefinitionBuilder = new IniBeanDefinitionBuilder();
+	
+	public IniBeanDefinitionsLoaderImpl() {
 		super();
 	}
 
-	public static Map<String, Set<ExtendedBeanDeclaration>> loadBeanDeclarations(
+	/* (non-Javadoc)
+	 * @see am.ajf.core.beans.BeanDefinitionsLoader#loadBeanDefinitions(java.lang.Class)
+	 */
+	@Override
+	public Map<String, Set<BeanDefinition>> loadBeanDefinitions(
 			Class<?> componentType) throws IOException {
 
 		// the result Map
-		Map<String, Set<ExtendedBeanDeclaration>> resultBeansMap = new HashMap<String, Set<ExtendedBeanDeclaration>>();
+		Map<String, Set<BeanDefinition>> resultBeansMap = new HashMap<String, Set<BeanDefinition>>();
 
 		// try to load interface level defined beans
-		loadBeanDeclarations(componentType, resultBeansMap);
+		loadBeanDefinitions(componentType, resultBeansMap);
 
 		// list the available Bean implementations
 		try {
 			Set<Class<?>> implemsSet = getBeanImplementations(componentType);
 			if (null != implemsSet) {
 				for (Class<?> beanImplemClass : implemsSet) {
-					loadBeanDeclarations(beanImplemClass, resultBeansMap);
+					loadBeanDefinitions(beanImplemClass, resultBeansMap);
 				}
 			}
 		} catch (Exception e) {
@@ -69,26 +76,34 @@ public class BeanDeclarationsLoader {
 		}
 
 		// sort the ExtendedBeanDeclarations
+		sortBeansDefinitionsMapByOrdinal(resultBeansMap);
+
+		return resultBeansMap;
+
+	}
+
+	private static void sortBeansDefinitionsMapByOrdinal(
+			Map<String, Set<BeanDefinition>> resultBeansMap) {
 		if (!resultBeansMap.isEmpty()) {
-			Set<Entry<String, Set<ExtendedBeanDeclaration>>> entries = resultBeansMap
+			Set<Entry<String, Set<BeanDefinition>>> entries = resultBeansMap
 					.entrySet();
 
-			for (Iterator<Entry<String, Set<ExtendedBeanDeclaration>>> iterator = entries
+			for (Iterator<Entry<String, Set<BeanDefinition>>> iterator = entries
 					.iterator(); iterator.hasNext();) {
-				Entry<String, Set<ExtendedBeanDeclaration>> entry = (Entry<String, Set<ExtendedBeanDeclaration>>) iterator
+				Entry<String, Set<BeanDefinition>> entry = (Entry<String, Set<BeanDefinition>>) iterator
 						.next();
 				// String key = entry.getKey();
-				Set<ExtendedBeanDeclaration> beanDeclarations = entry
+				Set<BeanDefinition> beanDeclarations = entry
 						.getValue();
 
-				List<ExtendedBeanDeclaration> list = Lists
+				List<BeanDefinition> list = Lists
 						.newArrayList(beanDeclarations.iterator());
 				Collections.sort(list,
-						new Comparator<ExtendedBeanDeclaration>() {
+						new Comparator<BeanDefinition>() {
 
 							@Override
-							public int compare(ExtendedBeanDeclaration o1,
-									ExtendedBeanDeclaration o2) {
+							public int compare(BeanDefinition o1,
+									BeanDefinition o2) {
 								int compareTo = ((Integer) o1.getBeanOrdinal())
 										.compareTo((Integer) o2
 												.getBeanOrdinal());
@@ -101,20 +116,17 @@ public class BeanDeclarationsLoader {
 
 						});
 
-				entry.setValue(new LinkedHashSet<ExtendedBeanDeclaration>(list));
+				entry.setValue(new LinkedHashSet<BeanDefinition>(list));
 
 			}
 		}
-
-		return resultBeansMap;
-
 	}
 
-	private static void loadBeanDeclarations(Class<?> componentType,
-			Map<String, Set<ExtendedBeanDeclaration>> resultBeansMap)
+	private static void loadBeanDefinitions(Class<?> componentType,
+			Map<String, Set<BeanDefinition>> resultBeansMap)
 			throws IOException {
 
-		String iniFileName = String.format("META-INF/config/%s.ini",
+		String iniFileName = String.format("META-INF/profiles/%s.ini",
 				componentType.getName());
 		Enumeration<URL> configURLs = classLoader.getResources(iniFileName);
 
@@ -122,15 +134,15 @@ public class BeanDeclarationsLoader {
 		 * Map<String, Set<ExtendedBeanDeclaration>> beansMap =
 		 * loadBeanDeclarations(configURLs, componentType, resultBeansMap);
 		 */
-		loadBeanDeclarations(configURLs, componentType, resultBeansMap);
+		loadBeanDefinitions(configURLs, componentType, resultBeansMap);
 		// copyBeans(beansMap, resultBeansMap);
 
 		// return beansMap;
 	}
 
-	private static void loadBeanDeclarations(Enumeration<URL> configURLs,
+	private static void loadBeanDefinitions(Enumeration<URL> configURLs,
 			Class<?> beanImplemClass,
-			Map<String, Set<ExtendedBeanDeclaration>> resultBeansMap) {
+			Map<String, Set<BeanDefinition>> resultBeansMap) {
 
 		// Map<String, Set<ExtendedBeanDeclaration>> beansMap = new
 		// HashMap<String, Set<ExtendedBeanDeclaration>>();
@@ -147,7 +159,7 @@ public class BeanDeclarationsLoader {
 					 * loadBeanDeclarations(configUrl, beanImplemClass,
 					 * resultBeansMap);
 					 */
-					loadBeanDeclarations(configUrl, beanImplemClass,
+					loadBeanDefinitions(configUrl, beanImplemClass,
 							resultBeansMap);
 
 					// copy localBeansMap in beansMap
@@ -167,30 +179,25 @@ public class BeanDeclarationsLoader {
 
 	}
 
-	private static void loadBeanDeclarations(URL configUrl,
+	private static void loadBeanDefinitions(URL configUrl,
 			Class<?> defaultComponentImplClass,
-			Map<String, Set<ExtendedBeanDeclaration>> resultBeansMap)
+			Map<String, Set<BeanDefinition>> resultBeansMap)
 			throws ConfigurationException {
 
 		logger.info(configUrl.toExternalForm());
-		HierarchicalINIConfiguration iniConfig = new HierarchicalINIConfiguration(
-				configUrl);
+		HierarchicalINIConfiguration iniConfig = new HierarchicalINIConfiguration();
+		iniConfig.setDelimiterParsingDisabled(true);
+		iniConfig.load(configUrl);
+		
 		Set<String> sections = iniConfig.getSections();
-
-		// Map<String, Set<ExtendedBeanDeclaration>> localBeansMap = new
-		// HashMap<String, Set<ExtendedBeanDeclaration>>();
 
 		for (String sectionName : sections) {
 
 			try {
 				Configuration sectionConfig = iniConfig.getSection(sectionName);
-				ExtendedBeanDeclaration beanDeclaration = new IniBeanDeclarationImpl(
-						defaultComponentImplClass,
-						ApplicationContext.getConfiguration(), sectionConfig,
-						sectionName);
-				// registerBeanDeclaration(localBeansMap, sectionName,
-				// beanDeclaration);
-				registerBeanDeclaration(resultBeansMap, sectionName,
+				
+				BeanDefinition beanDeclaration = beanDefinitionBuilder.build(defaultComponentImplClass, sectionName, sectionConfig);
+				registerBeanDefinition(resultBeansMap, sectionName,
 						beanDeclaration);
 
 			} catch (Exception e) {
@@ -198,57 +205,52 @@ public class BeanDeclarationsLoader {
 			}
 
 		}
-
-		// return localBeansMap;
-		// return resultBeansMap;
 	}
 
 	@SuppressWarnings("unused")
 	private static void copyBeans(
-			Map<String, Set<ExtendedBeanDeclaration>> srcBeansMap,
-			Map<String, Set<ExtendedBeanDeclaration>> targetBeansMap) {
+			Map<String, Set<BeanDefinition>> srcBeansMap,
+			Map<String, Set<BeanDefinition>> targetBeansMap) {
 
 		if (!srcBeansMap.isEmpty()) {
-			Set<Entry<String, Set<ExtendedBeanDeclaration>>> localBeansMapEntries = srcBeansMap
+			Set<Entry<String, Set<BeanDefinition>>> localBeansMapEntries = srcBeansMap
 					.entrySet();
-			for (Iterator<Entry<String, Set<ExtendedBeanDeclaration>>> iterator = localBeansMapEntries
+			for (Iterator<Entry<String, Set<BeanDefinition>>> iterator = localBeansMapEntries
 					.iterator(); iterator.hasNext();) {
-				Entry<String, Set<ExtendedBeanDeclaration>> entry = (Entry<String, Set<ExtendedBeanDeclaration>>) iterator
+				Entry<String, Set<BeanDefinition>> entry = (Entry<String, Set<BeanDefinition>>) iterator
 						.next();
-				Set<ExtendedBeanDeclaration> beanDeclarations = entry
+				Set<BeanDefinition> beanDeclarations = entry
 						.getValue();
-				for (ExtendedBeanDeclaration beanDeclaration : beanDeclarations) {
-					registerBeanDeclaration(targetBeansMap, entry.getKey(),
+				for (BeanDefinition beanDeclaration : beanDeclarations) {
+					registerBeanDefinition(targetBeansMap, entry.getKey(),
 							beanDeclaration);
 				}
 			}
 		}
 	}
 
-	private static void registerBeanDeclaration(
-			Map<String, Set<ExtendedBeanDeclaration>> beansMap,
-			String beanName, ExtendedBeanDeclaration beanDeclaration) {
+	private static void registerBeanDefinition(
+			Map<String, Set<BeanDefinition>> beansMap,
+			String beanName, BeanDefinition beanDeclaration) {
 
 		String newBeanName = beanName;
 		if (Strings.isNullOrEmpty(newBeanName))
-			newBeanName = BeansManager.DEFAULT_BEAN_NAME;
+			newBeanName = BeansManager.DEFAULT_BEAN_PROFILE;
 
-		Set<ExtendedBeanDeclaration> beanInstances = (Set<ExtendedBeanDeclaration>) beansMap
+		Set<BeanDefinition> beanInstances = (Set<BeanDefinition>) beansMap
 				.get(newBeanName);
 		if (null == beanInstances) {
-			beanInstances = new HashSet<ExtendedBeanDeclaration>();
+			beanInstances = new HashSet<BeanDefinition>();
 			beansMap.put(newBeanName, beanInstances);
 		}
 		beanInstances.add(beanDeclaration);
 	}
 
-	/**
-	 * 
-	 * @param componentType
-	 * @return the set of implementations classes
-	 * @throws Exception
+	/* (non-Javadoc)
+	 * @see am.ajf.core.beans.BeanDefinitionsLoader#getBeanImplementations(java.lang.Class)
 	 */
-	public static Set<Class<?>> getBeanImplementations(Class<?> componentType)
+	@Override
+	public Set<Class<?>> getBeanImplementations(Class<?> componentType)
 			throws Exception {
 
 		if (beanImplementationsMap.containsKey(componentType)) {
@@ -257,7 +259,7 @@ public class BeanDeclarationsLoader {
 
 		Set<Class<?>> implemsSet = new HashSet<Class<?>>();
 
-		String resourceName = String.format("META-INF/services/%s",
+		String resourceName = String.format("META-INF/beans/%s",
 				componentType.getName());
 		Enumeration<URL> resources = classLoader.getResources(resourceName);
 
@@ -319,7 +321,11 @@ public class BeanDeclarationsLoader {
 
 	}
 
-	public static Set<Class<?>> getBeans()
+	/* (non-Javadoc)
+	 * @see am.ajf.core.beans.BeanDefinitionsLoader#getBeans()
+	 */
+	@Override
+	public Set<Class<?>> getBeans()
 			throws Exception {
 
 		if (!beansSet.isEmpty()) {
@@ -391,6 +397,5 @@ public class BeanDeclarationsLoader {
 		return beansSet;
 
 	}
-
 	
 }

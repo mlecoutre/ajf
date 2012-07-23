@@ -38,6 +38,8 @@ import javax.naming.NamingException;
 
 import org.slf4j.Logger;
 
+import com.google.common.base.Strings;
+
 import am.ajf.core.ApplicationContext;
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.core.mail.AttachedFilesException;
@@ -84,17 +86,7 @@ public class SimpleMailSenderImpl implements MailSender {
 	public void send(MailBean eMail) throws AddressException, MessagingException, IOException, NamingException {
 
 		// check required parameters
-		if ((null == eMail.getSender()) || eMail.getSender().isEmpty())
-			throw new NullPointerException("Sender can not be null");
-
-		if ((null == eMail.getSubject()) || eMail.getSubject().isEmpty())
-			throw new NullPointerException("Subject can not be null");
-
-		if ((null == eMail.getTo()) || eMail.getTo().isEmpty())
-			throw new NullPointerException("Receiver can not be null");
-		
-		if ((null == eMail.getBody()) || eMail.getBody().isEmpty())
-			throw new NullPointerException("Body can not be null");
+		checkParameters(eMail);
 
 		// get the session
 		Session session = buildSession();
@@ -162,10 +154,33 @@ public class SimpleMailSenderImpl implements MailSender {
 		}
 	}
 
+	/**
+	 * 
+	 * @param eMail
+	 */
+	private void checkParameters(MailBean eMail) {
+		if ((null == eMail.getSender()) || eMail.getSender().isEmpty())
+			throw new NullPointerException("Sender can not be null");
+
+		if ((null == eMail.getSubject()) || eMail.getSubject().isEmpty())
+			throw new NullPointerException("Subject can not be null");
+
+		if ((null == eMail.getTo()) || eMail.getTo().isEmpty())
+			throw new NullPointerException("Receiver can not be null");
+		
+		if ((null == eMail.getBody()) || eMail.getBody().isEmpty())
+			throw new NullPointerException("Body can not be null");
+	}
+
+	/**
+	 * 
+	 * @return
+	 * @throws NamingException
+	 */
 	private Session buildSession() throws NamingException {
 		
 		String jndi = getJndiName();
-		if ((null != jndi) && (!jndi.trim().isEmpty())) {
+		if (!Strings.isNullOrEmpty(jndi)) {
 			try {
 				Context initCtx = new InitialContext();
 				Context envCtx = (Context) initCtx.lookup("java:comp/env");
@@ -201,7 +216,7 @@ public class SimpleMailSenderImpl implements MailSender {
 	 * @throws AddressException
 	 */
 	private Address[] processToAddress(String to) throws AddressException {
-		String[] toArray = to.split(",");
+		String[] toArray = to.split("[ ]*,[ ]*");
 		List<Address> toAddressList = new ArrayList<Address>();
 		for (String toOne : toArray) {
 			toAddressList.add(new InternetAddress(toOne));

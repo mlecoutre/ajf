@@ -1,6 +1,7 @@
 package am.ajf.core;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import org.apache.commons.configuration.AbstractConfiguration;
 import org.apache.commons.configuration.Configuration;
@@ -21,8 +22,14 @@ public class ApplicationContext {
 	private static final String LOG_CONFIG_TEST = "logback-test.xml";
 	private static final String LOG_CONFIG = "logback.xml";
 
+	private static final String APPLICATION_SETTINGS_TEST_PROPERTIES = "settings-test.properties";
 	private static final String APPLICATION_SETTINGS_PROPERTIES = "settings.properties";
 
+	/*
+	private static final String APPLICATION_SETTINGS_TEST_XML = "settings-test.xml";
+	private static final String APPLICATION_SETTINGS_XML = "settings.xml";
+	*/
+	
 	public static final String APPLICATION_NAME_KEY = "application.name";
 	public static final String WORKING_DIR_KEY = "working.dir";
 	public static final String LOG_DIR_KEY = "log.dir";
@@ -235,10 +242,27 @@ public class ApplicationContext {
 		try {
 
 			System.out.println("Try to load application settings file '".concat(
-					APPLICATION_SETTINGS_PROPERTIES).concat("'."));
+					APPLICATION_SETTINGS_TEST_PROPERTIES).concat("'."));
 
-			configuration = ConfigurationHelper
+			configuration = null;
+			// load the test one
+			try {
+				configuration = ConfigurationHelper
+						.newConfigurationFromPropertiesResource(APPLICATION_SETTINGS_TEST_PROPERTIES);
+			} catch (FileNotFoundException e) {
+				System.out.println("The settings file '".concat(
+						APPLICATION_SETTINGS_TEST_PROPERTIES).concat("' can not be found."));
+				configuration = null;
+			}
+			
+			// then load the standard one
+			if (null == configuration) {
+				System.out.println("Try to load application settings file '".concat(
+						APPLICATION_SETTINGS_PROPERTIES).concat("'."));
+				configuration = ConfigurationHelper
 					.newConfigurationFromPropertiesResource(APPLICATION_SETTINGS_PROPERTIES);
+			}
+			
 			if (configuration instanceof AbstractConfiguration) {
 				((AbstractConfiguration) configuration)
 						.setThrowExceptionOnMissing(false);

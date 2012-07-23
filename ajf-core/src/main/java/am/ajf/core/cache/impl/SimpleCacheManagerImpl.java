@@ -1,10 +1,10 @@
 package am.ajf.core.cache.impl;
 
-import am.ajf.core.beans.LifecycleAware;
+import am.ajf.core.Service;
 import am.ajf.core.cache.Cache;
 
 public class SimpleCacheManagerImpl extends AbstractCacheManager
-	implements LifecycleAware {
+	implements Service {
 
 	private static final String THREADLOCAL = "simple";
 

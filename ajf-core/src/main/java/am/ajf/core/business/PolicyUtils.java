@@ -45,7 +45,7 @@ public class PolicyUtils {
 				targetLog.error(msg, exception);
 			}
 			if (!(ale instanceof BusinessLayerException)) {
-				ble = new BusinessLayerException(ale);
+				ale = new BusinessLayerException(ale);
 			}
 			ble = (BusinessLayerException) ale;
 		} else {

@@ -4,12 +4,12 @@ import org.infinispan.config.Configuration;
 import org.infinispan.manager.DefaultCacheManager;
 import org.infinispan.manager.EmbeddedCacheManager;
 
-import am.ajf.core.beans.LifecycleAware;
+import am.ajf.core.Service;
 import am.ajf.core.cache.CacheManagerAdapter;
 
 @SuppressWarnings("deprecation")
 public class InfinispanEmbeddedCacheManagerImpl extends AbstractCacheManager
-		implements CacheManagerAdapter, LifecycleAware {
+		implements CacheManagerAdapter, Service {
 
 	private static final String INFINISPAN = "infinispan";
 

@@ -3,11 +3,11 @@ package am.ajf.core.cache.impl;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.config.CacheConfiguration;
-import am.ajf.core.beans.LifecycleAware;
+import am.ajf.core.Service;
 import am.ajf.core.cache.CacheManagerAdapter;
 
 public class EHCacheCacheManagerImpl extends AbstractCacheManager 
-	implements CacheManagerAdapter, LifecycleAware {
+	implements CacheManagerAdapter, Service {
 
 	private static final String EHCACHE = "ehcache";
 
