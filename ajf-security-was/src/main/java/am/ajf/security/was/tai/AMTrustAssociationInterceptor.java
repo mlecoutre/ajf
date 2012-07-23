@@ -1,7 +1,6 @@
 package am.ajf.security.was.tai;
 
 import java.rmi.RemoteException;
-
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -10,12 +9,10 @@ import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
-
+import javax.security.auth.Subject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import javax.security.auth.Subject;
 
 import am.ajf.security.utils.CookieUtils;
 import am.ajf.security.utils.UserAccount;
@@ -25,7 +22,6 @@ import com.ibm.websphere.security.EntryNotFoundException;
 import com.ibm.websphere.security.UserRegistry;
 import com.ibm.websphere.security.WebTrustAssociationException;
 import com.ibm.websphere.security.WebTrustAssociationFailedException;
-
 import com.ibm.wsspi.security.tai.TAIResult;
 import com.ibm.wsspi.security.tai.TrustAssociationInterceptor;
 import com.ibm.wsspi.security.token.AttributeNameConstants;
@@ -40,7 +36,9 @@ public class AMTrustAssociationInterceptor implements TrustAssociationIntercepto
 	public final static String SUNAM_DEFAULT_HEADER_FIELD = "HTTP_LOGON_USER";
 	
 	private String sunAMHeaderField = AMTrustAssociationInterceptor.SUNAM_DEFAULT_HEADER_FIELD;
+	
 	private boolean enforceCookieAuthentication;
+	
 	private boolean allowBackDoor;
 
 	// Back door
@@ -97,7 +95,7 @@ public class AMTrustAssociationInterceptor implements TrustAssociationIntercepto
 			allowBackDoor = false;
 		}
 		
-		
+				
 		return 0;
 	}
 

@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -20,8 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import am.ajf.security.utils.CookieUtils;
 import am.ajf.security.utils.UserAccount;
-
-import com.ibm.websphere.security.auth.WSSubject;
 
 /**
  * @author U002617
@@ -37,6 +36,7 @@ public class LoginFilter implements Filter {
 	public static final String CREATE_COOKIE = "createCookie";
 
 	private boolean createCookie = false;
+	
 	private String cookieDomain = null;
 	private boolean cookiePath = true;
 	private int cookieExpiry = 0;
@@ -68,18 +68,19 @@ public class LoginFilter implements Filter {
 	@Override
 	public void init(FilterConfig config) throws ServletException {
 
-		String str = config.getInitParameter(CREATE_COOKIE);
+		ServletContext ctx = config.getServletContext();
+		String str = ctx.getInitParameter(CREATE_COOKIE);
 
 		this.createCookie = Boolean.parseBoolean(str);
 
-		str = config.getInitParameter(COOKIE_DOMAIN);
+		str = ctx.getInitParameter(COOKIE_DOMAIN);
 		this.cookieDomain = str;
 
-		str = config.getInitParameter(COOKIE_PATH);
+		str = ctx.getInitParameter(COOKIE_PATH);
 		this.cookiePath = Boolean.parseBoolean(str);
 
 		this.cookieExpiry = -1;
-		str = config.getInitParameter(COOKIE_EXPIRY);
+		str = ctx.getInitParameter(COOKIE_EXPIRY);
 		try {
 			this.cookieExpiry = Integer.parseInt(str);
 		} catch (NumberFormatException e) {
