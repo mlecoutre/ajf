@@ -1,5 +1,20 @@
 package am.ajf.showcase.web.controllers;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.slf4j.Logger;
+
 import am.ajf.core.logger.LoggerFactory;
 import am.ajf.showcase.lib.business.EmployeeManagementBD;
 import am.ajf.showcase.lib.business.dto.FireEmployeePB;
@@ -9,18 +24,6 @@ import am.ajf.showcase.lib.business.dto.HireEmployeeRB;
 import am.ajf.showcase.lib.business.dto.ListEmployeesPB;
 import am.ajf.showcase.lib.business.dto.ListEmployeesRB;
 import am.ajf.showcase.lib.model.Person;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import org.slf4j.Logger;
 
 /**
  * Managed bean to get input of client. This class has to implement
@@ -130,7 +133,7 @@ public class EmployeeMBean implements Serializable {
 	 *             raise all error
 	 */
 	public void listEmployees() throws Exception {
-
+		
 		logger.debug("listEmployees MBean");
 
 		ListEmployeesPB pb = new ListEmployeesPB(searchLastname);
