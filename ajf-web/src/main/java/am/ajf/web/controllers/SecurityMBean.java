@@ -1,21 +1,25 @@
 package am.ajf.web.controllers;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
-import javax.enterprise.context.SessionScoped;
+import java.security.Principal;
+
+import javax.enterprise.context.ApplicationScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.servlet.ServletContext;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.config.IniSecurityManagerFactory;
-import org.apache.shiro.subject.Subject;
-import org.apache.shiro.util.Factory;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import am.ajf.security.spi.UserRegistry;
+import am.ajf.security.utils.CookieUtils;
+import am.ajf.security.utils.UserAccount;
 
 /**
  * SecurityBean that enable authentication and allow to display user information
@@ -25,54 +29,29 @@ import org.slf4j.LoggerFactory;
  * 
  */
 @Named
-@SessionScoped
+@ApplicationScoped
 public class SecurityMBean implements Serializable {
 
-	private static final String OUTCOME_OK = "/index";
+	private static final String USER_DISPLAY_NAME_ATTRIBUTE = "am.ajf.UserRegistry.userDisplayNameAttribute";
 
+	private static final String USER_REGISTRY = "am.ajf.UserRegistry";
+
+	//private static final String OUTCOME_OK = "/ajf/login/login.jsf?faces-redirect=true";
+	//private static final String OUTCOME_OK = "/ajf/login/logout.html";
+	//private static final String OUTCOME_OK = "ajf/login/login.jsf";
+	
 	private static final long serialVersionUID = 1L;
-	private static final String OUTCOME_ACCESS_DENIED = "/ajf/errors/accessDenied";
+
 	private transient Logger log = LoggerFactory.getLogger(SecurityMBean.class);
 
-	private String username;
-	private String password;
-
+	// private static final String OUTCOME_ACCESS_DENIED =
+	// "/ajf/errors/accessDenied";
+	
 	/**
 	 * Default constructor
 	 */
 	public SecurityMBean() {
 		super();
-	}
-
-	/**
-	 * Enable authentication
-	 * 
-	 * @return outcome value to be redirected
-	 */
-	public String doLogin() {
-
-		log.debug(String.format(" Try to authentify %s", username));
-		Factory<org.apache.shiro.mgt.SecurityManager> factory = new IniSecurityManagerFactory();
-		org.apache.shiro.mgt.SecurityManager securityManager = factory
-				.getInstance();
-		SecurityUtils.setSecurityManager(securityManager);
-		UsernamePasswordToken token = new UsernamePasswordToken(username,
-				password);
-		Subject user = SecurityUtils.getSubject();
-		// FacesContext.getCurrentInstance().getExternalContext().getRequestContextPath();
-		try {
-			user.login(token);
-			log.debug(String.format("%s is Authenticated: ", username,
-					user.isAuthenticated()));
-			return OUTCOME_OK;
-		} catch (AuthenticationException ae) {
-			log.error(String.format(
-					"Impossible to authenticate username %s: %s", username,
-					ae.getMessage()));
-
-			return OUTCOME_ACCESS_DENIED;
-		}
-
 	}
 
 	/**
@@ -83,8 +62,16 @@ public class SecurityMBean implements Serializable {
 	 */
 	public boolean getIsLogIn() {
 
-		Subject currentSubject = SecurityUtils.getSubject();
-		return currentSubject.isAuthenticated();
+		/*
+		 * Subject currentSubject = SecurityUtils.getSubject(); return
+		 * currentSubject.isAuthenticated();
+		 */
+
+		FacesContext ctx = FacesContext.getCurrentInstance();
+		HttpServletRequest servletRequest = (HttpServletRequest) ctx
+				.getExternalContext().getRequest();
+		return (null != servletRequest.getUserPrincipal());
+
 	}
 
 	/**
@@ -92,11 +79,65 @@ public class SecurityMBean implements Serializable {
 	 * 
 	 * @return index destination
 	 */
-	public String doLogout() {
-		Subject currentSubject = SecurityUtils.getSubject();
+	public void doLogout() {
+
+		// Subject currentSubject = SecurityUtils.getSubject();
+		String username = getUsername();
+		if (null == username)
+			return;
+		
 		log.debug(String.format("Logout %s", username));
-		currentSubject.logout();
-		return OUTCOME_OK;
+
+		FacesContext ctx = FacesContext.getCurrentInstance();
+
+		// remove cookies if required
+		HttpServletRequest req = (HttpServletRequest) ctx.getExternalContext()
+				.getRequest();
+		HttpServletResponse resp = (HttpServletResponse) ctx
+				.getExternalContext().getResponse();
+
+		removeCookie(req, username, CookieUtils.AJF_COOKIE_NAME, resp);
+		removeCookie(req, username, CookieUtils.MEOW_COOKIE_NAME, resp);
+		
+		HttpSession userSession = (HttpSession) ctx.getExternalContext()
+				.getSession(false);
+		if (null != userSession) {
+			userSession.invalidate();
+		}
+
+		// currentSubject.logout();
+		//return OUTCOME_OK;
+
+	}
+
+	protected void removeCookie(HttpServletRequest req, String username, String cookieName,
+			HttpServletResponse resp) {
+		
+		Cookie cookie = CookieUtils.retieveCookie(cookieName, req);
+		if (null != cookie) {
+			UserAccount userAccount = CookieUtils.decodeCookie(cookie);
+			if (null != userAccount) {
+				if (username.equals(userAccount.getUser())) {
+					CookieUtils.removeCookie(cookie, req);
+					resp.addCookie(cookie);
+				}
+			}
+		}
+	}
+
+	/**
+	 * 
+	 * @return the User Principal
+	 */
+	public Principal getPrincipal() {
+
+		FacesContext ctx = FacesContext.getCurrentInstance();
+		HttpServletRequest servletRequest = (HttpServletRequest) ctx
+				.getExternalContext().getRequest();
+		Principal principal = servletRequest.getUserPrincipal();
+
+		return principal;
+
 	}
 
 	/**
@@ -109,17 +150,28 @@ public class SecurityMBean implements Serializable {
 	public boolean isAllowed(String roles) {
 
 		boolean isAllowed = false;
-		Subject currentSubject = SecurityUtils.getSubject();
+
+		FacesContext ctx = FacesContext.getCurrentInstance();
+		HttpServletRequest servletRequest = (HttpServletRequest) ctx
+				.getExternalContext().getRequest();
+		Principal principal = servletRequest.getUserPrincipal();
+
 		if (roles.contains(",")) {
-			String[] rolesArray = StringUtils.split(roles, ',');
-			List<String> listRoles = Arrays.asList(rolesArray);
-			isAllowed = currentSubject.hasAllRoles(listRoles);
+			String[] rolesArray = roles.split("[ ]*,[ ]*");
+			for (String role : rolesArray) {
+				if ((null != role) && (0 != role.trim().length())) {
+					isAllowed = servletRequest.isUserInRole(role);
+					if (!isAllowed) {
+						break;
+					}
+				}
+			}
 		} else {
-			isAllowed = currentSubject.hasRole(roles);
+			isAllowed = servletRequest.isUserInRole(roles);
 		}
 
-		log.debug(String.format("%s for role %s : %s",
-				currentSubject.getPrincipal(), roles, isAllowed));
+		log.debug(String.format("%s for role %s : %s", principal, roles,
+				isAllowed));
 		return isAllowed;
 	}
 
@@ -141,33 +193,53 @@ public class SecurityMBean implements Serializable {
 	 * @return username
 	 */
 	public String getUsername() {
-		return username;
+		Principal principal = getPrincipal();
+		if (null != principal)
+			return principal.getName();
+		return null;
 	}
 
 	/**
 	 * 
-	 * @param username
-	 *            current username
+	 * @return displayname
 	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
+	public String getDisplayname() {
 
-	/**
-	 * 
-	 * @param password
-	 *            password
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
+		String displayname = null;
 
-	/**
-	 * 
-	 * @return password
-	 */
-	public String getPassword() {
-		return password;
-	}
+		Principal principal = getPrincipal();
+		if (null != principal) {
+			String userId = principal.getName();
+			displayname = userId;
+			try {
+				ServletContext servletCtx = (ServletContext) FacesContext
+						.getCurrentInstance().getExternalContext().getContext();
+				String userRegistryName = servletCtx
+						.getInitParameter(USER_REGISTRY);
+				String userDisplayNameAttribute = servletCtx
+						.getInitParameter(USER_DISPLAY_NAME_ATTRIBUTE);
 
+				Context context = new InitialContext();
+
+				UserRegistry userRegistry = (UserRegistry) context
+						.lookup(userRegistryName);
+
+				// try to resolve the user unique id
+				String userUniqueId = userRegistry.getUserUniqueId(userId);
+
+				// read th displayName attribute
+				Object[] values = userRegistry.readAttribute(userUniqueId,
+						userDisplayNameAttribute);
+				if ((null != values) && (values.length > 0)) {
+					displayname = (String) values[0];
+				}
+			} catch (Exception e) {
+				log.error(e.getMessage(), e);
+			}
+
+		}
+
+		return displayname;
+	}
+	
 }

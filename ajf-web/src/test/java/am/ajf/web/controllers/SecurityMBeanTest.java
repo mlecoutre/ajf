@@ -31,6 +31,7 @@ public class SecurityMBeanTest {
 	 * @throws Exception
 	 *             on error
 	 */
+	/*
 	@Test
 	public void testDoLoginOk() throws Exception {
 		logger.debug("testDoLogin");
@@ -62,7 +63,9 @@ public class SecurityMBeanTest {
 				"/index".equals(res));
 
 	}
-
+	*/
+	
+	/*
 	@Test
 	public void testDoLoginFailed() throws Exception {
 		logger.debug("testDoLogin");
@@ -89,4 +92,5 @@ public class SecurityMBeanTest {
 		// "securityBean.isAllowed should return false for anonymous role",
 		// isAllowed);
 	}
+	*/
 }

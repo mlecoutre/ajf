@@ -8,7 +8,6 @@
 		<relativePath>../ajf-parent/pom.xml</relativePath>
 	</parent>
 
-
 	<artifactId>ajf-web</artifactId>
 	<description>specific utility classes for ajf web application</description>
 
@@ -65,6 +64,7 @@
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-security</artifactId>
 			<version>${project.version}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>am.ajf</groupId>
