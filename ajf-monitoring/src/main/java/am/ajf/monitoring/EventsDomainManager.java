@@ -65,9 +65,13 @@ public class EventsDomainManager {
 	}
 
 	protected static synchronized void createEventsDomain(
-			String eventManagerName) {
+			String eventsDomainName) {
+		
+		if (eventsDomainsMap.containsKey(eventsDomainName))
+			return;
+		
 		EventsDomain eventManager = new EventsDomain();
-		eventsDomainsMap.put(eventManagerName, eventManager);
+		eventsDomainsMap.put(eventsDomainName, eventManager);
 	}
 
 	/**
