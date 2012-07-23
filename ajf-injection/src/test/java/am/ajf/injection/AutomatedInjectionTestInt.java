@@ -73,7 +73,6 @@ public class AutomatedInjectionTestInt {
 				.addClasses(CacheProducer.class)
 				.addClasses(PropertyProducer.class)
 				.addClasses(ConfigurationProducer.class)
-				.addClasses(MailSenderProducer.class)
 				.addClasses(MonitoringInterceptor.class)
 				.addAsManifestResource("META-INF/beans.xml",
 						ArchivePaths.create("beans.xml"));

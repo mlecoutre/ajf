@@ -23,7 +23,7 @@ import am.ajf.injection.ConfigurationProducer;
 import am.ajf.injection.LoggerProducer;
 import am.ajf.injection.MonitoringInterceptor;
 import am.ajf.injection.PropertyProducer;
-import am.ajf.injection.annotation.Bean;
+import am.ajf.injection.annotation.Profile;
 import foo.beans.MyService;
 
 @RunWith(Arquillian.class)
@@ -36,11 +36,11 @@ public class SimpleBeanInjectionTest {
 	private MyService myDefaultService;
 
 	@Inject
-	@Bean
+	@Profile
 	private MyService myBeanService;
 
 	@Inject
-	@Bean("myNamedBean")
+	@Profile("myNamedBean")
 	private MyService myNamedBeanService;
 
 	@BeforeClass

@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import am.ajf.injection.ClassGenerationException;
-import am.ajf.injection.annotation.Bean;
+import am.ajf.injection.annotation.Profile;
 
 public class BeanBuilder {
 	
@@ -105,7 +105,7 @@ public class BeanBuilder {
 		Map<String, MemberValue> membersMap = new HashMap<String, MemberValue>();
 		membersMap.put("value", beanMemberValue);
 		
-		addAnnotation(pool, cc, Bean.class, membersMap);
+		addAnnotation(pool, cc, Profile.class, membersMap);
 		
 		return cc;
 	

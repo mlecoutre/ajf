@@ -15,30 +15,23 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 
 import am.ajf.core.ApplicationContext;
-import am.ajf.core.cache.CacheManagerFactory;
-import am.ajf.core.utils.BeanUtils;
-import am.ajf.injection.events.BasicEventImpl;
-import foo.core.services.MyService;
-import foo.lib.services.MyServiceBD;
 
 @RunWith(Arquillian.class)
-public class InjectionTest {
-
+public class AutomatedLoggerInjectionTestInt {
+	
 	@Inject
 	private Logger logger;
-	
-	@Inject 
-	private javax.enterprise.event.Event<BasicEventImpl> event;
-	
+		
 	@BeforeClass
 	public static void setUpClass() {
+		
 		ApplicationContext.init();
+		
 	}
-	
+
 	@Deployment
 	public static JavaArchive createTestArchive() {
 		JavaArchive archive = ShrinkWrap.create(JavaArchive.class, "test.jar")
-				.addPackages(true, "foo")
 				.addClasses(AuditDataProducer.class)
 				.addClasses(LoggerProducer.class)
 				.addClasses(CacheProducer.class)
@@ -49,11 +42,11 @@ public class InjectionTest {
 						ArchivePaths.create("beans.xml"));
 		return archive;
 	}
-	
-	public InjectionTest() {
+
+	public AutomatedLoggerInjectionTestInt() {
 		super();
 	}
-			
+	
 	@Test
 	public void testLoggerInjection() {
 		
@@ -62,47 +55,5 @@ public class InjectionTest {
 		
 	}
 	
-	@Test
-	public void testFireEvent() {
-	
-		assertNotNull(event);	
-		
-		event.fire(new BasicEventImpl("myEvent"));
-		
-		logger.info("AuditData injected.");
-		
-	}
-	
-	@Test
-	public void testServiceInjection() {
-		
-		
-		CacheManagerFactory.getFirstCacheManager();
-		
-		MyServiceBD svc = BeanUtils.newInstance(MyServiceBD.class);
-		
-		assertNotNull(svc);
-		
-		String res = svc.myFirstOperation("vincent", "toto");
-		
-		assertNotNull(res);
-		
-		MyServiceBD svc2 = BeanUtils.newInstance(MyServiceBD.class);
-		res = svc2.myFirstOperation("vincent", "toto");
-		
-	}
-	
-	@Test
-	public void testServiceImplInjection() {
-		
-		MyServiceBD svc = BeanUtils.newInstance(MyService.class);
-		
-		assertNotNull(svc);
-		
-		String res = svc.myFirstOperation("vincent", "toto");
-		
-		assertNotNull(res);
-				
-	}
 	
 }

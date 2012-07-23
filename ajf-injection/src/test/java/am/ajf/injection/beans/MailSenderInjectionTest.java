@@ -25,8 +25,8 @@ import am.ajf.injection.ConfigurationProducer;
 import am.ajf.injection.LoggerProducer;
 import am.ajf.injection.MonitoringInterceptor;
 import am.ajf.injection.PropertyProducer;
-import am.ajf.injection.annotation.Bean;
-import am.ajf.injection.annotation.DefaultBean;
+import am.ajf.injection.annotation.Profile;
+import am.ajf.injection.annotation.DefaultProfile;
 
 @RunWith(Arquillian.class)
 public class MailSenderInjectionTest {
@@ -44,15 +44,15 @@ public class MailSenderInjectionTest {
 	private AnotherMailSenderImpl anOtherServiceImpl;
 	
 	@Inject
-	@Bean
+	@Profile
 	private MailSender myImplicitBeanService;
 	
 	@Inject
-	@DefaultBean
+	@DefaultProfile
 	private MailSender myExplicitDefaultBeanService;
 	
 	@Inject
-	@Bean("toto")
+	@Profile("toto")
 	private MailSender myNamedBeanService;
 	
 	@BeforeClass

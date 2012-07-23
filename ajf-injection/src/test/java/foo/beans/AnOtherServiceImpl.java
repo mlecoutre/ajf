@@ -4,7 +4,7 @@ package foo.beans;
 
 import javax.enterprise.inject.Alternative;
 
-import am.ajf.core.beans.LifecycleAware;
+import am.ajf.core.Service;
 import am.ajf.injection.annotation.Monitored;
 
 /**
@@ -12,7 +12,7 @@ import am.ajf.injection.annotation.Monitored;
  *
  */
 @Alternative 
-public class AnOtherServiceImpl implements MyService, LifecycleAware {
+public class AnOtherServiceImpl implements MyService, Service {
 
 	protected String stringTemplate;
 

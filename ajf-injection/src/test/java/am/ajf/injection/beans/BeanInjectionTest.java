@@ -28,10 +28,9 @@ import am.ajf.injection.CacheInterceptor;
 import am.ajf.injection.CacheProducer;
 import am.ajf.injection.ConfigurationProducer;
 import am.ajf.injection.LoggerProducer;
-import am.ajf.injection.MailSenderProducer;
 import am.ajf.injection.MonitoringInterceptor;
 import am.ajf.injection.PropertyProducer;
-import am.ajf.injection.annotation.Bean;
+import am.ajf.injection.annotation.Profile;
 import foo.beans.MyService;
 
 @RunWith(Arquillian.class)
@@ -46,10 +45,10 @@ public class BeanInjectionTest {
 	@Inject @Default
 	private MyService myExplictDefaultService;
 	
-	@Inject @Bean
+	@Inject @Profile
 	private MyService myDefaultQualifiedService;
 	
-	@Inject @Bean("myNamedBean")
+	@Inject @Profile("myNamedBean")
 	private MyService myQualifiedService;
 	
 	@Inject @Any
@@ -72,7 +71,6 @@ public class BeanInjectionTest {
 				.addClasses(CacheProducer.class)
 				.addClasses(PropertyProducer.class)
 				.addClasses(ConfigurationProducer.class)
-				.addClasses(MailSenderProducer.class)
 				.addClasses(MonitoringInterceptor.class)
 				.addClasses(CacheInterceptor.class)
 				.addAsManifestResource("META-INF/beans.xml",

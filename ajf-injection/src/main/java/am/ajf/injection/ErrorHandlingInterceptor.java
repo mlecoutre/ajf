@@ -67,6 +67,7 @@ public class ErrorHandlingInterceptor implements Serializable {
 			}
 
 			Logger targetLog = LoggerFactory.getLogger(targetClass);
+			
 			// Test type of class (Web, Policy, SERVICE)
 			if (ClassUtils.isPolicyImpl(targetClass)) {
 				PolicyUtils.handleError(exception, targetClass, targetLog);

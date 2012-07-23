@@ -1,8 +1,8 @@
 package foo.beans;
 
-import am.ajf.injection.annotation.Bean;
+import am.ajf.injection.annotation.Profile;
 
-@Bean
+@Profile
 public interface MyService {
 
 	String doSomething();

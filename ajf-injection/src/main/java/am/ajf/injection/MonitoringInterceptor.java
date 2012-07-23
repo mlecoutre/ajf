@@ -10,6 +10,7 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import org.slf4j.Logger;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.base.Strings;
 
 /**
@@ -62,14 +63,18 @@ public class MonitoringInterceptor implements Serializable {
 
 		logger.trace(">> ".concat(serviceName).concat("#").concat(operation)
 				.concat("(...)"));
-		long start = System.currentTimeMillis();
+		//long start = System.currentTimeMillis();
+		Stopwatch stopwatch = new Stopwatch().start();
 
 		try {
 			Object res = ctx.proceed();
 			return res;
 		} finally {
+			/*
 			long end = System.currentTimeMillis();
 			long ellapsed = end - start;
+			*/
+			long ellapsed = stopwatch.stop().elapsedMillis();
 			logger.trace("<< ".concat(serviceName).concat("#")
 					.concat(operation).concat("(...) in {} ms."), ellapsed);
 		}

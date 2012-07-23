@@ -16,8 +16,8 @@ import am.ajf.core.beans.BeansManager;
 @Qualifier
 @Retention(RUNTIME)
 @Target({TYPE, FIELD, PARAMETER, CONSTRUCTOR})
-public @interface Bean {
+public @interface Profile {
 	
-	public String value() default BeansManager.DEFAULT_BEAN_NAME;
+	public String value() default BeansManager.DEFAULT_BEAN_PROFILE;
 	
 }

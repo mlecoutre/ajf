@@ -22,10 +22,10 @@ import javax.inject.Qualifier;
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 
+import am.ajf.core.Service;
 import am.ajf.core.beans.BeansManager;
-import am.ajf.core.beans.LifecycleAware;
 import am.ajf.core.logger.LoggerFactory;
-import am.ajf.injection.annotation.DefaultBean;
+import am.ajf.injection.annotation.DefaultProfile;
 
 public class BeanImpl<T> implements Bean<T> {
 
@@ -37,7 +37,7 @@ public class BeanImpl<T> implements Bean<T> {
 
 	@SuppressWarnings("unused")
 	private final Logger logger = LoggerFactory
-			.getLogger(ConfiguredBeanImpl.class);
+			.getLogger(BeanImpl.class);
 
 	/** Begin : Constructor **/
 
@@ -63,8 +63,8 @@ public class BeanImpl<T> implements Bean<T> {
 
 		it.postConstruct(instance);
 
-		if (instance instanceof LifecycleAware) {
-			((LifecycleAware) instance).start();
+		if (instance instanceof Service) {
+			((Service) instance).start();
 		}
 
 		ctx.push(instance);
@@ -75,8 +75,8 @@ public class BeanImpl<T> implements Bean<T> {
 	@Override
 	public void destroy(T instance, CreationalContext<T> ctx) {
 
-		if (instance instanceof LifecycleAware) {
-			((LifecycleAware) instance).stop();
+		if (instance instanceof Service) {
+			((Service) instance).stop();
 		}
 
 		it.preDestroy(instance);
@@ -126,23 +126,23 @@ public class BeanImpl<T> implements Bean<T> {
 		});
 		
 		// add @DefaultBean
-		qualifiers.add(new DefaultBean() {
+		qualifiers.add(new DefaultProfile() {
 			@Override
 			public Class<? extends Annotation> annotationType() {
-				return DefaultBean.class;
+				return DefaultProfile.class;
 			}
 		});
 		
-		qualifiers.add(new am.ajf.injection.annotation.Bean() {
+		qualifiers.add(new am.ajf.injection.annotation.Profile() {
 			
 			@Override
 			public Class<? extends Annotation> annotationType() {
-				return am.ajf.injection.annotation.Bean.class;
+				return am.ajf.injection.annotation.Profile.class;
 			}
 			
 			@Override
 			public String value() {
-				return BeansManager.DEFAULT_BEAN_NAME;
+				return BeansManager.DEFAULT_BEAN_PROFILE;
 			}
 		});
 		

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package am.ajf.injection.internal;
 
 import java.lang.annotation.Annotation;
@@ -26,85 +23,98 @@ import javax.inject.Qualifier;
 import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 
-import am.ajf.core.beans.BeansManager;
-import am.ajf.core.beans.ExtendedBeanDeclaration;
-import am.ajf.core.beans.LifecycleAware;
+import am.ajf.core.Service;
+import am.ajf.core.beans.BeanDefinition;
 import am.ajf.core.logger.LoggerFactory;
-import am.ajf.injection.annotation.DefaultBean;
+import am.ajf.injection.annotation.DefaultProfile;
 
 /**
  * @author U002617
- *
+ * 
  */
 public class ConfiguredBeanImpl<T> implements Bean<T> {
 
 	private final String beanName;
 	private final Class<T> beanClass;
 	private final boolean isDefaultBean;
-	private final ExtendedBeanDeclaration beanDeclaration;
+	private final BeanDefinition beanDefinition;
 
 	private final AnnotatedType<T> at;
 	private final InjectionTarget<T> it;
-		
-	private final Logger logger = LoggerFactory.getLogger(ConfiguredBeanImpl.class);
+
+	private final Logger logger = LoggerFactory
+			.getLogger(ConfiguredBeanImpl.class);
 
 	/** Begin : Constructor **/
-		
-	public ConfiguredBeanImpl(String beanName, Class<T> beanClass, boolean isDefaultBean,
-			ExtendedBeanDeclaration beanDeclaration, 
+
+	public ConfiguredBeanImpl(String beanName, Class<T> beanClass,
+			boolean isDefaultBean, BeanDefinition beanDefinition,
 			AnnotatedType<T> at, InjectionTarget<T> it) {
-		
+
 		this.beanName = beanName;
 		this.beanClass = beanClass;
 		this.isDefaultBean = isDefaultBean;
-		this.beanDeclaration = beanDeclaration;
-		
+		this.beanDefinition = beanDefinition;
+
 		this.at = at;
 		this.it = it;
 	}
-	
+
 	/** End : Constructor **/
-	
+
 	/** Begin : Overrides **/
-	
+
+	@SuppressWarnings("unchecked")
 	@Override
 	public T create(CreationalContext<T> ctx) {
+
+		logger.trace("Creation of Bean from configuration '" + beanName + "'.");
+
+		T instance = null;
+		try {
+			instance = (T) beanDefinition.getBeanFactory().resolve(
+					beanDefinition);
+		} catch (Exception exc) {
+			logger.error(exc.getMessage(), exc);
+			return instance;
+		}
+
+		if (null == instance) {
+			instance = it.produce(ctx);
+		}
 		
-		logger.trace("Creation of Bean from configuration '"+beanName+"'.");
-		
-		T instance = it.produce(ctx);
-        it.inject(instance, ctx);
-        
-        if (null != beanDeclaration) {
-	        try {
-	        	BeansManager.initBean(instance, beanDeclaration);
+		it.inject(instance, ctx);
+		if (null != beanDefinition) {
+			try {
+				beanDefinition.getBeanFactory().initialize(instance,
+						beanDefinition);
 			} catch (Exception e) {
-				logger.error("Unable to initialize bean attributes for bean: " + beanClass.getName());
+				logger.error("Unable to initialize bean attributes for bean: "
+						+ beanClass.getName());
 			}
-        }
-		        
-        it.postConstruct(instance);
-        
-        if (instance instanceof LifecycleAware) {
-        	((LifecycleAware) instance).start();
-        }
-        
-        ctx.push(instance);
-        
-        return instance;
+		}
+
+		it.postConstruct(instance);
+		if (instance instanceof Service) {
+			((Service) instance).start();
+		}
+
+		ctx.push(instance);
+
+		return instance;
 	}
 
 	@Override
 	public void destroy(T instance, CreationalContext<T> ctx) {
-	
-		if (instance instanceof LifecycleAware) {
-        	((LifecycleAware) instance).stop();
-        }
-		
+
 		it.preDestroy(instance);
-        it.dispose(instance);
-        ctx.release();
+		if (instance instanceof Service) {
+			((Service) instance).stop();
+		}
 		
+		it.dispose(instance);
+		ctx.release();
+
 	}
 
 	@Override
@@ -118,31 +128,32 @@ public class ConfiguredBeanImpl<T> implements Bean<T> {
 	}
 
 	@Override
-	public String getName() {		
-		return null; //beanClass.getSimpleName();
+	public String getName() {
+		return null; // beanClass.getSimpleName();
 	}
-	
+
 	@Override
 	public Set<Annotation> getQualifiers() {
 		Set<Annotation> qualifiers = new HashSet<Annotation>();
-		
+
 		Set<Annotation> annotations = at.getAnnotations();
 		if ((null != annotations) && (!annotations.isEmpty())) {
 			Iterator<Annotation> annotationIterator = annotations.iterator();
 			while (annotationIterator.hasNext()) {
 				Annotation annotation = annotationIterator.next();
-				
+
 				// and @Any are also qualifiers
-				if (annotation.annotationType().isAnnotationPresent(Qualifier.class)) {
+				if (annotation.annotationType().isAnnotationPresent(
+						Qualifier.class)) {
 					if (!Default.class.equals(annotation.annotationType())) {
 						qualifiers.add(annotation);
 					}
 					continue;
 				}
-				
+
 			}
 		}
-		
+
 		// if not default Bean
 		if (!isDefaultBean) {
 			qualifiers.add(new Alternative() {
@@ -152,24 +163,24 @@ public class ConfiguredBeanImpl<T> implements Bean<T> {
 				}
 			});
 		}
-		
+
 		qualifiers.add(new Any() {
 			@Override
 			public Class<? extends Annotation> annotationType() {
 				return Any.class;
 			}
 		});
-		
+
 		if (isDefaultBean) {
-			
+
 			// add @DefaultBean
-			qualifiers.add(new DefaultBean() {
+			qualifiers.add(new DefaultProfile() {
 				@Override
 				public Class<? extends Annotation> annotationType() {
-					return DefaultBean.class;
+					return DefaultProfile.class;
 				}
 			});
-			
+
 			// add @Default
 			qualifiers.add(new Default() {
 				@Override
@@ -177,39 +188,40 @@ public class ConfiguredBeanImpl<T> implements Bean<T> {
 					return Default.class;
 				}
 			});
-			
+
 		}
-		
-		qualifiers.add(new am.ajf.injection.annotation.Bean() {
-			
+
+		qualifiers.add(new am.ajf.injection.annotation.Profile() {
+
 			@Override
 			public Class<? extends Annotation> annotationType() {
-				return am.ajf.injection.annotation.Bean.class;
+				return am.ajf.injection.annotation.Profile.class;
 			}
-			
+
 			@Override
 			public String value() {
 				return beanName;
 			}
 		});
-		
+
 		return qualifiers;
 	}
 
 	@Override
 	public Class<? extends Annotation> getScope() {
-		
+
 		Set<Annotation> annotations = at.getAnnotations();
 		if ((null != annotations) && (!annotations.isEmpty())) {
 			Iterator<Annotation> annotationIterator = annotations.iterator();
 			while (annotationIterator.hasNext()) {
 				Annotation annotation = annotationIterator.next();
-				if (annotation.annotationType().isAnnotationPresent(NormalScope.class)) {
+				if (annotation.annotationType().isAnnotationPresent(
+						NormalScope.class)) {
 					return annotation.annotationType();
 				}
 			}
 		}
-	
+
 		return ApplicationScoped.class;
 	}
 
@@ -222,33 +234,33 @@ public class ConfiguredBeanImpl<T> implements Bean<T> {
 	@Override
 	public Set<Type> getTypes() {
 		Set<Type> types = new HashSet<Type>();
-        types.add(beanClass);
-        
-        List<Class<?>> interfaces = ClassUtils.getAllInterfaces(beanClass);
-        for (Class<?> interf : interfaces) {
+		types.add(beanClass);
+
+		List<Class<?>> interfaces = ClassUtils.getAllInterfaces(beanClass);
+		for (Class<?> interf : interfaces) {
 			types.add(interf);
 		}
-        
-        List<Class<?>> superClasses = ClassUtils.getAllSuperclasses(beanClass);
-        for (Class<?> superClass : superClasses) {
+
+		List<Class<?>> superClasses = ClassUtils.getAllSuperclasses(beanClass);
+		for (Class<?> superClass : superClasses) {
 			types.add(superClass);
 		}
-        
-        types.add(Object.class);
 
-        return types;
+		types.add(Object.class);
+
+		return types;
 	}
 
 	@Override
-	public boolean isAlternative() {		
+	public boolean isAlternative() {
 		return (!isDefaultBean);
 	}
 
 	@Override
-	public boolean isNullable() {		
+	public boolean isNullable() {
 		return true;
-	}	
-	
+	}
+
 	/** End : Overrides **/
 
 }

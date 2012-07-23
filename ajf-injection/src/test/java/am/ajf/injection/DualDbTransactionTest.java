@@ -25,7 +25,7 @@ public class DualDbTransactionTest {
 	
 	@Inject
 	private JPAQueriesOnDBH2Policy cut;
-	
+		
 	@Deployment
 	public static JavaArchive createTestArchive() {
 		return ShrinkWrap

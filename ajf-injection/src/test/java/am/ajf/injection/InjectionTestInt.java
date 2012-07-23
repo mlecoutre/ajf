@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import am.ajf.core.ApplicationContext;
 import am.ajf.core.cache.Cache;
 import am.ajf.core.datas.AuditData;
+import am.ajf.core.mail.MailSender;
 import am.ajf.injection.annotation.Property;
 import foo.lib.services.MyServiceBD;
 
@@ -38,6 +39,9 @@ public class InjectionTestInt {
 	
 	@Inject @am.ajf.injection.annotation.Cache(cacheManagerName="simple", cacheName="default")
 	private Cache cache;
+	
+	@Inject
+	private MailSender mailSender;
 	
 	@Inject
 	private Configuration appConfiguration;
@@ -73,7 +77,6 @@ public class InjectionTestInt {
 				.addClasses(CacheProducer.class)
 				.addClasses(PropertyProducer.class)
 				.addClasses(ConfigurationProducer.class)
-				//.addClasses(MailSenderProducer.class)
 				.addClasses(MonitoringInterceptor.class)
 				.addAsManifestResource("META-INF/beans.xml",
 						ArchivePaths.create("beans.xml"));
@@ -97,6 +100,14 @@ public class InjectionTestInt {
 		
 		assertNotNull(logger);
 		logger.info("Logger injected.");
+		
+	}
+	
+	@Test
+	public void testMailSenderInjection() {
+		
+		assertNotNull(mailSender);
+		logger.info("MailSender injected.");
 		
 	}
 	

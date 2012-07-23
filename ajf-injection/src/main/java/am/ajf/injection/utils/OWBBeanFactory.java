@@ -15,10 +15,10 @@ import org.slf4j.Logger;
 import com.google.common.base.Throwables;
 
 import am.ajf.core.logger.LoggerFactory;
-import am.ajf.core.utils.BeanFactory;
+import am.ajf.core.utils.BeanUtilsProvider;
 
 public class OWBBeanFactory 
-	implements BeanFactory {
+	implements BeanUtilsProvider {
 	
 	private Logger logger = LoggerFactory.getLogger(OWBBeanFactory.class);
 	
@@ -63,7 +63,8 @@ public class OWBBeanFactory
 		
 		try {
 			container.startApplication(null);
-		} catch (Exception e) {
+		} catch (Throwable e) {
+			e.printStackTrace();
 			logger.warn("Exception occured while starting the application.", e);
 		}			
 		
@@ -77,8 +78,7 @@ public class OWBBeanFactory
 			CreationalContext<T> cCtx = (CreationalContext<T>) beanManager.createCreationalContext(null);
 			
 			T result = null;
-			
-			
+						
 			if (beanClass.isInterface()) {
 				Set<Bean<?>> beans = beanManager.getBeans(beanClass);
 				Bean<?> bean = beans.iterator().next();

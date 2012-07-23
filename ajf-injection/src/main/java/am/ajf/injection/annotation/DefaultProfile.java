@@ -14,6 +14,6 @@ import javax.inject.Qualifier;
 @Qualifier
 @Retention(RUNTIME)
 @Target({TYPE, FIELD, PARAMETER, CONSTRUCTOR})
-public @interface DefaultBean {
+public @interface DefaultProfile {
 	
 }
