@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	You under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. --><!-- The contents of this file will be loaded for each web application -->
+<Context>
+
+	<!-- CDI : OpenWebBeans Listener -->
+  	<Listener className="org.apache.webbeans.web.tomcat.ContextLifecycleListener" />
+  	
+  	<Valve className="am.ajf.security.tomcat.valves.TrustAuthenticationAssociationValve" 
+		createCookie="true" cookieExpiry="86400"
+		enforceCookieAuthentication="false" />  
+
+    <!-- Default set of monitored resources -->
+	<WatchedResource>WEB-INF/web.xml</WatchedResource>
+	
+	<!-- Editable user database that can also be used by UserDatabaseRealm 
+			to authenticate users -->
+	<!-- 		
+	<ResourceLink name="MemoryUserDatabase"
+            global="UserDatabase"
+            type="org.apache.catalina.UserDatabase" />
+    -->
+    <!-- 
+    <Resource auth="Container" 
+			description="User database that can be updated and saved" 
+			factory="org.apache.catalina.users.MemoryUserDatabaseFactory" 
+			name="MemoryUserDatabase" 
+			pathname="${catalina.base}/conf/users.xml" 
+			type="org.apache.catalina.UserDatabase"/>				
+	-->
+								
+	<Resource name="ArmonyUserRegistry" auth="Container"
+		factory="am.ajf.naming.SimpleGenericBeanFactory"
+		type="am.ajf.security.spi.UserRegistry"
+		class="am.ajf.security.LDAPUserRegistry"
+		providerURL="ldap://APP_LDAPWASHD_PROD:389"
+		authentication="simple" bindDN="was-reader@armony.net" bindPWD="re@dPwd0" 
+		realm="ARMONY" 
+		referrals="follow" 
+		userBase="OU=Accounts,DC=armony,DC=net" 
+		userDNAttribute="distinguishedname" userFilterAttribute="sAMAccountName" userMemberOfAttribute="memberOf" 
+		userSearchControlScope="SUBTREE_SCOPE"
+		groupBase="OU=Groups,dc=armony,dc=net" 
+		groupDNAttribute="distinguishedname" groupMembersAttribute="member" groupNameAttribute="cn" 
+		groupSearchControlScope="SUBTREE_SCOPE" />
+		
+	<Resource name="UserRolesResolver"  
+    	factory="am.ajf.naming.SimpleGenericBeanFactory" 
+    	type="am.ajf.security.spi.UserRoleResolver"
+    	class="am.ajf.security.PropertiesGroupsMappingUserRoleResolver"
+    	rolesGroupsMappingPath="${catalina.base}/conf/ajf-showcase-simple_roles-groups-mapping.properties" />
+		
+	<!-- EMAIL management -->
+	<Resource name="mail/Session" auth="Container" 
+		type="javax.mail.Session"
+		mail.smtp.host="applicatifs.appliarmony.net" />
+		
+	<!-- DATASOURCE management -->
+	<!-- 
+	<Resource name="jdbc/SHOWCASE_DS" auth="Container" type="javax.sql.DataSource"
+		factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+		username="showcase" password="showcase" driverClassName="org.apache.derby.jdbc.EmbeddedDriver"
+		url="jdbc:derby:showcase;create=true" maxActive="10" maxIdle="1" />
+	-->			
+		
+	<Realm className="org.apache.catalina.realm.LockOutRealm">
+	
+		<!-- 
+		<Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+			resourceName="MemoryUserDatabase" />
+	 	 -->
+	 	 
+		<Realm className="org.apache.catalina.realm.JAASRealm" 
+		 	appName="ArmonyRealm"
+		 	userClassNames="am.ajf.security.UserPrincipal"
+	     	roleClassNames="am.ajf.security.RolePrincipal" />
+	
+	 </Realm>
+		
+</Context>
