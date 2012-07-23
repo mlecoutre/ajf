@@ -17,7 +17,7 @@
 		<appender-ref ref="STDOUT" />
 	</root>
 
-	<logger name="ajf" level="TRACE" additivity="false">
+	<logger name="am.ajf" level="DEBUG" additivity="false">
 		<appender-ref ref="STDERR" />
 	</logger>
 
