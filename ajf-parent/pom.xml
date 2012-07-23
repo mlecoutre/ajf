@@ -11,7 +11,7 @@
 	<version>2.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
-	<name>AJF2</name>
+	<name>ajf</name>
 
 	<scm>
 		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-parent</connection>
@@ -21,6 +21,7 @@
 		
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<slf4j.version>1.6.4</slf4j.version>
 	</properties>
 	
 	<developers>
@@ -73,6 +74,69 @@
 				<artifactId>junit</artifactId>
 				<version>4.10</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-injection</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-monitoring</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-notif</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-security</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-security-tomcat</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-security-was</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-web</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-skin-default</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-persistence</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-remoting</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>am.ajf</groupId>
+				<artifactId>ajf-testing</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 
 		</dependencies>
 	</dependencyManagement>
@@ -86,8 +150,14 @@
 		<!-- optionnal modules -->
 		<module>../ajf-monitoring</module>
 		<module>../ajf-notif</module>
+		
 		<module>../ajf-security</module>
+		<module>../ajf-security-tomcat</module>
+		<module>../ajf-security-was</module>
+		
 		<module>../ajf-web</module>
+		<module>../ajf-skin-default</module>
+		
 		<module>../ajf-persistence</module>
 		<module>../ajf-remoting</module>
 		
