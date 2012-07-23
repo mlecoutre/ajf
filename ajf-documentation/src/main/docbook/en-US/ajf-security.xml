@@ -3,8 +3,8 @@
 <chapter id="security">
 	<title>AJF - Security Reference</title>
 	<para>
-		The AJF Core library provide a set of commons reusable components for use
-		on J2EE server and other Servlet containers. 		
+		The AJF Security library provide a link with the container security layer. It allow the user authentication and 
+		authorization management - authorizations are roles and web resources based. 		
 	</para>
 	<example>
 			<title>Reference "ajf-security" in your Maven 2 project configuration file 'pom.xml'</title>
@@ -13,16 +13,61 @@
 		<groupId>am.ajf</groupId>
 		<artifactId>ajf-security</artifactId>
 		<version>${ajf.version}</version>
+		<scope>provided</scope>
 	</dependency>
 			]]></programlisting>
 	</example>
 	<section>
 		<title>Introduction</title>
 		<para>
-			
+			AJF Security allow to securize the access to your applications. Authentication and authorizations functionalities are delegated to the application server container.
+			As the security is delegated to the container, the configuration depends of the target application server container. 
 		</para>
 	</section>
-	
+	<section>
+		<title>Principle</title>
+		<para>
+			 
+		</para>
+			<section>
+				<title>Authentication</title>
+				<para>
+					 Authentication is based on the JAAS API (Java Authentication and Authorization Service).
+					 Authentication datas are provided by authentication form (j_username/j_password submitted to j_security_check)
+				</para>
+			</section>
+			<section>
+				<title>Autorizations</title>
+				<para>
+					 
+				</para>
+			</section>
+			<section>
+				<title>Users informations</title>
+				<para>
+					 
+				</para>
+			</section>
+	</section>
+	<section>
+		<title>Configuration</title>
+		<para>
+			 
+		</para>
+		<section>
+			<title>Tomcat v7</title>
+			<para>
+				 
+			</para>
+		</section>
+		<section>
+			<title>Websphere Application Server v7</title>
+			<para>
+				 
+			</para>
+		</section>
+	</section>
+						   	
 	<!--  
 	<section>
 		<title></title>
