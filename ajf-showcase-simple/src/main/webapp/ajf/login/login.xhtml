@@ -5,7 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://java.sun.com/jsf/core"
-	template="/ext/templates/brandClassicLayout.xhtml">
+	template="/ext/templates/brandNoMenuLayout.xhtml">
 
 	<ui:define name="content">
 		<center>
@@ -13,18 +13,27 @@
 				<h:outputText value="Please Login" />
 			</h2>
 			<p:panel header="Login page" style="width:400px">
-				<h:form id="loginFormPage">
-					<h:panelGrid columns="2">
-						<h:outputLabel value="User ID:" />
-						<p:inputText value="#{securityMBean.username}" />
-
-						<h:outputLabel value="Password:" />
-						<p:password value="#{securityMBean.password}" />
-
-						<h:commandButton action="#{securityMBean.doLogin}" value="login" />
+			
+				<form method="post" action="j_security_check" name="loginForm" id="loginForm">
+					<p:focus for="j_username" />
+					<h:panelGrid columns="3">
+						<h:outputText value="#{m['loginBox.label.userName']}" />
+						<h:inputText id="j_username" autocomplete="off"
+							styleClass="jq_watermark" />
+						<p:watermark for="j_username" value="#{m['loginBox.label.userName']}" />
+					
+						<h:outputText value="#{m['loginBox.label.password']}" />
+						<h:inputSecret id="j_password" autocomplete="off"
+							styleClass="jq_watermark" />
+						<p:watermark for="j_password" value="#{m['loginBox.label.password']}" />
 					</h:panelGrid>
-				</h:form>
+					<div class="loginButtonPanel">
+						<h:commandButton type="submit"
+							value="#{m['loginBox.label.login']}" styleClass="access" />
+					</div>
+				</form>
 			</p:panel>
 		</center>
 	</ui:define>
+	
 </ui:composition>

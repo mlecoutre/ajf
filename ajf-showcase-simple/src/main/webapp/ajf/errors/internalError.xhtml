@@ -4,18 +4,22 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	template="/ext/templates/brandNoMenuLayout.xhtml">
+	xmlns:f="http://java.sun.com/jsf/core"
+	template="/ext/templates/brandClassicLayout.xhtml">
 
 	<ui:define name="content">
+
 		<br />
 		<center>
-			<h1>
-				<h:outputText value="#{m['application.error.loginFail']} !" />
-			</h1>
-			<input type="hidden" name="authentication_status" value="authentication-failure" />
-			<br /> <br />
-			<h:outputLink value="index.xhtml">#{m['application.message.retryLogin']}.</h:outputLink>
+			<p:panel header="500: internal server error" style="width:500px;">
+				<h1>
+					<h:outputText value="Internal Server Error" />
+				</h1>
+				<br />
+				<br />
+				<h:link value="Back" outcome="index.jsf" />
+			</p:panel>
 		</center>
-	</ui:define>
 
+	</ui:define>
 </ui:composition>

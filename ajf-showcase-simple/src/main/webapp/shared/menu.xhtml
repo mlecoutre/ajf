@@ -29,9 +29,17 @@
 		<!-- When already logged in : user Name button with logout submenu -->
 		<p:submenu label="#{securityMBean.username}"
 			rendered="#{securityMBean.isLogIn}" icon="ui-icon ui-icon-key">
+			<!-- 
 			<p:menuitem value="Log Out"
 				actionListener="#{securityMBean.doLogout}"
+				action="#{securityMBean.doLogout}"
 				action="index.xhtml?faces-redirect=true"
+				oncomplete="navigateTo('securizedIndex.jsp');"
+				icon="ui-icon ui-icon-close" />
+			-->
+			<p:menuitem value="Log Out"
+				action="#{securityMBean.doLogout}"
+				oncomplete="navigateTo('ajf/login/logout.html');"
 				icon="ui-icon ui-icon-close" />
 		</p:submenu>
 	</p:menubar>
