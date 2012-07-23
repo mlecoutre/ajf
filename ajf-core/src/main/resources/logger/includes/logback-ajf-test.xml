@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <included>
 
-	<!-- property definer -->
-	<!-- not yet required in test -->
-	<!--
-	<define name="appLogDir" class="am.ajf.core.configuration.ConfigurationPropertyDefiner">
-    	<propertyKey>log.dir</propertyKey>
-  	</define>
-  	-->
-  	
 	<!-- appenders -->
 	
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">

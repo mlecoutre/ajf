@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <included>
 
-	<!-- property definer -->
-
-	<!-- 
-	<define name="appLogDir" class="am.ajf.core.configuration.ConfigurationPropertyDefiner">
-    	<propertyKey>log.dir</propertyKey>
-  	</define>
-  	-->
-  	
   	<property name="LOG" value="${log.dir}" />
   	<property name="LOG_HISTORY" value="${log.dir}/history" />
   	

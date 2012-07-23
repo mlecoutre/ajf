@@ -1,12 +1,14 @@
 package am.ajf.core.beans;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+
+import javax.naming.NamingException;
 
 import org.junit.Test;
 
@@ -19,21 +21,21 @@ public class BeansManagerTest {
 	}
 	
 	@Test
-	public void testGetBeanDeclarations() throws Exception {
+	public void testGetBeanDefinition() throws Exception {
 		
 		Class<MyService> beanClass = MyService.class;
 		
-		Map<String, Set<ExtendedBeanDeclaration>> beanDeclarations = BeansManager.getBeanDeclarations(beanClass);
+		Map<String, Set<BeanDefinition>> beanDeclarations = BeansManager.getBeanDefinitions(beanClass);
 		
 		assertNotNull(beanDeclarations);
 		
-		Set<Entry<String, Set<ExtendedBeanDeclaration>>> entries = beanDeclarations.entrySet();
-		for (Iterator<Entry<String, Set<ExtendedBeanDeclaration>>> iterator = entries.iterator(); iterator.hasNext();) {
-			Entry<String, Set<ExtendedBeanDeclaration>> entry = (Entry<String, Set<ExtendedBeanDeclaration>>) iterator
+		Set<Entry<String, Set<BeanDefinition>>> entries = beanDeclarations.entrySet();
+		for (Iterator<Entry<String, Set<BeanDefinition>>> iterator = entries.iterator(); iterator.hasNext();) {
+			Entry<String, Set<BeanDefinition>> entry = (Entry<String, Set<BeanDefinition>>) iterator
 					.next();
 			System.out.println(entry.getKey());
-			Collection<ExtendedBeanDeclaration> values = entry.getValue();
-			for (ExtendedBeanDeclaration beanDeclar : values) {
+			Collection<BeanDefinition> values = entry.getValue();
+			for (BeanDefinition beanDeclar : values) {
 				System.out.println("\t"+beanDeclar.toString());
 				try {
 					Object bean = BeansManager.getBean(beanDeclar);
@@ -41,9 +43,7 @@ public class BeansManagerTest {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
 			}
-			
 			
 		}
 		
@@ -52,7 +52,41 @@ public class BeansManagerTest {
 	@Test
 	public void testGetDefaultBean() throws Exception {
 		
-		MyService myService = BeansManager.getDefaultBean(MyService.class);
+		MyService myService = BeansManager.getBean(MyService.class);
+		assertNotNull(myService);
+		
+		System.out.println(myService);
+		
+	}
+	
+	@Test
+	public void testGetProfileBean() throws Exception {
+		
+		System.setProperty(BeansManager.BEAN_PROFILES_KEY, "test");
+		MyService myService = BeansManager.getBean(MyService.class);
+		
+		System.clearProperty(BeansManager.BEAN_PROFILES_KEY);
+		
+		assertNotNull(myService);
+		
+		System.out.println(myService);
+		
+	}
+	
+	@Test
+	public void testGetBean() throws Exception {
+		
+		MyService myService = BeansManager.getBean(MyService.class, "test");
+		assertNotNull(myService);
+		
+		System.out.println(myService);
+		
+	}
+	
+	@Test(expected=NamingException.class)
+	public void testGetNamedBean() throws Exception {
+		
+		MyService myService = BeansManager.getBean(MyService.class, "named");
 		assertNotNull(myService);
 		
 		System.out.println(myService);
@@ -72,7 +106,7 @@ public class BeansManagerTest {
 	@Test
 	public void testGetMailSender() throws Exception {
 		
-		MailSender myService = BeansManager.getDefaultBean(MailSender.class);
+		MailSender myService = BeansManager.getBean(MailSender.class);
 		assertNotNull(myService);
 		
 		System.out.println(myService);		
