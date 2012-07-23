@@ -1,6 +1,6 @@
 package am.ajf.core.utils;
 
-public interface BeanFactory {
+public interface BeanUtilsProvider {
 	
 	/**
 	 * 

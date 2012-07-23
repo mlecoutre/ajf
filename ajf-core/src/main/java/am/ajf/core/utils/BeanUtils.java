@@ -18,18 +18,18 @@ public class BeanUtils {
 	private static boolean initialized = false;
 	private static final Object token = new Object();
 	
-	private static BeanFactory beanUtilsDelegate = null;
+	private static BeanUtilsProvider beanUtilsDelegate = null;
 		
 	private BeanUtils() {
 		super();
 	}
 	
-	public synchronized static void setBeanUtilsDelegate(BeanFactory delegate) {
+	public synchronized static void setBeanUtilsDelegate(BeanUtilsProvider delegate) {
 		logger.info("set BeanUtilsDelegate to instance of: ".concat(delegate.getClass().getName()));
 		beanUtilsDelegate = delegate;
 	}
 	
-	public static BeanFactory getBeanUtilsDelegate() {
+	public static BeanUtilsProvider getBeanUtilsDelegate() {
 		checkInit();
 		return beanUtilsDelegate;
 	}
@@ -103,16 +103,16 @@ public class BeanUtils {
 			synchronized (token) { 
 				if (!initialized) {
 					try {
-						ServiceLoader<BeanFactory> budLoader = ServiceLoader.load(BeanFactory.class);
+						ServiceLoader<BeanUtilsProvider> budLoader = ServiceLoader.load(BeanUtilsProvider.class);
 						if (null != budLoader) {
-							for (BeanFactory bud : budLoader) {
+							for (BeanUtilsProvider bud : budLoader) {
 								logger.info("Use BeanUtilsDelegate instance of: ".concat(bud.getClass().getName()));
 								beanUtilsDelegate = bud;
 								break;
 							}
 						}
 					} catch (Exception e) {
-						logger.warn("Unable to get resources 'META-INF/services/".concat(BeanFactory.class.getName()).concat("'."), e);
+						logger.warn("Unable to get resources 'META-INF/services/".concat(BeanUtilsProvider.class.getName()).concat("'."), e);
 					}
 					initialized = true;
 				}

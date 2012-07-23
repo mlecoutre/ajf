@@ -32,8 +32,6 @@ public class ContainerSupport {
 			}
 		}		
 		return ejbSupport.booleanValue();
-	}
-	
-	
+	}	
 	
 }
