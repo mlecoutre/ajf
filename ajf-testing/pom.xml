@@ -25,13 +25,10 @@
 
 	<dependencies>
 
-
-
 		<!-- AJF 2 -->
 		<dependency>
 			<groupId>am.ajf</groupId>
 			<artifactId>ajf-core</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 
 		<!-- junit -->
@@ -90,13 +87,11 @@
 			<groupId>org.jboss.arquillian.junit</groupId>
 			<artifactId>arquillian-junit-container</artifactId>
 			<version>1.0.0.CR7</version>
-
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.arquillian.container</groupId>
 			<artifactId>arquillian-openwebbeans-embedded-1</artifactId>
 			<version>1.0.0.CR2</version>
-
 		</dependency>
 		<dependency>
 			<groupId>org.apache.openwebbeans.test</groupId>
