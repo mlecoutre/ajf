@@ -16,10 +16,6 @@
 		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-core/]]></url>
 	</scm>
 
-	<properties>
-		<slf4j.version>1.6.4</slf4j.version>
-	</properties>
-
 	<dependencies>
 
 		<!-- junit -->
@@ -170,7 +166,7 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>11.0.2</version>
+			<version>12.0</version>
 		</dependency>
 
 		<dependency>
@@ -194,13 +190,16 @@
 		</pluginManagement>
 
 		<plugins>
+			 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>versions-maven-plugin</artifactId>
 				<executions>
 					<execution>
 						<id>checkDependenciesVersions</id>
+						<!-- 
 						<phase>verify</phase>
+						-->
 						<goals>
 							<goal>display-dependency-updates</goal>
 						</goals>
@@ -210,6 +209,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
