@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<security>
+
+	<role-mapping>
+		<role-name>admin</role-name>
+		<groups-collection>
+		      <group-name>dun-gg-web-deploycenter-w</group-name>
+		      <group-name>groupe2</group-name>
+		</groups-collection>
+	</role-mapping>
+
+	<role-mapping>
+		<role-name>valideur</role-name>
+		<everyone>false</everyone>
+		<allAuthenticatedUsers>true</allAuthenticatedUsers>
+		<groups-collection>
+		      <group-name>groupe1</group-name>
+		      <group-name>groupe3</group-name>
+		</groups-collection>
+	</role-mapping>
+	
+</security>
+	
