@@ -29,10 +29,9 @@ public class DataSourceConnectionFactory implements
 	}
 
 	@Override
-	public synchronized Connection getConnection() throws NamingException, SQLException {
+	public synchronized Connection getNewConnection() throws NamingException, SQLException {
 
 		if (null == dataSource) {
-			
 			// new context
 			Context ctx = new InitialContext();
 			// lookup and register the DataSource 

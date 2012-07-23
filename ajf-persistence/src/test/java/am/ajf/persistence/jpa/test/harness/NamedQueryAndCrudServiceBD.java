@@ -6,9 +6,11 @@ import am.ajf.persistence.jpa.annotation.NamedQuery;
 import am.ajf.persistence.jpa.annotation.QueryParam;
 import am.ajf.persistence.jpa.api.CrudServiceBD;
 
-public interface NamedQueryAndCrudServiceBD extends CrudServiceBD<Model1, Long>{
+public interface NamedQueryAndCrudServiceBD 
+	extends CrudServiceBD<Model1, Long>{
 
 	@NamedQuery(name=Model1.FIND_BY_NAME)
-	List<Model1> findAllModelsByName(@QueryParam("name") String name);
+	List<Model1> findAllModelsByName(
+			@QueryParam("name") String name);
 	
 }

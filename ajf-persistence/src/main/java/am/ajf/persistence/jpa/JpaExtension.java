@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import am.ajf.persistence.jpa.impl.EntityManagerBean;
+import am.ajf.persistence.jpa.impl.EntityManagerFactoryBean;
 
 public class JpaExtension implements Extension {
 	
@@ -41,6 +42,9 @@ public class JpaExtension implements Extension {
 			EntityManagerBean emBean = new EntityManagerBean(puName);
 			abd.addBean(emBean);
 			logger.info("Added injectable EntityManager for: "+puName);
+			EntityManagerFactoryBean emfBean = new EntityManagerFactoryBean(puName);
+			abd.addBean(emfBean);
+			logger.info("Added injectable EntityManagerFactory for: "+puName);
 		}		
 	}
 	

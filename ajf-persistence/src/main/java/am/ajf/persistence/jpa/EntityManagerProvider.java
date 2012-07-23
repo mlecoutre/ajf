@@ -200,38 +200,41 @@ public class EntityManagerProvider {
 		if (!persistenceUnitsTransactions.isEmpty())
 			return;
 		
-		InputStream is = EntityManagerProvider.class.getClassLoader().getResourceAsStream("META-INF/persistence.xml");
+		InputStream is = null;
 		try {
-			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
-
-			NodeList puNodes = doc.getElementsByTagName("persistence-unit");
-			for (int i = 0 ; i < puNodes.getLength() ; i++) {
-				Node puNode = puNodes.item(i);
-				NamedNodeMap attributes = puNode.getAttributes();			
-				String puName = attributes.getNamedItem("name").getNodeValue();
-				
-				String tranTypeAsString = attributes.getNamedItem("transaction-type").getNodeValue();
-				if ("RESOURCE_LOCAL".equals(tranTypeAsString)) {
-					persistenceUnitsTransactions.put(puName, TransactionType.LOCAL);
-				} else if ("JTA".equals(tranTypeAsString)) {
-					persistenceUnitsTransactions.put(puName, TransactionType.JTA);
-				} else {
-					throw new IllegalArgumentException("A persistence-unit should have transaction of type JTA or RESOURCE_LOCAL. Check your persistence.xml file.");
-				}
-				
-				// add the persistenceConnectionFactory in the map
-				PersistenceConnectionFactory persistenceConnectionFactory = PersistenceConnectionFactoryBuilder.build(puNode);
-				if (null != persistenceConnectionFactory) {
-					persistenceConnectionsFactories.put(puName, persistenceConnectionFactory);
-				}
-				
+			is = EntityManagerProvider.class.getClassLoader()
+					.getResourceAsStream("META-INF/persistence.xml");
+			if (null != is) {
+				Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
+	
+				NodeList puNodes = doc.getElementsByTagName("persistence-unit");
+				for (int i = 0 ; i < puNodes.getLength() ; i++) {
+					Node puNode = puNodes.item(i);
+					NamedNodeMap attributes = puNode.getAttributes();			
+					String puName = attributes.getNamedItem("name").getNodeValue();
+					
+					String tranTypeAsString = attributes.getNamedItem("transaction-type").getNodeValue();
+					if ("RESOURCE_LOCAL".equals(tranTypeAsString)) {
+						persistenceUnitsTransactions.put(puName, TransactionType.LOCAL);
+					} else if ("JTA".equals(tranTypeAsString)) {
+						persistenceUnitsTransactions.put(puName, TransactionType.JTA);
+					} else {
+						throw new IllegalArgumentException("A persistence-unit should have transaction of type JTA or RESOURCE_LOCAL. Check your persistence.xml file.");
+					}
+					
+					// add the persistenceConnectionFactory in the map
+					PersistenceConnectionFactory persistenceConnectionFactory = PersistenceConnectionFactoryBuilder.build(puNode);
+					if (null != persistenceConnectionFactory) {
+						persistenceConnectionsFactories.put(puName, persistenceConnectionFactory);
+					}
+				}				
 			}
 		} catch (IOException e) {
-			throw new IllegalStateException("Impossible to access the file META-INF/persistence.xml. Check it exist in your application.", e);				
+			logger.error("Impossible to access the file META-INF/persistence.xml. Check it exist in your application.", e);				
 		} catch (SAXException e) {
-			throw new IllegalStateException("Impossible to parse the file META-INF/persistence.xml. Check it is valid in your application.", e);
+			logger.error("Impossible to parse the file META-INF/persistence.xml. Check it is valid in your application.", e);
 		} catch (ParserConfigurationException e) {
-			throw new IllegalStateException("Impossible to parse the file META-INF/persistence.xml. Check it is valid in your application.", e);
+			logger.error("Impossible to parse the file META-INF/persistence.xml. Check it is valid in your application.", e);
 		}
 	}
 		
