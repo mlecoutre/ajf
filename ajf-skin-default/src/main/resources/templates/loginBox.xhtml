@@ -6,22 +6,32 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.org/ui">
 
-	<h:form id="InloginForm">
+	<h:form id="InLoginForm">
 		<p:focus for="username" />
 		<h:panelGrid columns="7" styleClass="login">
 			<h:outputText value="#{m['loginBox.label.userName']}" />
-			<h:inputText id="username" value="#{securityMBean.username}"
-				tabindex="1" styleClass="jq_watermark" />
+			<h:inputText id="username" tabindex="1" 
+				autocomplete="off" styleClass="jq_watermark" />
 			<p:watermark for="username" value="#{m['loginBox.label.userName']}" />
+			
 			<h:outputText value="#{m['loginBox.label.password']}" />
-
-			<h:inputSecret id="password" tabindex="2"
-				value="#{securityMBean.password}" styleClass="jq_watermark" />
+			<h:inputSecret id="password" tabindex="2" 
+				autocomplete="off" styleClass="jq_watermark" />
 			<p:watermark for="password" value="#{m['loginBox.label.password']}" />
-			<h:commandButton tabindex="3" action="#{securityMBean.doLogin}"
-				styleClass="access" value="#{m['loginBox.label.login']}">
+
+			<h:commandButton tabindex="3" type="button"
+				onclick="doLogin('InLoginForm:username', 'InLoginForm:password', 'securizedIndex.jsp', 'ajf/login/loginError.jsf');"
+				value="#{m['loginBox.label.login']}"
+				styleClass="access">
 			</h:commandButton>
+			
+			<b>
+				<h:outputText value="#{m['loginBox.label.welcome']} #{securityMBean.displayname}" rendered="#{securityMBean.isLogIn}"/>
+				<span id="InLoginForm:loginMessage" />
+			</b>
+			
 		</h:panelGrid>
 	</h:form>
 
 </ui:composition>
+

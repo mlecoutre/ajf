@@ -158,3 +158,9 @@
 	bottom: 0px;
 	
 }
+
+.loginButtonPanel {
+	padding-bottom: 20px;
+	float: none;
+	padding-left: 320px;
+}

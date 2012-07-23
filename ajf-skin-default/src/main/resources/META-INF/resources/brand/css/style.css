@@ -391,7 +391,7 @@ a:active,a:focus {
 	height: 14px;
 }
 
-.search input[type='button'],.bandeau_login  input[type='submit'],.closeParam,.closeFaq,.pwd_lost input[type='button']
+.search input[type='button'],.bandeau_login  input[type='submit'],.bandeau_login  input[type='button'],.closeParam,.closeFaq,.pwd_lost input[type='button']
 	{
 	background-color: #A79C84;
 	color: white;

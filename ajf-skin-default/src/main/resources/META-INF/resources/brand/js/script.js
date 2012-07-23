@@ -1,3 +1,88 @@
+function buildXMLHttpRequest() {
+	var xmlHttpReq = null;
+
+	// Mozilla/Safari
+	if (window.XMLHttpRequest) {
+	    xmlHttpReq = new XMLHttpRequest();
+	}
+	// IE
+	else if (window.ActiveXObject) {
+	    xmlHttpReq = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	return xmlHttpReq;
+}
+
+function navigateTo(targetURI) {
+	
+	window.location.href = targetURI;
+	//window.location.reload(true);
+	
+}
+
+function printMessage(elementId, message) {
+	var element = document.getElementById(elementId);
+	element.innerHTML = "<b>" + message + "</b>";
+}
+
+function postLoginForm(xmlHttpReq, usernameComponentId, passwordComponentId, securizedURI, loginErrorURI) {
+	
+	jUserName = document.getElementById(usernameComponentId).value;
+	jPassword = document.getElementById(passwordComponentId).value;
+	
+	encodedURI = "j_security_check?j_username="+jUserName+"&j_password="+encodeURIComponent(jPassword);
+	
+	xmlHttpReq.onreadystatechange = function() {
+		if (xmlHttpReq.readyState == 4 ) {
+			// Authenticated
+		 	if (xmlHttpReq.status == 200) {
+		 		if (-1 == xmlHttpReq.responseText.indexOf('authentication-failure')) {
+		 			navigateTo(securizedURI);
+		 		}
+		 		else {
+		 			printMessage('InLoginForm:loginMessage',
+		 					'Authentication failure.');
+		 			//navigateTo(loginErrorURI);
+		 		}
+			}
+		 	else {
+				// Authentication Failure
+				if (xmlHttpReq.status == 403) {
+					printMessage('InLoginForm:loginMessage',
+						'Authentication failure.');
+					//navigateTo(loginErrorURI);
+				}
+				else {
+					//alert(xmlHttpReq.status);
+					//alert(xmlHttpReq.responseText);
+					printMessage('InLoginForm:loginMessage',
+						'Authentication failure.');
+					//navigateTo(loginErrorURI);
+				}
+		 	}
+		}
+	};		
+	
+	xmlHttpReq.open("POST", encodedURI, false);
+	xmlHttpReq.send();
+			
+}
+
+function doLogin(usernameComponentId, passwordComponentId, securizedURI, loginErrorURI) {
+	
+	var xmlHttpReq = buildXMLHttpRequest();
+
+	xmlHttpReq.onreadystatechange = function() {
+		if (xmlHttpReq.readyState == 4 && xmlHttpReq.status == 200) {
+			postLoginForm(xmlHttpReq, usernameComponentId, passwordComponentId, securizedURI, loginErrorURI);
+		}
+	};
+	
+	// Try to access securized resource
+	xmlHttpReq.open("GET", securizedURI, false);
+	xmlHttpReq.send();
+	    
+}
+
 $(document).ready(function(){
 
 	/****** Check browser to load CSS3 or JS *********/
@@ -72,3 +157,4 @@ $(document).ready(function(){
 	diff -=25;
 	$(".footer").css("bottom",'-'+diff+'px');
 });
+
