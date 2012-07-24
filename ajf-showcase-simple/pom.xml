@@ -353,32 +353,32 @@
 								<version>1.0</version>
 							</dependency>
 
-							<!-- LOGGING -->
-							<dependency>
-								<groupId>ch.qos.logback</groupId>
-								<artifactId>logback-classic</artifactId>
-								<version>0.9.24</version>
-							</dependency>
-							<dependency>
-								<groupId>commons-logging</groupId>
-								<artifactId>commons-logging</artifactId>
-								<version>1.1.1</version>
-							</dependency>
-							<dependency>
-								<groupId>org.slf4j</groupId>
-								<artifactId>log4j-over-slf4j</artifactId>
-								<version>1.6.1</version>
-							</dependency>
-							<dependency>
-								<groupId>org.slf4j</groupId>
-								<artifactId>jcl-over-slf4j</artifactId>
-								<version>1.6.1</version>
-							</dependency>
-							<dependency>
-								<groupId>org.slf4j</groupId>
-								<artifactId>slf4j-api</artifactId>
-								<version>1.6.1</version>
-							</dependency>
+                            <dependency>
+                                <groupId>axis</groupId>
+                                <artifactId>axis</artifactId>
+                                <version>1.4</version>
+                            </dependency>
+
+                            <!-- loggers adapters -->
+                            <dependency>
+                                <groupId>org.slf4j</groupId>
+                                <artifactId>log4j-over-slf4j</artifactId>
+                                <version>${slf4j.version}</version>
+                            </dependency>
+
+                            <dependency>
+                                <groupId>org.slf4j</groupId>
+                                <artifactId>jcl-over-slf4j</artifactId>
+                                <version>${slf4j.version}</version>
+                            </dependency>
+
+                            <!-- effective logger impl -->
+                            <dependency>
+                                <groupId>ch.qos.logback</groupId>
+                                <artifactId>logback-classic</artifactId>
+                                <version>1.0.1</version>
+                            </dependency>
+                            <!-- End : Logging dependencies -->
 
 							<!-- START OPEN WEB BEANS -->
 							<dependency>
@@ -453,6 +453,8 @@
 								<artifactId>hibernate-validator</artifactId>
 								<version>4.0.2.GA</version>
 							</dependency>
+
+                            <!-- webservice stack -->
 
 						</dependencies>
 					</plugin>

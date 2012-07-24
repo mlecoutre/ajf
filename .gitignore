@@ -1,0 +1,6 @@
+**/target/
+**/*.iml
+/ajf-showcase-simple/showcase
+**/.idea/
+**/*.log
+**/*.tlog
