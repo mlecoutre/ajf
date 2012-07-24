@@ -144,7 +144,7 @@
 		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>javax.faces</artifactId>
-			<version>2.1.6</version>
+			<version>2.1.9</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.el</groupId>
@@ -164,7 +164,7 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>3.2</version>
+			<version>3.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.primefaces.themes</groupId>
@@ -302,14 +302,14 @@
 						<version>2.0-beta-1</version>
 						<configuration>
 							<systemProperties>
-            					<java.security.auth.login.config>src/test/tomcat/jaas.config</java.security.auth.login.config>
+            					<java.security.auth.login.config>src/test/resources/tomcat/jaas.config</java.security.auth.login.config>
           					</systemProperties>
 							<!-- Embedded port -->
 							<port>8080</port>
 							<configurationDir>${project.build.directory}/tomcat</configurationDir>
-							<contextFile>src/test/tomcat/context.xml</contextFile>
-							<additionalConfigFilesDir>src/test/tomcat</additionalConfigFilesDir>
-							<tomcatWebXml>src/test/tomcat/web.xml</tomcatWebXml>
+							<contextFile>src/test/resources/tomcat/context.xml</contextFile>
+							<additionalConfigFilesDir>src/test/resources/tomcat</additionalConfigFilesDir>
+							<tomcatWebXml>src/test/resources/tomcat/web.xml</tomcatWebXml>
 							<warFile>target/${project.artifactId}.war</warFile>
 							<path>/${project.artifactId}</path>
 						</configuration>
