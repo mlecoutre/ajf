@@ -29,7 +29,8 @@ public class MonitoringServlet extends HttpServlet {
 	 * The response content type: text/html
 	 */
 	private static final String CONTENT_TYPE = "text/html";
-	private static final String DEFAULT_MONITORING_SERVLET = "ajf.monitoring.web.WASMonitoringServlet";
+	private static final String WAS_MONITORING_SERVLET = "ajf.monitoring.web.WASMonitoringServlet";
+	private static final String DEFAULT_MONITORING_SERVLET = "ajf.monitoring.web.MonitoringServlet";
 	private static final long MBYTES = 1024 * 1024;
 	private static final String MONITORING_SERVLET_CLASS_PARAMETER = "MonitoringServletClass";
 
@@ -147,17 +148,32 @@ public class MonitoringServlet extends HttpServlet {
 			}
 		}
 
+		attachMonitoringServlet(config, className);
+		
+		if (null == monitoringServlet) {
+			attachMonitoringServlet(config, WAS_MONITORING_SERVLET);			
+		}
+		
+
+	}
+
+	/**
+	 * 
+	 * @param config
+	 * @param className
+	 */
+	private void attachMonitoringServlet(ServletConfig config, String className) {
 		try {
 			monitoringServlet = (HttpServlet) Class.forName(className)
 					.newInstance();
 			monitoringServlet.init(config);
 			logger.info("Delegate Monitoring to ".concat(className));
 		} catch (Exception e) {
+			monitoringServlet = null;
 			logger.error(
 					"Delegate Monitoring to ".concat(className).concat(
 							" failure"), e);
 		}
-
 	}
 
 }
