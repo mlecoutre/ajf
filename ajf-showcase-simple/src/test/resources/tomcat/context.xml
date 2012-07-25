@@ -62,7 +62,7 @@
     	factory="am.ajf.naming.SimpleGenericBeanFactory" 
     	type="am.ajf.security.spi.UserRoleResolver"
     	class="am.ajf.security.PropertiesGroupsMappingUserRoleResolver"
-    	rolesGroupsMappingPath="${catalina.base}/conf/ajf-showcase-simple_roles-groups-mapping.properties" />
+    	rolesGroupsMappingPath="${catalina.base}/conf/roles-groups-mapping.properties" />
 		
 	<!-- EMAIL management -->
 	<Resource name="mail/Session" auth="Container" 

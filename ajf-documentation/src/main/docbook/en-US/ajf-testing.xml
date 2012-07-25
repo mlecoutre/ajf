@@ -250,4 +250,18 @@ Not writing unit tests is costly, but writing unit tests is costly too. There is
 	  	</para>
 	  	</section>
   	</section>
+    <section id="FunctionalTestingSection">
+        <title>Functional/IHM testing</title>
+        <para>
+            AJF Testing include differents testing frameworks distributions, such as :
+            <itemizedlist>
+                <listitem>JUnit : a framework for java unit testing</listitem>
+                <listitem>DBUnit : a framework for database testing and filling (using with Jailer)</listitem>
+                <listitem>XMLUnit : a framework for XML testing with differents matching rules</listitem>
+                <listitem>Mockito : a mocking framework for mocking objects</listitem>
+                <listitem>Powermock : extension of mockito targeting the static objects</listitem>
+                <listitem>Arquillian : a lightweight JEE container for integration testing</listitem>
+            </itemizedlist>
+        </para>
+    </section>
 </chapter>

@@ -1,357 +1,395 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>am.ajf</groupId>
-		<artifactId>ajf-parent</artifactId>
-		<version>2.1.1-SNAPSHOT</version>
-		<relativePath>../ajf-parent/pom.xml</relativePath>
-	</parent>
+    <parent>
+        <groupId>am.ajf</groupId>
+        <artifactId>ajf-parent</artifactId>
+        <version>2.1.1-SNAPSHOT</version>
+        <relativePath>../ajf-parent/pom.xml</relativePath>
+    </parent>
 
-	<groupId>am.ajf</groupId>
-	<artifactId>ajf-showcase-simple</artifactId>
-	<version>2.1.1-SNAPSHOT</version>
-	<packaging>war</packaging>
-	<name>ajf-showcase-simple</name>
+    <groupId>am.ajf</groupId>
+    <artifactId>ajf-showcase-simple</artifactId>
+    <version>2.1.1-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>ajf-showcase-simple</name>
 
-	<scm>
-		<connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-showcase-simple</connection>
-		<developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-showcase-simple</developerConnection>
-		<url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-showcase-simple/]]></url>
-	</scm>
+    <scm>
+        <connection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-showcase-simple</connection>
+        <developerConnection>scm:svn:http://web-svn-srv/repos/ITSWE/ajf/trunk/ajf-showcase-simple</developerConnection>
+        <url><![CDATA[http://web-svn-viewer/listing.php?repname=ITSWE&path=/ajf/trunk/ajf-showcase-simple/]]></url>
+    </scm>
 
 
-	<properties>
-		<ajfversion>2.1.1-SNAPSHOT</ajfversion>
-		<openwebbeansVersion>1.1.3</openwebbeansVersion>
-		<slf4j.version>1.6.4</slf4j.version>
-	</properties>
+    <properties>
+        <ajfversion>2.1.1-SNAPSHOT</ajfversion>
+        <openwebbeansVersion>1.1.3</openwebbeansVersion>
+        <slf4j.version>1.6.4</slf4j.version>
+    </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>am.ajf</groupId>
-			<artifactId>ajf-web</artifactId>
-			<version>${ajfversion}</version>
-		</dependency>
-		<dependency>
-			<groupId>am.ajf</groupId>
-			<artifactId>ajf-core</artifactId>
-			<version>${ajfversion}</version>
-		</dependency>
-		<dependency>
-			<groupId>am.ajf</groupId>
-			<artifactId>ajf-injection</artifactId>
-			<version>${ajfversion}</version>
-		</dependency>
-		<dependency>
-			<groupId>am.ajf</groupId>
-			<artifactId>ajf-persistence</artifactId>
-			<version>${ajfversion}</version>
-		</dependency>
-		<dependency>
-			<groupId>am.ajf</groupId>
-			<artifactId>ajf-testing</artifactId>
-			<version>${ajfversion}</version>
-			<scope>test</scope>
-			<exclusions>
-				<exclusion>
-					<artifactId>openwebbeans-impl</artifactId>
-					<groupId>org.apache.openwebbeans</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+    <dependencies>
 
-		<dependency>
-			<groupId>am.ajf</groupId>
-			<artifactId>ajf-skin-default</artifactId>
-			<version>${ajfversion}</version>
-		</dependency>
-		
-		<!-- Container Provided -->
-		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>tomcat-catalina</artifactId>
-			<version>7.0.28</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>am.ajf</groupId>
-			<artifactId>ajf-security</artifactId>
-			<version>${ajfversion}</version>
-			<scope>provided</scope>
-		</dependency>
-		
-		<!-- the logger abstraction -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium.client-drivers</groupId>
+            <artifactId>selenium-java-client-driver</artifactId>
+            <version>1.0.2</version>
+            <scope>test</scope>
+        </dependency>
 
-		<!-- loggers adapters -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>log4j-over-slf4j</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>am.ajf</groupId>
+            <artifactId>ajf-web</artifactId>
+            <version>${ajfversion}</version>
+        </dependency>
+        <dependency>
+            <groupId>am.ajf</groupId>
+            <artifactId>ajf-core</artifactId>
+            <version>${ajfversion}</version>
+        </dependency>
+        <dependency>
+            <groupId>am.ajf</groupId>
+            <artifactId>ajf-injection</artifactId>
+            <version>${ajfversion}</version>
+        </dependency>
+        <dependency>
+            <groupId>am.ajf</groupId>
+            <artifactId>ajf-persistence</artifactId>
+            <version>${ajfversion}</version>
+        </dependency>
+        <dependency>
+            <groupId>am.ajf</groupId>
+            <artifactId>ajf-testing</artifactId>
+            <version>${ajfversion}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>openwebbeans-impl</artifactId>
+                    <groupId>org.apache.openwebbeans</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>am.ajf</groupId>
+            <artifactId>ajf-skin-default</artifactId>
+            <version>${ajfversion}</version>
+        </dependency>
 
-		<!-- effective logger impl -->
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>1.0.1</version>
-		</dependency>
-		<!-- End : Logging dependencies -->
+        <!-- Container Provided -->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-catalina</artifactId>
+            <version>7.0.28</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>am.ajf</groupId>
+            <artifactId>ajf-security</artifactId>
+            <version>${ajfversion}</version>
+            <scope>provided</scope>
+        </dependency>
 
-		<!-- open web beans common between was7 and tomcat7 -->
-		<dependency>
-			<artifactId>openwebbeans-impl</artifactId>
-			<groupId>org.apache.openwebbeans</groupId>
-			<version>${openwebbeansVersion}</version>
-		</dependency>
-		<!-- <dependency> <groupId>org.apache.openwebbeans</groupId> <artifactId>openwebbeans-resource</artifactId> 
-			<version>${openwebbeansVersion}</version> <exclusions> <exclusion> <artifactId>scannotation</artifactId> 
-			<groupId>net.sf.scannotation</groupId> </exclusion> </exclusions> </dependency> -->
-		<dependency>
-			<groupId>org.apache.openwebbeans</groupId>
-			<artifactId>openwebbeans-jsf</artifactId>
-			<version>${openwebbeansVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.openwebbeans</groupId>
-			<artifactId>openwebbeans-web</artifactId>
-			<version>${openwebbeansVersion}</version>
-		</dependency>
+        <!-- the logger abstraction -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
 
-		<!-- END OPEN WEB BEANS -->
+        <!-- loggers adapters -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
 
-		<!-- Servlet API is sufficient -->
-		<!-- validation with JSR 303 -->
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.0.0.GA</version>
-			<scope>compile</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>javax.faces</artifactId>
-			<version>2.1.9</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.el</groupId>
-			<artifactId>el-api</artifactId>
-			<version>2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.web</groupId>
-			<artifactId>el-impl</artifactId>
-			<version>2.2</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.2.1-b03</version>
-		</dependency>
-		<dependency>
-			<groupId>org.primefaces</groupId>
-			<artifactId>primefaces</artifactId>
-			<version>3.3.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.primefaces.themes</groupId>
-			<artifactId>aristo</artifactId>
-			<version>1.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-			<version>1.2</version>
-		</dependency>
+        <!-- effective logger impl -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <!-- End : Logging dependencies -->
 
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<version>10.8.2.2</version>
-			<scope>test</scope>
-		</dependency>
+        <!-- open web beans common between was7 and tomcat7 -->
+        <dependency>
+            <artifactId>openwebbeans-impl</artifactId>
+            <groupId>org.apache.openwebbeans</groupId>
+            <version>${openwebbeansVersion}</version>
+        </dependency>
+        <!-- <dependency> <groupId>org.apache.openwebbeans</groupId> <artifactId>openwebbeans-resource</artifactId>
+              <version>${openwebbeansVersion}</version> <exclusions> <exclusion> <artifactId>scannotation</artifactId>
+              <groupId>net.sf.scannotation</groupId> </exclusion> </exclusions> </dependency> -->
+        <dependency>
+            <groupId>org.apache.openwebbeans</groupId>
+            <artifactId>openwebbeans-jsf</artifactId>
+            <version>${openwebbeansVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.openwebbeans</groupId>
+            <artifactId>openwebbeans-web</artifactId>
+            <version>${openwebbeansVersion}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>3.6.7.Final</version>
-		</dependency>
-		<dependency>
-			<artifactId>hibernate-validator</artifactId>
-			<groupId>org.hibernate</groupId>
-			<version>4.0.2.GA</version>
-			<exclusions>
-				<!-- excluding jaxb-impl-2.1.3, jaxws-rt-2.1.7 requires jaxb-impl-2.1.11 -->
-				<exclusion>
-					<groupId>com.sun.xml.bind</groupId>
-					<artifactId>jaxb-impl</artifactId>
-				</exclusion>
-				<exclusion>
-					<artifactId>jaxb-api</artifactId>
-					<groupId>javax.xml.bind</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <!-- END OPEN WEB BEANS -->
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.10</version>
-			<scope>test</scope>
-		</dependency>
+        <!-- Servlet API is sufficient -->
+        <!-- validation with JSR 303 -->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.0.0.GA</version>
+            <scope>compile</scope>
+        </dependency>
 
-		<!-- JEE 5 -->
-		<dependency>
-			<groupId>javaee</groupId>
-			<artifactId>javaee-api</artifactId>
-			<version>5</version>
-			<scope>provided</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.faces</artifactId>
+            <version>2.1.9</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>
+            <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>el-impl</artifactId>
+            <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.2.1-b03</version>
+        </dependency>
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.primefaces.themes</groupId>
+            <artifactId>aristo</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
 
-		<!-- 
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-core</artifactId>
-			<version>1.2.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-web</artifactId>
-			<version>1.2.0</version>
-		</dependency>
-		-->
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.8.2.2</version>
+            <scope>test</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>javax.mail-api</artifactId>
-			<version>1.4.4</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4.4</version>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>3.6.7.Final</version>
+        </dependency>
+        <dependency>
+            <artifactId>hibernate-validator</artifactId>
+            <groupId>org.hibernate</groupId>
+            <version>4.0.2.GA</version>
+            <exclusions>
+                <!-- excluding jaxb-impl-2.1.3, jaxws-rt-2.1.7 requires jaxb-impl-2.1.11 -->
+                <exclusion>
+                    <groupId>com.sun.xml.bind</groupId>
+                    <artifactId>jaxb-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jaxb-api</artifactId>
+                    <groupId>javax.xml.bind</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
-		<!-- 
-		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>ojdbc14</artifactId>
-			<version>10.2.0.4.0</version>
-		</dependency>
-		-->
-		
-	</dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
 
-	<profiles>
-		<profile>
-			<id>TOMCAT7</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>javax.el</groupId>
-					<artifactId>el-api</artifactId>
-					<version>2.2</version>
-					<scope>provided</scope>
-				</dependency>
-				<dependency>
-					<groupId>org.apache.geronimo.specs</groupId>
-					<artifactId>geronimo-jcdi_1.0_spec</artifactId>
-					<version>1.0</version>
-					<scope>provided</scope><!-- provided for tomcat -->
-				</dependency>
-				<dependency>
-					<groupId>org.apache.geronimo.specs</groupId>
-					<artifactId>geronimo-atinject_1.0_spec</artifactId>
-					<version>1.0</version>
-					<scope>provided</scope><!-- provided for tomcat -->
-				</dependency>
-				<dependency>
-					<groupId>org.apache.geronimo.specs</groupId>
-					<artifactId>geronimo-interceptor_1.1_spec</artifactId>
-					<version>1.0</version>
-					<scope>provided</scope><!-- provided for tomcat -->
-				</dependency>
-				
-			</dependencies>
+        <!-- JEE 5 -->
+        <dependency>
+            <groupId>javaee</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>5</version>
+            <scope>provided</scope>
+        </dependency>
 
-			<build>
-				<plugins>
+        <!--
+          <dependency>
+              <groupId>org.apache.shiro</groupId>
+              <artifactId>shiro-core</artifactId>
+              <version>1.2.0</version>
+          </dependency>
+          <dependency>
+              <groupId>org.apache.shiro</groupId>
+              <artifactId>shiro-web</artifactId>
+              <version>1.2.0</version>
+          </dependency>
+          -->
 
-					<!-- TOMCAT PLUGIN -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+            <version>1.4.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.4</version>
+            <scope>test</scope>
+        </dependency>
 
-					<plugin>
-						<groupId>org.apache.tomcat.maven</groupId>
-						<artifactId>tomcat7-maven-plugin</artifactId>
-						<version>2.0-beta-1</version>
-						<configuration>
-							<systemProperties>
-            					<java.security.auth.login.config>src/test/resources/tomcat/jaas.config</java.security.auth.login.config>
-          					</systemProperties>
-							<!-- Embedded port -->
-							<port>8080</port>
-							<configurationDir>${project.build.directory}/tomcat</configurationDir>
-							<contextFile>src/test/resources/tomcat/context.xml</contextFile>
-							<additionalConfigFilesDir>src/test/resources/tomcat</additionalConfigFilesDir>
-							<tomcatWebXml>src/test/resources/tomcat/web.xml</tomcatWebXml>
-							<warFile>target/${project.artifactId}.war</warFile>
-							<path>/${project.artifactId}</path>
-						</configuration>
-						<dependencies>
-							<!-- add drivers resources for the container -->
 
-							<dependency>
-								<groupId>org.apache.derby</groupId>
-								<artifactId>derby</artifactId>
-								<version>10.9.1.0</version>
-							</dependency>
+        <!--
+          <dependency>
+              <groupId>com.oracle</groupId>
+              <artifactId>ojdbc14</artifactId>
+              <version>10.2.0.4.0</version>
+          </dependency>
+          -->
 
-							<!-- EL 2.2 -->
+    </dependencies>
 
-							<dependency>
-								<groupId>org.glassfish.web</groupId>
-								<artifactId>el-impl</artifactId>
-								<version>2.2</version>
-							</dependency>
+    <profiles>
+        <profile>
+            <id>TOMCAT7</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>javax.el</groupId>
+                    <artifactId>el-api</artifactId>
+                    <version>2.2</version>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-jcdi_1.0_spec</artifactId>
+                    <version>1.0</version>
+                    <scope>provided</scope>
+                    <!-- provided for tomcat -->
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-atinject_1.0_spec</artifactId>
+                    <version>1.0</version>
+                    <scope>provided</scope>
+                    <!-- provided for tomcat -->
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-interceptor_1.1_spec</artifactId>
+                    <version>1.0</version>
+                    <scope>provided</scope>
+                    <!-- provided for tomcat -->
+                </dependency>
 
-							<!-- WS aware -->
-							<dependency>
-								<groupId>com.sun.xml.ws</groupId>
-								<artifactId>jaxws-rt</artifactId>
-								<version>2.1.7</version>
-							</dependency>
-							<dependency>
-								<groupId>javax.annotation</groupId>
-								<artifactId>jsr250-api</artifactId>
-								<version>1.0</version>
-							</dependency>
+                <dependency>
+                    <groupId>org.apache.openwebbeans</groupId>
+                    <artifactId>openwebbeans-resource</artifactId>
+                    <version>${openwebbeansVersion}</version>
+                </dependency>
 
-							<dependency>
-								<groupId>javax.jws</groupId>
-								<artifactId>jsr181-api</artifactId>
-								<version>1.0-MR1</version>
-							</dependency>
-							<dependency>
-								<groupId>org.apache.geronimo.specs</groupId>
-								<artifactId>geronimo-ejb_3.0_spec</artifactId>
-								<version>1.0</version>
-							</dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+
+                    <!-- TOMCAT PLUGIN -->
+
+                    <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <version>2.0-beta-1</version>
+                        <configuration>
+                            <systemProperties>
+                                <java.security.auth.login.config>src/test/resources/tomcat/jaas.config
+                                </java.security.auth.login.config>
+                            </systemProperties>
+                            <!-- Embedded port -->
+                            <port>8080</port>
+                            <configurationDir>${project.build.directory}/tomcat</configurationDir>
+                            <contextFile>src/test/resources/tomcat/context.xml</contextFile>
+                            <additionalConfigFilesDir>src/test/resources/tomcat</additionalConfigFilesDir>
+                            <tomcatWebXml>src/test/resources/tomcat/web.xml</tomcatWebXml>
+                            <warFile>${project.build.directory}/${project.artifactId}.war</warFile>
+                            <path>/${project.artifactId}</path>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>tomcat-run</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <fork>true</fork>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>tomcat-shutdown</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>shutdown</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <!-- add drivers resources for the container -->
+
+                            <dependency>
+                                <groupId>org.apache.derby</groupId>
+                                <artifactId>derby</artifactId>
+                                <version>10.9.1.0</version>
+                            </dependency>
+
+                            <!-- EL 2.2 -->
+
+                            <dependency>
+                                <groupId>org.glassfish.web</groupId>
+                                <artifactId>el-impl</artifactId>
+                                <version>2.2</version>
+                            </dependency>
+
+                            <!-- WS aware -->
+                            <dependency>
+                                <groupId>com.sun.xml.ws</groupId>
+                                <artifactId>jaxws-rt</artifactId>
+                                <version>2.1.7</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>javax.annotation</groupId>
+                                <artifactId>jsr250-api</artifactId>
+                                <version>1.0</version>
+                            </dependency>
+
+                            <dependency>
+                                <groupId>javax.jws</groupId>
+                                <artifactId>jsr181-api</artifactId>
+                                <version>1.0-MR1</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.geronimo.specs</groupId>
+                                <artifactId>geronimo-ejb_3.0_spec</artifactId>
+                                <version>1.0</version>
+                            </dependency>
 
                             <dependency>
                                 <groupId>axis</groupId>
@@ -380,184 +418,257 @@
                             </dependency>
                             <!-- End : Logging dependencies -->
 
-							<!-- START OPEN WEB BEANS -->
-							<dependency>
-								<groupId>org.apache.openwebbeans</groupId>
-								<artifactId>openwebbeans-impl</artifactId>
-								<version>${openwebbeansVersion}</version>
-							</dependency>
-							<dependency>
-								<groupId>org.apache.openwebbeans</groupId>
-								<artifactId>openwebbeans-spi</artifactId>
-								<version>${openwebbeansVersion}</version>
-							</dependency>
-							<dependency>
-								<groupId>org.apache.openwebbeans</groupId>
-								<artifactId>openwebbeans-tomcat7</artifactId>
-								<version>${openwebbeansVersion}</version>
-							</dependency>
+                            <!-- START OPEN WEB BEANS -->
+                            <dependency>
+                                <groupId>org.apache.openwebbeans</groupId>
+                                <artifactId>openwebbeans-impl</artifactId>
+                                <version>${openwebbeansVersion}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.openwebbeans</groupId>
+                                <artifactId>openwebbeans-spi</artifactId>
+                                <version>${openwebbeansVersion}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.openwebbeans</groupId>
+                                <artifactId>openwebbeans-tomcat7</artifactId>
+                                <version>${openwebbeansVersion}</version>
+                            </dependency>
 
-							<dependency>
-								<groupId>org.scannotation</groupId>
-								<artifactId>scannotation</artifactId>
-								<version>1.0.3</version>
-							</dependency>
-							<dependency>
-								<groupId>org.apache.geronimo.specs</groupId>
-								<artifactId>geronimo-atinject_1.0_spec</artifactId>
-								<version>1.0</version>
-							</dependency>
-							<dependency>
-								<groupId>org.apache.geronimo.specs</groupId>
-								<artifactId>geronimo-interceptor_1.1_spec</artifactId>
-								<version>1.0</version>
-							</dependency>
-							<dependency>
-								<groupId>org.apache.geronimo.specs</groupId>
-								<artifactId>geronimo-jcdi_1.0_spec</artifactId>
-								<version>1.0</version>
-							</dependency>
-							<dependency>
-								<groupId>javassist</groupId>
-								<artifactId>javassist</artifactId>
-								<version>3.12.1.GA</version>
-							</dependency>
-							<!-- END OPEN WEB BEANS -->
-							
-							<dependency>
-								<groupId>am.ajf</groupId>
-								<artifactId>ajf-security</artifactId>
-								<version>${ajfversion}</version>
-							</dependency>
-							<dependency>
-								<groupId>am.ajf</groupId>
-								<artifactId>ajf-security-tomcat</artifactId>
-								<version>${ajfversion}</version>
-							</dependency>
+                            <dependency>
+                                <groupId>org.scannotation</groupId>
+                                <artifactId>scannotation</artifactId>
+                                <version>1.0.3</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.geronimo.specs</groupId>
+                                <artifactId>geronimo-atinject_1.0_spec</artifactId>
+                                <version>1.0</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.geronimo.specs</groupId>
+                                <artifactId>geronimo-interceptor_1.1_spec</artifactId>
+                                <version>1.0</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.geronimo.specs</groupId>
+                                <artifactId>geronimo-jcdi_1.0_spec</artifactId>
+                                <version>1.0</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>javassist</groupId>
+                                <artifactId>javassist</artifactId>
+                                <version>3.12.1.GA</version>
+                            </dependency>
+                            <!-- END OPEN WEB BEANS -->
 
-							<!-- Mail Service -->
-							<dependency>
-								<groupId>javax.mail</groupId>
-								<artifactId>javax.mail-api</artifactId>
-								<version>1.4.4</version>
-							</dependency>
-							<dependency>
-								<groupId>javax.mail</groupId>
-								<artifactId>mail</artifactId>
-								<version>1.4.4</version>
-							</dependency>
+                            <dependency>
+                                <groupId>am.ajf</groupId>
+                                <artifactId>ajf-security</artifactId>
+                                <version>${ajfversion}</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>am.ajf</groupId>
+                                <artifactId>ajf-security-tomcat</artifactId>
+                                <version>${ajfversion}</version>
+                            </dependency>
 
-							<!-- Bean Validation -->
-							<dependency>
-								<groupId>org.hibernate</groupId>
-								<artifactId>hibernate-validator</artifactId>
-								<version>4.0.2.GA</version>
-							</dependency>
+                            <!-- Mail Service -->
+                            <dependency>
+                                <groupId>javax.mail</groupId>
+                                <artifactId>javax.mail-api</artifactId>
+                                <version>1.4.4</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>javax.mail</groupId>
+                                <artifactId>mail</artifactId>
+                                <version>1.4.4</version>
+                            </dependency>
+
+                            <!-- Bean Validation -->
+                            <dependency>
+                                <groupId>org.hibernate</groupId>
+                                <artifactId>hibernate-validator</artifactId>
+                                <version>4.0.2.GA</version>
+                            </dependency>
 
                             <!-- webservice stack -->
 
-						</dependencies>
-					</plugin>
+                        </dependencies>
+                    </plugin>
 
 
-				</plugins>
-			</build>
+                </plugins>
+            </build>
 
-		</profile>
+        </profile>
 
-		<profile>
-			<id>WAS7</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<dependencies>
-				<dependency>
-					<groupId>javax.el</groupId>
-					<artifactId>el-api</artifactId>
-					<version>2.2</version>
-				</dependency>
-				<dependency>
-					<groupId>org.apache.geronimo.specs</groupId>
-					<artifactId>geronimo-jcdi_1.0_spec</artifactId>
-					<version>1.0</version>
-				</dependency>
-				<dependency>
-					<groupId>org.apache.geronimo.specs</groupId>
-					<artifactId>geronimo-atinject_1.0_spec</artifactId>
-					<version>1.0</version>
-				</dependency>
-				<dependency>
-					<groupId>org.apache.geronimo.specs</groupId>
-					<artifactId>geronimo-interceptor_1.1_spec</artifactId>
-					<version>1.0</version>
-				</dependency>
+        <profile>
+            <id>WAS7</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>javax.el</groupId>
+                    <artifactId>el-api</artifactId>
+                    <version>2.2</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-jcdi_1.0_spec</artifactId>
+                    <version>1.0</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-atinject_1.0_spec</artifactId>
+                    <version>1.0</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-interceptor_1.1_spec</artifactId>
+                    <version>1.0</version>
+                </dependency>
 
-				<!-- Just for was7 (no tomcat) -->
-				<!-- <dependency> <groupId>org.apache.openwebbeans</groupId> <artifactId>openwebbeans-ee</artifactId> 
-					<version>${openwebbeansVersion}</version> </dependency> <dependency> <groupId>org.apache.openwebbeans</groupId> 
-					<artifactId>openwebbeans-ee-common</artifactId> <version>${openwebbeansVersion}</version> 
-					</dependency> <dependency> <groupId>org.apache.openwebbeans</groupId> <artifactId>openwebbeans-ejb</artifactId> 
-					<version>${openwebbeansVersion}</version> </dependency> -->
-				<dependency>
-					<groupId>org.apache.openwebbeans</groupId>
-					<artifactId>openwebbeans-el10</artifactId>
-					<version>${openwebbeansVersion}</version>
-				</dependency>
-				<dependency>
-					<groupId>org.apache.openwebbeans</groupId>
-					<artifactId>openwebbeans-impl</artifactId>
-					<version>${openwebbeansVersion}</version>
-				</dependency>
-				<dependency>
-					<groupId>org.apache.openwebbeans</groupId>
-					<artifactId>openwebbeans-spi</artifactId>
-					<version>${openwebbeansVersion}</version>
-				</dependency>
-				<dependency>
-					<groupId>org.scannotation</groupId>
-					<artifactId>scannotation</artifactId>
-					<version>1.0.3</version>
-				</dependency>
-			</dependencies>
-		</profile>
+                <!-- Just for was7 (no tomcat) -->
+                <!-- <dependency> <groupId>org.apache.openwebbeans</groupId> <artifactId>openwebbeans-ee</artifactId>
+                        <version>${openwebbeansVersion}</version> </dependency> <dependency> <groupId>org.apache.openwebbeans</groupId>
+                        <artifactId>openwebbeans-ee-common</artifactId> <version>${openwebbeansVersion}</version>
+                        </dependency> <dependency> <groupId>org.apache.openwebbeans</groupId> <artifactId>openwebbeans-ejb</artifactId>
+                        <version>${openwebbeansVersion}</version> </dependency> -->
+                <dependency>
+                    <groupId>org.apache.openwebbeans</groupId>
+                    <artifactId>openwebbeans-el10</artifactId>
+                    <version>${openwebbeansVersion}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.openwebbeans</groupId>
+                    <artifactId>openwebbeans-impl</artifactId>
+                    <version>${openwebbeansVersion}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.openwebbeans</groupId>
+                    <artifactId>openwebbeans-spi</artifactId>
+                    <version>${openwebbeansVersion}</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.scannotation</groupId>
+                    <artifactId>scannotation</artifactId>
+                    <version>1.0.3</version>
+                </dependency>
+            </dependencies>
+        </profile>
 
-	</profiles>
+    </profiles>
 
-	<build>
-		<finalName>${project.artifactId}</finalName>
-		
-		<plugins>
-		
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<configuration>
-					<warName>${project.artifactId}</warName>
-					<!-- <packagingIncludes> WEB-INF/lib/jsf*.jar,WEB-INF/lib/primefaces*.jar,WEB-INF/lib/aristo*.jar,WEB-INF/lib/jstl*.jar,WEB-INF/lib/cupertino*.jar,WEB-INF/lib/ajf-web*.jar,**/*.xml,**/*.properties,**/*.class,**/*.jpg,**/*.png,**/*.css,**/*.js*,**/*.*html,**/*.MF</packagingIncludes> -->
-					<archive>
-						<addMavenDescriptor>true</addMavenDescriptor>
-						<manifest>
-							<addClasspath>true</addClasspath>
-							<classpathPrefix>lib/</classpathPrefix>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-						</manifest>
-						<manifestEntries>
-							<Build-Jdk>${java.build.version}</Build-Jdk>
-							<Implementation-Build>${buildNumber}</Implementation-Build>
-						</manifestEntries>
-					</archive>
-					<!-- <archiveClasses>false</archiveClasses>tomcat7 mandatory -->
-				</configuration>
-			</plugin>
+    <build>
+        <finalName>${project.artifactId}</finalName>
 
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-			
-		</plugins>
-	</build>
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <warName>${project.artifactId}</warName>
+                    <!-- <packagingIncludes> WEB-INF/lib/jsf*.jar,WEB-INF/lib/primefaces*.jar,WEB-INF/lib/aristo*.jar,WEB-INF/lib/jstl*.jar,WEB-INF/lib/cupertino*.jar,WEB-INF/lib/ajf-web*.jar,**/*.xml,**/*.properties,**/*.class,**/*.jpg,**/*.png,**/*.css,**/*.js*,**/*.*html,**/*.MF</packagingIncludes> -->
+                    <archive>
+                        <addMavenDescriptor>true</addMavenDescriptor>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Build-Jdk>${java.build.version}</Build-Jdk>
+                            <Implementation-Build>${buildNumber}</Implementation-Build>
+                        </manifestEntries>
+                    </archive>
+                    <!-- <archiveClasses>false</archiveClasses>tomcat7 mandatory -->
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+          <!--  <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.12</version>
+               <configuration>
+                    <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>-->
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skip>false</skip>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <excludes>
+                        <exclude>**/integration/*</exclude>
+                    </excludes>
+                </configuration>
+               <executions>
+                    <execution>
+                        <id>integration-tests</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <skip>false</skip>
+                            <excludes>
+                                <exclude>none</exclude>
+                            </excludes>
+
+                            <includes>
+                                <include>**/integration/*</include>
+        <!--                        <include>am/ajf/showcase/integration/IndexPageTest.java</include>-->
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>selenium-maven-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <id>start</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start-server</goal>
+                        </goals>
+                        <configuration>
+                            <background>true</background>
+                            <logOutput>true</logOutput>
+                        </configuration>
+
+                    </execution>
+                    <execution>
+                        <id>stop</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop-server</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

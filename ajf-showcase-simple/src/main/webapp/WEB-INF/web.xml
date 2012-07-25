@@ -121,16 +121,28 @@
     </login-config>
 
     <security-constraint>
+    <web-resource-collection>
+        <web-resource-name>AdminPages</web-resource-name>
+        <url-pattern>/employeemanagement/*</url-pattern>
+        <http-method>GET</http-method>
+    </web-resource-collection>
+    <auth-constraint>
+        <role-name>admin</role-name>
+        <role-name>poweruser</role-name>
+    </auth-constraint>
+</security-constraint>
+
+    <security-constraint>
         <web-resource-collection>
-            <web-resource-name>AdminPages</web-resource-name>
-            <url-pattern>/employeemanagement/*</url-pattern>
+            <web-resource-name>AllAuthenticated</web-resource-name>
+            <url-pattern>/aminfo/*</url-pattern>
             <http-method>GET</http-method>
         </web-resource-collection>
         <auth-constraint>
-            <role-name>admin</role-name>
-            <role-name>poweruser</role-name>
+            <role-name>allusers</role-name>
         </auth-constraint>
     </security-constraint>
+
 
     <security-constraint>
         <web-resource-collection>
@@ -162,6 +174,12 @@
     </security-role>
     <security-role>
         <role-name>poweruser</role-name>
+    </security-role>
+    <security-role>
+        <role-name>ITuser</role-name>
+    </security-role>
+    <security-role>
+        <role-name>allusers</role-name>
     </security-role>
 
     <resource-ref>
