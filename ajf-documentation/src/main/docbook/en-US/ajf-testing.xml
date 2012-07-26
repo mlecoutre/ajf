@@ -1,132 +1,157 @@
 <?xml version='1.0' encoding='ISO-8859-1'?>
 <!-- This document was created with Syntext Serna Free. -->
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+        "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
 <chapter id="testing">
-  <title>AJF - Testing Reference</title>
-  <important>
-	 <para>
-	  Design your code with testing in mind
-	 </para>
- </important>
- <example>
-	<title>Reference "ajf-testing" in your Maven 2 project configuration file 'pom.xml'</title>
-	<programlisting language="Xml" role="Xml"><![CDATA[
+    <title>AJF - Testing Reference</title>
+    <important>
+        <para>
+            Design your code with testing in mind
+        </para>
+    </important>
+    <example>
+        <title>Reference "ajf-testing" in your Maven 2 project configuration file 'pom.xml'</title>
+        <programlisting language="Xml" role="Xml"><![CDATA[
 	<dependency>
 		<groupId>am.ajf</groupId>
 		<artifactId>ajf-testing</artifactId>
 		<version>${ajf.version}</version>
 	</dependency>
 	]]></programlisting>
-  </example>
-  <section id="introductionSection">
-    <title>Introduction</title>
-    <para>
-   		AJF Testing include differents testing frameworks distributions, such as :
-   		<itemizedlist>
-			<listitem>JUnit : a framework for java unit testing</listitem>
-			<listitem>DBUnit : a framework for database testing and filling (using with Jailer)</listitem>
-			<listitem>XMLUnit : a framework for XML testing with differents matching rules</listitem>
-			<listitem>Mockito : a mocking framework for mocking objects</listitem>
-			<listitem>Powermock : extension of mockito targeting the static objects</listitem>
-			<listitem>Arquillian : a lightweight JEE container for integration testing</listitem>
-		</itemizedlist>
-    </para>
-  </section>
-  <section is="testingRulesSection">
-    <title>Testing rules</title>
-    <para>
-   <itemizedlist>
-        <listitem>
-          <para>
-      Unit tests should be fully automated and non-interactive
-     </para>
-        </listitem>
-        <listitem>
-          <para>
-      Unit tests has to be infinitely repeatable without human intervention; use <classname>@before</classname>, <classname>@beforeClass</classname>,<classname>@after</classname>,<classname>@afterClass</classname> to prepare or clean your test environment
-     </para>
-        </listitem>
-        <listitem>
-          <para>
-      Fix failing tests immediately := ALL HAS TO BE GREEN when commited on the source repository
-Each developer should be responsible for making sure a new test runs successfully upon check in, and that all existing tests runs successfully upon code check in. If a test fails as part of a regular test execution the entire team should drop what they are currently doing and make sure the problem gets fixed.
-     </para>
-        </listitem>
-        <listitem>
-          <para>
-Design code with testing in mind
-define your interface (inputs and outputs) to be easily testable
-     </para>
-        </listitem>
-        <listitem>
-          <para>
-Keep tests independent
-To ensure testing robustness and simplify maintenance, tests should never rely on other tests nor should they depend on the ordering in which tests are executed.
-Test per layer, Use mock object  (e.g. mockito API)
-     </para>
-        </listitem>
-        <listitem>
-          <para>
-Write test to reproduce bugs
-When a bug is reported, write a test to reproduce the bug (i.e. a failing test) and use this test as a success criteria when fixing the code.
-     </para>
-        </listitem>
-        <listitem>
-          <para>
-Test Exception part and Error Handling also
-     </para>
-        </listitem>
-        <listitem>
-          <para>
-Know the cost of testing
-Not writing unit tests is costly, but writing unit tests is costly too. There is a trade-off between the two, and in terms of execution coverage the typical industry standard is at about 70%.
-     </para>
-        </listitem>
-      </itemizedlist> 
-  </para>
-    <para>More rules at <ulink url="http://geosoft.no/development/unittesting.html">http://geosoft.no/development/unittesting.html</ulink></para> 
-  </section>
-  <section id="namingRulesSection">
-    <title>Unit testing naming conventions</title>
-    <para>
-   <itemizedlist>
-        <listitem>
-          <para>
-      Tests classes has to be in a specific source folder. for maven project, folder &quot;src/test/java&quot;
-     </para>
-        </listitem>
-        <listitem>
-          <para>Test class  has to be in the same package  name that the tested class
-     </para>
-        </listitem>
-        <listitem>
-          <para>Test class has to be named <classname>MyClassXXXTest</classname> for the tested class <classname>MyClassXXX</classname>
-     </para>
-        </listitem>
-        <listitem>
-          <para>Naming convention for test methods  <classname>test[what]</classname> such as  <classname>testSaveAs()</classname>
- 		  or <classname>testSaveAsOnError()</classname></para>
-        </listitem>
-      </itemizedlist> 
-  </para>
-  </section>
-  <section id="testingFrameworksSection">
-  	  <title>Testing frameworks</title>
-  	  <section id="junitSection">
-	  	<title>JUnit</title>
-	  	<para>
-	  	JUnit is a Framework which allows you to write and run some unit tests.
-		Just writing test cases is not the biggest interest of such a framework. What is important is that those test cases will be re-usable
-		and will be executed over and over again and guarantee the project non regression.
-		They will also be used (if they are clearly written) to help in understanding how to use a specific java component.
-		The idea is to create at least one test case per implemented method, in order to make it tested. 
-		</para>
-		<para>
-		JUnit complete documentation is available <ulink url="http://junit.sourceforge.net/#Documentation">here</ulink>.
-		</para>
-		<example>
-			<title>Junit Test Class</title>
-			<programlisting language="Java" role="Java"><![CDATA[
+    </example>
+    <section id="introductionSection">
+        <title>Introduction</title>
+        <para>
+            AJF Testing include differents testing frameworks distributions, such as :
+            <itemizedlist>
+                <listitem>JUnit : a framework for java unit testing</listitem>
+                <listitem>DBUnit : a framework for database testing and filling (using with Jailer)</listitem>
+                <listitem>XMLUnit : a framework for XML testing with differents matching rules</listitem>
+                <listitem>Mockito : a mocking framework for mocking objects</listitem>
+                <listitem>Powermock : extension of mockito targeting the static objects</listitem>
+                <listitem>Arquillian : a lightweight JEE container for integration testing</listitem>
+            </itemizedlist>
+        </para>
+    </section>
+    <section is="testingRulesSection">
+        <title>Testing rules</title>
+        <para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        Unit tests should be fully automated and non-interactive
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        Unit tests has to be infinitely repeatable without human intervention; use<classname>
+                        @before</classname>,<classname>@beforeClass</classname>,<classname>@after</classname>,
+                        <classname>@afterClass</classname>
+                        to prepare or clean your test environment
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        Fix failing tests immediately := ALL HAS TO BE GREEN when commited on the source repository
+                        Each developer should be responsible for making sure a new test runs successfully upon check in,
+                        and that all existing tests runs successfully upon code check in. If a test fails as part of a
+                        regular test execution the entire team should drop what they are currently doing and make sure
+                        the problem gets fixed.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        Design code with testing in mind
+                        define your interface (inputs and outputs) to be easily testable
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        Keep tests independent
+                        To ensure testing robustness and simplify maintenance, tests should never rely on other tests
+                        nor should they depend on the ordering in which tests are executed.
+                        Test per layer, Use mock object (e.g. mockito API)
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        Write test to reproduce bugs
+                        When a bug is reported, write a test to reproduce the bug (i.e. a failing test) and use this
+                        test as a success criteria when fixing the code.
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        Test Exception part and Error Handling also
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>
+                        Know the cost of testing
+                        Not writing unit tests is costly, but writing unit tests is costly too. There is a trade-off
+                        between the two, and in terms of execution coverage the typical industry standard is at about
+                        70%.
+                    </para>
+                </listitem>
+            </itemizedlist>
+        </para>
+        <para>More rules at
+            <ulink url="http://geosoft.no/development/unittesting.html">http://geosoft.no/development/unittesting.html
+            </ulink>
+        </para>
+    </section>
+    <section id="namingRulesSection">
+        <title>Unit testing naming conventions</title>
+        <para>
+            <itemizedlist>
+                <listitem>
+                    <para>
+                        Tests classes has to be in a specific source folder. for maven project, folder &quot;src/test/java&quot;
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>Test class has to be in the same package name that the tested class
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>Test class has to be named
+                        <classname>MyClassXXXTest</classname>
+                        for the tested class
+                        <classname>MyClassXXX</classname>
+                    </para>
+                </listitem>
+                <listitem>
+                    <para>Naming convention for test methods
+                        <classname>test[what]</classname>
+                        such as
+                        <classname>testSaveAs()</classname>
+                        or
+                        <classname>testSaveAsOnError()</classname>
+                    </para>
+                </listitem>
+            </itemizedlist>
+        </para>
+    </section>
+    <section id="testingFrameworksSection">
+        <title>Testing frameworks</title>
+        <section id="junitSection">
+            <title>JUnit</title>
+            <para>
+                JUnit is a Framework which allows you to write and run some unit tests.
+                Just writing test cases is not the biggest interest of such a framework. What is important is that those
+                test cases will be re-usable
+                and will be executed over and over again and guarantee the project non regression.
+                They will also be used (if they are clearly written) to help in understanding how to use a specific java
+                component.
+                The idea is to create at least one test case per implemented method, in order to make it tested.
+            </para>
+            <para>
+                JUnit complete documentation is available<ulink url="http://junit.sourceforge.net/#Documentation">
+                here</ulink>.
+            </para>
+            <example>
+                <title>JUnit Test Class</title>
+                <programlisting language="Java" role="Java"><![CDATA[
 	public class NotifyForInterchangeTest {
 		
 			@BeforeClass
@@ -172,13 +197,13 @@ Not writing unit tests is costly, but writing unit tests is costly too. There is
 			
 		}
 			]]></programlisting>
-		</example>
-		<section>
-			<title>Anatomy of a test method</title>
-			<para>
-			
-			</para>
-			<programlisting language="Java" role="Java"><![CDATA[
+            </example>
+            <section>
+                <title>Anatomy of a test method</title>
+                <para>
+
+                </para>
+                <programlisting language="Java" role="Java"><![CDATA[
 			
 			@Test
 			public void testWriteNotifygForInterchange() throws Exception {
@@ -202,66 +227,303 @@ Not writing unit tests is costly, but writing unit tests is costly too. There is
 			}
 		
 			]]></programlisting>
-		</section>
-		<section>
-			<title>Test method execution plan</title>
-			<para>
-				<itemizedlist>
-					<listitem>Load test clas</listitem>
-					<listitem>invoke @BeforeClass annotated static method</listitem>
-					<para />
-					<listitem>invoke @Before annotated method</listitem>
-					<listitem>invoke @Test annotated method</listitem>
-					<listitem>invoke @After annotated method</listitem>
-					<para />
-					<listitem>invoke @Before annotated method</listitem>
-					<listitem>invoke @Test annotated method</listitem>
-					<listitem>invoke @After annotated method</listitem>
-					<para />
-					<listitem>invoke @AfterClass annotated static method</listitem>
-				</itemizedlist>
-			</para>
-			
-		</section>
-	  </section>
-	   <section id="dbunitSection">>
-	  	<title>DBUnit</title>
-	  	<para>
-	  	</para>
-	  	</section>
-	  	<section id="xmlunitSection">>
-	  	<title>XMLUnit</title>
-	  	<para>
-	  	</para>
-	  	</section>
-	  	<section id="mockitoSection">>
-	  	<title>Mockito</title>
-	  	<para>
-	  	</para>
-	  	</section>
-	  	<section id="powermockSection">>
-	  	<title>Powermock</title>
-	  	<para>
-	  	</para>
-	  	</section>
-	  	<section id="arquillianSection">>
-	  	<title>Arquillian</title>
-	  	<para>
-	  	</para>
-	  	</section>
-  	</section>
+            </section>
+            <section>
+                <title>Test method execution plan</title>
+                <para>
+                    <itemizedlist>
+                        <listitem>Load test clas</listitem>
+                        <listitem>invoke @BeforeClass annotated static method</listitem>
+                        <para/>
+                        <listitem>invoke @Before annotated method</listitem>
+                        <listitem>invoke @Test annotated method</listitem>
+                        <listitem>invoke @After annotated method</listitem>
+                        <para/>
+                        <listitem>invoke @Before annotated method</listitem>
+                        <listitem>invoke @Test annotated method</listitem>
+                        <listitem>invoke @After annotated method</listitem>
+                        <para/>
+                        <listitem>invoke @AfterClass annotated static method</listitem>
+                    </itemizedlist>
+                </para>
+
+            </section>
+        </section>
+        <section id="Test databases">
+            <title>DBUnit</title>
+            <para>
+            </para>
+        </section>
+        <section id="Test XML">
+            <title>XMLUnit</title>
+            <para>
+            </para>
+        </section>
+        <section id="UnitTestingWithMock">
+            <title>UnitTestingWithMock: Mockito and PowerMock</title>
+            <para>
+            </para>
+        </section>
+        <section id="TransactionAndContainerMode">
+            <title>Transaction and Container needs: Arquillian</title>
+            <para>
+            </para>
+        </section>
+    </section>
     <section id="FunctionalTestingSection">
-        <title>Functional/IHM testing</title>
+        <title>Functional/IHM testing - selenium</title>
         <para>
-            AJF Testing include differents testing frameworks distributions, such as :
+            AJF proposes to use Selenium to implement functional or integration tests.
+            Selenium allows you
             <itemizedlist>
-                <listitem>JUnit : a framework for java unit testing</listitem>
-                <listitem>DBUnit : a framework for database testing and filling (using with Jailer)</listitem>
-                <listitem>XMLUnit : a framework for XML testing with differents matching rules</listitem>
-                <listitem>Mockito : a mocking framework for mocking objects</listitem>
-                <listitem>Powermock : extension of mockito targeting the static objects</listitem>
-                <listitem>Arquillian : a lightweight JEE container for integration testing</listitem>
+                <listitem>
+                    <para>Graphically record scenario of tests in a browser (firefox)</para>
+                </listitem>
+                <listitem>
+                    <para>Re execute within the firefox plugin these scenario very quickly</para>
+                </listitem>
+                <listitem>
+                    <para>Export these tests in JUnit4in order to add them to the Daily Build and
+                        generates HTML reports (e.g. <ulink url="http://web-java/projects/ajf-showcase-simple/surefire-report.html">showcase tests reports</ulink>)
+                    </para>
+                </listitem>
             </itemizedlist>
+
+            You have to install the selenium firefox plugin in order to record your functional tests.
+            Within firefox go to  <ulink url="http://seleniumhq.org/download/">Selenium website</ulink>  and download
+            the last <emphasis>selenium IDE</emphasis>. (not the server).
+            <figure id="seleniumIDE.ref">
+                <title>Selenium IDE plugin</title>
+                <mediaobject>
+                    <imageobject>
+                        <imagedata align="center" fileref="images/testing/seleniumIDE.png"/>
+                    </imageobject>
+                </mediaobject>
+            </figure>
         </para>
+        <section id="Norms">
+            <title>Norms</title>
+            <para>
+                Save your tests in the <emphasis>src/test/resources/integration</emphasis> folder of your project.
+                This will allow to  use the versioning system and recreate the implementation very shortly in case of
+                update of your code.
+                <figure id="seleniumNorms.ref">
+                    <title>Selenium norms plugin</title>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata align="center" fileref="images/testing/seleniumNorms.png"  />
+                        </imageobject>
+                    </mediaobject>
+                </figure>
+            </para>
+        </section>
+        <section id="ImplementAsAJunitTest">
+            <title>Implement as a JUnit test</title>
+            <para>
+                Once you have saved the functional tests in the <emphasis>Selenium IDE</emphasis>, you can use the
+                <emphasis>Export > JUnit for remote</emphasis>
+                This will generate a class like below where, you will maybe have to make some update.
+                like the server hosting the application (should be localhost) et the brower "*pifirefox" to
+                compatible with the proxy.
+                <figure id="exportJUnit4Remote.ref">
+                    <title>Selenium export for JUnit </title>
+                    <mediaobject>
+                        <imageobject>
+                            <imagedata align="center" fileref="images/testing/exportJUnit4Remote.png"  />
+                        </imageobject>
+                    </mediaobject>
+                </figure>
+                Your Integration tests should be saved in the src/test/java/am.<emphasis>projectName</emphasis>.
+                <emphasis role="bold">integration</emphasis> folder.
+            </para>
+            <example>
+                <title>JUnit Selenium test implementation sample</title>
+                <programlisting language="Java" role="Java"><![CDATA[
+                    package am.ajf.showcase.integration;
+
+                    import am.ajf.core.logger.LoggerFactory;
+                    import com.thoughtworks.selenium.DefaultSelenium;
+                    import com.thoughtworks.selenium.SeleneseTestCase;
+                    import org.junit.After;
+                    import org.junit.Before;
+                    import org.junit.Test;
+                    import org.slf4j.Logger;
+
+                    import static org.junit.Assert.assertTrue;
+
+                    /**
+                    * First integration test implementation
+                    */
+                    public class IndexPageTest extends SeleneseTestCase {
+
+                    private final Logger logger = LoggerFactory
+                    .getLogger(IndexPageTest.class);
+
+                    @Before
+                    public void setUp() throws Exception {
+                    logger.debug("Connect to the SeleniumRC server to launch the tests...");
+                    selenium = new DefaultSelenium("localhost", 4444, "*pifirefox", "http://localhost:8080/");
+                    selenium.start();
+                    // setUp("http://localhost:8080/ajf-showcase-simple/");
+
+                    }
+
+                    @Test
+                    /**
+                    * Only check is the index page exists and display the "news" part.
+                    */
+                    public void testIndexPageResult() throws Exception {
+                    selenium.open("/ajf-showcase-simple/index.jsf");
+                    //selenium.waitForPageToLoad("30000");
+                    // logger.debug(selenium.getBodyText());
+                    assertTrue(selenium.isTextPresent("News"));
+                    }
+
+                    @After
+                    public void tearDown() throws Exception {
+                    selenium.stop();
+                    }
+                    }
+                    ]]></programlisting>
+            </example>
+        </section>
+        <section id="ProjectConfiguration">
+            <title>Project configuration</title>
+            <para>
+
+                You have to configure the surefire plugin in order to add the integration tests. First excludes the
+                package with your integration tests of your unit tests and create a specific execution for your
+                integration tests.
+            </para>
+            <example>
+                <title>surefire plugin configuration</title>
+                <programlisting language="XML" role="XML"><![CDATA[
+
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skip>false</skip>
+                            <testFailureIgnore>true</testFailureIgnore>
+                            <excludes>
+                                <exclude>**/integration/*</exclude>
+                            </excludes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>integration-tests</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <skip>false</skip>
+                                    <excludes>
+                                        <exclude>none</exclude>
+                                    </excludes>
+                                    <includes>
+                                        <include>**/integration/*</include>
+                                    </includes>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    ]]></programlisting>
+            </example>
+            <para>
+                Then, you need to configure the selectinum RC Server to start just before the beginning of
+                the tests.
+            </para>
+            <example>
+                <title>selenium plugin configuration</title>
+                <programlisting language="XML" role="XML"><![CDATA[
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>selenium-maven-plugin</artifactId>
+                        <version>2.3</version>
+                        <executions>
+                            <execution>
+                                <id>start</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start-server</goal>
+                                </goals>
+                                <configuration>
+                                    <background>true</background>
+                                    <logOutput>true</logOutput>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop-server</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>]]></programlisting>
+            </example>
+
+            <section id="WebSphere">
+                <title>WebSphere</title>
+                <para>
+                    TODO: Should envisage either to use cargo plugin or specific plugin from Vincent to deploy on
+                    an instance of WAS
+                </para>
+            </section>
+            <section id="Tomcat">
+                <title>Tomcat</title>
+                <para>
+                    For a simple application inside a WAR file, we are able to deploy it inside a tomcat instance.
+                    We must add a specific execution to start and stop the instance at the beginning and at the
+                    end of the integration tests.
+                </para>
+                <example>
+                    <title>tomcat configuration</title>
+                    <programlisting language="XML" role="XML"><![CDATA[
+
+                        <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <version>2.0-beta-1</version>
+                        <configuration>
+                            <systemProperties>
+                                <java.security.auth.login.config>src/test/resources/tomcat/jaas.config
+                                </java.security.auth.login.config>
+                            </systemProperties>
+                            <!-- Embedded port -->
+                            <port>8080</port>
+                            <configurationDir>${project.build.directory}/tomcat</configurationDir>
+                            <contextFile>src/test/resources/tomcat/context.xml</contextFile>
+                            <additionalConfigFilesDir>src/test/resources/tomcat</additionalConfigFilesDir>
+                            <tomcatWebXml>src/test/resources/tomcat/web.xml</tomcatWebXml>
+                            <warFile>${project.build.directory}/${project.artifactId}.war</warFile>
+                            <path>/${project.artifactId}</path>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>tomcat-run</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <fork>true</fork>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>tomcat-shutdown</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>shutdown</goal>
+                                </goals>
+                            </execution>
+                        </executions>]]></programlisting>
+                </example>
+            </section>
+        </section>
+
+
     </section>
 </chapter>

@@ -633,10 +633,8 @@
                             <excludes>
                                 <exclude>none</exclude>
                             </excludes>
-
                             <includes>
                                 <include>**/integration/*</include>
-        <!--                        <include>am/ajf/showcase/integration/IndexPageTest.java</include>-->
                             </includes>
                         </configuration>
                     </execution>

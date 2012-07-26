@@ -28,12 +28,11 @@ public class IndexPageTest extends SeleneseTestCase {
     }
 
     @Test
+    /**
+     * Only check is the index page exists and display the "news" part.
+     */
     public void testIndexPageResult() throws Exception {
-        logger.debug("Execute the integvroration test .");
-
-
-
-        selenium.open("/ajf-showcase-simple/index.jsf");
+      selenium.open("/ajf-showcase-simple/index.jsf");
        //selenium.waitForPageToLoad("30000");
        // logger.debug(selenium.getBodyText());
         assertTrue(selenium.isTextPresent("News"));
