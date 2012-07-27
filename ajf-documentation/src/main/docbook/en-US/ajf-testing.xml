@@ -315,6 +315,19 @@
                         </imageobject>
                     </mediaobject>
                 </figure>
+                <note>
+                    <para>
+                         Be care to maintain synchronism between HTML test definition and JUnit code to be able to
+                        reload the tests within selenium IDE manually. JUnit code should not be modified
+                        (except url and browser if needed)
+                    </para>
+                </note>
+                <important>
+                    Be care that every links and every button have a defined <emphasis>id</emphasis> attribute.
+                   When we use selenium and primefaces, <emphasis>name</emphasis> attribute is auto generated and change
+                    at every compilation. Selenium use by default the <emphasis>id</emphasis> attribute if it defined.
+                    We should not see any reference in the test to sthg like <emphasis>j_idtxx</emphasis>
+                </important>
             </para>
         </section>
         <section id="ImplementAsAJunitTest">

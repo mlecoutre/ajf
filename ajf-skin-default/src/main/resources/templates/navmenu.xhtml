@@ -10,14 +10,14 @@
 	
 	<ul>
 		<li><h:outputLink id="linkFAQ" value="shared/faq.xhtml">
-				<h:outputText value="#{m['menu.faq']}" />
+				<h:outputText id="faq" value="#{m['menu.faq']}" />
 			</h:outputLink></li>
 		<li><h:outputLink id="linkContact" value="shared/contacts.xhtml">
-				<h:outputText value="#{m['menu.contact']}" />
+				<h:outputText id="contact" value="#{m['menu.contact']}" />
 			</h:outputLink></li>
 		<li><h:outputLink id="linkHelp" target="_blank"
 				onclick="window.open('#{helpMBean.currentPage}','helpWindow', 'top=30px left=50px width=800px height=464px dependent=yes menubar=0 toolbar=0 location=0 scrollbars=0 resizable=1 status=0'); return false;">
-				<h:outputText value="#{m['menu.help']}" />
+				<h:outputText id="help" value="#{m['menu.help']}" />
 			</h:outputLink></li>
 		<li><p:commandLink oncomplete="loggerDialog.show()"
 				value="#{m['menu.parameters']}" /></li>
