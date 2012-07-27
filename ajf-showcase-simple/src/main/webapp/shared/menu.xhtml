@@ -24,6 +24,8 @@
 				url="showcase/layout.jsf" />
 					<p:menuitem value="#{m['menu.showcase.brownlayout']}"
 				url="showcase/brownLayoutSample.jsf" />
+            <p:menuitem value="All authenticated user access"
+                        url="aminfo/allAuthenticatedInfo.jsf" rendered="#{securityMBean.isAllowed('allusers')}"/>
 		</p:submenu>
 
 		<!-- When already logged in : user Name button with logout submenu -->
