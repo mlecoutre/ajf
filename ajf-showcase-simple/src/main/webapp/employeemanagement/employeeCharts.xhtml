@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui"
+	template="/ext/templates/brandClassicLayout.xhtml">
+
+	<ui:define name="content">
+		<h:form>
+			<h:panelGrid columns="2">
+				<p:lineChart value="#{employeeChartsMBean.linearModel}" legendPosition="e" zoom="true" animate="true"
+					title="Linear Chart" minY="0" maxY="10" style="width:400px;" widgetVar="chart" />
+
+				<p:barChart id="basic" value="#{employeeChartsMBean.categoryModel}" legendPosition="ne" title="Basic Bar Chart"
+					min="0" max="200" style="width:400px" animate="true" />
+			</h:panelGrid>
+
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>
