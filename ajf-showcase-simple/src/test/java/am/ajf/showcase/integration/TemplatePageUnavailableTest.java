@@ -9,7 +9,7 @@ import org.junit.Test;
 public class TemplatePageUnavailableTest extends SeleneseTestCase {
     @Before
     public void setUp() throws Exception {
-        selenium = new DefaultSelenium("localhost", 4444, "*pifirefox", "http://localhost:8080/");
+        selenium = new DefaultSelenium("localhost", 4444, "*pifirefox c:/Appli/Mozilla Firefox/firefox.exe", "http://localhost:8080/");
         selenium.start();
     }
 
