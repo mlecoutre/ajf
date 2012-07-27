@@ -16,6 +16,9 @@
 			<p:menuitem value="#{m['menu.employee.create.title']}"
 				url="employeemanagement/createEmployee.jsf"
 				rendered="#{securityMBean.isAllowed('admin')}" />
+            <p:menuitem value="#{m['menu.employee.charts.title']}"
+                        url="employeemanagement/employeeCharts.jsf"
+                        rendered="#{securityMBean.isAllowed('admin')}" />
 		</p:submenu>
 		<p:submenu label="#{m['menu.showcase.title']}">
 			<p:menuitem value="#{m['menu.showcase.uimessages']}"
