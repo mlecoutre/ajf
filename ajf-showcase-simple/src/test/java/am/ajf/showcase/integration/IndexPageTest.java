@@ -21,7 +21,7 @@ public class IndexPageTest extends SeleneseTestCase {
     @Before
     public void setUp() throws Exception {
         logger.debug("Start the tomcat instance for integration tests...");
-        selenium = new DefaultSelenium("localhost", 4444, "*pifirefox", "http://localhost:8080/");
+        selenium = new DefaultSelenium("localhost", 4444, "*iexplore", "http://localhost:8080/");
         selenium.start();
         // setUp("http://localhost:8080/ajf-showcase-simple/");
 
